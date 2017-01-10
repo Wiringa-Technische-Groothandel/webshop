@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
+use App\Helper;
 use App\Content;
 use App\Product;
-use App\Helper;
+use Illuminate\Http\Request;
 
 /**
  * Class ExportController.
  *
- * @package WTG
  * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
  */
 class ExportController extends Controller
 {
-
     /**
      * Catalog generation page.
      *
@@ -136,5 +134,4 @@ class ExportController extends Controller
                 ->withInput($request->input());
         }
     }
-
 }

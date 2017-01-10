@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use GuzzleHttp\Exception\TransferException;
-use Illuminate\Http\Request;
 use GuzzleHttp\Client;
+use Illuminate\Http\Request;
+use GuzzleHttp\Exception\TransferException;
 
 /**
  * Class EmailController.
  *
- * @package WTG
  * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
  */
 class EmailController extends Controller
@@ -20,12 +19,12 @@ class EmailController extends Controller
     public function view()
     {
         return view('admin.email.index', [
-            'mailstats' => $this->stats(request())
+            'mailstats' => $this->stats(request()),
         ]);
     }
 
     /**
-     * Attempt to send a test email
+     * Attempt to send a test email.
      *
      * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
@@ -33,7 +32,7 @@ class EmailController extends Controller
     public function test(Request $request)
     {
         $validator = \Validator::make($request->input(), [
-            'email' => 'required|email'
+            'email' => 'required|email',
         ]);
 
         if ($validator->passes()) {
@@ -64,15 +63,15 @@ class EmailController extends Controller
 
         $client = new Client([
             'base_uri' => 'https://api.mailgun.net/v3/',
-            'auth' => ['api', config('services.mailgun.secret')]
+            'auth' => ['api', config('services.mailgun.secret')],
         ]);
 
         try {
-            $response = $client->get(config('services.mailgun.domain')."/stats/total", [
+            $response = $client->get(config('services.mailgun.domain').'/stats/total', [
                 'query' => [
-                    'event' => array('accepted', 'delivered', 'failed'),
-                    'duration' => $duration
-                ]
+                    'event' => ['accepted', 'delivered', 'failed'],
+                    'duration' => $duration,
+                ],
             ]);
         } catch (TransferException $e) {
             \Log::error($e->getMessage());

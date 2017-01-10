@@ -5,14 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Helper;
 
 /**
- * Class CacheController
+ * Class CacheController.
  *
- * @package WTG
  * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
  */
 class CacheController extends Controller
 {
-
     /**
      * Cache dashboard.
      *
@@ -71,5 +69,4 @@ class CacheController extends Controller
                 ->withErrors('Er is een fout opgetreden tijdens het resetten van de cache. De \'OpCache module is niet geinstalleerd.\'');
         }
     }
-
 }

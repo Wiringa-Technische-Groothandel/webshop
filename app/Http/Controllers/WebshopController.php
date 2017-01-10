@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Order;
-use App\Product;
+use DB;
 use Auth;
 use Cart;
-use DB;
-use Helper;
 use Input;
-use Redirect;
+use Helper;
 use Request;
 use Session;
+use Redirect;
+use App\Order;
+use App\Product;
 
 /**
  * Class WebshopController.
@@ -76,7 +76,6 @@ class WebshopController extends Controller
         } else {
             $related_products = null;
         }
-
 
         if (preg_match('/(search|clearance|specials)/', Request::server('HTTP_REFERER'))) {
             Session::put('continueShopping', Request::server('HTTP_REFERER'));

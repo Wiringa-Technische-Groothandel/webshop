@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use Carbon\Carbon;
-use Cart;
-use Illuminate\Http\Request;
 use Log;
+use Auth;
+use Cart;
 use Session;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 /**
  * Class UserController.

@@ -10,7 +10,7 @@ $routeOptions = [
     'middleware' => 'auth.admin',
     'prefix' => 'admin',
     'as' => 'admin.',
-    'namespace' => 'Admin'
+    'namespace' => 'Admin',
 ];
 
 Route::group($routeOptions, function () {

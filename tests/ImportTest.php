@@ -1,7 +1,7 @@
 <?php
 
-use App\Discount;
 use App\Product;
+use App\Discount;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ImportTest extends TestCase

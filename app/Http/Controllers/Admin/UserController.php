@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Company;
 use App\User;
+use App\Company;
+use Illuminate\Http\Request;
 
 /**
- * Class UserController
+ * Class UserController.
  *
- * @package WTG
  * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
  */
 class UserController extends Controller
 {
-
     /**
      * The user management page.
      *
@@ -184,5 +182,4 @@ class UserController extends Controller
                 ->withErrors($validator->errors());
         }
     }
-
 }

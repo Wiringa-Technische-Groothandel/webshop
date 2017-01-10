@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\ProductNotFoundException;
-use App\Pack;
-use App\PackProduct;
-use App\Product;
 use Auth;
 use Helper;
-use Illuminate\Http\Request;
 use Session;
+use App\Pack;
+use App\Product;
+use App\PackProduct;
+use Illuminate\Http\Request;
+use App\Exceptions\ProductNotFoundException;
 
 /**
  * Class ProductController.

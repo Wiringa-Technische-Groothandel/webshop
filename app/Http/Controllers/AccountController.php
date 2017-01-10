@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Address;
-use App\Order;
-use App\Product;
-use Auth;
 use DB;
+use Auth;
 use File;
-use Helper;
-use Illuminate\Http\Request;
 use Mail;
-use Response;
+use Helper;
 use Session;
+use Response;
+use App\Order;
+use App\Address;
+use App\Product;
+use Illuminate\Http\Request;
 
 /**
  * Class AccountController.

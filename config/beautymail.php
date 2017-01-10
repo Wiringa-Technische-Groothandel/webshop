@@ -18,10 +18,10 @@ return [
     ],
 
     'view' => [
-        'senderName'  => "Wiringa Technische Groothandel",
+        'senderName'  => 'Wiringa Technische Groothandel',
         'reminder'    => null,
         'unsubscribe' => null,
-        'address'     => "Bovenstreek 1, 9731 DH, Groningen",
+        'address'     => 'Bovenstreek 1, 9731 DH, Groningen',
 
         'logo'        => [
             'path'   => public_path('img/mail-logo.png'),

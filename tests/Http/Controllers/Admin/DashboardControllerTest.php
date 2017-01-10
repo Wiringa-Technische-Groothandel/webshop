@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Admin\Controller as AdminController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\Controller as AdminController;
 
 class DashboardControllerTest extends TestCase
 {
@@ -11,7 +11,7 @@ class DashboardControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = $this->createUser(true, true, "11111", "11111");
+        $this->user = $this->createUser(true, true, '11111', '11111');
     }
 
     /**
@@ -37,7 +37,7 @@ class DashboardControllerTest extends TestCase
      */
     public function stats_method_returns_json()
     {
-        /** @var Illuminate\Http\Response $response */
+        /* @var Illuminate\Http\Response $response */
         $this->get(route('admin.dashboard::stats'))
             ->isJson();
     }
@@ -50,7 +50,7 @@ class DashboardControllerTest extends TestCase
         $this->actingAs($this->user)
             ->get(route('admin.dashboard::chart', ['type' => 'orders']))
             ->seeJson([
-                'message' => "Chart data for chart 'orders'"
+                'message' => "Chart data for chart 'orders'",
             ]);
     }
 
@@ -62,7 +62,7 @@ class DashboardControllerTest extends TestCase
         $this->actingAs($this->user)
             ->get(route('admin.dashboard::chart', ['type' => 'invalid']))
             ->seeJson([
-                'message' => "Unknown chart type"
+                'message' => 'Unknown chart type',
             ])
             ->assertResponseStatus(400);
     }
@@ -74,7 +74,7 @@ class DashboardControllerTest extends TestCase
     {
         $this->actingAs($this->user)
             ->get(route('admin.dashboard'))
-            ->see("Server stats");
+            ->see('Server stats');
     }
 
     /**
@@ -84,8 +84,8 @@ class DashboardControllerTest extends TestCase
     {
         $this->actingAs($this->user)
             ->get(route('admin.dashboard'))
-            ->see("Korting import")
-            ->see("Product import");
+            ->see('Korting import')
+            ->see('Product import');
     }
 
     /**
@@ -95,6 +95,6 @@ class DashboardControllerTest extends TestCase
     {
         $this->actingAs($this->user)
             ->get(route('admin.dashboard'))
-            ->see("Orders per maand");
+            ->see('Orders per maand');
     }
 }
