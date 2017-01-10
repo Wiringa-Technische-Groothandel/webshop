@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
 use App\Carousel;
+use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * Class CarouselController.
  *
- * @package WTG
  * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
  */
 class CarouselController extends Controller
 {
-
     /**
      * The carousel management page.
      *
@@ -132,5 +130,4 @@ class CarouselController extends Controller
                 ->withErrors("De slide met id {$id} bestaat niet");
         }
     }
-
 }

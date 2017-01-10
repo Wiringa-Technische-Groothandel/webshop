@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Pack;
-use App\PackProduct;
 use App\Product;
+use App\PackProduct;
 use Illuminate\Http\Request;
 
 /**
  * Class PacksController.
  *
- * @package WTG
  * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
  */
 class PacksController extends Controller

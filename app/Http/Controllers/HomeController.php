@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Carousel;
 use App\Content;
+use App\Carousel;
 
 /**
  * Class HomeController.

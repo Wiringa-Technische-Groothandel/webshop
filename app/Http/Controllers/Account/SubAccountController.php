@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Account;
 
-use App\Http\Controllers\Controller;
-use App\User;
 use Auth;
-use Illuminate\Http\Request;
+use App\User;
 use Response;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 /**
  * Class SubAccountController.

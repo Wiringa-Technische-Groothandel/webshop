@@ -9,12 +9,10 @@ use Illuminate\Http\Request;
 /**
  * Class DashboardController.
  *
- * @package WTG
  * @author Thomas Wiringa <thomas.wiringa@gmail.com>
  */
 class DashboardController extends Controller
 {
-
     /**
      * The dashboard view.
      *
@@ -53,7 +51,7 @@ class DashboardController extends Controller
         return response()->json([
             'cpu' => $cpuData,
             'ram' => $ramData,
-            'disk' => $diskData
+            'disk' => $diskData,
         ]);
     }
 
@@ -66,7 +64,7 @@ class DashboardController extends Controller
     {
         return [
             'total' => disk_total_space('/'),
-            'free' => disk_free_space('/')
+            'free' => disk_free_space('/'),
         ];
     }
 
@@ -133,5 +131,4 @@ class DashboardController extends Controller
             ], 400);
         }
     }
-
 }

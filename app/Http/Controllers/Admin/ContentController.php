@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Description;
 use App\Content;
 use App\Product;
+use App\Description;
+use Illuminate\Http\Request;
 
 /**
  * Class ContentController.
  *
- * @package WTG
  * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
  */
 class ContentController extends Controller
 {
-
     /**
      * Content manager.
      *
@@ -24,7 +22,7 @@ class ContentController extends Controller
     public function view()
     {
         return view('admin.content.index', [
-            'data' => Content::where('hidden', '0')->get()
+            'data' => Content::where('hidden', '0')->get(),
         ]);
     }
 
@@ -152,5 +150,4 @@ class ContentController extends Controller
                 ->withErrors($validator->errors());
         }
     }
-
 }

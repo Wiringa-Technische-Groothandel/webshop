@@ -2,15 +2,15 @@
 
 namespace App\Console\Commands;
 
-use App\Content;
-use App\Exceptions\InvalidColumnCountException;
-use App\Product;
-use Carbon\Carbon;
 use DB;
 use File;
 use Helper;
-use Illuminate\Console\Command;
 use Validator;
+use App\Content;
+use App\Product;
+use Carbon\Carbon;
+use Illuminate\Console\Command;
+use App\Exceptions\InvalidColumnCountException;
 
 class importProducts extends Command
 {

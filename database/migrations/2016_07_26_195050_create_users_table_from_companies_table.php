@@ -1,9 +1,9 @@
 <?php
 
-use App\Company;
 use App\User;
-use Illuminate\Database\Migrations\Migration;
+use App\Company;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateUsersTableFromCompaniesTable extends Migration
 {

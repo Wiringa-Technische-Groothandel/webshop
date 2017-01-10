@@ -3,8 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Routing\TerminableMiddleware;
 use Session;
+use Illuminate\Contracts\Routing\TerminableMiddleware;
 
 class RemoveTempFile implements TerminableMiddleware
 {

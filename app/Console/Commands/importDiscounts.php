@@ -2,14 +2,14 @@
 
 namespace App\Console\Commands;
 
-use App\Content;
-use App\Discount;
-use App\Exceptions\InvalidColumnCountException;
-use Carbon\Carbon;
 use DB;
 use File;
-use Illuminate\Console\Command;
 use Validator;
+use App\Content;
+use App\Discount;
+use Carbon\Carbon;
+use Illuminate\Console\Command;
+use App\Exceptions\InvalidColumnCountException;
 
 class importDiscounts extends Command
 {

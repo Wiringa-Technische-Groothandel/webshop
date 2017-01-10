@@ -1,10 +1,10 @@
 <?php
 
-use App\Company;
 use App\User;
+use App\Company;
 use App\Product;
-use App\Description;
 use App\Discount;
+use App\Description;
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase
 {

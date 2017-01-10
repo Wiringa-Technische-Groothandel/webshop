@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Address;
-use App\Order;
-use App\Pack;
-use App\Product;
 use Auth;
 use Cart;
-use Illuminate\Http\Request;
 use Session;
+use App\Pack;
+use App\Order;
+use App\Address;
+use App\Product;
+use Illuminate\Http\Request;
 
 /**
  * Class CartController.

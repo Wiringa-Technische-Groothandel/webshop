@@ -5,12 +5,10 @@ namespace App\Services;
 /**
  * Class FormatService.
  *
- * @package WTG
  * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
  */
 class FormatService
 {
-
     /**
      * Number formatter.
      *
@@ -44,16 +42,15 @@ class FormatService
      */
     public function bytes($bytes)
     {
-        $type = ["", "kilo", "mega", "giga", "tera", "peta", "exa", "zetta", "yotta"];
+        $type = ['', 'kilo', 'mega', 'giga', 'tera', 'peta', 'exa', 'zetta', 'yotta'];
         $index = 0;
 
-        while($bytes >= 1024) {
+        while ($bytes >= 1024) {
             $bytes /= 1024;
 
             $index++;
         }
 
-        return round($bytes, 2)." ".$type[$index]."bytes" ;
+        return round($bytes, 2).' '.$type[$index].'bytes';
     }
-
 }
