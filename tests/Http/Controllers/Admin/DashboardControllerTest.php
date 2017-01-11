@@ -1,10 +1,18 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use \Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Http\Controllers\Admin\Controller as AdminController;
 
+/**
+ * Class DashboardControllerTest.
+ *
+ * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
+ */
 class DashboardControllerTest extends TestCase
 {
+    use DatabaseTransactions;
+
     /**
      * @var App\User
      */

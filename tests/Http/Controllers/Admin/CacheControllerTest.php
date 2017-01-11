@@ -1,10 +1,18 @@
 <?php
 
 use App\Http\Controllers\Admin\CacheController;
+use \Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Http\Controllers\Admin\Controller as AdminController;
 
+/**
+ * Class CacheControllerTest.
+ *
+ * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
+ */
 class CacheControllerTest extends TestCase
 {
+    use DatabaseTransactions;
+
     /**
      * @var App\User
      */
