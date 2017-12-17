@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
 interface CustomerContract
 {
     /**
-     * Get or set the product identifier.
+     * Get or set the identifier.
      *
      * @param  null|string  $id
      * @return string

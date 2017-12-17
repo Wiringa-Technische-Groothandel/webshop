@@ -2,7 +2,9 @@
 
 namespace WTG\Models;
 
+use WTG\Contracts\ContactContract;
 use Illuminate\Database\Eloquent\Model;
+use WTG\Contracts\CustomerContract;
 
 /**
  * Contact model.
@@ -11,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @subpackage  Models
  * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
-class Contact extends Model
+class Contact extends Model implements ContactContract
 {
     /**
      * Company relation.
@@ -21,5 +23,26 @@ class Contact extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    /**
+     * Get the identifier
+     *
+     * @param null|string $id
+     * @return string
+     */
+    public function identifier(?string $id = null): string
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Get the customer.
+     *
+     * @return CustomerContract
+     */
+    public function getCustomer(): CustomerContract
+    {
+        return $this->getAttribute('customer');
     }
 }

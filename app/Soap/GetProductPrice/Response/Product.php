@@ -42,6 +42,11 @@ class Product
     public $discount;
 
     /**
+     * @var string
+     */
+    public $discountType;
+
+    /**
      * @var float
      */
     public $price_per;
@@ -49,12 +54,12 @@ class Product
     /**
      * @var string
      */
-    public $price_unit;
+    public $price_per_string;
 
     /**
-     * @var float
+     * @var string
      */
-    public $stock;
+    public $price_unit;
 
     /**
      * @var int

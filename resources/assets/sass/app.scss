@@ -3,7 +3,9 @@
 
 // Imports
 @import "~bootstrap/scss/bootstrap";
-@import "~font-awesome/scss/font-awesome.scss";
+@import "../packages/fontawesome-pro/scss/fontawesome.scss";
+@import "../packages/fontawesome-pro/scss/fa-regular.scss";
+@import "../packages/fontawesome-pro/scss/fa-light.scss";
 @import "~animate.css/animate";
 @import "~tiny-slider/src/tiny-slider.scss";
 
@@ -21,6 +23,7 @@
 
 body {
   text-rendering: optimizeLegibility;
+  height: $fa-font-path;
 }
 
 .separator {

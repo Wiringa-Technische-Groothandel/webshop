@@ -21,6 +21,11 @@ class Request extends AbstractRequest
     /**
      * @var string
      */
+    public $currencyId;
+
+    /**
+     * @var string
+     */
     public $debtorId;
 
     /**
@@ -51,5 +56,6 @@ class Request extends AbstractRequest
         parent::__construct();
 
         $this->profileId = config('soap.profiles.priceAndStock');
+        $this->currencyId = 'EUR';
     }
 }

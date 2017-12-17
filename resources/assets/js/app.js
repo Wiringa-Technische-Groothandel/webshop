@@ -7,12 +7,7 @@
 
 require('./bootstrap');
 
-// require('./components/content');
-// require('./components/footer');
-// require('./components/cart');
-// require('./components/price');
-// require('./components/search');
-// require('./components/address');
+// $(document).snowfall({ flakeCount : 100, shadow: true, round: true, maxSize: 5 });
 
 var doc = document.documentElement;
 doc.setAttribute('data-useragent', navigator.userAgent);
@@ -43,6 +38,7 @@ Vue.use(VueGoogleMaps, {
 });
 
 window.vm = new Vue({
+    props: ['loggedIn'],
     el: '#app',
     components: {
         'price': Price,
@@ -84,6 +80,8 @@ window.vm = new Vue({
         });
     },
     mounted () {
-        this.fetchPrices();
+        if (window.Laravel.isLoggedIn) {
+            this.fetchPrices();
+        }
     }
 });

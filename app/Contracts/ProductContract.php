@@ -25,4 +25,20 @@ interface ProductContract
      * @return string
      */
     public function sku(?string $sku = null): string;
+
+    /**
+     * Get or set the product group.
+     *
+     * @param  null|string  $group
+     * @return string
+     */
+    public function group(?string $group = null): string;
+
+    /**
+     * Get or set the product sales unit.
+     *
+     * @param  null|string  $salesUnit
+     * @return string
+     */
+    public function salesUnit(?string $salesUnit = null): string;
 }

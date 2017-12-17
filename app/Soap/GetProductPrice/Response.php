@@ -13,5 +13,8 @@ use WTG\Soap\AbstractResponse;
  */
 class Response extends AbstractResponse
 {
-    //
+    /**
+     * @var Response\Product
+     */
+    public $product;
 }

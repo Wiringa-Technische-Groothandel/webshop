@@ -14,9 +14,13 @@ set('http_user', 'wiringa');
 // [Optional] Allocate tty for git clone. Default value is false.
 set('git_tty', true); 
 
-// Shared files/dirs between deploys 
+// Laravel shared dirs
+set('shared_dirs', [
+    'storage',
+]);
+
+// Laravel shared file
 set('shared_files', []);
-set('shared_dirs', []);
 
 // Writable dirs by web server 
 set('writable_dirs', []);
@@ -27,10 +31,11 @@ set('bin/composer', 'composer');
 
 host('artemis')
     ->stage('staging')
-    ->set('deploy_path', '/httpdocs');
+    ->set('deploy_path', '/httpdocs')
+    ->set('branch', 'release');
 
 // Tasks
-
+//
 //task('build', function () {
 //    run('cd {{release_path}} && build');
 //});

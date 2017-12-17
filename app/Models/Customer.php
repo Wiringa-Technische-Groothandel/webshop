@@ -3,9 +3,9 @@
 namespace WTG\Models;
 
 use Illuminate\Support\Collection;
+use WTG\Contracts\ContactContract;
 use WTG\Contracts\ProductContract;
 use WTG\Contracts\CustomerContract;
-use WTG\Contracts\FavoriteContract;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -100,6 +100,25 @@ class Customer extends Authenticatable implements CustomerContract
     public function identifier(?string $id = null): string
     {
         return $this->getAttribute('id');
+    }
+
+    /**
+     * Get the contact.
+     *
+     * @return ContactContract
+     */
+    public function getContact(): ContactContract
+    {
+        $contact = $this->getAttribute('contact');
+
+        if (! $contact) {
+            /** @var Contact $contact */
+            $contact = app()->make(ContactContract::class);
+            $contact->setAttribute('customer_id', $this->identifier());
+            $contact->save();
+        }
+
+        return $contact;
     }
 
     /**

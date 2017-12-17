@@ -5,6 +5,7 @@ namespace WTG\Models;
 use Laravel\Scout\Searchable;
 use WTG\Contracts\ProductContract;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Product model.
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Product extends Model implements ProductContract
 {
-    use Searchable;
+    use Searchable, SoftDeletes;
 
     /**
      * @var array
@@ -48,6 +49,35 @@ class Product extends Model implements ProductContract
         return $this->getAttribute('sku');
     }
 
+    /**
+     * Get or set the product group.
+     *
+     * @param  null|string  $group
+     * @return string
+     */
+    public function group(?string $group = null): string
+    {
+        if ($group) {
+            $this->setAttribute('group', $group);
+        }
+
+        return $this->getAttribute('group');
+    }
+
+    /**
+     * Get or set the product sales unit.
+     *
+     * @param  null|string  $salesUnit
+     * @return string
+     */
+    public function salesUnit(?string $salesUnit = null): string
+    {
+        if ($salesUnit) {
+            $this->setAttribute('sales_unit', $salesUnit);
+        }
+
+        return $this->getAttribute('sales_unit');
+    }
 
     /**
      * Get the indexable data array for the model.
@@ -80,7 +110,7 @@ class Product extends Model implements ProductContract
     public static function createFromSoapProduct(\WTG\Soap\GetProducts\Response\Product $product): Product
     {
         /** @var static $model */
-        $model = static::firstOrNew([
+        $model = static::withTrashed()->firstOrNew([
             'sku' => $product->sku
         ]);
 
@@ -122,8 +152,8 @@ class Product extends Model implements ProductContract
     public function getPath(): string
     {
         return sprintf(
-            '%s  /  %s  /  %s',
-            $this->getAttribute('brand'),
+            '%s  /  %s',
+//            $this->getAttribute('brand'),
             $this->getAttribute('series'),
             $this->getAttribute('type')
         );

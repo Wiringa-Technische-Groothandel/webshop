@@ -13,7 +13,7 @@
                 <form action="{{ route('catalog.search') }}">
                     <div class="input-group">
                         <input type="text" name="query" class="form-control" placeholder="{{ __('Zoeken') }}" value="{{ request('query') }}">
-                        <span class="input-group-btn"><button class="btn btn-primary" type="button">{{ __('Zoeken') }}</button></span>
+                        <span class="input-group-btn"><button class="btn btn-primary" type="button"><i class="fal fa-fw fa-search"></i></button></span>
                     </div>
 
                     <hr />

@@ -17,7 +17,7 @@ class CreateContactsTable extends Migration
             $table->increments('id');
             $table->integer('customer_id', false, true);
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
-            $table->string('contact_email');
+            $table->string('contact_email')->nullable();
             $table->string('order_email')->nullable();
             $table->timestamps();
         });

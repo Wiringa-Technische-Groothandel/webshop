@@ -5,6 +5,12 @@ namespace WTG\Providers;
 use Illuminate\Support\ServiceProvider;
 use WTG\LogHandlers\DatabaseLogHandler;
 
+/**
+ * Log service provider.
+ *
+ * @package     WTG\Providers
+ * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
+ */
 class LogServiceProvider extends ServiceProvider
 {
     /**

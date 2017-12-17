@@ -14,7 +14,7 @@
                 @yield('content')
             </main>
 
-            @include('components.footer')
+            <footer-block></footer-block>
 
             @yield('after_content')
 

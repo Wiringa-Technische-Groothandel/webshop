@@ -84,8 +84,6 @@ class PriceController extends Controller
         $customerNumber = auth()->user()->getCustomerNumber();
         $response = app('soap')->getProductPricesAndStocks($products, $customerNumber);
 
-
-
         return response()->json([
             'payload' => $response->products,
             'message' => $response->message,

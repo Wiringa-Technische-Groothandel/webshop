@@ -2,6 +2,8 @@
 
 namespace WTG\Soap\GetProducts\Response;
 
+use Carbon\Carbon;
+
 /**
  * GetProducts product response.
  *
@@ -20,6 +22,11 @@ class Product
      * @var string
      */
     public $group;
+
+    /**
+     * @var Carbon
+     */
+    public $deleted_at;
 
     /**
      * @var string

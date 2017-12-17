@@ -3,6 +3,7 @@
 namespace WTG\Soap\GetProductPrice;
 
 use Exception;
+use WTG\Contracts\ProductContract;
 use WTG\Soap\AbstractService;
 
 /**
@@ -56,17 +57,16 @@ class Service extends AbstractService
     /**
      * Run the service.
      *
-     * @param  string  $sku
+     * @param  ProductContract  $product
      * @param  float  $quantity
-     * @param  string  $unit
      * @param  string  $customerId
      * @return Response
      */
-    public function handle(string $sku, float $quantity, string $unit, string $customerId)
+    public function handle(ProductContract $product, float $quantity, string $customerId)
     {
-        $this->sku = $sku;
+        $this->sku = $product->sku();
+        $this->unit = $product->salesUnit();
         $this->quantity = $quantity;
-        $this->unit = $unit;
         $this->customerId = $customerId;
 
         try {
@@ -105,6 +105,36 @@ class Service extends AbstractService
      */
     protected function buildResponse($soapResponse)
     {
-        dd($soapResponse);
+        $soapProduct = $soapResponse->ProductPricesV2->ProductPriceV2;
+        $soapPrice = $soapProduct->ProductPriceDetailsV2->ProductPriceDetailV2;
+
+        /** @var Response\Product $product */
+        $product = app()->make(Response\Product::class);
+        $product->sku           = $soapProduct->ProductId;
+        $product->sales_unit    = $soapProduct->UnitId;
+        $product->quantity      = (float) $soapPrice->NumberRequested;
+        $product->gross_price   = (float) $soapPrice->GrossPrice;
+        $product->net_price     = (float) $soapPrice->NettPrice;
+        $product->discount      = (float) $soapPrice->Discount;
+        $product->discountType  = $soapPrice->DiscountOrigin;
+        $product->price_per     = (float) $soapPrice->PricePer;
+        $product->price_unit    = $soapPrice->PriceUnit;
+        $product->refactor      = (int) $soapPrice->ConversionFactor;
+
+        if ($product->sales_unit === $product->price_unit) {
+            $pricePerString = sprintf('Prijs per %s %s',
+                $product->price_per, unit_to_str($product->sales_unit, $product->price_per > 1));
+        } else {
+            $pricePerString = sprintf('Prijs per %s %s van %s %s',
+                $product->price_per, unit_to_str($product->sales_unit, $product->price_per > 1),
+                $product->refactor, unit_to_str($product->price_unit, $product->refactor > 1)
+            );
+        }
+
+        $product->price_per_string = $pricePerString;
+
+        $this->response->product = $product;
+        $this->response->code = 200;
+        $this->response->message = 'Success';
     }
 }

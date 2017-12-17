@@ -2,18 +2,33 @@ language: php
 
 php:
   - '7.1'
+  - '7.2'
+
+before_install:
+  - phpenv config-rm xdebug.ini
+  - cp .env.travis .env
+  - mysql -e 'create database testing;'
 
 install:
   - npm install
   - composer install --no-interaction
+  - php artisan key:generate
+  - php artisan migrate
 
 script:
   - npm run prod
   - vendor/bin/phpunit
 
-#deploy:
-#  skip_cleanup: true
-#  - provider: script
-#    script: vendor/bin/dep deploy staging
-#    on:
-#      branch: task/redesign-and-rewrite
+services:
+  - mysql
+
+cache:
+  directories:
+    - node_modules
+    - vendor
+
+branches:
+    only:
+        - master
+        - release
+        - development

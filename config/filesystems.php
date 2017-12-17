@@ -55,6 +55,18 @@ return [
             'visibility' => 'public',
         ],
 
+        'sftp' => [
+            'driver' => 'sftp',
+            'host' => env('SFTP_HOST'),
+            'port' => env('SFTP_PORT', 22),
+            'username' => env('SFTP_USER'),
+            'password' => env('SFTP_PASS'),
+            'privateKey' => '',
+            'root' => env('SFTP_ROOT'),
+            'timeout' => 10,
+            'directoryPerm' => 0755
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_KEY'),

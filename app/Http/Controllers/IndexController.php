@@ -22,6 +22,8 @@ class IndexController extends Controller
      */
     public function getAction(Request $request)
     {
+        dd($request->user()->getContact());
+
         return view('pages.index');
     }
 }

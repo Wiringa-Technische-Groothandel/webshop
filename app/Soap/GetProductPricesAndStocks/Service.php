@@ -98,9 +98,7 @@ class Service extends AbstractService
      */
     protected function buildResponse($soapResponse)
     {
-        $soapProducts = !empty($soapResponse->ProductPricesAndStocks) ?
-            $soapResponse->ProductPricesAndStocks->ProductPriceAndStockV2 :
-            [];
+        $soapProducts = $soapResponse->ProductPricesAndStocks->ProductPriceAndStockV2 ?? [];
 
         if (! is_array($soapProducts)) {
             $soapProducts = [ $soapProducts ];

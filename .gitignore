@@ -11,4 +11,5 @@ Homestead.yaml
 npm-debug.log
 .env
 _ide_helper.php
+.phpstorm.meta.php
 yarn-error.log

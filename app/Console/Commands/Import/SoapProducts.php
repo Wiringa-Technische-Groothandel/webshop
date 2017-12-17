@@ -10,6 +10,7 @@ use WTG\Soap\GetProducts\Response;
 /**
  * Import products command.
  *
+ * @deprecated
  * @package     WTG\Console
  * @subpackage  Commands
  * @author      Thomas Wiringa <thomas.wiringa@gmail.com>

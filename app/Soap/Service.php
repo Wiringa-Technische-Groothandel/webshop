@@ -2,7 +2,7 @@
 
 namespace WTG\Soap;
 
-use Carbon\Carbon;
+use WTG\Contracts\ProductContract;
 use Illuminate\Support\Collection;
 use WTG\Services\AbstractSoapService;
 
@@ -15,24 +15,6 @@ use WTG\Services\AbstractSoapService;
  */
 class Service extends AbstractSoapService
 {
-    public function getAllProduct()
-    {
-        return $this->client->__soapCall("GetProductV2", [
-            "GetProductV2" => [
-                "SecurityContext" => [
-                    "SessionToken" => "",
-                    "UserId" => config('soap.user'),
-                    "Password" => config('soap.pass'),
-                ],
-                "AdminId" => config('soap.admin'),
-                "ProfileId" => config('soap.profiles.product'),
-                "ProductId" => "4011805",
-                "UnitId" => "",
-                "ContextDate" => Carbon::now()->format('Y-m-d')
-            ]
-        ]);
-    }
-
     /**
      * Calls: GetProducts
      *
@@ -52,17 +34,16 @@ class Service extends AbstractSoapService
      * Calls: GetProductPrice
      *
      * @soap
-     * @param  string  $sku
+     * @param  ProductContract  $product
      * @param  float  $quantity
-     * @param  string  $unit
      * @param  string  $customerId
      * @return GetProductPrice\Response
      */
-    public function getProductPrice(string $sku, float $quantity, string $unit, string $customerId)
+    public function getProductPrice(ProductContract $product, float $quantity, string $customerId)
     {
         /** @var GetProductPrice\Service $service */
         $service = app()->make(GetProductPrice\Service::class);
-        return $service->handle($sku, $quantity, $unit, $customerId);
+        return $service->handle($product, $quantity, $customerId);
     }
 
     /**
@@ -78,23 +59,5 @@ class Service extends AbstractSoapService
         /** @var GetProductPricesAndStocks\Service $service */
         $service = app()->make(GetProductPricesAndStocks\Service::class);
         return $service->handle($products, $customerId);
-    }
-
-    public function getProductStock()
-    {
-        return $this->client->__soapCall("GetProductStock", [
-            "GetProductStock" => [
-                "SecurityContext" => [
-                    "SessionToken" => "",
-                    "UserId" => config('soap.user'),
-                    "Password" => config('soap.pass'),
-                ],
-                "AdminId" => config('soap.admin'),
-                "ProfileId" => config('soap.profiles.priceAndStock'),
-                "ProductId" => "1501333",
-                "UnitId" => "LGT",
-                "ContextDate" => Carbon::now()->format('Y-m-d')
-            ]
-        ]);
     }
 }

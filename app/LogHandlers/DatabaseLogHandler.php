@@ -51,6 +51,6 @@ class DatabaseLogHandler extends AbstractHandler implements HandlerInterface
 
         $this->failed = false;
 
-        return true;
+        return false;
     }
 }

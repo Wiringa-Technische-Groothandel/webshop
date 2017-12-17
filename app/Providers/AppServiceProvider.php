@@ -2,8 +2,10 @@
 
 namespace WTG\Providers;
 
+use League\Flysystem\Filesystem;
 use WTG\Services\AddressService;
 use WTG\Soap\Service as SoapService;
+use League\Flysystem\Sftp\SftpAdapter;
 use Illuminate\Support\ServiceProvider;
 use WTG\Services\Contracts\AddressServiceContract;
 
@@ -16,7 +18,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        \Storage::extend('sftp', function ($app, $config) {
+            $adapter = new SftpAdapter($config);
+
+            return new Filesystem($adapter);
+        });
     }
 
     /**
