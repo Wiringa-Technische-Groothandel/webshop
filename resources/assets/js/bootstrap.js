@@ -9,8 +9,6 @@ window._ = require('lodash');
 
 window.$ = window.jQuery = require('jquery');
 
-require('../packages/JQuery-Snowfall/dist/snowfall.jquery.min');
-
 import Popper from 'popper.js';
 window.Popper = Popper;
 

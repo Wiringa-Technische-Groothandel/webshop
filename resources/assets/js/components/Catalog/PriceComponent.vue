@@ -6,11 +6,17 @@
         </div>
 
         <div class="gross-price" v-if="grossPrice !== false">
-            Bruto: <i class="fab fa-euro-sign"></i> <span>{{ grossPrice }}</span>
+            Bruto:
+            <span class="d-block d-sm-inline">
+                <i class="fab fa-euro-sign"></i> <span>{{ grossPrice }}</span>
+            </span>
         </div>
 
         <div class="net-price" v-if="netPrice !== false">
-            Netto: <i class="fab fa-euro-sign"></i> <span>{{ netPrice }}</span>
+            Netto:
+            <span class="d-block d-sm-inline">
+                <i class="fab fa-euro-sign"></i> <span>{{ netPrice }}</span>
+            </span>
         </div>
 
         <small class="form-text text-muted price-per" v-if="pricePer !== false">
@@ -27,10 +33,15 @@
         font-family: 'Exo 2', sans-serif;
         font-size: 20px;
         color: #125175;
+
+        span {
+            white-space: nowrap;
+        }
     }
 
     .price-per {
-        margin-top: 15px
+        margin-top: 15px;
+        white-space: nowrap;
     }
 </style>
 

@@ -7,8 +7,6 @@
 
 require('./bootstrap');
 
-// $(document).snowfall({ flakeCount : 100, shadow: true, round: true, maxSize: 5 });
-
 var doc = document.documentElement;
 doc.setAttribute('data-useragent', navigator.userAgent);
 

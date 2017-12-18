@@ -20,46 +20,14 @@
     display: table-cell;
   }
 
+  .product-name {
+    font-size: 18px;
+  }
+
   &:last-child {
     border-bottom: none;
   }
 }
-
-//.prices > .net-price,
-//.prices > .gross-price {
-//  p {
-//    margin: 5px 0 0;
-//    font-weight: 600;
-//    font-size: 18px;
-//  }
-//
-//  div {
-//    font-style: italic;
-//    font-size: 20px;
-//  }
-//}
-
-//.price-loading {
-//  .loading-animation {
-//    display: block;
-//  }
-//
-//  .net-price,
-//  .gross-price {
-//    display: none !important;
-//  }
-//}
-//
-//.price-loaded {
-//  .loading-animation {
-//    display: none;
-//  }
-//
-//  .net-price,
-//  .gross-price {
-//    display: inline-block;
-//  }
-//}
 
 .pagination {
   margin: 0 auto;

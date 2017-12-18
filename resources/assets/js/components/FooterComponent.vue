@@ -2,7 +2,7 @@
     <footer id="footer" :class="{ 'footer-fixed-bottom': fixedFooter }">
         <div class="container">
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-md-3">
                     <address>
                         <b>Wiringa Technische Groothandel</b><br />
                         Bovenstreek 1<br />
@@ -10,7 +10,7 @@
                         <i class="fal fa-fw fa-phone"></i> <a href="tel:+31505445566">050 - 544 55 66</a>
                     </address>
                 </div>
-                <div class="col-sm-9">
+                <div class="col-md-9">
                     <p>
                         Deze site maakt gebruik van <abbr title="Deze cookies houden de login status bij en zorgen voor de essentiele functionaliteit van de website">functionele cookies</abbr> en <abbr title="Deze cookies houden anoniem surfgedrag bij van uitsluitend deze website zodat wij de site beter kunnen laten werken">analytische cookies</abbr>.
                         <br />

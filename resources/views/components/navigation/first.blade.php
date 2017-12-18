@@ -8,14 +8,6 @@
             @endif
         </a>
 
-        @can('visit admin panel')
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link btn btn-outline-success" href="{{ routeIf('admin') }}">{{ trans('navigation.items.admin') }}</a>
-                </li>
-            </ul>
-        @endcan
-
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-links">
             <span class="navbar-toggler-icon"></span>
         </button>
