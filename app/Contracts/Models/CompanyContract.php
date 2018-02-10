@@ -13,28 +13,48 @@ use Illuminate\Support\Collection;
 interface CompanyContract
 {
     /**
-     * Get or set the identifier.
+     * Get the attached customers.
      *
-     * @param  null|string  $id
+     * @return Collection
+     */
+    public function getCustomers(): Collection;
+
+    /**
+     * Get the identifier.
+     *
      * @return null|string
      */
-    public function identifier(?string $id = null): ?string;
+    public function getId(): ?string;
 
     /**
      * Get or set the name.
      *
-     * @param  null|string  $name
-     * @return null|string
+     * @param  string  $name
+     * @return CompanyContract
      */
-    public function name(?string $name = null): ?string;
+    public function setName(string $name): CompanyContract;
 
     /**
-     * Get or set the customer number.
+     * Get or set the name.
      *
-     * @param  null|string  $customerNumber
      * @return null|string
      */
-    public function customerNumber(?string $customerNumber = null): ?string;
+    public function getName(): ?string;
+
+    /**
+     * Set the customer number.
+     *
+     * @param  string  $customerNumber
+     * @return CompanyContract
+     */
+    public function setCustomerNumber(string $customerNumber): CompanyContract;
+
+    /**
+     * Get the customer number.
+     *
+     * @return null|string
+     */
+    public function getCustomerNumber(): ?string;
 
     /**
      * Get the addresses.

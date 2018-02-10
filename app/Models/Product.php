@@ -5,7 +5,9 @@ namespace WTG\Models;
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use WTG\Contracts\Models\ProductContract;
+use WTG\Contracts\Models\DescriptionContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * Product model.
@@ -21,76 +23,213 @@ class Product extends Model implements ProductContract
     /**
      * @var array
      */
-    protected $guarded = ['id'];
+    protected $guarded = ['id', 'webshop'];
+
+    /**
+     * Description relation.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    protected function description(): HasOne
+    {
+        return $this->hasOne(Description::class);
+    }
+
+    /**
+     * Does the product have a description.
+     *
+     * @return bool
+     */
+    public function hasDescription(): bool
+    {
+        return (bool) $this->description()->exists();
+    }
+
+    /**
+     * Does the product have a description.
+     *
+     * @return null|DescriptionContract
+     */
+    public function getDescription(): ?DescriptionContract
+    {
+        return $this->getAttribute('description');
+    }
 
     /**
      * Product identifier.
      *
-     * @param  null|string  $id
      * @return string
      */
-    public function identifier(?string $id = null): string
+    public function getId(): string
     {
         return $this->getAttribute('id');
     }
 
     /**
-     * Get or set the sku.
+     * Set the sku.
      *
-     * @param  null|string  $sku
+     * @param  string  $sku
+     * @return ProductContract
+     */
+    public function setSku(string $sku): ProductContract
+    {
+        return $this->setAttribute('sku', $sku);
+    }
+
+    /**
+     * Get the sku.
+     *
      * @return string
      */
-    public function sku(?string $sku = null): string
+    public function getSku(): string
     {
-        if ($sku) {
-            $this->setAttribute('sku', $sku);
-        }
-
         return $this->getAttribute('sku');
     }
 
     /**
-     * Get or set the product group.
+     * Set the product group.
      *
-     * @param  null|string  $group
+     * @param  string  $group
+     * @return ProductContract
+     */
+    public function setGroup(string $group): ProductContract
+    {
+        return $this->setAttribute('group', $group);
+    }
+
+    /**
+     * Get the product group.
+     *
      * @return string
      */
-    public function group(?string $group = null): string
+    public function getGroup(): string
     {
-        if ($group) {
-            $this->setAttribute('group', $group);
-        }
-
         return $this->getAttribute('group');
     }
 
     /**
-     * Get or set the product name.
+     * Set the product name.
      *
-     * @param  null|string  $name
+     * @param  string  $name
+     * @return ProductContract
+     */
+    public function setName(string $name): ProductContract
+    {
+        return $this->setAttribute('name', $name);
+    }
+
+    /**
+     * Get the product name.
+     *
      * @return string
      */
-    public function name(?string $name = null): string
+    public function getName(): string
     {
-        if ($name) {
-            $this->setAttribute('name', $name);
-        }
-
         return $this->getAttribute('name');
     }
 
     /**
-     * Get or set the product sales unit.
+     * Set the product ean.
      *
-     * @param  null|string  $salesUnit
+     * @param  string  $ean
+     * @return ProductContract
+     */
+    public function setEan(string $ean): ProductContract
+    {
+        return $this->setAttribute('ean', $ean);
+    }
+
+    /**
+     * Get the product ean.
+     *
      * @return string
      */
-    public function salesUnit(?string $salesUnit = null): string
+    public function getEan(): string
     {
-        if ($salesUnit) {
-            $this->setAttribute('sales_unit', $salesUnit);
-        }
+        return $this->getAttribute('ean');
+    }
 
+    /**
+     * Set the product brand.
+     *
+     * @param  string  $brand
+     * @return ProductContract
+     */
+    public function setBrand(string $brand): ProductContract
+    {
+        return $this->setAttribute('brand', $brand);
+    }
+
+    /**
+     * Get the product brand.
+     *
+     * @return string
+     */
+    public function getBrand(): string
+    {
+        return $this->getAttribute('brand');
+    }
+
+    /**
+     * Set the product series.
+     *
+     * @param  string  $series
+     * @return ProductContract
+     */
+    public function setSeries(string $series): ProductContract
+    {
+        return $this->setAttribute('series', $series);
+    }
+
+    /**
+     * Get the product series.
+     *
+     * @return string
+     */
+    public function getSeries(): string
+    {
+        return $this->getAttribute('series');
+    }
+
+    /**
+     * Set the product type.
+     *
+     * @param  string  $type
+     * @return ProductContract
+     */
+    public function setType(string $type): ProductContract
+    {
+        return $this->setAttribute('type', $type);
+    }
+
+    /**
+     * Get the product type.
+     *
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->getAttribute('type');
+    }
+
+    /**
+     * Set the product sales unit.
+     *
+     * @param  string  $salesUnit
+     * @return ProductContract
+     */
+    public function setSalesUnit(string $salesUnit): ProductContract
+    {
+        return $this->setAttribute('sales_unit', $salesUnit);
+    }
+
+    /**
+     * Get the product sales unit.
+     *
+     * @return string
+     */
+    public function getSalesUnit(): string
+    {
         return $this->getAttribute('sales_unit');
     }
 
@@ -130,6 +269,10 @@ class Product extends Model implements ProductContract
         ]);
 
         foreach (get_object_vars($product) as $key => $value) {
+            if (in_array($key, $model->guarded)) {
+                continue;
+            }
+
             $model->setAttribute($key, $value);
         }
 

@@ -12,8 +12,8 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="my-2 my-lg-0">
-            <quick-search query="{{ request('request') }}" search-url="{{ route('catalog.search') }}"></quick-search>
+        <div class="my-2 my-lg-0 search-form">
+            <quick-search query="{{ request('query') }}" search-url="{{ route('catalog.search') }}"></quick-search>
         </div>
     </div>
 </nav>

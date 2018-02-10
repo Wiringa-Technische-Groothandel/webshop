@@ -2,13 +2,13 @@
 
 namespace WTG\Converters;
 
-use WTG\Models\Company;
-use WTG\Models\Contact;
-use WTG\Models\Customer;
-use Illuminate\Database\Eloquent\Model;
-use WTG\Models\Product;
 use WTG\Models\Quote;
+use WTG\Models\Contact;
+use WTG\Models\Product;
+use WTG\Models\Customer;
 use WTG\Models\QuoteItem;
+use Illuminate\Database\Eloquent\Model;
+use WTG\Contracts\Models\CompanyContract;
 
 /**
  * Customer table converter.
@@ -44,7 +44,7 @@ class CustomerTableConverter extends AbstractTableConverter
      */
     public function createModel(array $data): ?Model
     {
-        $company = Company::customerNumber($data['company_id'])->first();
+        $company = app()->make(CompanyContract::class)->where('customer_number', $data['company_id'])->first();
 
         if ($company === null) {
             \Log::warning('[Customer table conversion] No company was found for customer number '.$data['User_id']);
@@ -54,7 +54,7 @@ class CustomerTableConverter extends AbstractTableConverter
 
         $customer = new Customer;
 
-        $customer->setAttribute('company_id', $company->getAttribute('id'));
+        $customer->setAttribute('company_id', $company->getId());
         $customer->setAttribute('username', $data['username']);
         $customer->setAttribute('password', $data['password']);
 

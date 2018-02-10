@@ -14,8 +14,6 @@
 Route::get('/', 'IndexController@getAction')->name('home');
 Route::get('downloads', 'DownloadsController@getAction')->name('downloads');
 
-//Route::view('logs', 'pages.logs', [ 'logs' => \WTG\Models\Log::orderBy('logged_at', 'desc')->limit(50)->get() ]);
-
 Route::group([
     'as' => 'auth.',
     'namespace' => 'Auth'
@@ -100,7 +98,6 @@ Route::group([
     Route::post('order-history', 'OrderHistoryController@postAction');
     Route::post('discount', 'DiscountController@postAction');
 
-    Route::put('contactEmail', 'Dashboard\ContactEmailController@putAction')->name('contactEmail');
     Route::put('accounts', 'SubAccountController@putAction');
     Route::put('addresses', 'AddressController@putAction');
     Route::put('favorites/cart', 'FavoritesController@putAction')->name('favorites.addToCart');

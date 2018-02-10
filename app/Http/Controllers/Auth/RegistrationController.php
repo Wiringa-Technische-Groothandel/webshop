@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use WTG\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use WTG\Contracts\Services\RegistrationServiceContract;
+use WTG\Models\Registration;
 
 /**
  * Registration controller.
@@ -38,7 +39,7 @@ class RegistrationController extends Controller
      *
      * @return View
      */
-    public function getAction(): View
+    public function getAction()
     {
         return view('pages.auth.registration');
     }
@@ -52,9 +53,11 @@ class RegistrationController extends Controller
     public function putAction(Request $request): RedirectResponse
     {
         try {
-            $this->registrationService->createFromRequest($request);
+            $this->registrationService->create($request->all());
         } catch (\Exception $e) {
-            return back()->withInput($request->input());
+            return back()
+                ->withErrors($e->getMessage())
+                ->withInput($request->input());
         }
 
         return redirect(route('home'))

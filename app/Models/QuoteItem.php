@@ -63,62 +63,88 @@ class QuoteItem extends Model implements CartItemContract
     }
 
     /**
-     * Get or set the quantity.
+     * Set the item quantity.
      *
      * @param  float|null  $quantity
+     * @return CartItemContract
+     */
+    public function setQuantity(float $quantity): CartItemContract
+    {
+        return $this->setAttribute('qty', $quantity);
+    }
+
+    /**
+     * Get the item quantity.
+     *
      * @return float
      */
-    public function quantity(float $quantity = null): float
+    public function getQuantity(): ?float
     {
-        if ($quantity !== null) {
-            $this->setAttribute('qty', $quantity);
-        }
-
         return $this->getAttribute('qty');
     }
 
     /**
-     * Get or set the cart.
+     * Set the cart.
      *
-     * @param  CartContract|null  $cart
-     * @return CartContract
+     * @param  CartContract  $cart
+     * @return CartItemContract
      */
-    public function cart(CartContract $cart = null): CartContract
+    public function setCart(CartContract $cart): CartItemContract
     {
-        if ($cart) {
-            $this->quote()->associate($cart);
-        }
+        $this->quote()->associate($cart);
 
+        return $this;
+    }
+
+    /**
+     * Get the cart.
+     *
+     * @return CartItemContract
+     */
+    public function getCart(): CartItemContract
+    {
         return $this->getAttribute('quote');
     }
 
     /**
-     * Get or set the price.
+     * Set the price.
      *
-     * @param  string|null  $price
-     * @return string
+     * @param  string  $price
+     * @return CartItemContract
      */
-    public function price(string $price = null): string
+    public function setPrice(string $price): CartItemContract
     {
-        if ($price !== null) {
-            $this->setAttribute('price', $price);
-        }
+        return $this->setAttribute('price', $price);
+    }
 
+    /**
+     * Get the price.
+     *
+     * @return null|string
+     */
+    public function getPrice(): ?string
+    {
         return $this->getAttribute('price');
     }
 
     /**
-     * Get or set the subtotal.
+     * Set the subtotal.
      *
-     * @param  string|null  $subtotal
+     * @param  string  $subtotal
+     * @return CartItemContract
+     */
+    public function setSubtotal(string $subtotal): CartItemContract
+    {
+        return $this->setAttribute('subtotal', $subtotal);
+    }
+
+    /**
+     * Get the subtotal.
+     *
      * @return string
      */
-    public function subtotal(string $subtotal = null): string
+    public function getSubtotal(): ?string
     {
-        if ($subtotal !== null) {
-            $this->setAttribute('subtotal', $subtotal);
-        }
-
         return $this->getAttribute('subtotal');
     }
 }

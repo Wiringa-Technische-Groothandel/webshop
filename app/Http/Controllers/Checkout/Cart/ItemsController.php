@@ -4,8 +4,8 @@ namespace WTG\Http\Controllers\Checkout\Cart;
 
 use Illuminate\Http\Request;
 use WTG\Http\Controllers\Controller;
-use WTG\Contracts\Models\CartContract;
 use WTG\Contracts\Models\CartItemContract;
+use Illuminate\View\Factory as ViewFactory;
 use WTG\Contracts\Services\CartServiceContract;
 
 /**
@@ -25,10 +25,13 @@ class ItemsController extends Controller
     /**
      * CartController constructor.
      *
+     * @param  ViewFactory  $view
      * @param  CartServiceContract  $cartService
      */
-    public function __construct(CartServiceContract $cartService)
+    public function __construct(ViewFactory $view, CartServiceContract $cartService)
     {
+        parent::__construct($view);
+
         $this->cartService = $cartService;
     }
 
@@ -49,7 +52,7 @@ class ItemsController extends Controller
             'payload' => [
                 'items' => $items,
                 'grandTotal' => format_price($items->sum(function (CartItemContract $item) {
-                    return str_replace(',', '.', $item->price()) * $item->quantity();
+                    return str_replace(',', '.', $item->getPrice()) * $item->getQuantity();
                 }))
             ]
         ]);

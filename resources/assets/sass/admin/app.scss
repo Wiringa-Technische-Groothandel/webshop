@@ -6,10 +6,12 @@
 // Variables
 @import "variables";
 
-// Bootstrap
+// Packages
 @import "~bootstrap/scss/bootstrap";
-
-// Animate.css
+@import "../../packages/fontawesome-pro/scss/fontawesome.scss";
+@import "../../packages/fontawesome-pro/scss/fa-solid.scss";
+@import "../../packages/fontawesome-pro/scss/fa-regular.scss";
+@import "../../packages/fontawesome-pro/scss/fa-light.scss";
 @import "~animate.css/animate";
 
 // Components
@@ -27,6 +29,10 @@ html,
 body {
   font-family: $font-family-sans-serif;
   overflow-x: hidden;
+}
+
+.pagination {
+  justify-content: center;
 }
 
 .separator {

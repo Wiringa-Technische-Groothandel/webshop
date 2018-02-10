@@ -4,7 +4,7 @@
 
 @section('account.title')
     <h2 class="text-center block-title">
-        {{ trans('titles.account.dashboard', ['company' => $customer->getCompany()->getAttribute('name')]) }}
+        {{ trans('titles.account.dashboard', ['company' => $customer->getCompany()->getName() ]) }}
     </h2>
 @endsection
 
@@ -17,8 +17,7 @@
 
     <div class="row my-4">
         <div class="col-6">
-            <contact-email email="{{ $customer->getContact()->contactEmail() }}"
-                submit-url="{{ route('account.contactEmail') }}"></contact-email>
+            @include('components.account.dashboard.delivery-email')
         </div>
 
         <div class="col-6">

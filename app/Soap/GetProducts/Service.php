@@ -126,11 +126,6 @@ class Service extends AbstractService
 
             $this->assignAttributes($responseProduct, $product);
 
-            // Skip this product if it does not have a catalog group
-            if (! $responseProduct->catalog_group) {
-                continue;
-            }
-
             $this->response->products[] = $responseProduct;
         }
 
@@ -171,12 +166,6 @@ class Service extends AbstractService
                     break;
                 case 'TBH':
                     $responseProduct->related = $value;
-                    break;
-                case 'HFS':
-                    $responseProduct->catalog_group = $value;
-                    break;
-                case 'INC':
-                    $responseProduct->catalog_index = $value;
                     break;
                 case 'ATT':
                     $responseProduct->keywords = $value;

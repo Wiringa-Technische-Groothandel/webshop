@@ -19,73 +19,96 @@ class Carousel extends Model implements CarouselContract
     public $table = 'carousel';
 
     /**
-     * Address identifier.
+     * Slide identifier.
      *
-     * @param  null|string  $id
-     * @return null|string
+     * @return null|int
      */
-    public function identifier(?string $id = null): ?string
+    public function getId(): ?int
     {
         return $this->getAttribute('id');
     }
 
     /**
-     * Get or set the title.
+     * Set the title.
      *
-     * @param  null|string  $title
+     * @param  string  $title
+     * @return CarouselContract
+     */
+    public function setTitle(string $title): CarouselContract
+    {
+        return $this->setAttribute('title', $title);
+    }
+
+    /**
+     * Get the title.
+     *
      * @return null|string
      */
-    public function title(?string $title = null): ?string
+    public function getTitle(): ?string
     {
-        if ($title) {
-            $this->setAttribute('title', $title);
-        }
-
         return $this->getAttribute('title');
     }
 
     /**
-     * Get or set the caption.
+     * Set the caption.
      *
-     * @param  null|string  $caption
+     * @param  string  $caption
+     * @return CarouselContract
+     */
+    public function setCaption(string $caption): CarouselContract
+    {
+        return $this->setAttribute('caption', $caption);
+    }
+
+    /**
+     * Get the caption.
+     *
      * @return null|string
      */
-    public function caption(?string $caption = null): ?string
+    public function getCaption(): ?string
     {
-        if ($caption) {
-            $this->setAttribute('caption', $caption);
-        }
-
         return $this->getAttribute('caption');
     }
 
     /**
-     * Get or set the order.
+     * Set the order.
      *
-     * @param  null|int  $order
-     * @return null|int
+     * @param  int  $order
+     * @return CarouselContract
      */
-    public function order(?int $order = null): ?int
+    public function setOrder(int $order): CarouselContract
     {
-        if ($order) {
-            $this->setAttribute('order', $order);
-        }
+        return $this->setAttribute('order', $order);
+    }
 
+    /**
+     * Get the order.
+     *
+     * @return int
+     */
+    public function getOrder(): int
+    {
         return $this->getAttribute('order');
     }
 
     /**
-     * Get or set the image.
+     * Set the order.
      *
-     * @param  null|string  $image
-     * @return null|string
+     * @param  string  $image
+     * @return CarouselContract
      */
-    public function image(?string $image = null): ?string
+    public function setImage(string $image): CarouselContract
     {
-        if ($image) {
-            $this->setAttribute('image', $image);
-        }
+        return $this->setAttribute('image', $image);
+    }
 
+    /**
+     * Get the order.
+     *
+     * @return string
+     */
+    public function getImage(): string
+    {
         return $this->getAttribute('image');
     }
 }

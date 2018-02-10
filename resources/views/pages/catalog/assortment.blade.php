@@ -11,12 +11,7 @@
         <div class="row">
             <div class="col-md-3">
                 <form action="{{ route('catalog.search') }}">
-                    <div class="input-group">
-                        <input type="text" name="query" class="form-control" placeholder="{{ __('Zoeken') }}" value="{{ request('query') }}">
-                        <span class="input-group-btn"><button class="btn btn-primary" type="button"><i class="fal fa-fw fa-search"></i></button></span>
-                    </div>
-
-                    <hr />
+                    <input type="hidden" name="query" value="{{ request('query') }}">
 
                     @include('components.catalog.filters')
                 </form>

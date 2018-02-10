@@ -56,7 +56,7 @@ class SearchService
             'products' => $paginator,
             'brands' => $results->pluck('brand')->unique()->sort(),
             'series' => $results->pluck('series')->unique()->sort(),
-            'types' => $results->pluck('types')->unique()->sort(),
+            'types' => $results->pluck('type')->unique()->sort(),
         ]);
     }
 
@@ -77,8 +77,8 @@ class SearchService
 
         $items = $items->map(function (Product $product) {
             return [
-                'url' => route('catalog.product', ['sku' => $product->sku()]),
-                'name' => $product->name()
+                'url' => route('catalog.product', [ 'sku' => $product->getSku() ]),
+                'name' => $product->getName()
             ];
         });
 

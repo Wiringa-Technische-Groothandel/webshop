@@ -144,7 +144,7 @@ class CartService implements CartServiceContract
         $products = $items->pluck('product');
 
         /** @var Response $response */
-        $response = app('soap')->getProductPricesAndStocks($products, $customer->getCompany()->customerNumber());
+        $response = app('soap')->getProductPricesAndStocks($products, $customer->getCompany()->getCustomerNumber());
 
         if ($response->code !== 200) {
             throw new \Exception('Failed to load prices for cart items.');
@@ -154,15 +154,15 @@ class CartService implements CartServiceContract
 
         $items->map(function (CartItemContract $item) use ($products) {
             $product = $products->first(function ($product) use ($item) {
-                return $product->sku === $item->getProduct()->sku();
+                return $product->sku === $item->getProduct()->getSku();
             });
 
             if (! $product) {
                 return $item;
             }
 
-            $item->price(format_price($product->net_price));
-            $item->subtotal(format_price($product->net_price * $item->quantity()));
+            $item->setPrice(format_price($product->net_price));
+            $item->setSubtotal(format_price($product->net_price * $item->getQuantity()));
 
             return $item;
         });

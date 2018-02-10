@@ -22,7 +22,10 @@ class SoapProducts extends Command
      *
      * @var string
      */
-    protected $signature = 'import:soap:products {--i|index=1 : Start index} {--c|count=200 : Amount of items to fetch at once}';
+    protected $signature =  'import:soap:products ' .
+                            '{--i|index=1 : Start index} ' .
+                            '{--c|count=200 : Amount of items to fetch at once} ' .
+                            '{--d|dry-run : Do not save the products}';
 
     /**
      * The console command description.
@@ -74,7 +77,9 @@ class SoapProducts extends Command
                 $product = Product::createFromSoapProduct($soapProduct);
                 $product->setAttribute('synchronized_at', $this->runTime);
 
-                $product->save();
+                if (! $this->option('dry-run')) {
+                    $product->save();
+                }
 
                 $this->output->progressAdvance();
             }

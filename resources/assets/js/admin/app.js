@@ -7,43 +7,22 @@
 
 require('./bootstrap');
 
-require('../components/notification');
-require('./components/company');
+// ChartJS
+window.Chart.defaults.global.maintainAspectRatio = false;
+
+// Axios
+window.axios.defaults.headers.common = {
+    'X-Requested-With': 'XMLHttpRequest'
+};
+
+window.randomColor = function () {
+    return randomMC.getColor();
+};
 
 // Names of the months
 window.months = ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December'];
 
-$(document).on('change', '.btn-file :file', function() {
-    var input = $(this),
-        numFiles = input.get(0).files ? input.get(0).files.length : 1,
-        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-
-    input.trigger('fileselect', [numFiles, label]);
-});
-
 $(document).ready( function() {
-    // Enable tooltips
-    $('[data-toggle="tooltip"]').tooltip();
-
-    $('.btn-file :file').on('fileselect', function(event, numFiles, label) {
-
-        var input = $(this).parents('.input-group').find(':text'),
-            log = numFiles > 1 ? numFiles + ' files selected' : label;
-
-        if( input.length ) {
-            input.val(log);
-        } else {
-            if( log ) alert(log);
-        }
-    });
-
-    // var $notification = $('.notification');
-    //
-    // setTimeout(function () {
-    //     $notification.removeClass('fadeInLeft');
-    //     $notification.addClass('fadeOutLeft');
-    // }, 5000);
-
     var $page = $('#page-wrapper');
     var $navToggle = $('#toggle-navigation');
 
@@ -54,4 +33,46 @@ $(document).ready( function() {
             $page.addClass('show-nav');
         }
     });
+});
+
+Vue.component('notification', require('../components/Notification'));
+
+window.vm = new Vue({
+    el: '#app',
+    data () {
+        return {
+            skus: [],
+            filter: {}
+        }
+    },
+    methods: {
+        fetchPrices () {
+            axios.post('/fetchPrices', {
+                skus: this.$data.skus
+            })
+                .then((response) => {
+                    response.data.payload.forEach((item) => {
+                        this.$root.$emit('price-fetched-' + item.sku, {
+                            netPrice: item.net_price,
+                            grossPrice: item.gross_price,
+                            pricePer: item.price_per_string,
+                            stock: item.stock_string,
+                        });
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    },
+    created () {
+        this.$root.$on('fetch-price', (sku) => {
+            this.$data.skus.push(sku);
+        });
+    },
+    mounted () {
+        if (window.Laravel.isLoggedIn && this.$data.skus.length > 0) {
+            this.fetchPrices();
+        }
+    }
 });

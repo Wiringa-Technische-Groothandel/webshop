@@ -2,7 +2,7 @@
 
 namespace WTG\Contracts\Services;
 
-use Illuminate\Http\Request;
+use WTG\Contracts\Models\RegistrationContract;
 
 /**
  * Registration service contract.
@@ -16,8 +16,8 @@ interface RegistrationServiceContract
     /**
      * Create a registration from request.
      *
-     * @param  Request  $request
-     * @return bool
+     * @param  array  $data
+     * @return RegistrationContract
      */
-    public function createFromRequest(Request $request): bool;
+    public function create(array $data): RegistrationContract;
 }

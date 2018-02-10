@@ -3,6 +3,7 @@
 namespace WTG\Services\Import;
 
 use Carbon\Carbon;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use WTG\Models\ImportData;
 use Illuminate\Support\Collection;
 use WTG\Models\Product as ProductModel;
@@ -52,6 +53,7 @@ class Assortment
      * Run the importer.
      *
      * @return void
+     * @throws FileNotFoundException
      */
     public function run(): void
     {
@@ -125,6 +127,7 @@ class Assortment
      *
      * @param  string  $file
      * @return string
+     * @throws FileNotFoundException
      */
     public function readFile(string $file): string
     {
@@ -145,9 +148,10 @@ class Assortment
      * Import products.
      *
      * @param  \SimpleXMLElement  $products
+     * @param  null|int  $count
      * @return void
      */
-    public function importProducts(\SimpleXMLElement $products)
+    public function importProducts(\SimpleXMLElement $products, ?int &$count = null)
     {
         foreach ($products->children() as $xmlProduct) {
             $mutation = substr((string) $xmlProduct->Mutation, 0, 1) ?: self::MUTATION_UPDATE;
@@ -163,6 +167,8 @@ class Assortment
                 $product->setAttribute('synchronized_at', $this->runTime);
                 $product->setAttribute('deleted_at', $this->runTime);
                 $product->save();
+
+                \Log::debug(sprintf('[Product import] Deleted %s.', $sku));
 
                 continue;
             }
@@ -187,8 +193,10 @@ class Assortment
 
             $this->assignAttributes($soapProduct, $xmlProduct);
 
-            // Skip this product if it does not have a catalog group
-            if (! $soapProduct->catalog_group) {
+            // Skip this product
+            if (! $soapProduct->webshop) {
+                \Log::debug(sprintf('[Product import] Skipped %s. Reason: %s', $sku, 'webshop is false'));
+
                 continue;
             }
 
@@ -197,6 +205,12 @@ class Assortment
             $product->setAttribute('deleted_at', null);
 
             $product->save();
+
+            if ($count !== null) {
+                $count++;
+            }
+
+            \Log::debug(sprintf('[Product import] Imported %s.', $sku));
         }
     }
 
@@ -242,11 +256,8 @@ class Assortment
                 case 'TBH':
                     $responseProduct->related = $value;
                     break;
-                case 'HFS':
-                    $responseProduct->catalog_group = $value;
-                    break;
-                case 'INC':
-                    $responseProduct->catalog_index = $value;
+                case 'WEB':
+                    $responseProduct->webshop = (bool) $value;
                     break;
                 case 'ATT':
                     $responseProduct->keywords = $value;

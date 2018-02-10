@@ -2,13 +2,14 @@
 
 namespace WTG\Http\Controllers\Account;
 
-use WTG\Models\Quote;
 use WTG\Models\Product;
 use WTG\Models\Customer;
 use Illuminate\Http\Request;
 use WTG\Http\Controllers\Controller;
+use Illuminate\View\Factory as ViewFactory;
 use WTG\Contracts\Services\CartServiceContract;
 use WTG\Http\Requests\AddFavoritesToCartRequest;
+use WTG\Contracts\Services\FavoritesServiceContract;
 
 /**
  * Favorites controller.
@@ -25,13 +26,26 @@ class FavoritesController extends Controller
     protected $cartService;
 
     /**
+     * @var FavoritesServiceContract
+     */
+    protected $favoritesService;
+
+    /**
      * FavoritesController constructor.
      *
+     * @param  ViewFactory  $view
      * @param  CartServiceContract  $cartService
+     * @param  FavoritesServiceContract  $favoritesService
      */
-    public function __construct(CartServiceContract $cartService)
-    {
+    public function __construct(
+        ViewFactory $view,
+        CartServiceContract $cartService,
+        FavoritesServiceContract $favoritesService
+    ) {
+        parent::__construct($view);
+
         $this->cartService = $cartService;
+        $this->favoritesService = $favoritesService;
     }
 
     /**

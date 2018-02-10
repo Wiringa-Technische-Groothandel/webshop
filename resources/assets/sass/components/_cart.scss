@@ -1,3 +1,18 @@
+#mini-cart {
+  position: relative;
+
+  .badge {
+    @include media-breakpoint-up(md) {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+    }
+
+    border-radius: 1rem;
+    font-weight: 100;
+  }
+}
+
 #cart-item-container {
   position: relative;
 

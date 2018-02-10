@@ -8,26 +8,12 @@ window._ = require('lodash');
 
 window.$ = window.jQuery = require('jquery');
 
+import Popper from 'popper.js';
+window.Popper = Popper;
+
 require('bootstrap');
 
-/**
- * We'll load the axios HTTP library which allows us to easily issue requests
- * to our Laravel back-end. This library automatically handles sending the
- * CSRF token as a header based on the value of the "XSRF" token cookie.
- */
-
-window.axios = require('axios');
-
-window.axios.defaults.headers.common = {
-    'X-Requested-With': 'XMLHttpRequest'
-};
-
-// Random material color generator
-window.randomMC = require('random-material-color');
-window.randomColor = function () {
-    return randomMC.getColor();
-};
-
-// ChartJS
 window.Chart = require('chart.js');
-window.Chart.defaults.global.maintainAspectRatio = false;
+window.Vue = require('vue');
+window.axios = require('axios');
+window.randomMC = require('random-material-color');

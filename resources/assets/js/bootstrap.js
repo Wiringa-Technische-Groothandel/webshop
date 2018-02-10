@@ -14,6 +14,8 @@ window.Popper = Popper;
 
 require('bootstrap');
 
+window.lightbox = require('lightbox2');
+
 window.Chart = require('chart.js');
 
 window.Vue = require('vue');

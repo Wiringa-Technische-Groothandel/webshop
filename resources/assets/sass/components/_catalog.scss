@@ -29,6 +29,34 @@
   }
 }
 
+.prices {
+  .gross-price,
+  .net-price {
+    font-family: $font-family-sans-serif-oswald;
+    font-weight: 700;
+    font-size: 20px;
+    color: #125175;
+
+    span {
+      white-space: nowrap;
+    }
+  }
+
+  .price-per {
+    margin-top: 15px;
+  }
+
+  .stock,
+  .price-per {
+    white-space: nowrap;
+  }
+}
+
+.product-name {
+  font-family: $font-family-sans-serif-oswald;
+  font-weight: 500;
+}
+
 .pagination {
   margin: 0 auto;
 }

@@ -2,10 +2,11 @@
 
 namespace WTG\Exceptions;
 
-use Exception;
-use Illuminate\Session\TokenMismatchException;
 use WTG\Constant;
+use WTG\Contracts\Models\CustomerContract;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Session\TokenMismatchException;
+use Illuminate\Auth\Access\AuthorizationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -44,8 +45,9 @@ class Handler extends ExceptionHandler
      *
      * @param  \Exception  $exception
      * @return void
+     * @throws \Exception
      */
-    public function report(Exception $exception)
+    public function report(\Exception $exception)
     {
         if (app()->environment() === Constant::ENV_PROD) {
             if (app()->bound('sentry') && $this->shouldReport($exception)) {
@@ -61,12 +63,16 @@ class Handler extends ExceptionHandler
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, \Exception $exception)
     {
         if ($exception instanceof TokenMismatchException) {
             return back()->withErrors(__("Uw sessie is verlopen, probeer het opnieuw."));
+        }
+
+        if ($exception instanceof AuthorizationException) {
+            return back()->withErrors(__('U hebt onvoldoende rechten om deze actie uit te voeren.'));
         }
 
         return parent::render($request, $exception);
@@ -94,12 +100,15 @@ class Handler extends ExceptionHandler
     protected function context()
     {
         try {
+            /** @var null|CustomerContract $customer */
+            $customer = auth()->user();
+
             return array_filter([
                 'userId' => auth()->id(),
-                'email' => auth()->user() ? auth()->user()->getAttribute('email') : null,
-                'customer_number' => auth()->user() ? auth()->user()->company->getAttribute('customer_number') : null,
+                'email' => $customer ? $customer->getContact()->contactEmail() : null,
+                'customer_number' => $customer ? $customer->getCompany()->customerNumber() : null,
             ]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return [];
         }
     }
@@ -132,7 +141,7 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $e
      * @return \Exception
      */
-    protected function prepareException(Exception $e)
+    protected function prepareException(\Exception $e)
     {
         if ($e instanceof TokenMismatchException) {
             return $e;

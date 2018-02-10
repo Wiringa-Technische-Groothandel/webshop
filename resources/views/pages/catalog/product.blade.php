@@ -1,47 +1,62 @@
 @extends('layouts.main')
 
-@section('title', __('Product - :product', ['product' => $product->getAttribute('sku')]))
+@section('title', __('Product - :product', [ 'product' => $product->getSku() ]))
 
 @section('content')
     <hr />
 
     <div class="container">
-        <div class="row">
-            <div class="col-4" id="image">
+        <div class="row mb-3">
+            <div class="d-none d-sm-block col-4 mb-3" id="image">
                 <div class="text-center">
-                    <img src="{{ $product->getImageUrl() }}" alt="{{ $product->getAttribute('name') }}" class="img-thumbnail">
+                    <a href="{{ $product->getImageUrl() }}" data-alt="{{ $product->getName() }}"
+                       data-caption="{{ $product->getName() }}" data-lightbox="desktop-product-image">
+                        <img src="{{ $product->getImageUrl() }}" alt="{{ $product->getName() }}" class="img-thumbnail">
+                    </a>
                 </div>
             </div>
 
-            <div class="col-8">
-                <h4>{{ $product->getAttribute('name') }}</h4>
+            <div class="col-12 col-sm-8">
+                <h4 class="product-name">{{ $product->getName() }}</h4>
 
                 <hr />
 
-                @auth
-                    <div class="row">
-                        <div class="col-6">
+                <div class="row">
+                    <div class="col-12 col-sm-8 col-md-6">
+                        <a href="{{ $product->getImageUrl() }}" data-alt="{{ $product->getName() }}"
+                           data-caption="{{ $product->getName() }}" data-lightbox="mobile-product-image"
+                           class="d-block d-sm-none">
+                            <img src="{{ $product->getImageUrl() }}" class="img-thumbnail w-25 float-right">
+                        </a>
+
+                        @auth
                             <price :product="{{ $product }}"></price>
 
                             <br />
 
                             <div class="row">
-                                <div class="col-10">
-                                    <add-to-cart sku="{{ $product->getAttribute('sku') }}"
-                                                 sales-unit-single="{{ ucfirst(unit_to_str($product->getAttribute('sales_unit'), false)) }}"
-                                                 sales-unit-plural="{{ ucfirst(unit_to_str($product->getAttribute('sales_unit'))) }}"
+                                <div class="col-12 col-md-10 mb-3">
+                                    <add-to-cart sku="{{ $product->getSku() }}"
+                                                 sales-unit-single="{{ ucfirst(unit_to_str($product->getSalesUnit(), false)) }}"
+                                                 sales-unit-plural="{{ ucfirst(unit_to_str($product->getSalesUnit())) }}"
                                                  submit-url="{{ route('checkout.cart') }}"></add-to-cart>
                                 </div>
 
-                                <div class="col-2">
-                                    <favorites-toggle-button sku="{{ $product->getAttribute('sku') }}"
+                                <div class="col-12 col-md-2">
+                                    <favorites-toggle-button sku="{{ $product->getSku() }}"
                                                       check-url="{{ route('favorites.check') }}"
                                                       toggle-url="{{ route('favorites.toggle') }}"></favorites-toggle-button>
                                 </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="row">
+                                <div class="col-12 col-md-8">
+
+                                </div>
+                            </div>
+                        @endauth
                     </div>
-                @endauth
+                </div>
 
                 {{--@if (count($pack_list) >= 1)--}}
                 {{--<div class="alert alert-warning text-center">--}}
@@ -57,42 +72,47 @@
             </div>
         </div>
 
-        <br />
-
-        <div class="row">
-            <div class="col-4">
-
+        @if ($product->hasDescription())
+            <div class="row mb-3">
+                <div class="col-12 col-md-8 offset-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <b>{{ __('Omschrijving') }}</b>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                {{ $product->getDescription()->getValue() }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
+        @endif
 
-            <div class="col-8">
+        <div class="row mb-3">
+            <div class="col-12 col-md-8 offset-md-4">
                 <div class="card">
                     <div class="card-header">
-                        {{ __("Product details") }}
+                        <b>{{ __('Details') }}</b>
                     </div>
-
-                    {{--@if ($product->description)--}}
-                    {{--<div class="panel-body">--}}
-                    {{--{!! $product->description->value !!}--}}
-                    {{--</div>--}}
-                    {{--@endif--}}
 
                     <table class="table">
                         <tr>
-                            <td><b>{{ __("Product nummer") }}</b></td>
-                            <td>{{ $product->getAttribute('sku') }}</td>
+                            <td><b>{{ __('Product nummer') }}</b></td>
+                            <td>{{ $product->getSku() }}</td>
                         </tr>
                         <tr>
-                            <td><b>{{ __("Product groep") }}</b></td>
-                            <td>{{ $product->getAttribute('group') }}</td>
+                            <td><b>{{ __('Product groep') }}</b></td>
+                            <td>{{ $product->getGroup() }}</td>
                         </tr>
                         {{--<tr>--}}
                         {{--<td><b>Fabrieksnummer</b></td>--}}
                         {{--<td>{{ $product->getAlternateSku() }}</td>--}}
                         {{--</tr>--}}
-                        @if ($product->getAttribute('ean'))
+                        @if ($product->getEan())
                             <tr>
-                                <td><b>{{ __("EAN") }}</b></td>
-                                <td>{{ $product->getAttribute('ean') }}</td>
+                                <td><b>{{ __('EAN') }}</b></td>
+                                <td>{{ $product->getEan() }}</td>
                             </tr>
                         @endif
                         {{--<tr>--}}
@@ -100,22 +120,20 @@
                         {{--<td></td>--}}
                         {{--</tr>--}}
                         <tr>
-                            <td><b>{{ __("Merk") }}</b></td>
-                            <td>{{ $product->getAttribute('brand') }}</td>
+                            <td><b>{{ __('Merk') }}</b></td>
+                            <td>{{ $product->getBrand() }}</td>
                         </tr>
                         <tr>
-                            <td><b>{{ __("Serie") }}</b></td>
-                            <td>{{ $product->getAttribute('series') }}</td>
+                            <td><b>{{ __('Serie') }}</b></td>
+                            <td>{{ $product->getSeries() }}</td>
                         </tr>
                         <tr>
-                            <td><b>{{ __("Type") }}</b></td>
-                            <td>{{ $product->getAttribute('type') }}</td>
+                            <td><b>{{ __('Type') }}</b></td>
+                            <td>{{ $product->getType() }}</td>
                         </tr>
                     </table>
                 </div>
             </div>
         </div>
-
-        <br />
     </div>
 @endsection

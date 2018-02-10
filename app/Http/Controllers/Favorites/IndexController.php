@@ -2,11 +2,14 @@
 
 namespace WTG\Http\Controllers\Favorites;
 
+use WTG\Contracts\Services\FavoritesServiceContract;
+use WTG\Exceptions\ProductNotFoundException;
 use WTG\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use WTG\Http\Controllers\Controller;
 use WTG\Contracts\Models\CustomerContract;
+use Illuminate\View\Factory as ViewFactory;
 
 /**
  * Favorites index controller.
@@ -18,6 +21,26 @@ use WTG\Contracts\Models\CustomerContract;
 class IndexController extends Controller
 {
     /**
+     * @var FavoritesServiceContract
+     */
+    protected $favoritesService;
+
+    /**
+     * FavoritesController constructor.
+     *
+     * @param  ViewFactory  $view
+     * @param  FavoritesServiceContract  $favoritesService
+     */
+    public function __construct(
+        ViewFactory $view,
+        FavoritesServiceContract $favoritesService
+    ) {
+        parent::__construct($view);
+
+        $this->favoritesService = $favoritesService;
+    }
+
+    /**
      * Check if a product is in the favorites.
      *
      * @param Request $request
@@ -25,19 +48,19 @@ class IndexController extends Controller
      */
     public function postAction(Request $request): JsonResponse
     {
-        $sku = $request->input('sku');
-
         /** @var CustomerContract $customer */
         $customer = $request->user();
-        $product = Product::findBySku($sku);
+        $sku = $request->input('sku');
 
-        if (! $product) {
+        try {
+            $isFavorite = $this->favoritesService->isFavorite($customer, $sku);
+        } catch (ProductNotFoundException $e) {
             return response()->json([
-                'message' => __('Geen product gevonden voor sku :sku', ['sku' => $sku])
+                'message' => $e->getMessage(),
+                'success' => false,
+                'code' => 400,
             ], 400);
         }
-
-        $isFavorite = $customer->hasFavorite($product);
 
         return response()->json([
             'isFavorite' => $isFavorite,
@@ -55,26 +78,18 @@ class IndexController extends Controller
      */
     public function patchAction(Request $request): JsonResponse
     {
-        $sku = $request->input('sku');
-
         /** @var CustomerContract $customer */
         $customer = $request->user();
-        $product = Product::findBySku($sku);
+        $sku = $request->input('sku');
 
-        if (! $product) {
+        try {
+            $added = $this->favoritesService->toggleFavorite($customer, $sku);
+        } catch (ProductNotFoundException $e) {
             return response()->json([
-                'message' => __('Geen product gevonden voor sku :sku', ['sku' => $sku])
+                'message' => $e->getMessage(),
+                'success' => false,
+                'code' => 400,
             ], 400);
-        }
-
-        $isFavorite = $customer->hasFavorite($product);
-
-        if ($isFavorite) {
-            $added = false;
-            $customer->removeFavorite($product);
-        } else {
-            $added = true;
-            $customer->addFavorite($product);
         }
 
         return response()->json([
