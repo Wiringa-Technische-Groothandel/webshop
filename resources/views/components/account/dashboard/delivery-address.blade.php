@@ -5,11 +5,17 @@
     <div class="card-body">
         @if ($address)
             <address>
-                <b>{{ $address->getAttribute('name') }}</b><br />
-                {{ $address->getAttribute('street') }} <br />
-                {{ $address->getAttribute('postcode') }} {{ $address->getAttribute('city') }} <br />
-                <i class="fal fa-fw fa-phone"></i> {{ $address->getAttribute('phone') }} <br />
-                <i class="fal fa-fw fa-mobile"></i> {{ $address->getAttribute('mobile') }}
+                <b>{{ $address->getName() }}</b><br />
+                {{ $address->getStreet() }} <br />
+                {{ $address->getPostcode() }} {{ $address->getCity() }} <br />
+
+                @if ($address->getPhone())
+                    <i class="fal fa-fw fa-phone"></i> {{ $address->getPhone() }} <br />
+                @endif
+
+                @if ($address->getMobile())
+                    <i class="fal fa-fw fa-mobile"></i> {{ $address->getMobile() }}
+                @endif
             </address>
         @else
             <div class="alert alert-warning">
