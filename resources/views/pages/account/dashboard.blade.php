@@ -17,7 +17,7 @@
 
     <div class="row my-4">
         <div class="col-6">
-            @include('components.account.dashboard.delivery-email')
+            @include('components.account.dashboard.contact-email')
         </div>
 
         <div class="col-6">
