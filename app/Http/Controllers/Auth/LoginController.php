@@ -77,6 +77,6 @@ class LoginController extends Controller
         \Log::info("[Login] Customer '".request('company')."' - '".request('username')."' has logged in");
 
         return redirect(request('toUrl') ?: route('home'))
-            ->with('status', trans('auth.login.success', ['name' => $company->name()]));
+            ->with('status', trans('auth.login.success', ['name' => $company->getName()]));
     }
 }

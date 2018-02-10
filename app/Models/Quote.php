@@ -72,7 +72,7 @@ class Quote extends Model implements CartContract
         if (! $address) {
             /** @var Customer $customer */
             $customer = $this->getAttribute('customer');
-            $address = $customer->getContact()->defaultAddress();
+            $address = $customer->getContact()->getDefaultAddress();
         }
 
         return $address;
@@ -101,7 +101,7 @@ class Quote extends Model implements CartContract
     {
         $this->forceFill(
             $this->firstOrCreate([
-                'customer_id' => $customer->identifier()
+                'customer_id' => $customer->getId()
             ])->toArray()
         );
 
@@ -111,14 +111,13 @@ class Quote extends Model implements CartContract
     }
 
     /**
-     * Get or set the product identifier.
+     * Get the product identifier.
      *
-     * @param  null|string  $id
-     * @return string
+     * @return null|string
      */
-    public function identifier(?string $id = null): string
+    public function getId(): ?string
     {
-        return $this->getKey();
+        return $this->getAttribute('id');
     }
 
     /**
@@ -134,13 +133,13 @@ class Quote extends Model implements CartContract
         $item = $this->findProduct($product);
 
         if ($item) {
-            $item->quantity($quantity + $item->quantity());
+            $item->setQuantity($quantity + $item->getQuantity());
         } else {
             /** @var CartItemContract|Model $item */
             $item = app()->make(CartItemContract::class);
             $item->setProduct($product);
-            $item->quantity($quantity);
-            $item->cart($this);
+            $item->setQuantity($quantity);
+            $item->setCart($this);
         }
 
         if ($item->save()) {
@@ -163,8 +162,9 @@ class Quote extends Model implements CartContract
      */
     public function updateProduct(ProductContract $product, float $quantity): CartItemContract
     {
+        /** @var CartItemContract|Model $item */
         $item = $this->findProduct($product);
-        $item->quantity($quantity);
+        $item->setQuantity($quantity);
 
         if ($item->save()) {
             // Update model timestamp to indicate the cart was updated.
@@ -181,10 +181,14 @@ class Quote extends Model implements CartContract
      *
      * @param  ProductContract  $product
      * @return bool
+     * @throws \Exception
      */
     public function removeProduct(ProductContract $product): bool
     {
-        if (($item = $this->findProduct($product)) === null) {
+        /** @var CartItemContract|Model $item */
+        $item = $this->findProduct($product);
+
+        if (! $item) {
             return true;
         }
 
@@ -200,7 +204,7 @@ class Quote extends Model implements CartContract
     public function findProduct(ProductContract $product): ?CartItemContract
     {
         return $this->items()->first(function (CartItemContract $item) use ($product) {
-            return $item->getProduct()->identifier() === $product->identifier();
+            return $item->getProduct()->getId() === $product->getId();
         });
     }
 

@@ -11,12 +11,7 @@
         <div class="row">
             <div class="col-md-3">
                 <form>
-                    <div class="input-group">
-                        <input name="query" type="text" class="form-control" placeholder="{{ __('Zoeken') }}" value="{{ request('query') }}">
-                        <span class="input-group-btn"><button class="btn btn-outline-primary" type="button"><i class="fal fa-fw fa-search"></i></button></span>
-                    </div>
-
-                    <hr />
+                    <input type="hidden" name="query" value="{{ request('query') }}">
 
                     @include('components.catalog.filters')
                 </form>
@@ -28,6 +23,14 @@
                         {{ __("Geen resultaten gevonden voor ':query'", ['query' => request('query')]) }}
                     </div>
                 @else
+                    <hr class="d-block d-md-none" />
+
+                    <h5 class="d-block d-sm-inline-block">{{ __(":count resultaten", ['count' => $results->get('products')->total()]) }}</h5>
+
+                    <h5 class="float-none float-sm-right">{{ __('Pagina :start van :end', ['start' => $results->get('products')->currentPage(), 'end' => $results->get('products')->lastPage()]) }}</h5>
+
+                    <hr />
+
                     @include('components.catalog.products')
                 @endif
 

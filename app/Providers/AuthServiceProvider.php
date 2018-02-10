@@ -2,14 +2,16 @@
 
 namespace WTG\Providers;
 
+use WTG\Models\Registration;
 use WTG\Services\AuthService;
 use WTG\Services\RegistrationService;
+use WTG\Contracts\Models\RegistrationContract;
 use WTG\Contracts\Services\AuthServiceContract;
 use WTG\Contracts\Services\RegistrationServiceContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 /**
- * Class AuthServiceProvider
+ * Auth service provider.
  *
  * @package     WTG
  * @subpackage  Providers
@@ -36,6 +38,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         $this->app->bind(AuthServiceContract::class, AuthService::class);
+        $this->app->bind(RegistrationContract::class, Registration::class);
         $this->app->bind(RegistrationServiceContract::class, RegistrationService::class);
     }
 }

@@ -13,12 +13,11 @@ use Illuminate\Support\Collection;
 interface CartContract
 {
     /**
-     * Get or set the product identifier.
+     * Get the product identifier.
      *
-     * @param  null|string  $id
-     * @return string
+     * @return null|string
      */
-    public function identifier(?string $id = null): string;
+    public function getId(): ?string;
 
     /**
      * Find or create a cart for a customer.

@@ -13,12 +13,41 @@ use Illuminate\Support\Collection;
 interface CustomerContract
 {
     /**
-     * Get or set the identifier.
+     * Get the identifier.
      *
-     * @param  null|string  $id
-     * @return string
+     * @return null|string
      */
-    public function identifier(?string $id = null): string;
+    public function getId(): ?string;
+
+    /**
+     * Set the username.
+     *
+     * @param  string  $username
+     * @return CustomerContract
+     */
+    public function setUsername(string $username): CustomerContract;
+
+    /**
+     * Get the username.
+     *
+     * @return null|string
+     */
+    public function getUsername(): ?string;
+
+    /**
+     * Set the active.
+     *
+     * @param  bool  $active
+     * @return CustomerContract
+     */
+    public function setActive(bool $active): CustomerContract;
+
+    /**
+     * Get the active.
+     *
+     * @return bool
+     */
+    public function getActive(): bool;
 
     /**
      * Get the contact.

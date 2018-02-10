@@ -57,7 +57,7 @@
                         console.log(error);
 
                         this.$root.$emit('send-notify', {
-                            message: error.response.data.message,
+                            text: error.response.data.message,
                             success: false
                         });
                     });

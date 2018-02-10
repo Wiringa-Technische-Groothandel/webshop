@@ -2,7 +2,8 @@
 
 namespace WTG\Services;
 
-use Illuminate\Http\Request;
+use WTG\Models\Registration;
+use WTG\Contracts\Models\RegistrationContract;
 use WTG\Contracts\Services\RegistrationServiceContract;
 
 /**
@@ -16,11 +17,16 @@ class RegistrationService implements RegistrationServiceContract
     /**
      * Create a registration from request.
      *
-     * @param  Request  $request
-     * @return bool
+     * @param  array  $data
+     * @return RegistrationContract
      */
-    public function createFromRequest(Request $request): bool
+    public function create(array $data): RegistrationContract
     {
-        //
+        /** @var Registration $registration */
+        $registration = app()->make(RegistrationContract::class);
+        $registration->fill($data);
+        $registration->save();
+
+        return $registration;
     }
 }

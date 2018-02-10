@@ -42,7 +42,7 @@ class PriceController extends Controller
 
         /** @var CustomerContract $customer */
         $customer = $request->user();
-        $customerNumber = $customer->getCompany()->customerNumber();
+        $customerNumber = $customer->getCompany()->getCustomerNumber();
         /** @var Response $response */
         $response = app('soap')->getProductPricesAndStocks($products, $customerNumber);
 
@@ -86,7 +86,7 @@ class PriceController extends Controller
 
         /** @var CustomerContract $customer */
         $customer = $request->user();
-        $customerNumber = $customer->getCompany()->customerNumber();
+        $customerNumber = $customer->getCompany()->getCustomerNumber();
         $response = app('soap')->getProductPricesAndStocks($products, $customerNumber);
 
         return response()->json([

@@ -9,7 +9,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-sm-8 mx-auto mb-3">
+            <div class="col-12 col-md-8 mx-auto mb-3">
                 <form method="POST" class="form form-horizontal">
                     {{ csrf_field() }}
 

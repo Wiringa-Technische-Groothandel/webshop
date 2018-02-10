@@ -13,24 +13,19 @@ doc.setAttribute('data-useragent', navigator.userAgent);
 // ChartJS Stuff
 Chart.defaults.global.defaultFontFamily = "'Titillium Web', sans-serif";
 
-import Carousel from './components/Carousel'
-import Notification from './components/Notification'
-import Footer from './components/Footer'
-import Logs from './components/Log'
-
-import ContactEmail from './components/Account/ContactEmail';
-import AddressList from './components/Account/AddressList';
-
-import Price from './components/Catalog/Price'
-
-import FavoritesToggleButton from './components/Favorites/ToggleButton'
-
-import Cart from './components/Checkout/Cart'
-import AddToCart from './components/Checkout/AddToCart'
-import MiniCart from './components/Checkout/MiniCart'
-import CartAddress from './components/Checkout/Address/CartAddress'
-
-import QuickSearch from './components/Search/QuickSearch';
+Vue.component('carousel', require('./components/Carousel'));
+Vue.component('price', require('./components/Catalog/Price'));
+Vue.component('cart', require('./components/Checkout/Cart'));
+Vue.component('add-to-cart', require('./components/Checkout/AddToCart'));
+Vue.component('mini-cart', require('./components/Checkout/MiniCart'));
+Vue.component('favorites-toggle-button', require('./components/Favorites/ToggleButton'));
+Vue.component('notification', require('./components/Notification'));
+Vue.component('footer-block', require('./components/Footer'));
+Vue.component('logs', require('./components/Log'));
+Vue.component('contact-email', require('./components/Account/ContactEmail'));
+Vue.component('address-list', require('./components/Account/AddressList'));
+Vue.component('cart-address', require('./components/Checkout/Address/CartAddress'));
+Vue.component('quick-search', require('./components/Search/QuickSearch'));
 
 import 'vue-googlemaps/dist/vue-googlemaps.css'
 import VueGoogleMaps from 'vue-googlemaps'
@@ -44,24 +39,10 @@ Vue.use(VueGoogleMaps, {
 
 window.vm = new Vue({
     el: '#app',
-    components: {
-        'carousel': Carousel,
-        'price': Price,
-        'cart': Cart,
-        'add-to-cart': AddToCart,
-        'mini-cart': MiniCart,
-        'favorites-toggle-button': FavoritesToggleButton,
-        'notification': Notification,
-        'footer-block': Footer,
-        'logs': Logs,
-        'contact-email': ContactEmail,
-        'address-list': AddressList,
-        'cart-address': CartAddress,
-        'quick-search': QuickSearch
-    },
     data () {
         return {
-            skus: []
+            skus: [],
+            filter: {}
         }
     },
     methods: {

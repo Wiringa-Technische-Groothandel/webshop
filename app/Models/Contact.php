@@ -34,18 +34,17 @@ class Contact extends Model implements ContactContract
     public function address()
     {
         return $this->belongsTo(Address::class)
-            ->where('company_id', $this->getCustomer()->getCompany()->identifier());
+            ->where('company_id', $this->getCustomer()->getCompany()->getId());
     }
 
     /**
      * Get the identifier
      *
-     * @param null|string $id
-     * @return string
+     * @return null|int
      */
-    public function identifier(?string $id = null): string
+    public function getId(): ?int
     {
-        return $this->getKey();
+        return $this->getAttribute('id');
     }
 
     /**
@@ -59,47 +58,66 @@ class Contact extends Model implements ContactContract
     }
 
     /**
-     * Get or set the contact email.
+     * Set the contact email.
      *
-     * @param  null|string  $email
+     * @param  string  $email
+     * @return ContactContract
+     */
+    public function setContactEmail(string $email): ContactContract
+    {
+        return $this->setAttribute('contact_email', $email);
+    }
+
+    /**
+     * Get the contact email.
+     *
      * @return null|string
      */
-    public function contactEmail(?string $email = null): ?string
+    public function getContactEmail(): ?string
     {
-        if ($email) {
-            $this->setAttribute('contact_email', $email);
-        }
-
         return $this->getAttribute('contact_email');
     }
 
     /**
-     * Get or set the order email.
+     * Set the order email.
      *
-     * @param  null|string  $email
+     * @param  string  $email
+     * @return ContactContract
+     */
+    public function setOrderEmail(string $email): ContactContract
+    {
+        return $this->setAttribute('order_email', $email);
+    }
+
+    /**
+     * Get the order email.
+     *
      * @return null|string
      */
-    public function orderEmail(?string $email = null): ?string
+    public function getOrderEmail(): ?string
     {
-        if ($email) {
-            $this->setAttribute('order_email', $email);
-        }
-
         return $this->getAttribute('order_email');
     }
 
     /**
-     * Get or set the default address.
+     * Set the default address.
      *
-     * @param  null|string  $addressId
+     * @param  int  $addressId
+     * @return ContactContract
+     */
+    public function setDefaultAddress(int $addressId): ContactContract
+    {
+        $this->address()->associate($addressId);
+        return $this;
+    }
+
+    /**
+     * Get the default address.
+     *
      * @return null|AddressContract
      */
-    public function defaultAddress(?string $addressId = null): ?AddressContract
+    public function getDefaultAddress(): ?AddressContract
     {
-        if ($addressId) {
-            $this->address()->associate($addressId);
-        }
-
         return $this->getAttribute('address');
     }
 }

@@ -1,12 +1,14 @@
 <template>
     <div class="input-group add-to-cart">
-        <span class="input-group-addon">{{ quantity > 1 ? salesUnitPlural : salesUnitSingle }}</span>
+        <div class="input-group-prepend">
+            <span class="input-group-text">{{ quantity > 1 ? salesUnitPlural : salesUnitSingle }}</span>
+        </div>
         <input type="text" class="form-control" placeholder="Aantal" v-model="quantity">
-        <span class="input-group-btn">
-            <button class="btn btn-success" v-on:click="this.addToCart">
+        <div class="input-group-append">
+            <button class="btn btn-outline-success" v-on:click="this.addToCart">
                 <span><i class="fas fa-fw fa-cart-plus"></i></span>
             </button>
-        </span>
+        </div>
     </div>
 </template>
 

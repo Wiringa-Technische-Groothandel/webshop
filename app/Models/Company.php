@@ -49,12 +49,21 @@ class Company extends Model implements CompanyContract
     }
 
     /**
-     * Get the id.
+     * Get the attached customers.
      *
-     * @param  null|string  $id
-     * @return string
+     * @return Collection
      */
-    public function identifier(?string $id = null): string
+    public function getCustomers(): Collection
+    {
+        return $this->getAttribute('customers');
+    }
+
+    /**
+     * Get the identifier.
+     *
+     * @return null|string
+     */
+    public function getId(): ?string
     {
         return $this->getAttribute('id');
     }
@@ -62,30 +71,42 @@ class Company extends Model implements CompanyContract
     /**
      * Get or set the name.
      *
-     * @param  null|string  $name
+     * @param  string  $name
+     * @return CompanyContract
+     */
+    public function setName(string $name): CompanyContract
+    {
+        return $this->setAttribute('name', $name);
+    }
+
+    /**
+     * Get or set the name.
+     *
      * @return null|string
      */
-    public function name(?string $name = null): ?string
+    public function getName(): ?string
     {
-        if ($name) {
-            $this->setAttribute('name', $name);
-        }
-
         return $this->getAttribute('name');
     }
 
     /**
-     * Get or set the customer number.
+     * Set the customer number.
      *
-     * @param  null|string  $customerNumber
+     * @param  string  $customerNumber
+     * @return CompanyContract
+     */
+    public function setCustomerNumber(string $customerNumber): CompanyContract
+    {
+        return $this->setAttribute('customer_number', $customerNumber);
+    }
+
+    /**
+     * Get the customer number.
+     *
      * @return null|string
      */
-    public function customerNumber(?string $customerNumber = null): ?string
+    public function getCustomerNumber(): ?string
     {
-        if ($customerNumber) {
-            $this->setAttribute('customer_number', $customerNumber);
-        }
-
         return $this->getAttribute('customer_number');
     }
 

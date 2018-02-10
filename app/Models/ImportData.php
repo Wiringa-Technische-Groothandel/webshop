@@ -38,4 +38,14 @@ class ImportData extends Model
     {
         return $builder->where('key', $key);
     }
+
+    /**
+     * Get the value.
+     *
+     * @return null|string
+     */
+    public function getValue(): ?string
+    {
+        return $this->getAttribute('value');
+    }
 }

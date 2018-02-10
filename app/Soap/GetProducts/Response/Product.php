@@ -117,19 +117,14 @@ class Product
     public $related;
 
     /**
-     * @var string
-     */
-    public $catalog_group;
-
-    /**
-     * @var string
-     */
-    public $catalog_index;
-
-    /**
      * Extra keywords for searching.
      *
      * @var string
      */
     public $keywords;
+
+    /**
+     * @var bool
+     */
+    public $webshop;
 }

@@ -12,65 +12,114 @@ namespace WTG\Contracts\Models;
 interface AddressContract
 {
     /**
-     * Address identifier.
+     * Get the identifier.
      *
-     * @param  null|string  $id
-     * @return string
+     * @return null|string
      */
-    public function identifier(?string $id = null): string;
+    public function getId(): ?string;
+
+    /**
+     * Set the company.
+     *
+     * @param  CompanyContract  $company
+     * @return AddressContract
+     */
+    public function setCompany(CompanyContract $company): AddressContract;
 
     /**
      * Get the company.
      *
-     * @return CompanyContract
+     * @return null|CompanyContract
      */
-    public function getCompany(): CompanyContract;
+    public function getCompany(): ?CompanyContract;
 
     /**
-     * Get or set the name.
+     * Set the name.
      *
-     * @param  null|string  $name
+     * @param  string  $name
+     * @return AddressContract
+     */
+    public function setName(string $name): AddressContract;
+
+    /**
+     * Get the name.
+     *
      * @return null|string
      */
-    public function name(?string $name = null): ?string;
+    public function getName(): ?string;
 
     /**
-     * Get or set the street.
+     * Set the street.
      *
-     * @param  null|string  $street
+     * @param  string  $street
+     * @return AddressContract
+     */
+    public function setStreet(string $street): AddressContract;
+
+    /**
+     * Get the street.
+     *
      * @return null|string
      */
-    public function street(?string $street = null): ?string;
+    public function getStreet(): ?string;
 
     /**
-     * Get or set the postcode.
+     * Set the postcode.
      *
      * @param  null|string  $postcode
-     * @return null|string
+     * @return AddressContract
      */
-    public function postcode(?string $postcode = null): ?string;
+    public function setPostcode(string $postcode): AddressContract;
 
     /**
-     * Get or set the city.
+     * Get the postcode.
+     *
+     * @return null|string
+     */
+    public function getPostcode(): ?string;
+
+    /**
+     * Set the city.
      *
      * @param  null|string  $city
-     * @return null|string
+     * @return AddressContract
      */
-    public function city(?string $city = null): ?string;
+    public function setCity(string $city): AddressContract;
 
     /**
-     * Get or set the phone.
+     * Get the city.
+     *
+     * @return null|string
+     */
+    public function getCity(): ?string;
+
+    /**
+     * Set the phone.
      *
      * @param  null|string  $phone
-     * @return null|string
+     * @return AddressContract
      */
-    public function phone(?string $phone = null): ?string;
+    public function setPhone(?string $phone = null): AddressContract;
 
     /**
-     * Get or set the mobile.
+     * Get the phone.
      *
-     * @param  null|string  $mobile
      * @return null|string
      */
-    public function mobile(?string $mobile = null): ?string;
+    public function getPhone(): ?string;
+
+    /**
+     * Set the mobile.
+     *
+     * @param  null|string  $mobile
+     * @return AddressContract
+     */
+    public function setMobile(?string $mobile = null): AddressContract;
+
+    /**
+     * Get the mobile.
+     *
+     * @return null|string
+     */
+    public function getMobile(): ?string;
 }

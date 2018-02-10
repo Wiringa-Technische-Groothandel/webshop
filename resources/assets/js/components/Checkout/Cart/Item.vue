@@ -3,7 +3,7 @@
         <div class="row cart-item">
             <div class="col-10 col-sm-5 col-lg-6">
                 <div class="cart-item-name">
-                    <a :href="'/product/' + item.product.sku">
+                    <a class="product-name" :href="'/product/' + item.product.sku">
                         {{ item.product.name }}
                     </a>
                 </div>

@@ -11,12 +11,11 @@ namespace WTG\Contracts\Models;
 interface ContactContract
 {
     /**
-     * Get or set the identifier.
+     * Get the identifier
      *
-     * @param  null|string  $id
-     * @return string
+     * @return null|int
      */
-    public function identifier(?string $id = null): string;
+    public function getId(): ?int;
 
     /**
      * Get the customer.
@@ -26,26 +25,47 @@ interface ContactContract
     public function getCustomer(): CustomerContract;
 
     /**
-     * Get or set the contact email.
+     * Set the contact email.
      *
-     * @param  null|string  $email
-     * @return null|string
+     * @param  string  $email
+     * @return ContactContract
      */
-    public function contactEmail(?string $email = null): ?string;
+    public function setContactEmail(string $email): ContactContract;
 
     /**
-     * Get or set the order email.
+     * Get the contact email.
      *
-     * @param  null|string  $email
      * @return null|string
      */
-    public function orderEmail(?string $email = null): ?string;
+    public function getContactEmail(): ?string;
 
     /**
-     * Get or set the default address.
+     * Set the order email.
      *
-     * @param  null|string  $addressId
+     * @param  string  $email
+     * @return ContactContract
+     */
+    public function setOrderEmail(string $email): ContactContract;
+
+    /**
+     * Get the order email.
+     *
+     * @return null|string
+     */
+    public function getOrderEmail(): ?string;
+
+    /**
+     * Set the default address.
+     *
+     * @param  int  $addressId
+     * @return ContactContract
+     */
+    public function setDefaultAddress(int $addressId): ContactContract;
+
+    /**
+     * Get the default address.
+     *
      * @return null|AddressContract
      */
-    public function defaultAddress(?string $addressId = null): ?AddressContract;
+    public function getDefaultAddress(): ?AddressContract;
 }

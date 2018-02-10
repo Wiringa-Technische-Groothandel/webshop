@@ -16,10 +16,11 @@
             <div class="navbar-right">
                 <ul class="nav navbar-nav">
                     @auth
-                        <li class="nav-item mx-3 {{ request()->is('cart') ? 'active' : '' }}">
+                        <li class="nav-item mx-md-3 {{ request()->is('cart') ? 'active' : '' }}">
                             <mini-cart :count="{{ $cart->count() }}" cart-url="{{ route('checkout.cart') }}"></mini-cart>
                         </li>
-                        <li class="nav-item dropdown {{ request()->is('account/*') ? 'active' : '' }}">
+
+                        <li class="d-none d-md-inline nav-item dropdown {{ request()->is('account/*') ? 'active' : '' }}">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
                                 <i class="far fa-fw fa-user"></i>
                             </a>
@@ -43,6 +44,12 @@
                                     <i class="far fa-fw fa-sign-out"></i> {{ trans('navigation.items.logout') }}
                                 </a>
                             </div>
+                        </li>
+
+                        <li class="d-inline d-md-none nav-item {{ request()->is('account/*') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('account.dashboard') }}">
+                                {{ trans('navigation.items.account') }}
+                            </a>
                         </li>
 
                         <form class="hidden" action="{{ route('auth.logout') }}" method="post" id="logout-form">

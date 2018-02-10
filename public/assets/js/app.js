@@ -1859,30 +1859,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['product'],
@@ -1917,6 +1893,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
 //
 //
 //
@@ -2305,17 +2283,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['count', 'cartUrl'],
@@ -2661,7 +2628,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log(error);
 
                 _this.$root.$emit('send-notify', {
-                    message: error.response.data.message,
+                    text: error.response.data.message,
                     success: false
                 });
             });
@@ -2682,8 +2649,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap v4.0.0-beta.3 (https://getbootstrap.com)
-  * Copyright 2011-2017 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap v4.0.0 (https://getbootstrap.com)
+  * Copyright 2011-2018 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
 (function (global, factory) {
@@ -2737,7 +2704,7 @@ function _inheritsLoose(subClass, superClass) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.3): util.js
+ * Bootstrap (v4.0.0): util.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -2749,7 +2716,7 @@ var Util = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var transition = false;
-  var MAX_UID = 1000000; // shoutout AngusCroll (https://goo.gl/pxwQGp)
+  var MAX_UID = 1000000; // Shoutout AngusCroll (https://goo.gl/pxwQGp)
 
   function toType(obj) {
     return {}.toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
@@ -2770,7 +2737,7 @@ var Util = function ($$$1) {
   }
 
   function transitionEndTest() {
-    if (window.QUnit) {
+    if (typeof window !== 'undefined' && window.QUnit) {
       return false;
     }
 
@@ -2804,7 +2771,7 @@ var Util = function ($$$1) {
   }
 
   function escapeId(selector) {
-    // we escape IDs in case of special selectors (selector = '#myId:something')
+    // We escape IDs in case of special selectors (selector = '#myId:something')
     // $.escapeSelector does not exist in jQuery < 3
     selector = typeof $$$1.escapeSelector === 'function' ? $$$1.escapeSelector(selector).substr(1) : selector.replace(/(:|\.|\[|\]|,|=|@)/g, '\\$1');
     return selector;
@@ -2831,7 +2798,7 @@ var Util = function ($$$1) {
 
       if (!selector || selector === '#') {
         selector = element.getAttribute('href') || '';
-      } // if it's an ID
+      } // If it's an ID
 
 
       if (selector.charAt(0) === '#') {
@@ -2841,7 +2808,7 @@ var Util = function ($$$1) {
       try {
         var $selector = $$$1(document).find(selector);
         return $selector.length > 0 ? selector : null;
-      } catch (error) {
+      } catch (err) {
         return null;
       }
     },
@@ -2877,7 +2844,7 @@ var Util = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.3): alert.js
+ * Bootstrap (v4.0.0): alert.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -2889,7 +2856,7 @@ var Alert = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'alert';
-  var VERSION = '4.0.0-beta.3';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.alert';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -2920,12 +2887,12 @@ var Alert = function ($$$1) {
   function () {
     function Alert(element) {
       this._element = element;
-    } // getters
+    } // Getters
 
 
     var _proto = Alert.prototype;
 
-    // public
+    // Public
     _proto.close = function close(element) {
       element = element || this._element;
 
@@ -2943,7 +2910,7 @@ var Alert = function ($$$1) {
     _proto.dispose = function dispose() {
       $$$1.removeData(this._element, DATA_KEY);
       this._element = null;
-    }; // private
+    }; // Private
 
 
     _proto._getRootElement = function _getRootElement(element) {
@@ -2985,7 +2952,7 @@ var Alert = function ($$$1) {
 
     _proto._destroyElement = function _destroyElement(element) {
       $$$1(element).detach().trigger(Event.CLOSED).remove();
-    }; // static
+    }; // Static
 
 
     Alert._jQueryInterface = function _jQueryInterface(config) {
@@ -3049,7 +3016,7 @@ var Alert = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.3): button.js
+ * Bootstrap (v4.0.0): button.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -3061,7 +3028,7 @@ var Button = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'button';
-  var VERSION = '4.0.0-beta.3';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.button';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -3094,12 +3061,12 @@ var Button = function ($$$1) {
   function () {
     function Button(element) {
       this._element = element;
-    } // getters
+    } // Getters
 
 
     var _proto = Button.prototype;
 
-    // public
+    // Public
     _proto.toggle = function toggle() {
       var triggerChangeEvent = true;
       var addAriaPressed = true;
@@ -3147,7 +3114,7 @@ var Button = function ($$$1) {
     _proto.dispose = function dispose() {
       $$$1.removeData(this._element, DATA_KEY);
       this._element = null;
-    }; // static
+    }; // Static
 
 
     Button._jQueryInterface = function _jQueryInterface(config) {
@@ -3212,7 +3179,7 @@ var Button = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.3): carousel.js
+ * Bootstrap (v4.0.0): carousel.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -3224,7 +3191,7 @@ var Carousel = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'carousel';
-  var VERSION = '4.0.0-beta.3';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.carousel';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -3307,12 +3274,12 @@ var Carousel = function ($$$1) {
       this._indicatorsElement = $$$1(this._element).find(Selector.INDICATORS)[0];
 
       this._addEventListeners();
-    } // getters
+    } // Getters
 
 
     var _proto = Carousel.prototype;
 
-    // public
+    // Public
     _proto.next = function next() {
       if (!this._isSliding) {
         this._slide(Direction.NEXT);
@@ -3402,7 +3369,7 @@ var Carousel = function ($$$1) {
       this._isSliding = null;
       this._activeElement = null;
       this._indicatorsElement = null;
-    }; // private
+    }; // Private
 
 
     _proto._getConfig = function _getConfig(config) {
@@ -3428,7 +3395,7 @@ var Carousel = function ($$$1) {
         });
 
         if ('ontouchstart' in document.documentElement) {
-          // if it's a touch-enabled device, mouseenter/leave are fired as
+          // If it's a touch-enabled device, mouseenter/leave are fired as
           // part of the mouse compatibility events on first tap - the carousel
           // would stop cycling until user tapped out of it;
           // here, we listen for touchend, explicitly pause the carousel
@@ -3467,7 +3434,6 @@ var Carousel = function ($$$1) {
           break;
 
         default:
-          return;
       }
     };
 
@@ -3559,7 +3525,7 @@ var Carousel = function ($$$1) {
       }
 
       if (!activeElement || !nextElement) {
-        // some weirdness is happening, so we bail
+        // Some weirdness is happening, so we bail
         return;
       }
 
@@ -3601,7 +3567,7 @@ var Carousel = function ($$$1) {
       if (isCycling) {
         this.cycle();
       }
-    }; // static
+    }; // Static
 
 
     Carousel._jQueryInterface = function _jQueryInterface(config) {
@@ -3625,7 +3591,7 @@ var Carousel = function ($$$1) {
           data.to(config);
         } else if (typeof action === 'string') {
           if (typeof data[action] === 'undefined') {
-            throw new Error("No method named \"" + action + "\"");
+            throw new TypeError("No method named \"" + action + "\"");
           }
 
           data[action]();
@@ -3712,7 +3678,7 @@ var Carousel = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.3): collapse.js
+ * Bootstrap (v4.0.0): collapse.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -3724,7 +3690,7 @@ var Collapse = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'collapse';
-  var VERSION = '4.0.0-beta.3';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.collapse';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -3781,6 +3747,8 @@ var Collapse = function ($$$1) {
         var selector = Util.getSelectorFromElement(elem);
 
         if (selector !== null && $$$1(selector).filter(element).length > 0) {
+          this._selector = selector;
+
           this._triggerArray.push(elem);
         }
       }
@@ -3794,12 +3762,12 @@ var Collapse = function ($$$1) {
       if (this._config.toggle) {
         this.toggle();
       }
-    } // getters
+    } // Getters
 
 
     var _proto = Collapse.prototype;
 
-    // public
+    // Public
     _proto.toggle = function toggle() {
       if ($$$1(this._element).hasClass(ClassName.SHOW)) {
         this.hide();
@@ -3819,15 +3787,15 @@ var Collapse = function ($$$1) {
       var activesData;
 
       if (this._parent) {
-        actives = $$$1.makeArray($$$1(this._parent).children().children(Selector.ACTIVES));
+        actives = $$$1.makeArray($$$1(this._parent).find(Selector.ACTIVES).filter("[data-parent=\"" + this._config.parent + "\"]"));
 
-        if (!actives.length) {
+        if (actives.length === 0) {
           actives = null;
         }
       }
 
       if (actives) {
-        activesData = $$$1(actives).data(DATA_KEY);
+        activesData = $$$1(actives).not(this._selector).data(DATA_KEY);
 
         if (activesData && activesData._isTransitioning) {
           return;
@@ -3842,7 +3810,7 @@ var Collapse = function ($$$1) {
       }
 
       if (actives) {
-        Collapse._jQueryInterface.call($$$1(actives), 'hide');
+        Collapse._jQueryInterface.call($$$1(actives).not(this._selector), 'hide');
 
         if (!activesData) {
           $$$1(actives).data(DATA_KEY, null);
@@ -3854,7 +3822,7 @@ var Collapse = function ($$$1) {
       $$$1(this._element).removeClass(ClassName.COLLAPSE).addClass(ClassName.COLLAPSING);
       this._element.style[dimension] = 0;
 
-      if (this._triggerArray.length) {
+      if (this._triggerArray.length > 0) {
         $$$1(this._triggerArray).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
       }
 
@@ -3900,7 +3868,7 @@ var Collapse = function ($$$1) {
       Util.reflow(this._element);
       $$$1(this._element).addClass(ClassName.COLLAPSING).removeClass(ClassName.COLLAPSE).removeClass(ClassName.SHOW);
 
-      if (this._triggerArray.length) {
+      if (this._triggerArray.length > 0) {
         for (var i = 0; i < this._triggerArray.length; i++) {
           var trigger = this._triggerArray[i];
           var selector = Util.getSelectorFromElement(trigger);
@@ -3944,12 +3912,12 @@ var Collapse = function ($$$1) {
       this._element = null;
       this._triggerArray = null;
       this._isTransitioning = null;
-    }; // private
+    }; // Private
 
 
     _proto._getConfig = function _getConfig(config) {
       config = _extends({}, Default, config);
-      config.toggle = Boolean(config.toggle); // coerce string values
+      config.toggle = Boolean(config.toggle); // Coerce string values
 
       Util.typeCheckConfig(NAME, config, DefaultType);
       return config;
@@ -3966,7 +3934,7 @@ var Collapse = function ($$$1) {
       var parent = null;
 
       if (Util.isElement(this._config.parent)) {
-        parent = this._config.parent; // it's a jQuery object
+        parent = this._config.parent; // It's a jQuery object
 
         if (typeof this._config.parent.jquery !== 'undefined') {
           parent = this._config.parent[0];
@@ -3986,11 +3954,11 @@ var Collapse = function ($$$1) {
       if (element) {
         var isOpen = $$$1(element).hasClass(ClassName.SHOW);
 
-        if (triggerArray.length) {
+        if (triggerArray.length > 0) {
           $$$1(triggerArray).toggleClass(ClassName.COLLAPSED, !isOpen).attr('aria-expanded', isOpen);
         }
       }
-    }; // static
+    }; // Static
 
 
     Collapse._getTargetFromElement = function _getTargetFromElement(element) {
@@ -4016,7 +3984,7 @@ var Collapse = function ($$$1) {
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new TypeError("No method named \"" + config + "\"");
           }
 
           data[config]();
@@ -4079,7 +4047,7 @@ var Collapse = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.3): dropdown.js
+ * Bootstrap (v4.0.0): dropdown.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -4091,7 +4059,7 @@ var Dropdown = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'dropdown';
-  var VERSION = '4.0.0-beta.3';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.dropdown';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -4174,12 +4142,12 @@ var Dropdown = function ($$$1) {
       this._inNavbar = this._detectNavbar();
 
       this._addEventListeners();
-    } // getters
+    } // Getters
 
 
     var _proto = Dropdown.prototype;
 
-    // public
+    // Public
     _proto.toggle = function toggle() {
       if (this._element.disabled || $$$1(this._element).hasClass(ClassName.DISABLED)) {
         return;
@@ -4212,10 +4180,10 @@ var Dropdown = function ($$$1) {
          * Popper - https://popper.js.org
          */
         if (typeof Popper === 'undefined') {
-          throw new Error('Bootstrap dropdown require Popper.js (https://popper.js.org)');
+          throw new TypeError('Bootstrap dropdown require Popper.js (https://popper.js.org)');
         }
 
-        var element = this._element; // for dropup with alignment we use the parent as popper container
+        var element = this._element; // For dropup with alignment we use the parent as popper container
 
         if ($$$1(parent).hasClass(ClassName.DROPUP)) {
           if ($$$1(this._menu).hasClass(ClassName.MENULEFT) || $$$1(this._menu).hasClass(ClassName.MENURIGHT)) {
@@ -4231,13 +4199,13 @@ var Dropdown = function ($$$1) {
         }
 
         this._popper = new Popper(element, this._menu, this._getPopperConfig());
-      } // if this is a touch-enabled device we add extra
+      } // If this is a touch-enabled device we add extra
       // empty mouseover listeners to the body's immediate children;
       // only needed because of broken event delegation on iOS
       // https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
 
 
-      if ('ontouchstart' in document.documentElement && !$$$1(parent).closest(Selector.NAVBAR_NAV).length) {
+      if ('ontouchstart' in document.documentElement && $$$1(parent).closest(Selector.NAVBAR_NAV).length === 0) {
         $$$1('body').children().on('mouseover', null, $$$1.noop);
       }
 
@@ -4268,7 +4236,7 @@ var Dropdown = function ($$$1) {
       if (this._popper !== null) {
         this._popper.scheduleUpdate();
       }
-    }; // private
+    }; // Private
 
 
     _proto._addEventListeners = function _addEventListeners() {
@@ -4350,7 +4318,7 @@ var Dropdown = function ($$$1) {
         }
       };
       return popperConfig;
-    }; // static
+    }; // Static
 
 
     Dropdown._jQueryInterface = function _jQueryInterface(config) {
@@ -4366,7 +4334,7 @@ var Dropdown = function ($$$1) {
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new TypeError("No method named \"" + config + "\"");
           }
 
           data[config]();
@@ -4408,7 +4376,7 @@ var Dropdown = function ($$$1) {
 
         if (hideEvent.isDefaultPrevented()) {
           continue;
-        } // if this is a touch-enabled device we remove the extra
+        } // If this is a touch-enabled device we remove the extra
         // empty mouseover listeners we added for iOS support
 
 
@@ -4431,7 +4399,8 @@ var Dropdown = function ($$$1) {
       }
 
       return parent || element.parentNode;
-    };
+    }; // eslint-disable-next-line complexity
+
 
     Dropdown._dataApiKeydownHandler = function _dataApiKeydownHandler(event) {
       // If not input/textarea:
@@ -4468,19 +4437,19 @@ var Dropdown = function ($$$1) {
 
       var items = $$$1(parent).find(Selector.VISIBLE_ITEMS).get();
 
-      if (!items.length) {
+      if (items.length === 0) {
         return;
       }
 
       var index = items.indexOf(event.target);
 
       if (event.which === ARROW_UP_KEYCODE && index > 0) {
-        // up
+        // Up
         index--;
       }
 
       if (event.which === ARROW_DOWN_KEYCODE && index < items.length - 1) {
-        // down
+        // Down
         index++;
       }
 
@@ -4543,7 +4512,7 @@ var Dropdown = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.3): modal.js
+ * Bootstrap (v4.0.0): modal.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -4555,7 +4524,7 @@ var Modal = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'modal';
-  var VERSION = '4.0.0-beta.3';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.modal';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -4624,12 +4593,12 @@ var Modal = function ($$$1) {
       this._ignoreBackdropClick = false;
       this._originalBodyPadding = 0;
       this._scrollbarWidth = 0;
-    } // getters
+    } // Getters
 
 
     var _proto = Modal.prototype;
 
-    // public
+    // Public
     _proto.toggle = function toggle(relatedTarget) {
       return this._isShown ? this.hide() : this.show(relatedTarget);
     };
@@ -4742,7 +4711,7 @@ var Modal = function ($$$1) {
 
     _proto.handleUpdate = function handleUpdate() {
       this._adjustDialog();
-    }; // private
+    }; // Private
 
 
     _proto._getConfig = function _getConfig(config) {
@@ -4757,7 +4726,7 @@ var Modal = function ($$$1) {
       var transition = Util.supportsTransitionEnd() && $$$1(this._element).hasClass(ClassName.FADE);
 
       if (!this._element.parentNode || this._element.parentNode.nodeType !== Node.ELEMENT_NODE) {
-        // don't move modals dom position
+        // Don't move modal's DOM position
         document.body.appendChild(this._element);
       }
 
@@ -4800,9 +4769,9 @@ var Modal = function ($$$1) {
     _proto._enforceFocus = function _enforceFocus() {
       var _this4 = this;
 
-      $$$1(document).off(Event.FOCUSIN) // guard against infinite focus loop
+      $$$1(document).off(Event.FOCUSIN) // Guard against infinite focus loop
       .on(Event.FOCUSIN, function (event) {
-        if (document !== event.target && _this4._element !== event.target && !$$$1(_this4._element).has(event.target).length) {
+        if (document !== event.target && _this4._element !== event.target && $$$1(_this4._element).has(event.target).length === 0) {
           _this4._element.focus();
         }
       });
@@ -5023,7 +4992,7 @@ var Modal = function ($$$1) {
       var scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth;
       document.body.removeChild(scrollDiv);
       return scrollbarWidth;
-    }; // static
+    }; // Static
 
 
     Modal._jQueryInterface = function _jQueryInterface(config, relatedTarget) {
@@ -5039,7 +5008,7 @@ var Modal = function ($$$1) {
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new TypeError("No method named \"" + config + "\"");
           }
 
           data[config](relatedTarget);
@@ -5087,7 +5056,7 @@ var Modal = function ($$$1) {
 
     var $target = $$$1(target).one(Event.SHOW, function (showEvent) {
       if (showEvent.isDefaultPrevented()) {
-        // only register focus restorer if modal will actually get shown
+        // Only register focus restorer if modal will actually get shown
         return;
       }
 
@@ -5119,7 +5088,7 @@ var Modal = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.3): tooltip.js
+ * Bootstrap (v4.0.0): tooltip.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -5131,7 +5100,7 @@ var Tooltip = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'tooltip';
-  var VERSION = '4.0.0-beta.3';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.tooltip';
   var EVENT_KEY = "." + DATA_KEY;
   var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
@@ -5220,7 +5189,7 @@ var Tooltip = function ($$$1) {
        * Popper - https://popper.js.org
        */
       if (typeof Popper === 'undefined') {
-        throw new Error('Bootstrap tooltips require Popper.js (https://popper.js.org)');
+        throw new TypeError('Bootstrap tooltips require Popper.js (https://popper.js.org)');
       } // private
 
 
@@ -5228,19 +5197,19 @@ var Tooltip = function ($$$1) {
       this._timeout = 0;
       this._hoverState = '';
       this._activeTrigger = {};
-      this._popper = null; // protected
+      this._popper = null; // Protected
 
       this.element = element;
       this.config = this._getConfig(config);
       this.tip = null;
 
       this._setListeners();
-    } // getters
+    } // Getters
 
 
     var _proto = Tooltip.prototype;
 
-    // public
+    // Public
     _proto.enable = function enable() {
       this._isEnabled = true;
     };
@@ -5375,7 +5344,7 @@ var Tooltip = function ($$$1) {
             _this._handlePopperPlacementChange(data);
           }
         });
-        $$$1(tip).addClass(ClassName.SHOW); // if this is a touch-enabled device we add extra
+        $$$1(tip).addClass(ClassName.SHOW); // If this is a touch-enabled device we add extra
         // empty mouseover listeners to the body's immediate children;
         // only needed because of broken event delegation on iOS
         // https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
@@ -5438,7 +5407,7 @@ var Tooltip = function ($$$1) {
         return;
       }
 
-      $$$1(tip).removeClass(ClassName.SHOW); // if this is a touch-enabled device we remove the extra
+      $$$1(tip).removeClass(ClassName.SHOW); // If this is a touch-enabled device we remove the extra
       // empty mouseover listeners we added for iOS support
 
       if ('ontouchstart' in document.documentElement) {
@@ -5462,7 +5431,7 @@ var Tooltip = function ($$$1) {
       if (this._popper !== null) {
         this._popper.scheduleUpdate();
       }
-    }; // protected
+    }; // Protected
 
 
     _proto.isWithContent = function isWithContent() {
@@ -5488,7 +5457,7 @@ var Tooltip = function ($$$1) {
       var html = this.config.html;
 
       if (typeof content === 'object' && (content.nodeType || content.jquery)) {
-        // content is a DOM node or a jQuery
+        // Content is a DOM node or a jQuery
         if (html) {
           if (!$$$1(content).parent().is($element)) {
             $element.empty().append(content);
@@ -5509,7 +5478,7 @@ var Tooltip = function ($$$1) {
       }
 
       return title;
-    }; // private
+    }; // Private
 
 
     _proto._getAttachment = function _getAttachment(placement) {
@@ -5698,7 +5667,7 @@ var Tooltip = function ($$$1) {
       this.hide();
       this.show();
       this.config.animation = initConfigAnimation;
-    }; // static
+    }; // Static
 
 
     Tooltip._jQueryInterface = function _jQueryInterface(config) {
@@ -5718,7 +5687,7 @@ var Tooltip = function ($$$1) {
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new TypeError("No method named \"" + config + "\"");
           }
 
           data[config]();
@@ -5784,7 +5753,7 @@ var Tooltip = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.3): popover.js
+ * Bootstrap (v4.0.0): popover.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -5796,7 +5765,7 @@ var Popover = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'popover';
-  var VERSION = '4.0.0-beta.3';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.popover';
   var EVENT_KEY = "." + DATA_KEY;
   var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
@@ -5849,7 +5818,7 @@ var Popover = function ($$$1) {
 
     var _proto = Popover.prototype;
 
-    // overrides
+    // Overrides
     _proto.isWithContent = function isWithContent() {
       return this.getTitle() || this._getContent();
     };
@@ -5864,7 +5833,7 @@ var Popover = function ($$$1) {
     };
 
     _proto.setContent = function setContent() {
-      var $tip = $$$1(this.getTipElement()); // we use append for html objects to maintain js events
+      var $tip = $$$1(this.getTipElement()); // We use append for html objects to maintain js events
 
       this.setElementContent($tip.find(Selector.TITLE), this.getTitle());
 
@@ -5876,7 +5845,7 @@ var Popover = function ($$$1) {
 
       this.setElementContent($tip.find(Selector.CONTENT), content);
       $tip.removeClass(ClassName.FADE + " " + ClassName.SHOW);
-    }; // private
+    }; // Private
 
 
     _proto._getContent = function _getContent() {
@@ -5890,7 +5859,7 @@ var Popover = function ($$$1) {
       if (tabClass !== null && tabClass.length > 0) {
         $tip.removeClass(tabClass.join(''));
       }
-    }; // static
+    }; // Static
 
 
     Popover._jQueryInterface = function _jQueryInterface(config) {
@@ -5910,7 +5879,7 @@ var Popover = function ($$$1) {
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new TypeError("No method named \"" + config + "\"");
           }
 
           data[config]();
@@ -5920,7 +5889,7 @@ var Popover = function ($$$1) {
 
     _createClass(Popover, null, [{
       key: "VERSION",
-      // getters
+      // Getters
       get: function get() {
         return VERSION;
       }
@@ -5977,7 +5946,7 @@ var Popover = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.3): scrollspy.js
+ * Bootstrap (v4.0.0): scrollspy.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -5989,7 +5958,7 @@ var ScrollSpy = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'scrollspy';
-  var VERSION = '4.0.0-beta.3';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.scrollspy';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -6056,16 +6025,16 @@ var ScrollSpy = function ($$$1) {
       this.refresh();
 
       this._process();
-    } // getters
+    } // Getters
 
 
     var _proto = ScrollSpy.prototype;
 
-    // public
+    // Public
     _proto.refresh = function refresh() {
       var _this2 = this;
 
-      var autoMethod = this._scrollElement !== this._scrollElement.window ? OffsetMethod.POSITION : OffsetMethod.OFFSET;
+      var autoMethod = this._scrollElement === this._scrollElement.window ? OffsetMethod.OFFSET : OffsetMethod.POSITION;
       var offsetMethod = this._config.method === 'auto' ? autoMethod : this._config.method;
       var offsetBase = offsetMethod === OffsetMethod.POSITION ? this._getScrollTop() : 0;
       this._offsets = [];
@@ -6084,7 +6053,7 @@ var ScrollSpy = function ($$$1) {
           var targetBCR = target.getBoundingClientRect();
 
           if (targetBCR.width || targetBCR.height) {
-            // todo (fat): remove sketch reliance on jQuery position/offset
+            // TODO (fat): remove sketch reliance on jQuery position/offset
             return [$$$1(target)[offsetMethod]().top + offsetBase, targetSelector];
           }
         }
@@ -6112,7 +6081,7 @@ var ScrollSpy = function ($$$1) {
       this._targets = null;
       this._activeTarget = null;
       this._scrollHeight = null;
-    }; // private
+    }; // Private
 
 
     _proto._getConfig = function _getConfig(config) {
@@ -6216,7 +6185,7 @@ var ScrollSpy = function ($$$1) {
 
     _proto._clear = function _clear() {
       $$$1(this._selector).filter(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
-    }; // static
+    }; // Static
 
 
     ScrollSpy._jQueryInterface = function _jQueryInterface(config) {
@@ -6232,7 +6201,7 @@ var ScrollSpy = function ($$$1) {
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new TypeError("No method named \"" + config + "\"");
           }
 
           data[config]();
@@ -6288,7 +6257,7 @@ var ScrollSpy = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.3): tab.js
+ * Bootstrap (v4.0.0): tab.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -6300,7 +6269,7 @@ var Tab = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'tab';
-  var VERSION = '4.0.0-beta.3';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.tab';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -6341,12 +6310,12 @@ var Tab = function ($$$1) {
   function () {
     function Tab(element) {
       this._element = element;
-    } // getters
+    } // Getters
 
 
     var _proto = Tab.prototype;
 
-    // public
+    // Public
     _proto.show = function show() {
       var _this = this;
 
@@ -6409,7 +6378,7 @@ var Tab = function ($$$1) {
     _proto.dispose = function dispose() {
       $$$1.removeData(this._element, DATA_KEY);
       this._element = null;
-    }; // private
+    }; // Private
 
 
     _proto._activate = function _activate(element, container, callback) {
@@ -6473,7 +6442,7 @@ var Tab = function ($$$1) {
       if (callback) {
         callback();
       }
-    }; // static
+    }; // Static
 
 
     Tab._jQueryInterface = function _jQueryInterface(config) {
@@ -6488,7 +6457,7 @@ var Tab = function ($$$1) {
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new TypeError("No method named \"" + config + "\"");
           }
 
           data[config]();
@@ -6542,7 +6511,7 @@ var Tab = function ($$$1) {
 
 (function ($$$1) {
   if (typeof $$$1 === 'undefined') {
-    throw new Error('Bootstrap\'s JavaScript requires jQuery. jQuery must be included before Bootstrap\'s JavaScript.');
+    throw new TypeError('Bootstrap\'s JavaScript requires jQuery. jQuery must be included before Bootstrap\'s JavaScript.');
   }
 
   var version = $$$1.fn.jquery.split(' ')[0].split('.');
@@ -21054,36 +21023,6 @@ exports.push([module.i, ".vue-google-map[data-v-3074bd5c]{position:relative}.vue
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-604dd58c\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/Catalog/Price.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(undefined);
-// imports
-exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Exo+2:700);", ""]);
-
-// module
-exports.push([module.i, "\n.gross-price[data-v-604dd58c],\n.net-price[data-v-604dd58c] {\n  font-family: 'Exo 2', sans-serif;\n  font-size: 20px;\n  color: #125175;\n}\n.gross-price span[data-v-604dd58c],\n  .net-price span[data-v-604dd58c] {\n    white-space: nowrap;\n}\n.price-per[data-v-604dd58c] {\n  margin-top: 15px;\n}\n.stock[data-v-604dd58c],\n.price-per[data-v-604dd58c] {\n  white-space: nowrap;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-c466d48e\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/Checkout/MiniCart.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n#mini-cart[data-v-c466d48e] {\n  position: relative;\n}\n#mini-cart .badge[data-v-c466d48e] {\n    position: absolute;\n    top: -5px;\n    right: -5px;\n    border-radius: 1rem;\n    font-weight: 100;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
 /***/ "./node_modules/css-loader/lib/css-base.js":
 /***/ (function(module, exports) {
 
@@ -21199,7 +21138,7 @@ function isSlowBuffer (obj) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- * jQuery JavaScript Library v3.2.1
+ * jQuery JavaScript Library v3.3.1
  * https://jquery.com/
  *
  * Includes Sizzle.js
@@ -21209,7 +21148,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
  * Released under the MIT license
  * https://jquery.org/license
  *
- * Date: 2017-03-20T18:59Z
+ * Date: 2018-01-20T17:24Z
  */
 ( function( global, factory ) {
 
@@ -21271,16 +21210,57 @@ var ObjectFunctionString = fnToString.call( Object );
 
 var support = {};
 
+var isFunction = function isFunction( obj ) {
+
+      // Support: Chrome <=57, Firefox <=52
+      // In some browsers, typeof returns "function" for HTML <object> elements
+      // (i.e., `typeof document.createElement( "object" ) === "function"`).
+      // We don't want to classify *any* DOM node as a function.
+      return typeof obj === "function" && typeof obj.nodeType !== "number";
+  };
 
 
-	function DOMEval( code, doc ) {
+var isWindow = function isWindow( obj ) {
+		return obj != null && obj === obj.window;
+	};
+
+
+
+
+	var preservedScriptAttributes = {
+		type: true,
+		src: true,
+		noModule: true
+	};
+
+	function DOMEval( code, doc, node ) {
 		doc = doc || document;
 
-		var script = doc.createElement( "script" );
+		var i,
+			script = doc.createElement( "script" );
 
 		script.text = code;
+		if ( node ) {
+			for ( i in preservedScriptAttributes ) {
+				if ( node[ i ] ) {
+					script[ i ] = node[ i ];
+				}
+			}
+		}
 		doc.head.appendChild( script ).parentNode.removeChild( script );
 	}
+
+
+function toType( obj ) {
+	if ( obj == null ) {
+		return obj + "";
+	}
+
+	// Support: Android <=2.3 only (functionish RegExp)
+	return typeof obj === "object" || typeof obj === "function" ?
+		class2type[ toString.call( obj ) ] || "object" :
+		typeof obj;
+}
 /* global Symbol */
 // Defining this global in .eslintrc.json would create a danger of using the global
 // unguarded in another place, it seems safer to define global only for this module
@@ -21288,7 +21268,7 @@ var support = {};
 
 
 var
-	version = "3.2.1",
+	version = "3.3.1",
 
 	// Define a local copy of jQuery
 	jQuery = function( selector, context ) {
@@ -21300,16 +21280,7 @@ var
 
 	// Support: Android <=4.0 only
 	// Make sure we trim BOM and NBSP
-	rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,
-
-	// Matches dashed string for camelizing
-	rmsPrefix = /^-ms-/,
-	rdashAlpha = /-([a-z])/g,
-
-	// Used by jQuery.camelCase as callback to replace()
-	fcamelCase = function( all, letter ) {
-		return letter.toUpperCase();
-	};
+	rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
 
 jQuery.fn = jQuery.prototype = {
 
@@ -21409,7 +21380,7 @@ jQuery.extend = jQuery.fn.extend = function() {
 	}
 
 	// Handle case when target is a string or something (possible in deep copy)
-	if ( typeof target !== "object" && !jQuery.isFunction( target ) ) {
+	if ( typeof target !== "object" && !isFunction( target ) ) {
 		target = {};
 	}
 
@@ -21475,28 +21446,6 @@ jQuery.extend( {
 
 	noop: function() {},
 
-	isFunction: function( obj ) {
-		return jQuery.type( obj ) === "function";
-	},
-
-	isWindow: function( obj ) {
-		return obj != null && obj === obj.window;
-	},
-
-	isNumeric: function( obj ) {
-
-		// As of jQuery 3.0, isNumeric is limited to
-		// strings and numbers (primitives or objects)
-		// that can be coerced to finite numbers (gh-2662)
-		var type = jQuery.type( obj );
-		return ( type === "number" || type === "string" ) &&
-
-			// parseFloat NaNs numeric-cast false positives ("")
-			// ...but misinterprets leading-number strings, particularly hex literals ("0x...")
-			// subtraction forces infinities to NaN
-			!isNaN( obj - parseFloat( obj ) );
-	},
-
 	isPlainObject: function( obj ) {
 		var proto, Ctor;
 
@@ -21530,27 +21479,9 @@ jQuery.extend( {
 		return true;
 	},
 
-	type: function( obj ) {
-		if ( obj == null ) {
-			return obj + "";
-		}
-
-		// Support: Android <=2.3 only (functionish RegExp)
-		return typeof obj === "object" || typeof obj === "function" ?
-			class2type[ toString.call( obj ) ] || "object" :
-			typeof obj;
-	},
-
 	// Evaluates a script in a global context
 	globalEval: function( code ) {
 		DOMEval( code );
-	},
-
-	// Convert dashed to camelCase; used by the css and data modules
-	// Support: IE <=9 - 11, Edge 12 - 13
-	// Microsoft forgot to hump their vendor prefix (#9572)
-	camelCase: function( string ) {
-		return string.replace( rmsPrefix, "ms-" ).replace( rdashAlpha, fcamelCase );
 	},
 
 	each: function( obj, callback ) {
@@ -21673,37 +21604,6 @@ jQuery.extend( {
 	// A global GUID counter for objects
 	guid: 1,
 
-	// Bind a function to a context, optionally partially applying any
-	// arguments.
-	proxy: function( fn, context ) {
-		var tmp, args, proxy;
-
-		if ( typeof context === "string" ) {
-			tmp = fn[ context ];
-			context = fn;
-			fn = tmp;
-		}
-
-		// Quick check to determine if target is callable, in the spec
-		// this throws a TypeError, but we will just return undefined.
-		if ( !jQuery.isFunction( fn ) ) {
-			return undefined;
-		}
-
-		// Simulated bind
-		args = slice.call( arguments, 2 );
-		proxy = function() {
-			return fn.apply( context || this, args.concat( slice.call( arguments ) ) );
-		};
-
-		// Set the guid of unique handler to the same of original handler, so it can be removed
-		proxy.guid = fn.guid = fn.guid || jQuery.guid++;
-
-		return proxy;
-	},
-
-	now: Date.now,
-
 	// jQuery.support is not used in Core but other projects attach their
 	// properties to it so it needs to exist.
 	support: support
@@ -21726,9 +21626,9 @@ function isArrayLike( obj ) {
 	// hasOwn isn't used here due to false negatives
 	// regarding Nodelist length in IE
 	var length = !!obj && "length" in obj && obj.length,
-		type = jQuery.type( obj );
+		type = toType( obj );
 
-	if ( type === "function" || jQuery.isWindow( obj ) ) {
+	if ( isFunction( obj ) || isWindow( obj ) ) {
 		return false;
 	}
 
@@ -24048,11 +23948,9 @@ var rsingleTag = ( /^<([a-z][^\/\0>:\x20\t\r\n\f]*)[\x20\t\r\n\f]*\/?>(?:<\/\1>|
 
 
 
-var risSimple = /^.[^:#\[\.,]*$/;
-
 // Implement the identical functionality for filter and not
 function winnow( elements, qualifier, not ) {
-	if ( jQuery.isFunction( qualifier ) ) {
+	if ( isFunction( qualifier ) ) {
 		return jQuery.grep( elements, function( elem, i ) {
 			return !!qualifier.call( elem, i, elem ) !== not;
 		} );
@@ -24072,16 +23970,8 @@ function winnow( elements, qualifier, not ) {
 		} );
 	}
 
-	// Simple selector that can be filtered directly, removing non-Elements
-	if ( risSimple.test( qualifier ) ) {
-		return jQuery.filter( qualifier, elements, not );
-	}
-
-	// Complex selector, compare the two sets, removing non-Elements
-	qualifier = jQuery.filter( qualifier, elements );
-	return jQuery.grep( elements, function( elem ) {
-		return ( indexOf.call( qualifier, elem ) > -1 ) !== not && elem.nodeType === 1;
-	} );
+	// Filtered directly for both simple and complex selectors
+	return jQuery.filter( qualifier, elements, not );
 }
 
 jQuery.filter = function( expr, elems, not ) {
@@ -24202,7 +24092,7 @@ var rootjQuery,
 						for ( match in context ) {
 
 							// Properties of context are called as methods if possible
-							if ( jQuery.isFunction( this[ match ] ) ) {
+							if ( isFunction( this[ match ] ) ) {
 								this[ match ]( context[ match ] );
 
 							// ...and otherwise set as attributes
@@ -24245,7 +24135,7 @@ var rootjQuery,
 
 		// HANDLE: $(function)
 		// Shortcut for document ready
-		} else if ( jQuery.isFunction( selector ) ) {
+		} else if ( isFunction( selector ) ) {
 			return root.ready !== undefined ?
 				root.ready( selector ) :
 
@@ -24560,11 +24450,11 @@ jQuery.Callbacks = function( options ) {
 
 					( function add( args ) {
 						jQuery.each( args, function( _, arg ) {
-							if ( jQuery.isFunction( arg ) ) {
+							if ( isFunction( arg ) ) {
 								if ( !options.unique || !self.has( arg ) ) {
 									list.push( arg );
 								}
-							} else if ( arg && arg.length && jQuery.type( arg ) !== "string" ) {
+							} else if ( arg && arg.length && toType( arg ) !== "string" ) {
 
 								// Inspect recursively
 								add( arg );
@@ -24679,11 +24569,11 @@ function adoptValue( value, resolve, reject, noValue ) {
 	try {
 
 		// Check for promise aspect first to privilege synchronous behavior
-		if ( value && jQuery.isFunction( ( method = value.promise ) ) ) {
+		if ( value && isFunction( ( method = value.promise ) ) ) {
 			method.call( value ).done( resolve ).fail( reject );
 
 		// Other thenables
-		} else if ( value && jQuery.isFunction( ( method = value.then ) ) ) {
+		} else if ( value && isFunction( ( method = value.then ) ) ) {
 			method.call( value, resolve, reject );
 
 		// Other non-thenables
@@ -24741,14 +24631,14 @@ jQuery.extend( {
 						jQuery.each( tuples, function( i, tuple ) {
 
 							// Map tuples (progress, done, fail) to arguments (done, fail, progress)
-							var fn = jQuery.isFunction( fns[ tuple[ 4 ] ] ) && fns[ tuple[ 4 ] ];
+							var fn = isFunction( fns[ tuple[ 4 ] ] ) && fns[ tuple[ 4 ] ];
 
 							// deferred.progress(function() { bind to newDefer or newDefer.notify })
 							// deferred.done(function() { bind to newDefer or newDefer.resolve })
 							// deferred.fail(function() { bind to newDefer or newDefer.reject })
 							deferred[ tuple[ 1 ] ]( function() {
 								var returned = fn && fn.apply( this, arguments );
-								if ( returned && jQuery.isFunction( returned.promise ) ) {
+								if ( returned && isFunction( returned.promise ) ) {
 									returned.promise()
 										.progress( newDefer.notify )
 										.done( newDefer.resolve )
@@ -24802,7 +24692,7 @@ jQuery.extend( {
 										returned.then;
 
 									// Handle a returned thenable
-									if ( jQuery.isFunction( then ) ) {
+									if ( isFunction( then ) ) {
 
 										// Special processors (notify) just wait for resolution
 										if ( special ) {
@@ -24898,7 +24788,7 @@ jQuery.extend( {
 							resolve(
 								0,
 								newDefer,
-								jQuery.isFunction( onProgress ) ?
+								isFunction( onProgress ) ?
 									onProgress :
 									Identity,
 								newDefer.notifyWith
@@ -24910,7 +24800,7 @@ jQuery.extend( {
 							resolve(
 								0,
 								newDefer,
-								jQuery.isFunction( onFulfilled ) ?
+								isFunction( onFulfilled ) ?
 									onFulfilled :
 									Identity
 							)
@@ -24921,7 +24811,7 @@ jQuery.extend( {
 							resolve(
 								0,
 								newDefer,
-								jQuery.isFunction( onRejected ) ?
+								isFunction( onRejected ) ?
 									onRejected :
 									Thrower
 							)
@@ -24961,8 +24851,15 @@ jQuery.extend( {
 					// fulfilled_callbacks.disable
 					tuples[ 3 - i ][ 2 ].disable,
 
+					// rejected_handlers.disable
+					// fulfilled_handlers.disable
+					tuples[ 3 - i ][ 3 ].disable,
+
 					// progress_callbacks.lock
-					tuples[ 0 ][ 2 ].lock
+					tuples[ 0 ][ 2 ].lock,
+
+					// progress_handlers.lock
+					tuples[ 0 ][ 3 ].lock
 				);
 			}
 
@@ -25032,7 +24929,7 @@ jQuery.extend( {
 
 			// Use .then() to unwrap secondary thenables (cf. gh-3000)
 			if ( master.state() === "pending" ||
-				jQuery.isFunction( resolveValues[ i ] && resolveValues[ i ].then ) ) {
+				isFunction( resolveValues[ i ] && resolveValues[ i ].then ) ) {
 
 				return master.then();
 			}
@@ -25160,7 +25057,7 @@ var access = function( elems, fn, key, value, chainable, emptyGet, raw ) {
 		bulk = key == null;
 
 	// Sets many values
-	if ( jQuery.type( key ) === "object" ) {
+	if ( toType( key ) === "object" ) {
 		chainable = true;
 		for ( i in key ) {
 			access( elems, fn, i, key[ i ], true, emptyGet, raw );
@@ -25170,7 +25067,7 @@ var access = function( elems, fn, key, value, chainable, emptyGet, raw ) {
 	} else if ( value !== undefined ) {
 		chainable = true;
 
-		if ( !jQuery.isFunction( value ) ) {
+		if ( !isFunction( value ) ) {
 			raw = true;
 		}
 
@@ -25212,6 +25109,23 @@ var access = function( elems, fn, key, value, chainable, emptyGet, raw ) {
 
 	return len ? fn( elems[ 0 ], key ) : emptyGet;
 };
+
+
+// Matches dashed string for camelizing
+var rmsPrefix = /^-ms-/,
+	rdashAlpha = /-([a-z])/g;
+
+// Used by camelCase as callback to replace()
+function fcamelCase( all, letter ) {
+	return letter.toUpperCase();
+}
+
+// Convert dashed to camelCase; used by the css and data modules
+// Support: IE <=9 - 11, Edge 12 - 15
+// Microsoft forgot to hump their vendor prefix (#9572)
+function camelCase( string ) {
+	return string.replace( rmsPrefix, "ms-" ).replace( rdashAlpha, fcamelCase );
+}
 var acceptData = function( owner ) {
 
 	// Accepts only:
@@ -25274,14 +25188,14 @@ Data.prototype = {
 		// Handle: [ owner, key, value ] args
 		// Always use camelCase key (gh-2257)
 		if ( typeof data === "string" ) {
-			cache[ jQuery.camelCase( data ) ] = value;
+			cache[ camelCase( data ) ] = value;
 
 		// Handle: [ owner, { properties } ] args
 		} else {
 
 			// Copy the properties one-by-one to the cache object
 			for ( prop in data ) {
-				cache[ jQuery.camelCase( prop ) ] = data[ prop ];
+				cache[ camelCase( prop ) ] = data[ prop ];
 			}
 		}
 		return cache;
@@ -25291,7 +25205,7 @@ Data.prototype = {
 			this.cache( owner ) :
 
 			// Always use camelCase key (gh-2257)
-			owner[ this.expando ] && owner[ this.expando ][ jQuery.camelCase( key ) ];
+			owner[ this.expando ] && owner[ this.expando ][ camelCase( key ) ];
 	},
 	access: function( owner, key, value ) {
 
@@ -25339,9 +25253,9 @@ Data.prototype = {
 
 				// If key is an array of keys...
 				// We always set camelCase keys, so remove that.
-				key = key.map( jQuery.camelCase );
+				key = key.map( camelCase );
 			} else {
-				key = jQuery.camelCase( key );
+				key = camelCase( key );
 
 				// If a key with the spaces exists, use it.
 				// Otherwise, create an array by matching non-whitespace
@@ -25487,7 +25401,7 @@ jQuery.fn.extend( {
 						if ( attrs[ i ] ) {
 							name = attrs[ i ].name;
 							if ( name.indexOf( "data-" ) === 0 ) {
-								name = jQuery.camelCase( name.slice( 5 ) );
+								name = camelCase( name.slice( 5 ) );
 								dataAttr( elem, name, data[ name ] );
 							}
 						}
@@ -25734,8 +25648,7 @@ var swap = function( elem, options, callback, args ) {
 
 
 function adjustCSS( elem, prop, valueParts, tween ) {
-	var adjusted,
-		scale = 1,
+	var adjusted, scale,
 		maxIterations = 20,
 		currentValue = tween ?
 			function() {
@@ -25753,30 +25666,33 @@ function adjustCSS( elem, prop, valueParts, tween ) {
 
 	if ( initialInUnit && initialInUnit[ 3 ] !== unit ) {
 
+		// Support: Firefox <=54
+		// Halve the iteration target value to prevent interference from CSS upper bounds (gh-2144)
+		initial = initial / 2;
+
 		// Trust units reported by jQuery.css
 		unit = unit || initialInUnit[ 3 ];
-
-		// Make sure we update the tween properties later on
-		valueParts = valueParts || [];
 
 		// Iteratively approximate from a nonzero starting point
 		initialInUnit = +initial || 1;
 
-		do {
+		while ( maxIterations-- ) {
 
-			// If previous iteration zeroed out, double until we get *something*.
-			// Use string for doubling so we don't accidentally see scale as unchanged below
-			scale = scale || ".5";
-
-			// Adjust and apply
-			initialInUnit = initialInUnit / scale;
+			// Evaluate and update our best guess (doubling guesses that zero out).
+			// Finish if the scale equals or crosses 1 (making the old*new product non-positive).
 			jQuery.style( elem, prop, initialInUnit + unit );
+			if ( ( 1 - scale ) * ( 1 - ( scale = currentValue() / initial || 0.5 ) ) <= 0 ) {
+				maxIterations = 0;
+			}
+			initialInUnit = initialInUnit / scale;
 
-		// Update scale, tolerating zero or NaN from tween.cur()
-		// Break the loop if scale is unchanged or perfect, or if we've just had enough.
-		} while (
-			scale !== ( scale = currentValue() / initial ) && scale !== 1 && --maxIterations
-		);
+		}
+
+		initialInUnit = initialInUnit * 2;
+		jQuery.style( elem, prop, initialInUnit + unit );
+
+		// Make sure we update the tween properties later on
+		valueParts = valueParts || [];
 	}
 
 	if ( valueParts ) {
@@ -25894,7 +25810,7 @@ var rcheckableType = ( /^(?:checkbox|radio)$/i );
 
 var rtagName = ( /<([a-z][^\/\0>\x20\t\r\n\f]+)/i );
 
-var rscriptType = ( /^$|\/(?:java|ecma)script/i );
+var rscriptType = ( /^$|^module$|\/(?:java|ecma)script/i );
 
 
 
@@ -25976,7 +25892,7 @@ function buildFragment( elems, context, scripts, selection, ignored ) {
 		if ( elem || elem === 0 ) {
 
 			// Add nodes directly
-			if ( jQuery.type( elem ) === "object" ) {
+			if ( toType( elem ) === "object" ) {
 
 				// Support: Android <=4.0 only, PhantomJS 1 only
 				// push.apply(_, arraylike) throws on ancient WebKit
@@ -26486,7 +26402,7 @@ jQuery.event = {
 			enumerable: true,
 			configurable: true,
 
-			get: jQuery.isFunction( hook ) ?
+			get: isFunction( hook ) ?
 				function() {
 					if ( this.originalEvent ) {
 							return hook( this.originalEvent );
@@ -26621,7 +26537,7 @@ jQuery.Event = function( src, props ) {
 	}
 
 	// Create a timestamp if incoming event doesn't have one
-	this.timeStamp = src && src.timeStamp || jQuery.now();
+	this.timeStamp = src && src.timeStamp || Date.now();
 
 	// Mark it as fixed
 	this[ jQuery.expando ] = true;
@@ -26820,14 +26736,13 @@ var
 
 	/* eslint-enable */
 
-	// Support: IE <=10 - 11, Edge 12 - 13
+	// Support: IE <=10 - 11, Edge 12 - 13 only
 	// In IE/Edge using regex groups here causes severe slowdowns.
 	// See https://connect.microsoft.com/IE/feedback/details/1736512/
 	rnoInnerhtml = /<script|<style|<link/i,
 
 	// checked="checked" or checked
 	rchecked = /checked\s*(?:[^=]|=\s*.checked.)/i,
-	rscriptTypeMasked = /^true\/(.*)/,
 	rcleanScript = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g;
 
 // Prefer a tbody over its parent table for containing new rows
@@ -26835,7 +26750,7 @@ function manipulationTarget( elem, content ) {
 	if ( nodeName( elem, "table" ) &&
 		nodeName( content.nodeType !== 11 ? content : content.firstChild, "tr" ) ) {
 
-		return jQuery( ">tbody", elem )[ 0 ] || elem;
+		return jQuery( elem ).children( "tbody" )[ 0 ] || elem;
 	}
 
 	return elem;
@@ -26847,10 +26762,8 @@ function disableScript( elem ) {
 	return elem;
 }
 function restoreScript( elem ) {
-	var match = rscriptTypeMasked.exec( elem.type );
-
-	if ( match ) {
-		elem.type = match[ 1 ];
+	if ( ( elem.type || "" ).slice( 0, 5 ) === "true/" ) {
+		elem.type = elem.type.slice( 5 );
 	} else {
 		elem.removeAttribute( "type" );
 	}
@@ -26916,15 +26829,15 @@ function domManip( collection, args, callback, ignored ) {
 		l = collection.length,
 		iNoClone = l - 1,
 		value = args[ 0 ],
-		isFunction = jQuery.isFunction( value );
+		valueIsFunction = isFunction( value );
 
 	// We can't cloneNode fragments that contain checked, in WebKit
-	if ( isFunction ||
+	if ( valueIsFunction ||
 			( l > 1 && typeof value === "string" &&
 				!support.checkClone && rchecked.test( value ) ) ) {
 		return collection.each( function( index ) {
 			var self = collection.eq( index );
-			if ( isFunction ) {
+			if ( valueIsFunction ) {
 				args[ 0 ] = value.call( this, index, self.html() );
 			}
 			domManip( self, args, callback, ignored );
@@ -26978,14 +26891,14 @@ function domManip( collection, args, callback, ignored ) {
 						!dataPriv.access( node, "globalEval" ) &&
 						jQuery.contains( doc, node ) ) {
 
-						if ( node.src ) {
+						if ( node.src && ( node.type || "" ).toLowerCase()  !== "module" ) {
 
 							// Optional AJAX dependency, but won't run scripts if not present
 							if ( jQuery._evalUrl ) {
 								jQuery._evalUrl( node.src );
 							}
 						} else {
-							DOMEval( node.textContent.replace( rcleanScript, "" ), doc );
+							DOMEval( node.textContent.replace( rcleanScript, "" ), doc, node );
 						}
 					}
 				}
@@ -27265,8 +27178,6 @@ jQuery.each( {
 		return this.pushStack( ret );
 	};
 } );
-var rmargin = ( /^margin/ );
-
 var rnumnonpx = new RegExp( "^(" + pnum + ")(?!px)[a-z%]+$", "i" );
 
 var getStyles = function( elem ) {
@@ -27283,6 +27194,8 @@ var getStyles = function( elem ) {
 		return view.getComputedStyle( elem );
 	};
 
+var rboxStyle = new RegExp( cssExpand.join( "|" ), "i" );
+
 
 
 ( function() {
@@ -27296,25 +27209,33 @@ var getStyles = function( elem ) {
 			return;
 		}
 
+		container.style.cssText = "position:absolute;left:-11111px;width:60px;" +
+			"margin-top:1px;padding:0;border:0";
 		div.style.cssText =
-			"box-sizing:border-box;" +
-			"position:relative;display:block;" +
+			"position:relative;display:block;box-sizing:border-box;overflow:scroll;" +
 			"margin:auto;border:1px;padding:1px;" +
-			"top:1%;width:50%";
-		div.innerHTML = "";
-		documentElement.appendChild( container );
+			"width:60%;top:1%";
+		documentElement.appendChild( container ).appendChild( div );
 
 		var divStyle = window.getComputedStyle( div );
 		pixelPositionVal = divStyle.top !== "1%";
 
 		// Support: Android 4.0 - 4.3 only, Firefox <=3 - 44
-		reliableMarginLeftVal = divStyle.marginLeft === "2px";
-		boxSizingReliableVal = divStyle.width === "4px";
+		reliableMarginLeftVal = roundPixelMeasures( divStyle.marginLeft ) === 12;
 
-		// Support: Android 4.0 - 4.3 only
+		// Support: Android 4.0 - 4.3 only, Safari <=9.1 - 10.1, iOS <=7.0 - 9.3
 		// Some styles come back with percentage values, even though they shouldn't
-		div.style.marginRight = "50%";
-		pixelMarginRightVal = divStyle.marginRight === "4px";
+		div.style.right = "60%";
+		pixelBoxStylesVal = roundPixelMeasures( divStyle.right ) === 36;
+
+		// Support: IE 9 - 11 only
+		// Detect misreporting of content dimensions for box-sizing:border-box elements
+		boxSizingReliableVal = roundPixelMeasures( divStyle.width ) === 36;
+
+		// Support: IE 9 only
+		// Detect overflow:scroll screwiness (gh-3699)
+		div.style.position = "absolute";
+		scrollboxSizeVal = div.offsetWidth === 36 || "absolute";
 
 		documentElement.removeChild( container );
 
@@ -27323,7 +27244,12 @@ var getStyles = function( elem ) {
 		div = null;
 	}
 
-	var pixelPositionVal, boxSizingReliableVal, pixelMarginRightVal, reliableMarginLeftVal,
+	function roundPixelMeasures( measure ) {
+		return Math.round( parseFloat( measure ) );
+	}
+
+	var pixelPositionVal, boxSizingReliableVal, scrollboxSizeVal, pixelBoxStylesVal,
+		reliableMarginLeftVal,
 		container = document.createElement( "div" ),
 		div = document.createElement( "div" );
 
@@ -27338,26 +27264,26 @@ var getStyles = function( elem ) {
 	div.cloneNode( true ).style.backgroundClip = "";
 	support.clearCloneStyle = div.style.backgroundClip === "content-box";
 
-	container.style.cssText = "border:0;width:8px;height:0;top:0;left:-9999px;" +
-		"padding:0;margin-top:1px;position:absolute";
-	container.appendChild( div );
-
 	jQuery.extend( support, {
-		pixelPosition: function() {
-			computeStyleTests();
-			return pixelPositionVal;
-		},
 		boxSizingReliable: function() {
 			computeStyleTests();
 			return boxSizingReliableVal;
 		},
-		pixelMarginRight: function() {
+		pixelBoxStyles: function() {
 			computeStyleTests();
-			return pixelMarginRightVal;
+			return pixelBoxStylesVal;
+		},
+		pixelPosition: function() {
+			computeStyleTests();
+			return pixelPositionVal;
 		},
 		reliableMarginLeft: function() {
 			computeStyleTests();
 			return reliableMarginLeftVal;
+		},
+		scrollboxSize: function() {
+			computeStyleTests();
+			return scrollboxSizeVal;
 		}
 	} );
 } )();
@@ -27389,7 +27315,7 @@ function curCSS( elem, name, computed ) {
 		// but width seems to be reliably pixels.
 		// This is against the CSSOM draft spec:
 		// https://drafts.csswg.org/cssom/#resolved-values
-		if ( !support.pixelMarginRight() && rnumnonpx.test( ret ) && rmargin.test( name ) ) {
+		if ( !support.pixelBoxStyles() && rnumnonpx.test( ret ) && rboxStyle.test( name ) ) {
 
 			// Remember the original values
 			width = style.width;
@@ -27494,87 +27420,120 @@ function setPositiveNumber( elem, value, subtract ) {
 		value;
 }
 
-function augmentWidthOrHeight( elem, name, extra, isBorderBox, styles ) {
-	var i,
-		val = 0;
+function boxModelAdjustment( elem, dimension, box, isBorderBox, styles, computedVal ) {
+	var i = dimension === "width" ? 1 : 0,
+		extra = 0,
+		delta = 0;
 
-	// If we already have the right measurement, avoid augmentation
-	if ( extra === ( isBorderBox ? "border" : "content" ) ) {
-		i = 4;
-
-	// Otherwise initialize for horizontal or vertical properties
-	} else {
-		i = name === "width" ? 1 : 0;
+	// Adjustment may not be necessary
+	if ( box === ( isBorderBox ? "border" : "content" ) ) {
+		return 0;
 	}
 
 	for ( ; i < 4; i += 2 ) {
 
-		// Both box models exclude margin, so add it if we want it
-		if ( extra === "margin" ) {
-			val += jQuery.css( elem, extra + cssExpand[ i ], true, styles );
+		// Both box models exclude margin
+		if ( box === "margin" ) {
+			delta += jQuery.css( elem, box + cssExpand[ i ], true, styles );
 		}
 
-		if ( isBorderBox ) {
+		// If we get here with a content-box, we're seeking "padding" or "border" or "margin"
+		if ( !isBorderBox ) {
 
-			// border-box includes padding, so remove it if we want content
-			if ( extra === "content" ) {
-				val -= jQuery.css( elem, "padding" + cssExpand[ i ], true, styles );
+			// Add padding
+			delta += jQuery.css( elem, "padding" + cssExpand[ i ], true, styles );
+
+			// For "border" or "margin", add border
+			if ( box !== "padding" ) {
+				delta += jQuery.css( elem, "border" + cssExpand[ i ] + "Width", true, styles );
+
+			// But still keep track of it otherwise
+			} else {
+				extra += jQuery.css( elem, "border" + cssExpand[ i ] + "Width", true, styles );
 			}
 
-			// At this point, extra isn't border nor margin, so remove border
-			if ( extra !== "margin" ) {
-				val -= jQuery.css( elem, "border" + cssExpand[ i ] + "Width", true, styles );
-			}
+		// If we get here with a border-box (content + padding + border), we're seeking "content" or
+		// "padding" or "margin"
 		} else {
 
-			// At this point, extra isn't content, so add padding
-			val += jQuery.css( elem, "padding" + cssExpand[ i ], true, styles );
+			// For "content", subtract padding
+			if ( box === "content" ) {
+				delta -= jQuery.css( elem, "padding" + cssExpand[ i ], true, styles );
+			}
 
-			// At this point, extra isn't content nor padding, so add border
-			if ( extra !== "padding" ) {
-				val += jQuery.css( elem, "border" + cssExpand[ i ] + "Width", true, styles );
+			// For "content" or "padding", subtract border
+			if ( box !== "margin" ) {
+				delta -= jQuery.css( elem, "border" + cssExpand[ i ] + "Width", true, styles );
 			}
 		}
 	}
 
-	return val;
+	// Account for positive content-box scroll gutter when requested by providing computedVal
+	if ( !isBorderBox && computedVal >= 0 ) {
+
+		// offsetWidth/offsetHeight is a rounded sum of content, padding, scroll gutter, and border
+		// Assuming integer scroll gutter, subtract the rest and round down
+		delta += Math.max( 0, Math.ceil(
+			elem[ "offset" + dimension[ 0 ].toUpperCase() + dimension.slice( 1 ) ] -
+			computedVal -
+			delta -
+			extra -
+			0.5
+		) );
+	}
+
+	return delta;
 }
 
-function getWidthOrHeight( elem, name, extra ) {
+function getWidthOrHeight( elem, dimension, extra ) {
 
 	// Start with computed style
-	var valueIsBorderBox,
-		styles = getStyles( elem ),
-		val = curCSS( elem, name, styles ),
-		isBorderBox = jQuery.css( elem, "boxSizing", false, styles ) === "border-box";
+	var styles = getStyles( elem ),
+		val = curCSS( elem, dimension, styles ),
+		isBorderBox = jQuery.css( elem, "boxSizing", false, styles ) === "border-box",
+		valueIsBorderBox = isBorderBox;
 
-	// Computed unit is not pixels. Stop here and return.
+	// Support: Firefox <=54
+	// Return a confounding non-pixel value or feign ignorance, as appropriate.
 	if ( rnumnonpx.test( val ) ) {
-		return val;
+		if ( !extra ) {
+			return val;
+		}
+		val = "auto";
 	}
 
 	// Check for style in case a browser which returns unreliable values
 	// for getComputedStyle silently falls back to the reliable elem.style
-	valueIsBorderBox = isBorderBox &&
-		( support.boxSizingReliable() || val === elem.style[ name ] );
+	valueIsBorderBox = valueIsBorderBox &&
+		( support.boxSizingReliable() || val === elem.style[ dimension ] );
 
-	// Fall back to offsetWidth/Height when value is "auto"
+	// Fall back to offsetWidth/offsetHeight when value is "auto"
 	// This happens for inline elements with no explicit setting (gh-3571)
-	if ( val === "auto" ) {
-		val = elem[ "offset" + name[ 0 ].toUpperCase() + name.slice( 1 ) ];
+	// Support: Android <=4.1 - 4.3 only
+	// Also use offsetWidth/offsetHeight for misreported inline dimensions (gh-3602)
+	if ( val === "auto" ||
+		!parseFloat( val ) && jQuery.css( elem, "display", false, styles ) === "inline" ) {
+
+		val = elem[ "offset" + dimension[ 0 ].toUpperCase() + dimension.slice( 1 ) ];
+
+		// offsetWidth/offsetHeight provide border-box values
+		valueIsBorderBox = true;
 	}
 
-	// Normalize "", auto, and prepare for extra
+	// Normalize "" and auto
 	val = parseFloat( val ) || 0;
 
-	// Use the active box-sizing model to add/subtract irrelevant styles
+	// Adjust for the element's box model
 	return ( val +
-		augmentWidthOrHeight(
+		boxModelAdjustment(
 			elem,
-			name,
+			dimension,
 			extra || ( isBorderBox ? "border" : "content" ),
 			valueIsBorderBox,
-			styles
+			styles,
+
+			// Provide the current computed size to request scroll gutter calculation (gh-3589)
+			val
 		)
 	) + "px";
 }
@@ -27615,9 +27574,7 @@ jQuery.extend( {
 
 	// Add in properties whose names you wish to fix before
 	// setting or getting the value
-	cssProps: {
-		"float": "cssFloat"
-	},
+	cssProps: {},
 
 	// Get and set the style property on a DOM Node
 	style: function( elem, name, value, extra ) {
@@ -27629,7 +27586,7 @@ jQuery.extend( {
 
 		// Make sure that we're working with the right name
 		var ret, type, hooks,
-			origName = jQuery.camelCase( name ),
+			origName = camelCase( name ),
 			isCustomProp = rcustomProp.test( name ),
 			style = elem.style;
 
@@ -27697,7 +27654,7 @@ jQuery.extend( {
 
 	css: function( elem, name, extra, styles ) {
 		var val, num, hooks,
-			origName = jQuery.camelCase( name ),
+			origName = camelCase( name ),
 			isCustomProp = rcustomProp.test( name );
 
 		// Make sure that we're working with the right name. We don't
@@ -27735,8 +27692,8 @@ jQuery.extend( {
 	}
 } );
 
-jQuery.each( [ "height", "width" ], function( i, name ) {
-	jQuery.cssHooks[ name ] = {
+jQuery.each( [ "height", "width" ], function( i, dimension ) {
+	jQuery.cssHooks[ dimension ] = {
 		get: function( elem, computed, extra ) {
 			if ( computed ) {
 
@@ -27752,29 +27709,41 @@ jQuery.each( [ "height", "width" ], function( i, name ) {
 					// in IE throws an error.
 					( !elem.getClientRects().length || !elem.getBoundingClientRect().width ) ?
 						swap( elem, cssShow, function() {
-							return getWidthOrHeight( elem, name, extra );
+							return getWidthOrHeight( elem, dimension, extra );
 						} ) :
-						getWidthOrHeight( elem, name, extra );
+						getWidthOrHeight( elem, dimension, extra );
 			}
 		},
 
 		set: function( elem, value, extra ) {
 			var matches,
-				styles = extra && getStyles( elem ),
-				subtract = extra && augmentWidthOrHeight(
+				styles = getStyles( elem ),
+				isBorderBox = jQuery.css( elem, "boxSizing", false, styles ) === "border-box",
+				subtract = extra && boxModelAdjustment(
 					elem,
-					name,
+					dimension,
 					extra,
-					jQuery.css( elem, "boxSizing", false, styles ) === "border-box",
+					isBorderBox,
 					styles
 				);
+
+			// Account for unreliable border-box dimensions by comparing offset* to computed and
+			// faking a content-box to get border and padding (gh-3699)
+			if ( isBorderBox && support.scrollboxSize() === styles.position ) {
+				subtract -= Math.ceil(
+					elem[ "offset" + dimension[ 0 ].toUpperCase() + dimension.slice( 1 ) ] -
+					parseFloat( styles[ dimension ] ) -
+					boxModelAdjustment( elem, dimension, "border", false, styles ) -
+					0.5
+				);
+			}
 
 			// Convert to pixels if value adjustment is needed
 			if ( subtract && ( matches = rcssNum.exec( value ) ) &&
 				( matches[ 3 ] || "px" ) !== "px" ) {
 
-				elem.style[ name ] = value;
-				value = jQuery.css( elem, name );
+				elem.style[ dimension ] = value;
+				value = jQuery.css( elem, dimension );
 			}
 
 			return setPositiveNumber( elem, value, subtract );
@@ -27818,7 +27787,7 @@ jQuery.each( {
 		}
 	};
 
-	if ( !rmargin.test( prefix ) ) {
+	if ( prefix !== "margin" ) {
 		jQuery.cssHooks[ prefix + suffix ].set = setPositiveNumber;
 	}
 } );
@@ -27989,7 +27958,7 @@ function createFxNow() {
 	window.setTimeout( function() {
 		fxNow = undefined;
 	} );
-	return ( fxNow = jQuery.now() );
+	return ( fxNow = Date.now() );
 }
 
 // Generate parameters to create a standard animation
@@ -28093,9 +28062,10 @@ function defaultPrefilter( elem, props, opts ) {
 	// Restrict "overflow" and "display" styles during box animations
 	if ( isBox && elem.nodeType === 1 ) {
 
-		// Support: IE <=9 - 11, Edge 12 - 13
+		// Support: IE <=9 - 11, Edge 12 - 15
 		// Record all 3 overflow attributes because IE does not infer the shorthand
-		// from identically-valued overflowX and overflowY
+		// from identically-valued overflowX and overflowY and Edge just mirrors
+		// the overflowX value there.
 		opts.overflow = [ style.overflow, style.overflowX, style.overflowY ];
 
 		// Identify a display type, preferring old show/hide data over the CSS cascade
@@ -28203,7 +28173,7 @@ function propFilter( props, specialEasing ) {
 
 	// camelCase, specialEasing and expand cssHook pass
 	for ( index in props ) {
-		name = jQuery.camelCase( index );
+		name = camelCase( index );
 		easing = specialEasing[ name ];
 		value = props[ index ];
 		if ( Array.isArray( value ) ) {
@@ -28328,9 +28298,9 @@ function Animation( elem, properties, options ) {
 	for ( ; index < length; index++ ) {
 		result = Animation.prefilters[ index ].call( animation, elem, props, animation.opts );
 		if ( result ) {
-			if ( jQuery.isFunction( result.stop ) ) {
+			if ( isFunction( result.stop ) ) {
 				jQuery._queueHooks( animation.elem, animation.opts.queue ).stop =
-					jQuery.proxy( result.stop, result );
+					result.stop.bind( result );
 			}
 			return result;
 		}
@@ -28338,7 +28308,7 @@ function Animation( elem, properties, options ) {
 
 	jQuery.map( props, createTween, animation );
 
-	if ( jQuery.isFunction( animation.opts.start ) ) {
+	if ( isFunction( animation.opts.start ) ) {
 		animation.opts.start.call( elem, animation );
 	}
 
@@ -28371,7 +28341,7 @@ jQuery.Animation = jQuery.extend( Animation, {
 	},
 
 	tweener: function( props, callback ) {
-		if ( jQuery.isFunction( props ) ) {
+		if ( isFunction( props ) ) {
 			callback = props;
 			props = [ "*" ];
 		} else {
@@ -28403,9 +28373,9 @@ jQuery.Animation = jQuery.extend( Animation, {
 jQuery.speed = function( speed, easing, fn ) {
 	var opt = speed && typeof speed === "object" ? jQuery.extend( {}, speed ) : {
 		complete: fn || !fn && easing ||
-			jQuery.isFunction( speed ) && speed,
+			isFunction( speed ) && speed,
 		duration: speed,
-		easing: fn && easing || easing && !jQuery.isFunction( easing ) && easing
+		easing: fn && easing || easing && !isFunction( easing ) && easing
 	};
 
 	// Go to the end state if fx are off
@@ -28432,7 +28402,7 @@ jQuery.speed = function( speed, easing, fn ) {
 	opt.old = opt.complete;
 
 	opt.complete = function() {
-		if ( jQuery.isFunction( opt.old ) ) {
+		if ( isFunction( opt.old ) ) {
 			opt.old.call( this );
 		}
 
@@ -28596,7 +28566,7 @@ jQuery.fx.tick = function() {
 		i = 0,
 		timers = jQuery.timers;
 
-	fxNow = jQuery.now();
+	fxNow = Date.now();
 
 	for ( ; i < timers.length; i++ ) {
 		timer = timers[ i ];
@@ -28949,7 +28919,7 @@ jQuery.each( [
 
 
 	// Strip and collapse whitespace according to HTML spec
-	// https://html.spec.whatwg.org/multipage/infrastructure.html#strip-and-collapse-whitespace
+	// https://infra.spec.whatwg.org/#strip-and-collapse-ascii-whitespace
 	function stripAndCollapse( value ) {
 		var tokens = value.match( rnothtmlwhite ) || [];
 		return tokens.join( " " );
@@ -28960,20 +28930,30 @@ function getClass( elem ) {
 	return elem.getAttribute && elem.getAttribute( "class" ) || "";
 }
 
+function classesToArray( value ) {
+	if ( Array.isArray( value ) ) {
+		return value;
+	}
+	if ( typeof value === "string" ) {
+		return value.match( rnothtmlwhite ) || [];
+	}
+	return [];
+}
+
 jQuery.fn.extend( {
 	addClass: function( value ) {
 		var classes, elem, cur, curValue, clazz, j, finalValue,
 			i = 0;
 
-		if ( jQuery.isFunction( value ) ) {
+		if ( isFunction( value ) ) {
 			return this.each( function( j ) {
 				jQuery( this ).addClass( value.call( this, j, getClass( this ) ) );
 			} );
 		}
 
-		if ( typeof value === "string" && value ) {
-			classes = value.match( rnothtmlwhite ) || [];
+		classes = classesToArray( value );
 
+		if ( classes.length ) {
 			while ( ( elem = this[ i++ ] ) ) {
 				curValue = getClass( elem );
 				cur = elem.nodeType === 1 && ( " " + stripAndCollapse( curValue ) + " " );
@@ -29002,7 +28982,7 @@ jQuery.fn.extend( {
 		var classes, elem, cur, curValue, clazz, j, finalValue,
 			i = 0;
 
-		if ( jQuery.isFunction( value ) ) {
+		if ( isFunction( value ) ) {
 			return this.each( function( j ) {
 				jQuery( this ).removeClass( value.call( this, j, getClass( this ) ) );
 			} );
@@ -29012,9 +28992,9 @@ jQuery.fn.extend( {
 			return this.attr( "class", "" );
 		}
 
-		if ( typeof value === "string" && value ) {
-			classes = value.match( rnothtmlwhite ) || [];
+		classes = classesToArray( value );
 
+		if ( classes.length ) {
 			while ( ( elem = this[ i++ ] ) ) {
 				curValue = getClass( elem );
 
@@ -29044,13 +29024,14 @@ jQuery.fn.extend( {
 	},
 
 	toggleClass: function( value, stateVal ) {
-		var type = typeof value;
+		var type = typeof value,
+			isValidValue = type === "string" || Array.isArray( value );
 
-		if ( typeof stateVal === "boolean" && type === "string" ) {
+		if ( typeof stateVal === "boolean" && isValidValue ) {
 			return stateVal ? this.addClass( value ) : this.removeClass( value );
 		}
 
-		if ( jQuery.isFunction( value ) ) {
+		if ( isFunction( value ) ) {
 			return this.each( function( i ) {
 				jQuery( this ).toggleClass(
 					value.call( this, i, getClass( this ), stateVal ),
@@ -29062,12 +29043,12 @@ jQuery.fn.extend( {
 		return this.each( function() {
 			var className, i, self, classNames;
 
-			if ( type === "string" ) {
+			if ( isValidValue ) {
 
 				// Toggle individual class names
 				i = 0;
 				self = jQuery( this );
-				classNames = value.match( rnothtmlwhite ) || [];
+				classNames = classesToArray( value );
 
 				while ( ( className = classNames[ i++ ] ) ) {
 
@@ -29126,7 +29107,7 @@ var rreturn = /\r/g;
 
 jQuery.fn.extend( {
 	val: function( value ) {
-		var hooks, ret, isFunction,
+		var hooks, ret, valueIsFunction,
 			elem = this[ 0 ];
 
 		if ( !arguments.length ) {
@@ -29155,7 +29136,7 @@ jQuery.fn.extend( {
 			return;
 		}
 
-		isFunction = jQuery.isFunction( value );
+		valueIsFunction = isFunction( value );
 
 		return this.each( function( i ) {
 			var val;
@@ -29164,7 +29145,7 @@ jQuery.fn.extend( {
 				return;
 			}
 
-			if ( isFunction ) {
+			if ( valueIsFunction ) {
 				val = value.call( this, i, jQuery( this ).val() );
 			} else {
 				val = value;
@@ -29306,18 +29287,24 @@ jQuery.each( [ "radio", "checkbox" ], function() {
 // Return jQuery for attributes-only inclusion
 
 
-var rfocusMorph = /^(?:focusinfocus|focusoutblur)$/;
+support.focusin = "onfocusin" in window;
+
+
+var rfocusMorph = /^(?:focusinfocus|focusoutblur)$/,
+	stopPropagationCallback = function( e ) {
+		e.stopPropagation();
+	};
 
 jQuery.extend( jQuery.event, {
 
 	trigger: function( event, data, elem, onlyHandlers ) {
 
-		var i, cur, tmp, bubbleType, ontype, handle, special,
+		var i, cur, tmp, bubbleType, ontype, handle, special, lastElement,
 			eventPath = [ elem || document ],
 			type = hasOwn.call( event, "type" ) ? event.type : event,
 			namespaces = hasOwn.call( event, "namespace" ) ? event.namespace.split( "." ) : [];
 
-		cur = tmp = elem = elem || document;
+		cur = lastElement = tmp = elem = elem || document;
 
 		// Don't do events on text and comment nodes
 		if ( elem.nodeType === 3 || elem.nodeType === 8 ) {
@@ -29369,7 +29356,7 @@ jQuery.extend( jQuery.event, {
 
 		// Determine event propagation path in advance, per W3C events spec (#9951)
 		// Bubble up to document, then to window; watch for a global ownerDocument var (#9724)
-		if ( !onlyHandlers && !special.noBubble && !jQuery.isWindow( elem ) ) {
+		if ( !onlyHandlers && !special.noBubble && !isWindow( elem ) ) {
 
 			bubbleType = special.delegateType || type;
 			if ( !rfocusMorph.test( bubbleType + type ) ) {
@@ -29389,7 +29376,7 @@ jQuery.extend( jQuery.event, {
 		// Fire handlers on the event path
 		i = 0;
 		while ( ( cur = eventPath[ i++ ] ) && !event.isPropagationStopped() ) {
-
+			lastElement = cur;
 			event.type = i > 1 ?
 				bubbleType :
 				special.bindType || type;
@@ -29421,7 +29408,7 @@ jQuery.extend( jQuery.event, {
 
 				// Call a native DOM method on the target with the same name as the event.
 				// Don't do default actions on window, that's where global variables be (#6170)
-				if ( ontype && jQuery.isFunction( elem[ type ] ) && !jQuery.isWindow( elem ) ) {
+				if ( ontype && isFunction( elem[ type ] ) && !isWindow( elem ) ) {
 
 					// Don't re-trigger an onFOO event when we call its FOO() method
 					tmp = elem[ ontype ];
@@ -29432,7 +29419,17 @@ jQuery.extend( jQuery.event, {
 
 					// Prevent re-triggering of the same event, since we already bubbled it above
 					jQuery.event.triggered = type;
+
+					if ( event.isPropagationStopped() ) {
+						lastElement.addEventListener( type, stopPropagationCallback );
+					}
+
 					elem[ type ]();
+
+					if ( event.isPropagationStopped() ) {
+						lastElement.removeEventListener( type, stopPropagationCallback );
+					}
+
 					jQuery.event.triggered = undefined;
 
 					if ( tmp ) {
@@ -29478,31 +29475,6 @@ jQuery.fn.extend( {
 } );
 
 
-jQuery.each( ( "blur focus focusin focusout resize scroll click dblclick " +
-	"mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
-	"change select submit keydown keypress keyup contextmenu" ).split( " " ),
-	function( i, name ) {
-
-	// Handle event binding
-	jQuery.fn[ name ] = function( data, fn ) {
-		return arguments.length > 0 ?
-			this.on( name, null, data, fn ) :
-			this.trigger( name );
-	};
-} );
-
-jQuery.fn.extend( {
-	hover: function( fnOver, fnOut ) {
-		return this.mouseenter( fnOver ).mouseleave( fnOut || fnOver );
-	}
-} );
-
-
-
-
-support.focusin = "onfocusin" in window;
-
-
 // Support: Firefox <=44
 // Firefox doesn't have focus(in | out) events
 // Related ticket - https://bugzilla.mozilla.org/show_bug.cgi?id=687787
@@ -29546,7 +29518,7 @@ if ( !support.focusin ) {
 }
 var location = window.location;
 
-var nonce = jQuery.now();
+var nonce = Date.now();
 
 var rquery = ( /\?/ );
 
@@ -29604,7 +29576,7 @@ function buildParams( prefix, obj, traditional, add ) {
 			}
 		} );
 
-	} else if ( !traditional && jQuery.type( obj ) === "object" ) {
+	} else if ( !traditional && toType( obj ) === "object" ) {
 
 		// Serialize object item.
 		for ( name in obj ) {
@@ -29626,7 +29598,7 @@ jQuery.param = function( a, traditional ) {
 		add = function( key, valueOrFunction ) {
 
 			// If value is a function, invoke it and use its return value
-			var value = jQuery.isFunction( valueOrFunction ) ?
+			var value = isFunction( valueOrFunction ) ?
 				valueOrFunction() :
 				valueOrFunction;
 
@@ -29744,7 +29716,7 @@ function addToPrefiltersOrTransports( structure ) {
 			i = 0,
 			dataTypes = dataTypeExpression.toLowerCase().match( rnothtmlwhite ) || [];
 
-		if ( jQuery.isFunction( func ) ) {
+		if ( isFunction( func ) ) {
 
 			// For each dataType in the dataTypeExpression
 			while ( ( dataType = dataTypes[ i++ ] ) ) {
@@ -30216,7 +30188,7 @@ jQuery.extend( {
 		if ( s.crossDomain == null ) {
 			urlAnchor = document.createElement( "a" );
 
-			// Support: IE <=8 - 11, Edge 12 - 13
+			// Support: IE <=8 - 11, Edge 12 - 15
 			// IE throws exception on accessing the href property if url is malformed,
 			// e.g. http://example.com:80x/
 			try {
@@ -30274,8 +30246,8 @@ jQuery.extend( {
 			// Remember the hash so we can put it back
 			uncached = s.url.slice( cacheURL.length );
 
-			// If data is available, append data to url
-			if ( s.data ) {
+			// If data is available and should be processed, append data to url
+			if ( s.data && ( s.processData || typeof s.data === "string" ) ) {
 				cacheURL += ( rquery.test( cacheURL ) ? "&" : "?" ) + s.data;
 
 				// #9682: remove data so that it's not used in an eventual retry
@@ -30512,7 +30484,7 @@ jQuery.each( [ "get", "post" ], function( i, method ) {
 	jQuery[ method ] = function( url, data, callback, type ) {
 
 		// Shift arguments if data argument was omitted
-		if ( jQuery.isFunction( data ) ) {
+		if ( isFunction( data ) ) {
 			type = type || callback;
 			callback = data;
 			data = undefined;
@@ -30550,7 +30522,7 @@ jQuery.fn.extend( {
 		var wrap;
 
 		if ( this[ 0 ] ) {
-			if ( jQuery.isFunction( html ) ) {
+			if ( isFunction( html ) ) {
 				html = html.call( this[ 0 ] );
 			}
 
@@ -30576,7 +30548,7 @@ jQuery.fn.extend( {
 	},
 
 	wrapInner: function( html ) {
-		if ( jQuery.isFunction( html ) ) {
+		if ( isFunction( html ) ) {
 			return this.each( function( i ) {
 				jQuery( this ).wrapInner( html.call( this, i ) );
 			} );
@@ -30596,10 +30568,10 @@ jQuery.fn.extend( {
 	},
 
 	wrap: function( html ) {
-		var isFunction = jQuery.isFunction( html );
+		var htmlIsFunction = isFunction( html );
 
 		return this.each( function( i ) {
-			jQuery( this ).wrapAll( isFunction ? html.call( this, i ) : html );
+			jQuery( this ).wrapAll( htmlIsFunction ? html.call( this, i ) : html );
 		} );
 	},
 
@@ -30691,7 +30663,8 @@ jQuery.ajaxTransport( function( options ) {
 					return function() {
 						if ( callback ) {
 							callback = errorCallback = xhr.onload =
-								xhr.onerror = xhr.onabort = xhr.onreadystatechange = null;
+								xhr.onerror = xhr.onabort = xhr.ontimeout =
+									xhr.onreadystatechange = null;
 
 							if ( type === "abort" ) {
 								xhr.abort();
@@ -30731,7 +30704,7 @@ jQuery.ajaxTransport( function( options ) {
 
 				// Listen to events
 				xhr.onload = callback();
-				errorCallback = xhr.onerror = callback( "error" );
+				errorCallback = xhr.onerror = xhr.ontimeout = callback( "error" );
 
 				// Support: IE 9 only
 				// Use onreadystatechange to replace onabort
@@ -30885,7 +30858,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 	if ( jsonProp || s.dataTypes[ 0 ] === "jsonp" ) {
 
 		// Get callback name, remembering preexisting value associated with it
-		callbackName = s.jsonpCallback = jQuery.isFunction( s.jsonpCallback ) ?
+		callbackName = s.jsonpCallback = isFunction( s.jsonpCallback ) ?
 			s.jsonpCallback() :
 			s.jsonpCallback;
 
@@ -30936,7 +30909,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 			}
 
 			// Call if it was a function and we have a response
-			if ( responseContainer && jQuery.isFunction( overwritten ) ) {
+			if ( responseContainer && isFunction( overwritten ) ) {
 				overwritten( responseContainer[ 0 ] );
 			}
 
@@ -31028,7 +31001,7 @@ jQuery.fn.load = function( url, params, callback ) {
 	}
 
 	// If it's a function
-	if ( jQuery.isFunction( params ) ) {
+	if ( isFunction( params ) ) {
 
 		// We assume that it's the callback
 		callback = params;
@@ -31136,7 +31109,7 @@ jQuery.offset = {
 			curLeft = parseFloat( curCSSLeft ) || 0;
 		}
 
-		if ( jQuery.isFunction( options ) ) {
+		if ( isFunction( options ) ) {
 
 			// Use jQuery.extend here to allow modification of coordinates argument (gh-1848)
 			options = options.call( elem, i, jQuery.extend( {}, curOffset ) );
@@ -31159,6 +31132,8 @@ jQuery.offset = {
 };
 
 jQuery.fn.extend( {
+
+	// offset() relates an element's border box to the document origin
 	offset: function( options ) {
 
 		// Preserve chaining for setter
@@ -31170,7 +31145,7 @@ jQuery.fn.extend( {
 				} );
 		}
 
-		var doc, docElem, rect, win,
+		var rect, win,
 			elem = this[ 0 ];
 
 		if ( !elem ) {
@@ -31185,50 +31160,52 @@ jQuery.fn.extend( {
 			return { top: 0, left: 0 };
 		}
 
+		// Get document-relative position by adding viewport scroll to viewport-relative gBCR
 		rect = elem.getBoundingClientRect();
-
-		doc = elem.ownerDocument;
-		docElem = doc.documentElement;
-		win = doc.defaultView;
-
+		win = elem.ownerDocument.defaultView;
 		return {
-			top: rect.top + win.pageYOffset - docElem.clientTop,
-			left: rect.left + win.pageXOffset - docElem.clientLeft
+			top: rect.top + win.pageYOffset,
+			left: rect.left + win.pageXOffset
 		};
 	},
 
+	// position() relates an element's margin box to its offset parent's padding box
+	// This corresponds to the behavior of CSS absolute positioning
 	position: function() {
 		if ( !this[ 0 ] ) {
 			return;
 		}
 
-		var offsetParent, offset,
+		var offsetParent, offset, doc,
 			elem = this[ 0 ],
 			parentOffset = { top: 0, left: 0 };
 
-		// Fixed elements are offset from window (parentOffset = {top:0, left: 0},
-		// because it is its only offset parent
+		// position:fixed elements are offset from the viewport, which itself always has zero offset
 		if ( jQuery.css( elem, "position" ) === "fixed" ) {
 
-			// Assume getBoundingClientRect is there when computed position is fixed
+			// Assume position:fixed implies availability of getBoundingClientRect
 			offset = elem.getBoundingClientRect();
 
 		} else {
-
-			// Get *real* offsetParent
-			offsetParent = this.offsetParent();
-
-			// Get correct offsets
 			offset = this.offset();
-			if ( !nodeName( offsetParent[ 0 ], "html" ) ) {
-				parentOffset = offsetParent.offset();
-			}
 
-			// Add offsetParent borders
-			parentOffset = {
-				top: parentOffset.top + jQuery.css( offsetParent[ 0 ], "borderTopWidth", true ),
-				left: parentOffset.left + jQuery.css( offsetParent[ 0 ], "borderLeftWidth", true )
-			};
+			// Account for the *real* offset parent, which can be the document or its root element
+			// when a statically positioned element is identified
+			doc = elem.ownerDocument;
+			offsetParent = elem.offsetParent || doc.documentElement;
+			while ( offsetParent &&
+				( offsetParent === doc.body || offsetParent === doc.documentElement ) &&
+				jQuery.css( offsetParent, "position" ) === "static" ) {
+
+				offsetParent = offsetParent.parentNode;
+			}
+			if ( offsetParent && offsetParent !== elem && offsetParent.nodeType === 1 ) {
+
+				// Incorporate borders into its offset, since they are outside its content origin
+				parentOffset = jQuery( offsetParent ).offset();
+				parentOffset.top += jQuery.css( offsetParent, "borderTopWidth", true );
+				parentOffset.left += jQuery.css( offsetParent, "borderLeftWidth", true );
+			}
 		}
 
 		// Subtract parent offsets and element margins
@@ -31270,7 +31247,7 @@ jQuery.each( { scrollLeft: "pageXOffset", scrollTop: "pageYOffset" }, function( 
 
 			// Coalesce documents and windows
 			var win;
-			if ( jQuery.isWindow( elem ) ) {
+			if ( isWindow( elem ) ) {
 				win = elem;
 			} else if ( elem.nodeType === 9 ) {
 				win = elem.defaultView;
@@ -31328,7 +31305,7 @@ jQuery.each( { Height: "height", Width: "width" }, function( name, type ) {
 			return access( this, function( elem, type, value ) {
 				var doc;
 
-				if ( jQuery.isWindow( elem ) ) {
+				if ( isWindow( elem ) ) {
 
 					// $( window ).outerWidth/Height return w/h including scrollbars (gh-1729)
 					return funcName.indexOf( "outer" ) === 0 ?
@@ -31362,6 +31339,28 @@ jQuery.each( { Height: "height", Width: "width" }, function( name, type ) {
 } );
 
 
+jQuery.each( ( "blur focus focusin focusout resize scroll click dblclick " +
+	"mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
+	"change select submit keydown keypress keyup contextmenu" ).split( " " ),
+	function( i, name ) {
+
+	// Handle event binding
+	jQuery.fn[ name ] = function( data, fn ) {
+		return arguments.length > 0 ?
+			this.on( name, null, data, fn ) :
+			this.trigger( name );
+	};
+} );
+
+jQuery.fn.extend( {
+	hover: function( fnOver, fnOut ) {
+		return this.mouseenter( fnOver ).mouseleave( fnOut || fnOver );
+	}
+} );
+
+
+
+
 jQuery.fn.extend( {
 
 	bind: function( types, data, fn ) {
@@ -31383,6 +31382,37 @@ jQuery.fn.extend( {
 	}
 } );
 
+// Bind a function to a context, optionally partially applying any
+// arguments.
+// jQuery.proxy is deprecated to promote standards (specifically Function#bind)
+// However, it is not slated for removal any time soon
+jQuery.proxy = function( fn, context ) {
+	var tmp, args, proxy;
+
+	if ( typeof context === "string" ) {
+		tmp = fn[ context ];
+		context = fn;
+		fn = tmp;
+	}
+
+	// Quick check to determine if target is callable, in the spec
+	// this throws a TypeError, but we will just return undefined.
+	if ( !isFunction( fn ) ) {
+		return undefined;
+	}
+
+	// Simulated bind
+	args = slice.call( arguments, 2 );
+	proxy = function() {
+		return fn.apply( context || this, args.concat( slice.call( arguments ) ) );
+	};
+
+	// Set the guid of unique handler to the same of original handler, so it can be removed
+	proxy.guid = fn.guid = fn.guid || jQuery.guid++;
+
+	return proxy;
+};
+
 jQuery.holdReady = function( hold ) {
 	if ( hold ) {
 		jQuery.readyWait++;
@@ -31393,6 +31423,26 @@ jQuery.holdReady = function( hold ) {
 jQuery.isArray = Array.isArray;
 jQuery.parseJSON = JSON.parse;
 jQuery.nodeName = nodeName;
+jQuery.isFunction = isFunction;
+jQuery.isWindow = isWindow;
+jQuery.camelCase = camelCase;
+jQuery.type = toType;
+
+jQuery.now = Date.now;
+
+jQuery.isNumeric = function( obj ) {
+
+	// As of jQuery 3.0, isNumeric is limited to
+	// strings and numbers (primitives or objects)
+	// that can be coerced to finite numbers (gh-2662)
+	var type = jQuery.type( obj );
+	return ( type === "number" || type === "string" ) &&
+
+		// parseFloat NaNs numeric-cast false positives ("")
+		// ...but misinterprets leading-number strings, particularly hex literals ("0x...")
+		// subtraction forces infinities to NaN
+		!isNaN( obj - parseFloat( obj ) );
+};
 
 
 
@@ -31452,6 +31502,535 @@ if ( !noGlobal ) {
 
 return jQuery;
 } );
+
+
+/***/ }),
+
+/***/ "./node_modules/lightbox2/dist/js/lightbox.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * Lightbox v2.10.0
+ * by Lokesh Dhakar
+ *
+ * More info:
+ * http://lokeshdhakar.com/projects/lightbox2/
+ *
+ * Copyright 2007, 2018 Lokesh Dhakar
+ * Released under the MIT license
+ * https://github.com/lokesh/lightbox2/blob/master/LICENSE
+ *
+ * @preserve
+ */
+
+// Uses Node, AMD or browser globals to create a module.
+(function (root, factory) {
+    if (true) {
+        // AMD. Register as an anonymous module.
+        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__("./node_modules/jquery/dist/jquery.js")], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+    } else if (typeof exports === 'object') {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like environments that support module.exports,
+        // like Node.
+        module.exports = factory(require('jquery'));
+    } else {
+        // Browser globals (root is window)
+        root.lightbox = factory(root.jQuery);
+    }
+}(this, function ($) {
+
+  function Lightbox(options) {
+    this.album = [];
+    this.currentImageIndex = void 0;
+    this.init();
+
+    // options
+    this.options = $.extend({}, this.constructor.defaults);
+    this.option(options);
+  }
+
+  // Descriptions of all options available on the demo site:
+  // http://lokeshdhakar.com/projects/lightbox2/index.html#options
+  Lightbox.defaults = {
+    albumLabel: 'Image %1 of %2',
+    alwaysShowNavOnTouchDevices: false,
+    fadeDuration: 600,
+    fitImagesInViewport: true,
+    imageFadeDuration: 600,
+    // maxWidth: 800,
+    // maxHeight: 600,
+    positionFromTop: 50,
+    resizeDuration: 700,
+    showImageNumberLabel: true,
+    wrapAround: false,
+    disableScrolling: false,
+    /*
+    Sanitize Title
+    If the caption data is trusted, for example you are hardcoding it in, then leave this to false.
+    This will free you to add html tags, such as links, in the caption.
+
+    If the caption data is user submitted or from some other untrusted source, then set this to true
+    to prevent xss and other injection attacks.
+     */
+    sanitizeTitle: false
+  };
+
+  Lightbox.prototype.option = function(options) {
+    $.extend(this.options, options);
+  };
+
+  Lightbox.prototype.imageCountLabel = function(currentImageNum, totalImages) {
+    return this.options.albumLabel.replace(/%1/g, currentImageNum).replace(/%2/g, totalImages);
+  };
+
+  Lightbox.prototype.init = function() {
+    var self = this;
+    // Both enable and build methods require the body tag to be in the DOM.
+    $(document).ready(function() {
+      self.enable();
+      self.build();
+    });
+  };
+
+  // Loop through anchors and areamaps looking for either data-lightbox attributes or rel attributes
+  // that contain 'lightbox'. When these are clicked, start lightbox.
+  Lightbox.prototype.enable = function() {
+    var self = this;
+    $('body').on('click', 'a[rel^=lightbox], area[rel^=lightbox], a[data-lightbox], area[data-lightbox]', function(event) {
+      self.start($(event.currentTarget));
+      return false;
+    });
+  };
+
+  // Build html for the lightbox and the overlay.
+  // Attach event handlers to the new DOM elements. click click click
+  Lightbox.prototype.build = function() {
+    if ($('#lightbox').length > 0) {
+        return;
+    }
+
+    var self = this;
+    $('<div id="lightboxOverlay" class="lightboxOverlay"></div><div id="lightbox" class="lightbox"><div class="lb-outerContainer"><div class="lb-container"><img class="lb-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" /><div class="lb-nav"><a class="lb-prev" href="" ></a><a class="lb-next" href="" ></a></div><div class="lb-loader"><a class="lb-cancel"></a></div></div></div><div class="lb-dataContainer"><div class="lb-data"><div class="lb-details"><span class="lb-caption"></span><span class="lb-number"></span></div><div class="lb-closeContainer"><a class="lb-close"></a></div></div></div></div>').appendTo($('body'));
+
+    // Cache jQuery objects
+    this.$lightbox       = $('#lightbox');
+    this.$overlay        = $('#lightboxOverlay');
+    this.$outerContainer = this.$lightbox.find('.lb-outerContainer');
+    this.$container      = this.$lightbox.find('.lb-container');
+    this.$image          = this.$lightbox.find('.lb-image');
+    this.$nav            = this.$lightbox.find('.lb-nav');
+
+    // Store css values for future lookup
+    this.containerPadding = {
+      top: parseInt(this.$container.css('padding-top'), 10),
+      right: parseInt(this.$container.css('padding-right'), 10),
+      bottom: parseInt(this.$container.css('padding-bottom'), 10),
+      left: parseInt(this.$container.css('padding-left'), 10)
+    };
+
+    this.imageBorderWidth = {
+      top: parseInt(this.$image.css('border-top-width'), 10),
+      right: parseInt(this.$image.css('border-right-width'), 10),
+      bottom: parseInt(this.$image.css('border-bottom-width'), 10),
+      left: parseInt(this.$image.css('border-left-width'), 10)
+    };
+
+    // Attach event handlers to the newly minted DOM elements
+    this.$overlay.hide().on('click', function() {
+      self.end();
+      return false;
+    });
+
+    this.$lightbox.hide().on('click', function(event) {
+      if ($(event.target).attr('id') === 'lightbox') {
+        self.end();
+      }
+      return false;
+    });
+
+    this.$outerContainer.on('click', function(event) {
+      if ($(event.target).attr('id') === 'lightbox') {
+        self.end();
+      }
+      return false;
+    });
+
+    this.$lightbox.find('.lb-prev').on('click', function() {
+      if (self.currentImageIndex === 0) {
+        self.changeImage(self.album.length - 1);
+      } else {
+        self.changeImage(self.currentImageIndex - 1);
+      }
+      return false;
+    });
+
+    this.$lightbox.find('.lb-next').on('click', function() {
+      if (self.currentImageIndex === self.album.length - 1) {
+        self.changeImage(0);
+      } else {
+        self.changeImage(self.currentImageIndex + 1);
+      }
+      return false;
+    });
+
+    /*
+      Show context menu for image on right-click
+
+      There is a div containing the navigation that spans the entire image and lives above of it. If
+      you right-click, you are right clicking this div and not the image. This prevents users from
+      saving the image or using other context menu actions with the image.
+
+      To fix this, when we detect the right mouse button is pressed down, but not yet clicked, we
+      set pointer-events to none on the nav div. This is so that the upcoming right-click event on
+      the next mouseup will bubble down to the image. Once the right-click/contextmenu event occurs
+      we set the pointer events back to auto for the nav div so it can capture hover and left-click
+      events as usual.
+     */
+    this.$nav.on('mousedown', function(event) {
+      if (event.which === 3) {
+        self.$nav.css('pointer-events', 'none');
+
+        self.$lightbox.one('contextmenu', function() {
+          setTimeout(function() {
+              this.$nav.css('pointer-events', 'auto');
+          }.bind(self), 0);
+        });
+      }
+    });
+
+
+    this.$lightbox.find('.lb-loader, .lb-close').on('click', function() {
+      self.end();
+      return false;
+    });
+  };
+
+  // Show overlay and lightbox. If the image is part of a set, add siblings to album array.
+  Lightbox.prototype.start = function($link) {
+    var self    = this;
+    var $window = $(window);
+
+    $window.on('resize', $.proxy(this.sizeOverlay, this));
+
+    $('select, object, embed').css({
+      visibility: 'hidden'
+    });
+
+    this.sizeOverlay();
+
+    this.album = [];
+    var imageNumber = 0;
+
+    function addToAlbum($link) {
+      self.album.push({
+        alt: $link.attr('data-alt'),
+        link: $link.attr('href'),
+        title: $link.attr('data-title') || $link.attr('title')
+      });
+    }
+
+    // Support both data-lightbox attribute and rel attribute implementations
+    var dataLightboxValue = $link.attr('data-lightbox');
+    var $links;
+
+    if (dataLightboxValue) {
+      $links = $($link.prop('tagName') + '[data-lightbox="' + dataLightboxValue + '"]');
+      for (var i = 0; i < $links.length; i = ++i) {
+        addToAlbum($($links[i]));
+        if ($links[i] === $link[0]) {
+          imageNumber = i;
+        }
+      }
+    } else {
+      if ($link.attr('rel') === 'lightbox') {
+        // If image is not part of a set
+        addToAlbum($link);
+      } else {
+        // If image is part of a set
+        $links = $($link.prop('tagName') + '[rel="' + $link.attr('rel') + '"]');
+        for (var j = 0; j < $links.length; j = ++j) {
+          addToAlbum($($links[j]));
+          if ($links[j] === $link[0]) {
+            imageNumber = j;
+          }
+        }
+      }
+    }
+
+    // Position Lightbox
+    var top  = $window.scrollTop() + this.options.positionFromTop;
+    var left = $window.scrollLeft();
+    this.$lightbox.css({
+      top: top + 'px',
+      left: left + 'px'
+    }).fadeIn(this.options.fadeDuration);
+
+    // Disable scrolling of the page while open
+    if (this.options.disableScrolling) {
+      $('html').addClass('lb-disable-scrolling');
+    }
+
+    this.changeImage(imageNumber);
+  };
+
+  // Hide most UI elements in preparation for the animated resizing of the lightbox.
+  Lightbox.prototype.changeImage = function(imageNumber) {
+    var self = this;
+
+    this.disableKeyboardNav();
+    var $image = this.$lightbox.find('.lb-image');
+
+    this.$overlay.fadeIn(this.options.fadeDuration);
+
+    $('.lb-loader').fadeIn('slow');
+    this.$lightbox.find('.lb-image, .lb-nav, .lb-prev, .lb-next, .lb-dataContainer, .lb-numbers, .lb-caption').hide();
+
+    this.$outerContainer.addClass('animating');
+
+    // When image to show is preloaded, we send the width and height to sizeContainer()
+    var preloader = new Image();
+    preloader.onload = function() {
+      var $preloader;
+      var imageHeight;
+      var imageWidth;
+      var maxImageHeight;
+      var maxImageWidth;
+      var windowHeight;
+      var windowWidth;
+
+      $image.attr({
+        'alt': self.album[imageNumber].alt,
+        'src': self.album[imageNumber].link
+      });
+
+      $preloader = $(preloader);
+
+      $image.width(preloader.width);
+      $image.height(preloader.height);
+
+      if (self.options.fitImagesInViewport) {
+        // Fit image inside the viewport.
+        // Take into account the border around the image and an additional 10px gutter on each side.
+
+        windowWidth    = $(window).width();
+        windowHeight   = $(window).height();
+        maxImageWidth  = windowWidth - self.containerPadding.left - self.containerPadding.right - self.imageBorderWidth.left - self.imageBorderWidth.right - 20;
+        maxImageHeight = windowHeight - self.containerPadding.top - self.containerPadding.bottom - self.imageBorderWidth.top - self.imageBorderWidth.bottom - 120;
+
+        // Check if image size is larger then maxWidth|maxHeight in settings
+        if (self.options.maxWidth && self.options.maxWidth < maxImageWidth) {
+          maxImageWidth = self.options.maxWidth;
+        }
+        if (self.options.maxHeight && self.options.maxHeight < maxImageWidth) {
+          maxImageHeight = self.options.maxHeight;
+        }
+
+        // Is the current image's width or height is greater than the maxImageWidth or maxImageHeight
+        // option than we need to size down while maintaining the aspect ratio.
+        if ((preloader.width > maxImageWidth) || (preloader.height > maxImageHeight)) {
+          if ((preloader.width / maxImageWidth) > (preloader.height / maxImageHeight)) {
+            imageWidth  = maxImageWidth;
+            imageHeight = parseInt(preloader.height / (preloader.width / imageWidth), 10);
+            $image.width(imageWidth);
+            $image.height(imageHeight);
+          } else {
+            imageHeight = maxImageHeight;
+            imageWidth = parseInt(preloader.width / (preloader.height / imageHeight), 10);
+            $image.width(imageWidth);
+            $image.height(imageHeight);
+          }
+        }
+      }
+      self.sizeContainer($image.width(), $image.height());
+    };
+
+    preloader.src          = this.album[imageNumber].link;
+    this.currentImageIndex = imageNumber;
+  };
+
+  // Stretch overlay to fit the viewport
+  Lightbox.prototype.sizeOverlay = function() {
+    this.$overlay
+      .width($(document).width())
+      .height($(document).height());
+  };
+
+  // Animate the size of the lightbox to fit the image we are showing
+  Lightbox.prototype.sizeContainer = function(imageWidth, imageHeight) {
+    var self = this;
+
+    var oldWidth  = this.$outerContainer.outerWidth();
+    var oldHeight = this.$outerContainer.outerHeight();
+    var newWidth  = imageWidth + this.containerPadding.left + this.containerPadding.right + this.imageBorderWidth.left + this.imageBorderWidth.right;
+    var newHeight = imageHeight + this.containerPadding.top + this.containerPadding.bottom + this.imageBorderWidth.top + this.imageBorderWidth.bottom;
+
+    function postResize() {
+      self.$lightbox.find('.lb-dataContainer').width(newWidth);
+      self.$lightbox.find('.lb-prevLink').height(newHeight);
+      self.$lightbox.find('.lb-nextLink').height(newHeight);
+      self.showImage();
+    }
+
+    if (oldWidth !== newWidth || oldHeight !== newHeight) {
+      this.$outerContainer.animate({
+        width: newWidth,
+        height: newHeight
+      }, this.options.resizeDuration, 'swing', function() {
+        postResize();
+      });
+    } else {
+      postResize();
+    }
+  };
+
+  // Display the image and its details and begin preload neighboring images.
+  Lightbox.prototype.showImage = function() {
+    this.$lightbox.find('.lb-loader').stop(true).hide();
+    this.$lightbox.find('.lb-image').fadeIn(this.options.imageFadeDuration);
+
+    this.updateNav();
+    this.updateDetails();
+    this.preloadNeighboringImages();
+    this.enableKeyboardNav();
+  };
+
+  // Display previous and next navigation if appropriate.
+  Lightbox.prototype.updateNav = function() {
+    // Check to see if the browser supports touch events. If so, we take the conservative approach
+    // and assume that mouse hover events are not supported and always show prev/next navigation
+    // arrows in image sets.
+    var alwaysShowNav = false;
+    try {
+      document.createEvent('TouchEvent');
+      alwaysShowNav = (this.options.alwaysShowNavOnTouchDevices) ? true : false;
+    } catch (e) {}
+
+    this.$lightbox.find('.lb-nav').show();
+
+    if (this.album.length > 1) {
+      if (this.options.wrapAround) {
+        if (alwaysShowNav) {
+          this.$lightbox.find('.lb-prev, .lb-next').css('opacity', '1');
+        }
+        this.$lightbox.find('.lb-prev, .lb-next').show();
+      } else {
+        if (this.currentImageIndex > 0) {
+          this.$lightbox.find('.lb-prev').show();
+          if (alwaysShowNav) {
+            this.$lightbox.find('.lb-prev').css('opacity', '1');
+          }
+        }
+        if (this.currentImageIndex < this.album.length - 1) {
+          this.$lightbox.find('.lb-next').show();
+          if (alwaysShowNav) {
+            this.$lightbox.find('.lb-next').css('opacity', '1');
+          }
+        }
+      }
+    }
+  };
+
+  // Display caption, image number, and closing button.
+  Lightbox.prototype.updateDetails = function() {
+    var self = this;
+
+    // Enable anchor clicks in the injected caption html.
+    // Thanks Nate Wright for the fix. @https://github.com/NateWr
+    if (typeof this.album[this.currentImageIndex].title !== 'undefined' &&
+      this.album[this.currentImageIndex].title !== '') {
+      var $caption = this.$lightbox.find('.lb-caption');
+      if (this.options.sanitizeTitle) {
+        $caption.text(this.album[this.currentImageIndex].title);
+      } else {
+        $caption.html(this.album[this.currentImageIndex].title);
+      }
+      $caption.fadeIn('fast')
+        .find('a').on('click', function(event) {
+          if ($(this).attr('target') !== undefined) {
+            window.open($(this).attr('href'), $(this).attr('target'));
+          } else {
+            location.href = $(this).attr('href');
+          }
+        });
+    }
+
+    if (this.album.length > 1 && this.options.showImageNumberLabel) {
+      var labelText = this.imageCountLabel(this.currentImageIndex + 1, this.album.length);
+      this.$lightbox.find('.lb-number').text(labelText).fadeIn('fast');
+    } else {
+      this.$lightbox.find('.lb-number').hide();
+    }
+
+    this.$outerContainer.removeClass('animating');
+
+    this.$lightbox.find('.lb-dataContainer').fadeIn(this.options.resizeDuration, function() {
+      return self.sizeOverlay();
+    });
+  };
+
+  // Preload previous and next images in set.
+  Lightbox.prototype.preloadNeighboringImages = function() {
+    if (this.album.length > this.currentImageIndex + 1) {
+      var preloadNext = new Image();
+      preloadNext.src = this.album[this.currentImageIndex + 1].link;
+    }
+    if (this.currentImageIndex > 0) {
+      var preloadPrev = new Image();
+      preloadPrev.src = this.album[this.currentImageIndex - 1].link;
+    }
+  };
+
+  Lightbox.prototype.enableKeyboardNav = function() {
+    $(document).on('keyup.keyboard', $.proxy(this.keyboardAction, this));
+  };
+
+  Lightbox.prototype.disableKeyboardNav = function() {
+    $(document).off('.keyboard');
+  };
+
+  Lightbox.prototype.keyboardAction = function(event) {
+    var KEYCODE_ESC        = 27;
+    var KEYCODE_LEFTARROW  = 37;
+    var KEYCODE_RIGHTARROW = 39;
+
+    var keycode = event.keyCode;
+    var key     = String.fromCharCode(keycode).toLowerCase();
+    if (keycode === KEYCODE_ESC || key.match(/x|o|c/)) {
+      this.end();
+    } else if (key === 'p' || keycode === KEYCODE_LEFTARROW) {
+      if (this.currentImageIndex !== 0) {
+        this.changeImage(this.currentImageIndex - 1);
+      } else if (this.options.wrapAround && this.album.length > 1) {
+        this.changeImage(this.album.length - 1);
+      }
+    } else if (key === 'n' || keycode === KEYCODE_RIGHTARROW) {
+      if (this.currentImageIndex !== this.album.length - 1) {
+        this.changeImage(this.currentImageIndex + 1);
+      } else if (this.options.wrapAround && this.album.length > 1) {
+        this.changeImage(0);
+      }
+    }
+  };
+
+  // Closing time. :-(
+  Lightbox.prototype.end = function() {
+    this.disableKeyboardNav();
+    $(window).off('resize', this.sizeOverlay);
+    this.$lightbox.fadeOut(this.options.fadeDuration);
+    this.$overlay.fadeOut(this.options.fadeDuration);
+    $('select, object, embed').css({
+      visibility: 'visible'
+    });
+    if (this.options.disableScrolling) {
+      $('html').removeClass('lb-disable-scrolling');
+    }
+  };
+
+  return new Lightbox();
+}));
 
 
 /***/ }),
@@ -68591,7 +69170,7 @@ function whichProperty(props){
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__helpers_events__ = __webpack_require__("./node_modules/tiny-slider/src/helpers/events.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__helpers_jsTransform__ = __webpack_require__("./node_modules/tiny-slider/src/helpers/jsTransform.js");
 // Format: ES MODULE
-// Version: 2.4.0
+// Version: 2.5.1
 
 // helper functions
 
@@ -68732,8 +69311,7 @@ var tns = function(options) {
     controlsContainer: false,
     nav: true,
     navContainer: false,
-    // navAnimationIn: false,
-    // navAnimationOut: false,
+    navAsThumbnails: false,
     arrowKeys: false,
     speed: 300,
     autoplay: false,
@@ -68889,7 +69467,8 @@ var tns = function(options) {
       transformPrefix = '',
       transformPostfix = '',
       // index
-      index = options.startIndex ? options.startIndex : !carousel ? 0 : cloneCount,
+      startIndex = getOption('startIndex'),
+      index = startIndex ? updateStartIndex(startIndex) : !carousel ? 0 : cloneCount,
       indexCached = index,
       indexMin = 0,
       indexMax = slideCountNew - items,
@@ -68935,16 +69514,18 @@ var tns = function(options) {
       },
       hasControls = checkOption('controls'),
       hasNav = checkOption('nav'),
+      navAsThumbnails = options.navAsThumbnails,
       hasAutoplay = checkOption('autoplay'),
       hasTouch = checkOption('touch'),
       hasMouseDrag = checkOption('mouseDrag'),
       slideActiveClass = 'tns-slide-active';
 
   // check startIndex
-  if (options.startIndex) {
-    index = index%slideCount;
-    if (index < 0) { index += slideCount; }
-    if (index > indexMax) { index = indexMax; }
+  function updateStartIndex (indexTem) {
+    indexTem = indexTem%slideCount;
+    if (indexTem < 0) { indexTem += slideCount; }
+    indexTem = Math.min(indexTem, slideCountNew - items);
+    return indexTem;
   }
 
   // controls
@@ -68962,14 +69543,12 @@ var tns = function(options) {
   if (hasNav) {
     var nav = getOption('nav'),
         navContainer = options.navContainer,
-        // navAnimationIn = options.navAnimationIn,
-        // navAnimationOut = options.navAnimationOut,
         navItems,
         visibleNavIndexes = [],
         visibleNavIndexesCached = visibleNavIndexes,
         navClicked = -1,
-        navCurrentIndex = 0,
-        navCurrentIndexCached = 0,
+        navCurrentIndex = index%slideCount,
+        navCurrentIndexCached = navCurrentIndex,
         navActiveClass = 'tns-nav-active';
   }
 
@@ -69381,18 +69960,13 @@ var tns = function(options) {
             'aria-selected': 'false',
             'aria-controls': slideItems[initIndex + i].id,
           });
-          // if (navAnimationOut) {
-          //   addClass(item, navAnimationOut);
-          // }
         });
 
       // generated nav 
       } else {
         var navHtml = '';
-            // classStr = navAnimationOut ? 'class="' + navAnimationOut + '"' : '';
         for (var i = 0; i < slideCount; i++) {
           // hide nav items by default
-          // navHtml += '<button ' + classStr + ' data-nav="' + i +'" tabindex="-1" aria-selected="false" aria-controls="' + slideId + '-item' + i +'" hidden type="button"></button>';
           navHtml += '<button data-nav="' + i +'" tabindex="-1" aria-selected="false" aria-controls="' + slideItems[initIndex + i].id +'" hidden type="button"></button>';
         }
         navHtml = '<div class="tns-nav" aria-label="Carousel Pagination">' + navHtml + '</div>';
@@ -69401,8 +69975,9 @@ var tns = function(options) {
         navContainer = outerWrapper.querySelector('.tns-nav');
         navItems = navContainer.children;
 
-        updateNavVisibility();
       }
+
+      updateNavVisibility();
 
       // add transition
       if (TRANSITIONDURATION) {
@@ -69416,14 +69991,8 @@ var tns = function(options) {
         Object(__WEBPACK_IMPORTED_MODULE_10__helpers_addCSSRule__["a" /* addCSSRule */])(sheet, '[aria-controls^=' + slideId + '-item]', str, Object(__WEBPACK_IMPORTED_MODULE_11__helpers_getCssRulesLength__["a" /* getCssRulesLength */])(sheet));
       }
 
-      Object(__WEBPACK_IMPORTED_MODULE_19__helpers_setAttrs__["a" /* setAttrs */])(navItems[0], {'tabindex': '0', 'aria-selected': 'true'});
-      Object(__WEBPACK_IMPORTED_MODULE_15__helpers_addClass__["a" /* addClass */])(navItems[0], navActiveClass);
-      // if (navAnimationOut) {
-      //   removeClass(navItems[0], navAnimationOut);
-      // }
-      // if (navAnimationIn) {
-      //   addClass(navItems[0], navAnimationIn);
-      // }
+      Object(__WEBPACK_IMPORTED_MODULE_19__helpers_setAttrs__["a" /* setAttrs */])(navItems[navCurrentIndex], {'tabindex': '0', 'aria-selected': 'true'});
+      Object(__WEBPACK_IMPORTED_MODULE_15__helpers_addClass__["a" /* addClass */])(navItems[navCurrentIndex], navActiveClass);
 
       // add events
       Object(__WEBPACK_IMPORTED_MODULE_27__helpers_addEvents__["a" /* addEvents */])(navContainer, navEvents);
@@ -69485,7 +70054,7 @@ var tns = function(options) {
       prevIsButton = isButton(prevButton);
       nextIsButton = isButton(nextButton);
 
-      if (!loop) { disEnableElement(prevIsButton, prevButton, true); }
+      updateControlsStatus();
 
       // add events
       Object(__WEBPACK_IMPORTED_MODULE_27__helpers_addEvents__["a" /* addEvents */])(controlsContainer, controlsEvents);
@@ -69786,16 +70355,22 @@ var tns = function(options) {
   var updateIndex = (function () {
     return loop ? 
       function () {
-        var leftEdge = indexMin + slideBy, rightEdge = indexMax - slideBy;
+        var leftEdge = indexMin,
+            rightEdge = indexMax;
 
-        // adjust edges when edge padding is true
-        // or fixed-width slider with extra space on the right side
-        if (edgePadding) {
-          leftEdge += 1;
-          rightEdge -= 1;
-        } else if (fixedWidth) {
-          var gt = gutter ? gutter : 0;
-          if (vpOuter%(fixedWidth + gt) > gt) { rightEdge -= 1; }
+        if (carousel) {
+          leftEdge += slideBy;
+          rightEdge -= slideBy;
+
+          // adjust edges when edge padding is true
+          // or fixed-width slider with extra space on the right side
+          if (edgePadding) {
+            leftEdge += 1;
+            rightEdge -= 1;
+          } else if (fixedWidth) {
+            var gt = gutter ? gutter : 0;
+            if (vpOuter%(fixedWidth + gt) > gt) { rightEdge -= 1; }
+          }
         }
 
         if (index > rightEdge) {
@@ -70059,15 +70634,6 @@ var tns = function(options) {
         });
         Object(__WEBPACK_IMPORTED_MODULE_16__helpers_removeClass__["a" /* removeClass */])(navPrev, navActiveClass);
         Object(__WEBPACK_IMPORTED_MODULE_15__helpers_addClass__["a" /* addClass */])(navCurrent, navActiveClass);
-
-        // if (navAnimationOut) {
-        //   removeClass(navPrev, navAnimationIn);
-        //   addClass(navPrev, navAnimationOut);
-        // }
-        // if (navAnimationIn) {
-        //   removeClass(navCurrent, navAnimationOut);
-        //   addClass(navCurrent, navAnimationIn);
-        // }
       }
     }
   }
@@ -70213,6 +70779,7 @@ var tns = function(options) {
     if (isNaN(duration)) { duration = speed; }
 
     // if container is hidden, set duration to 0
+    // to fix an issue where browser doesn't fire ontransitionend on hidden element
     if (animating && !Object(__WEBPACK_IMPORTED_MODULE_23__helpers_isVisible__["a" /* isVisible */])(container)) { duration = 0; }
     
     if (TRANSITIONDURATION) { setDurations(duration); }
@@ -70432,6 +70999,14 @@ var tns = function(options) {
   function stopAutoplay () {
     stopAutoplayTimer();
     if (autoplayButton) { updateAutoplayButton('start', autoplayText[0]); }
+  }
+
+  // programaitcally play/pause the slider
+  function play () {
+    if (autoplay && !animating) { startAutoplay(); }
+  }
+  function pause () {
+    if (animating) { stopAutoplay(); }
   }
 
   function toggleAnimation () {
@@ -70754,7 +71329,7 @@ var tns = function(options) {
    * 3. remove "hidden" attrubutes to new visible nav items
    */
   function updateNavVisibility () {
-    if (!nav || options.navContainer) { return; }
+    if (!nav || navAsThumbnails) { return; }
     getVisibleNavIndex();
 
     if (visibleNavIndexes !== visibleNavIndexesCached) {
@@ -70800,6 +71375,8 @@ var tns = function(options) {
     getInfo: info,
     events: events,
     goTo: goTo,
+    play: play,
+    pause: pause,
 
     destroy: function () {
       // sheet
@@ -74008,7 +74585,7 @@ if (false) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-604dd58c\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/Catalog/Price.vue":
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-604dd58c\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/Catalog/Price.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -74090,13 +74667,20 @@ var render = function() {
     _c("div", { staticClass: "row cart-item" }, [
       _c("div", { staticClass: "col-10 col-sm-5 col-lg-6" }, [
         _c("div", { staticClass: "cart-item-name" }, [
-          _c("a", { attrs: { href: "/product/" + _vm.item.product.sku } }, [
-            _vm._v(
-              "\n                    " +
-                _vm._s(_vm.item.product.name) +
-                "\n                "
-            )
-          ])
+          _c(
+            "a",
+            {
+              staticClass: "product-name",
+              attrs: { href: "/product/" + _vm.item.product.sku }
+            },
+            [
+              _vm._v(
+                "\n                    " +
+                  _vm._s(_vm.item.product.name) +
+                  "\n                "
+              )
+            ]
+          )
         ])
       ]),
       _vm._v(" "),
@@ -74461,10 +75045,12 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "input-group add-to-cart" }, [
-    _c("span", { staticClass: "input-group-addon" }, [
-      _vm._v(
-        _vm._s(_vm.quantity > 1 ? _vm.salesUnitPlural : _vm.salesUnitSingle)
-      )
+    _c("div", { staticClass: "input-group-prepend" }, [
+      _c("span", { staticClass: "input-group-text" }, [
+        _vm._v(
+          _vm._s(_vm.quantity > 1 ? _vm.salesUnitPlural : _vm.salesUnitSingle)
+        )
+      ])
     ]),
     _vm._v(" "),
     _c("input", {
@@ -74489,10 +75075,13 @@ var render = function() {
       }
     }),
     _vm._v(" "),
-    _c("span", { staticClass: "input-group-btn" }, [
+    _c("div", { staticClass: "input-group-append" }, [
       _c(
         "button",
-        { staticClass: "btn btn-success", on: { click: this.addToCart } },
+        {
+          staticClass: "btn btn-outline-success",
+          on: { click: this.addToCart }
+        },
         [_vm._m(0)]
       )
     ])
@@ -74517,7 +75106,7 @@ if (false) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-c466d48e\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/Checkout/MiniCart.vue":
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-c466d48e\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/Checkout/MiniCart.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -74526,7 +75115,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { attrs: { id: "mini-cart" } }, [
     _c("a", { staticClass: "nav-link", attrs: { href: _vm.cartUrl } }, [
-      _c("i", { staticClass: "far fa-fw fa-shopping-cart" }),
+      _c("i", { staticClass: "far fa-fw fa-shopping-cart d-none d-md-inline" }),
+      _vm._v(" "),
+      _c("span", { staticClass: "d-inline d-md-none" }, [
+        _vm._v("Winkelwagen")
+      ]),
       _vm._v(" "),
       _c("span", { staticClass: "badge badge-danger" }, [
         _vm._v(_vm._s(_vm.itemCount))
@@ -74543,316 +75136,6 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-c466d48e", module.exports)
   }
 }
-
-/***/ }),
-
-/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-604dd58c\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/Catalog/Price.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-604dd58c\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/Catalog/Price.vue");
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("113ec6a9", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-604dd58c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./Price.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-604dd58c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./Price.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-c466d48e\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/Checkout/MiniCart.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-c466d48e\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/Checkout/MiniCart.vue");
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("6e7db283", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-c466d48e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./MiniCart.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-c466d48e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./MiniCart.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-style-loader/lib/addStylesClient.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-  Modified by Evan You @yyx990803
-*/
-
-var hasDocument = typeof document !== 'undefined'
-
-if (typeof DEBUG !== 'undefined' && DEBUG) {
-  if (!hasDocument) {
-    throw new Error(
-    'vue-style-loader cannot be used in a non-browser environment. ' +
-    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
-  ) }
-}
-
-var listToStyles = __webpack_require__("./node_modules/vue-style-loader/lib/listToStyles.js")
-
-/*
-type StyleObject = {
-  id: number;
-  parts: Array<StyleObjectPart>
-}
-
-type StyleObjectPart = {
-  css: string;
-  media: string;
-  sourceMap: ?string
-}
-*/
-
-var stylesInDom = {/*
-  [id: number]: {
-    id: number,
-    refs: number,
-    parts: Array<(obj?: StyleObjectPart) => void>
-  }
-*/}
-
-var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
-var singletonElement = null
-var singletonCounter = 0
-var isProduction = false
-var noop = function () {}
-
-// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-// tags it will allow on a page
-var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
-
-module.exports = function (parentId, list, _isProduction) {
-  isProduction = _isProduction
-
-  var styles = listToStyles(parentId, list)
-  addStylesToDom(styles)
-
-  return function update (newList) {
-    var mayRemove = []
-    for (var i = 0; i < styles.length; i++) {
-      var item = styles[i]
-      var domStyle = stylesInDom[item.id]
-      domStyle.refs--
-      mayRemove.push(domStyle)
-    }
-    if (newList) {
-      styles = listToStyles(parentId, newList)
-      addStylesToDom(styles)
-    } else {
-      styles = []
-    }
-    for (var i = 0; i < mayRemove.length; i++) {
-      var domStyle = mayRemove[i]
-      if (domStyle.refs === 0) {
-        for (var j = 0; j < domStyle.parts.length; j++) {
-          domStyle.parts[j]()
-        }
-        delete stylesInDom[domStyle.id]
-      }
-    }
-  }
-}
-
-function addStylesToDom (styles /* Array<StyleObject> */) {
-  for (var i = 0; i < styles.length; i++) {
-    var item = styles[i]
-    var domStyle = stylesInDom[item.id]
-    if (domStyle) {
-      domStyle.refs++
-      for (var j = 0; j < domStyle.parts.length; j++) {
-        domStyle.parts[j](item.parts[j])
-      }
-      for (; j < item.parts.length; j++) {
-        domStyle.parts.push(addStyle(item.parts[j]))
-      }
-      if (domStyle.parts.length > item.parts.length) {
-        domStyle.parts.length = item.parts.length
-      }
-    } else {
-      var parts = []
-      for (var j = 0; j < item.parts.length; j++) {
-        parts.push(addStyle(item.parts[j]))
-      }
-      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
-    }
-  }
-}
-
-function createStyleElement () {
-  var styleElement = document.createElement('style')
-  styleElement.type = 'text/css'
-  head.appendChild(styleElement)
-  return styleElement
-}
-
-function addStyle (obj /* StyleObjectPart */) {
-  var update, remove
-  var styleElement = document.querySelector('style[data-vue-ssr-id~="' + obj.id + '"]')
-
-  if (styleElement) {
-    if (isProduction) {
-      // has SSR styles and in production mode.
-      // simply do nothing.
-      return noop
-    } else {
-      // has SSR styles but in dev mode.
-      // for some reason Chrome can't handle source map in server-rendered
-      // style tags - source maps in <style> only works if the style tag is
-      // created and inserted dynamically. So we remove the server rendered
-      // styles and inject new ones.
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  if (isOldIE) {
-    // use singleton mode for IE9.
-    var styleIndex = singletonCounter++
-    styleElement = singletonElement || (singletonElement = createStyleElement())
-    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
-    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
-  } else {
-    // use multi-style-tag mode in all other cases
-    styleElement = createStyleElement()
-    update = applyToTag.bind(null, styleElement)
-    remove = function () {
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  update(obj)
-
-  return function updateStyle (newObj /* StyleObjectPart */) {
-    if (newObj) {
-      if (newObj.css === obj.css &&
-          newObj.media === obj.media &&
-          newObj.sourceMap === obj.sourceMap) {
-        return
-      }
-      update(obj = newObj)
-    } else {
-      remove()
-    }
-  }
-}
-
-var replaceText = (function () {
-  var textStore = []
-
-  return function (index, replacement) {
-    textStore[index] = replacement
-    return textStore.filter(Boolean).join('\n')
-  }
-})()
-
-function applyToSingletonTag (styleElement, index, remove, obj) {
-  var css = remove ? '' : obj.css
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = replaceText(index, css)
-  } else {
-    var cssNode = document.createTextNode(css)
-    var childNodes = styleElement.childNodes
-    if (childNodes[index]) styleElement.removeChild(childNodes[index])
-    if (childNodes.length) {
-      styleElement.insertBefore(cssNode, childNodes[index])
-    } else {
-      styleElement.appendChild(cssNode)
-    }
-  }
-}
-
-function applyToTag (styleElement, obj) {
-  var css = obj.css
-  var media = obj.media
-  var sourceMap = obj.sourceMap
-
-  if (media) {
-    styleElement.setAttribute('media', media)
-  }
-
-  if (sourceMap) {
-    // https://developer.chrome.com/devtools/docs/javascript-debugging
-    // this makes source maps inside style tags work properly in Chrome
-    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
-    // http://stackoverflow.com/a/26603875
-    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
-  }
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = css
-  } else {
-    while (styleElement.firstChild) {
-      styleElement.removeChild(styleElement.firstChild)
-    }
-    styleElement.appendChild(document.createTextNode(css))
-  }
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-style-loader/lib/listToStyles.js":
-/***/ (function(module, exports) {
-
-/**
- * Translates the list format produced by css-loader into something
- * easier to manipulate.
- */
-module.exports = function listToStyles (parentId, list) {
-  var styles = []
-  var newStyles = {}
-  for (var i = 0; i < list.length; i++) {
-    var item = list[i]
-    var id = item[0]
-    var css = item[1]
-    var media = item[2]
-    var sourceMap = item[3]
-    var part = {
-      id: parentId + ':' + i,
-      css: css,
-      media: media,
-      sourceMap: sourceMap
-    }
-    if (!newStyles[id]) {
-      styles.push(newStyles[id] = { id: id, parts: [part] })
-    } else {
-      newStyles[id].parts.push(part)
-    }
-  }
-  return styles
-}
-
 
 /***/ }),
 
@@ -85736,35 +86019,9 @@ module.exports = function(module) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Carousel__ = __webpack_require__("./resources/assets/js/components/Carousel.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Carousel___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_Carousel__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Notification__ = __webpack_require__("./resources/assets/js/components/Notification.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Notification___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_Notification__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Footer__ = __webpack_require__("./resources/assets/js/components/Footer.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Footer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_Footer__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Log__ = __webpack_require__("./resources/assets/js/components/Log.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Log___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_Log__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Account_ContactEmail__ = __webpack_require__("./resources/assets/js/components/Account/ContactEmail.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Account_ContactEmail___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_Account_ContactEmail__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Account_AddressList__ = __webpack_require__("./resources/assets/js/components/Account/AddressList.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Account_AddressList___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_Account_AddressList__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_Catalog_Price__ = __webpack_require__("./resources/assets/js/components/Catalog/Price.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_Catalog_Price___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_Catalog_Price__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_Favorites_ToggleButton__ = __webpack_require__("./resources/assets/js/components/Favorites/ToggleButton.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_Favorites_ToggleButton___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_Favorites_ToggleButton__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_Checkout_Cart__ = __webpack_require__("./resources/assets/js/components/Checkout/Cart.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_Checkout_Cart___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__components_Checkout_Cart__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_Checkout_AddToCart__ = __webpack_require__("./resources/assets/js/components/Checkout/AddToCart.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_Checkout_AddToCart___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__components_Checkout_AddToCart__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_Checkout_MiniCart__ = __webpack_require__("./resources/assets/js/components/Checkout/MiniCart.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_Checkout_MiniCart___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__components_Checkout_MiniCart__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_Checkout_Address_CartAddress__ = __webpack_require__("./resources/assets/js/components/Checkout/Address/CartAddress.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_Checkout_Address_CartAddress___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__components_Checkout_Address_CartAddress__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__components_Search_QuickSearch__ = __webpack_require__("./resources/assets/js/components/Search/QuickSearch.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__components_Search_QuickSearch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12__components_Search_QuickSearch__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_vue_googlemaps_dist_vue_googlemaps_css__ = __webpack_require__("./node_modules/vue-googlemaps/dist/vue-googlemaps.css");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_vue_googlemaps_dist_vue_googlemaps_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_13_vue_googlemaps_dist_vue_googlemaps_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_vue_googlemaps__ = __webpack_require__("./node_modules/vue-googlemaps/dist/vue-googlemaps.esm.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_googlemaps_dist_vue_googlemaps_css__ = __webpack_require__("./node_modules/vue-googlemaps/dist/vue-googlemaps.css");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_googlemaps_dist_vue_googlemaps_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_googlemaps_dist_vue_googlemaps_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_googlemaps__ = __webpack_require__("./node_modules/vue-googlemaps/dist/vue-googlemaps.esm.js");
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -85780,29 +86037,24 @@ doc.setAttribute('data-useragent', navigator.userAgent);
 // ChartJS Stuff
 Chart.defaults.global.defaultFontFamily = "'Titillium Web', sans-serif";
 
+Vue.component('carousel', __webpack_require__("./resources/assets/js/components/Carousel.vue"));
+Vue.component('price', __webpack_require__("./resources/assets/js/components/Catalog/Price.vue"));
+Vue.component('cart', __webpack_require__("./resources/assets/js/components/Checkout/Cart.vue"));
+Vue.component('add-to-cart', __webpack_require__("./resources/assets/js/components/Checkout/AddToCart.vue"));
+Vue.component('mini-cart', __webpack_require__("./resources/assets/js/components/Checkout/MiniCart.vue"));
+Vue.component('favorites-toggle-button', __webpack_require__("./resources/assets/js/components/Favorites/ToggleButton.vue"));
+Vue.component('notification', __webpack_require__("./resources/assets/js/components/Notification.vue"));
+Vue.component('footer-block', __webpack_require__("./resources/assets/js/components/Footer.vue"));
+Vue.component('logs', __webpack_require__("./resources/assets/js/components/Log.vue"));
+Vue.component('contact-email', __webpack_require__("./resources/assets/js/components/Account/ContactEmail.vue"));
+Vue.component('address-list', __webpack_require__("./resources/assets/js/components/Account/AddressList.vue"));
+Vue.component('cart-address', __webpack_require__("./resources/assets/js/components/Checkout/Address/CartAddress.vue"));
+Vue.component('quick-search', __webpack_require__("./resources/assets/js/components/Search/QuickSearch.vue"));
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Vue.use(__WEBPACK_IMPORTED_MODULE_14_vue_googlemaps__["a" /* default */], {
+Vue.use(__WEBPACK_IMPORTED_MODULE_1_vue_googlemaps__["a" /* default */], {
     load: {
         apiKey: 'AIzaSyAQ1vHHgU-naArhlFsQOZKcy_Lp3yPHh7Y',
         libraries: ['places']
@@ -85811,24 +86063,10 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_14_vue_googlemaps__["a" /* default */], {
 
 window.vm = new Vue({
     el: '#app',
-    components: {
-        'carousel': __WEBPACK_IMPORTED_MODULE_0__components_Carousel___default.a,
-        'price': __WEBPACK_IMPORTED_MODULE_6__components_Catalog_Price___default.a,
-        'cart': __WEBPACK_IMPORTED_MODULE_8__components_Checkout_Cart___default.a,
-        'add-to-cart': __WEBPACK_IMPORTED_MODULE_9__components_Checkout_AddToCart___default.a,
-        'mini-cart': __WEBPACK_IMPORTED_MODULE_10__components_Checkout_MiniCart___default.a,
-        'favorites-toggle-button': __WEBPACK_IMPORTED_MODULE_7__components_Favorites_ToggleButton___default.a,
-        'notification': __WEBPACK_IMPORTED_MODULE_1__components_Notification___default.a,
-        'footer-block': __WEBPACK_IMPORTED_MODULE_2__components_Footer___default.a,
-        'logs': __WEBPACK_IMPORTED_MODULE_3__components_Log___default.a,
-        'contact-email': __WEBPACK_IMPORTED_MODULE_4__components_Account_ContactEmail___default.a,
-        'address-list': __WEBPACK_IMPORTED_MODULE_5__components_Account_AddressList___default.a,
-        'cart-address': __WEBPACK_IMPORTED_MODULE_11__components_Checkout_Address_CartAddress___default.a,
-        'quick-search': __WEBPACK_IMPORTED_MODULE_12__components_Search_QuickSearch___default.a
-    },
     data: function data() {
         return {
-            skus: []
+            skus: [],
+            filter: {}
         };
     },
 
@@ -85890,6 +86128,8 @@ window.$ = window.jQuery = __webpack_require__("./node_modules/jquery/dist/jquer
 window.Popper = __WEBPACK_IMPORTED_MODULE_0_popper_js__["default"];
 
 __webpack_require__("./node_modules/bootstrap/dist/js/bootstrap.js");
+
+window.lightbox = __webpack_require__("./node_modules/lightbox2/dist/js/lightbox.js");
 
 window.Chart = __webpack_require__("./node_modules/chart.js/src/chart.js");
 
@@ -86075,21 +86315,17 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-604dd58c\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/Catalog/Price.vue")
-}
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
 var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/Catalog/Price.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-604dd58c\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/Catalog/Price.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-604dd58c\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/Catalog/Price.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = injectStyle
+var __vue_styles__ = null
 /* scopeId */
-var __vue_scopeId__ = "data-v-604dd58c"
+var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -86415,21 +86651,17 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-c466d48e\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/Checkout/MiniCart.vue")
-}
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
 var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/Checkout/MiniCart.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-c466d48e\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/Checkout/MiniCart.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-c466d48e\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/Checkout/MiniCart.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = injectStyle
+var __vue_styles__ = null
 /* scopeId */
-var __vue_scopeId__ = "data-v-c466d48e"
+var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -86703,6 +86935,13 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/sass/admin/app.scss":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ "./resources/assets/sass/app.scss":
 /***/ (function(module, exports) {
 
@@ -86714,7 +86953,8 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__("./resources/assets/js/app.js");
-module.exports = __webpack_require__("./resources/assets/sass/app.scss");
+__webpack_require__("./resources/assets/sass/app.scss");
+module.exports = __webpack_require__("./resources/assets/sass/admin/app.scss");
 
 
 /***/ })

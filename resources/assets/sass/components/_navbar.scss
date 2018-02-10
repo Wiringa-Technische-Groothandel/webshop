@@ -30,6 +30,7 @@
   }
 
   @include media-breakpoint-down(sm) {
+    .search-form,
     form {
       width: 100%;
 

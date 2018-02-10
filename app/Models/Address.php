@@ -5,6 +5,7 @@ namespace WTG\Models;
 use Illuminate\Database\Eloquent\Model;
 use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\CompanyContract;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Address model.
@@ -20,7 +21,7 @@ class Address extends Model implements AddressContract
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function company()
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
@@ -28,111 +29,159 @@ class Address extends Model implements AddressContract
     /**
      * Get the identifier.
      *
-     * @param  null|string  $id
-     * @return string
+     * @return null|string
      */
-    public function identifier(?string $id = null): string
+    public function getId(): ?string
     {
         return $this->getAttribute('id');
     }
 
     /**
+     * Set the company.
+     *
+     * @param  CompanyContract  $company
+     * @return AddressContract
+     */
+    public function setCompany(CompanyContract $company): AddressContract
+    {
+        $this->company()->associate($company);
+
+        return $this;
+    }
+
+    /**
      * Get the company.
      *
-     * @return CompanyContract
+     * @return null|CompanyContract
      */
-    public function getCompany(): CompanyContract
+    public function getCompany(): ?CompanyContract
     {
         return $this->getAttribute('company');
     }
 
     /**
-     * Get or set the name.
+     * Set the name.
      *
-     * @param  null|string  $name
+     * @param  string  $name
+     * @return AddressContract
+     */
+    public function setName(string $name): AddressContract
+    {
+        return $this->setAttribute('name', $name);
+    }
+
+    /**
+     * Get the name.
+     *
      * @return null|string
      */
-    public function name(?string $name = null): ?string
+    public function getName(): ?string
     {
-        if ($name) {
-            $this->setAttribute('name', $name);
-        }
-
         return $this->getAttribute('name');
     }
 
     /**
-     * Get or set the street.
+     * Set the street.
      *
-     * @param  null|string  $street
+     * @param  string  $street
+     * @return AddressContract
+     */
+    public function setStreet(string $street): AddressContract
+    {
+        return $this->setAttribute('street', $street);
+    }
+
+    /**
+     * Get the street.
+     *
      * @return null|string
      */
-    public function street(?string $street = null): ?string
+    public function getStreet(): ?string
     {
-        if ($street) {
-            $this->setAttribute('street', $street);
-        }
-
         return $this->getAttribute('street');
     }
 
     /**
-     * Get or set the postcode.
+     * Set the postcode.
      *
      * @param  null|string  $postcode
+     * @return AddressContract
+     */
+    public function setPostcode(string $postcode): AddressContract
+    {
+        return $this->setAttribute('postcode', $postcode);
+    }
+
+    /**
+     * Get the postcode.
+     *
      * @return null|string
      */
-    public function postcode(?string $postcode = null): ?string
+    public function getPostcode(): ?string
     {
-        if ($postcode) {
-            $this->setAttribute('postcode', $postcode);
-        }
-
         return $this->getAttribute('postcode');
     }
 
     /**
-     * Get or set the city.
+     * Set the city.
      *
      * @param  null|string  $city
+     * @return AddressContract
+     */
+    public function setCity(string $city): AddressContract
+    {
+        return $this->setAttribute('city', $city);
+    }
+
+    /**
+     * Get the city.
+     *
      * @return null|string
      */
-    public function city(?string $city = null): ?string
+    public function getCity(): ?string
     {
-        if ($city) {
-            $this->setAttribute('city', $city);
-        }
-
         return $this->getAttribute('city');
     }
 
     /**
-     * Get or set the phone.
+     * Set the phone.
      *
      * @param  null|string  $phone
+     * @return AddressContract
+     */
+    public function setPhone(?string $phone = null): AddressContract
+    {
+        return $this->setAttribute('phone', $phone);
+    }
+
+    /**
+     * Get the phone.
+     *
      * @return null|string
      */
-    public function phone(?string $phone = null): ?string
+    public function getPhone(): ?string
     {
-        if ($phone) {
-            $this->setAttribute('phone', $phone);
-        }
-
         return $this->getAttribute('phone');
     }
 
     /**
-     * Get or set the mobile.
+     * Set the mobile.
      *
      * @param  null|string  $mobile
+     * @return AddressContract
+     */
+    public function setMobile(?string $mobile = null): AddressContract
+    {
+        return $this->setAttribute('mobile', $mobile);
+    }
+
+    /**
+     * Get the mobile.
+     *
      * @return null|string
      */
-    public function mobile(?string $mobile = null): ?string
+    public function getMobile(): ?string
     {
-        if ($mobile) {
-            $this->setAttribute('mobile', $mobile);
-        }
-
         return $this->getAttribute('mobile');
     }
 }

@@ -10,223 +10,12 @@
     <hr />
 
     <div class="container">
-        <form method="post" id="needs-validation" novalidate>
-            {{ csrf_field() }}
-            {{ method_field('put') }}
-
-            <p class="help-block">
-                {{ __('Velden gemarkeerd met een * zijn verplicht.') }}
-            </p>
-
-            <div class="row mb-3">
-                <div class="col-12 col-md-6">
-                    <h3>{{ __('Contactgegevens') }}</h3>
-
-                    <section id="contact" class="mt-5">
-                        <div class="form-group">
-                            <label for="contact-company">{{ __('Naam bedrijf') }} *</label>
-                            <input type="text" class="form-control" name="contact-company" placeholder="{{ __('Naam bedrijf') }}" required>
-                            <div class="invalid-feedback">
-                                {{ __('Vul aub een bedrijfsnaam in') }}
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="contact-name">{{ __('Naam contactpersoon') }} *</label>
-                            <input type="text" class="form-control" name="contact-name" placeholder="{{ __('Naam contactpersoon') }}" required>
-                            <div class="invalid-feedback">
-                                {{ __('Vul aub de naam van de contactpersoon in') }}
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="contact-address">{{ __('Straat + Huisnummer') }} *</label>
-                            <input type="text" class="form-control" name="contact-address" placeholder="{{ __('Straat + Huisnummer') }}" required>
-                            <div class="invalid-feedback">
-                                {{ __('Vul aub een adres in') }}
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="contact-city">{{ __('Plaats') }} *</label>
-                                    <input type="text" class="form-control" name="contact-city" placeholder="{{ __('Plaats') }}" required>
-                                    <div class="invalid-feedback">
-                                        {{ __('Vul aub een plaats in') }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="contact-postcode">{{ __('Postcode') }} *</label>
-                                    <input type="text" class="form-control" name="contact-postcode" placeholder="YYYYXX" maxlength="6" required>
-                                    <div class="invalid-feedback">
-                                        {{ __('Vul aub een postcode in') }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="contact-phone-company">{{ __('Telefoon bedrijf') }} *</label>
-                                    <input type="tel" class="form-control" name="contact-phone-company" placeholder="{{ __('Telefoon bedrijf') }}" required>
-                                    <div class="invalid-feedback">
-                                        {{ __('Vul aub een telefoonnummer in') }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="contact-phone">{{ __('Telefoon contactpersoon') }}</label>
-                                    <input type="tel" class="form-control" name="contact-phone" placeholder="{{ __('Telefoon contactpersoon') }}">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="contact-email">{{ __('E-Mail') }} *</label>
-                            <input type="email" class="form-control" name="contact-email" placeholder="{{ __('E-Mail') }}" required>
-                            <div class="invalid-feedback">
-                                {{ __('Vul aub een e-mail adres in') }}
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="contact-url">{{ __('Website url') }}</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">https://</div>
-                                </div>
-                                <input type="url" class="form-control" placeholder="{{ __('Website url') }}" name="contact-url">
-                            </div>
-                        </div>
-                    </section>
-                </div>
-
-                <div class="col-12 col-md-6">
-                    <h3>{{ __('Vestigingsadres') }}</h3>
-
-                    <div class="custom-control custom-checkbox mb-3">
-                        <input type="checkbox" class="custom-control-input" name="copy-contact" id="copy-contact">
-                        <label class="custom-control-label" for="copy-contact">{{ __('Overnemen van contactgegevens') }}</label>
-                    </div>
-
-                    <section id="location">
-                        <div class="form-group">
-                            <label for="alt-address">{{ __('Straat + Huisnummer') }} *</label>
-                            <input type="text" class="form-control" name="alt-address" placeholder="{{ __('Straat + Huisnummer') }}" required>
-                            <div class="invalid-feedback">
-                                {{ __('Vul aub een adres in') }}
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="alt-city">{{ __('Plaats') }} *</label>
-                                    <input type="text" class="form-control" name="alt-city" placeholder="{{ __('Plaats') }}" required>
-                                    <div class="invalid-feedback">
-                                        {{ __('Vul aub een plaats in') }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="alt-postcode">{{ __('Postcode') }} *</label>
-                                    <input type="text" class="form-control" name="alt-postcode" placeholder="YYYYXX" maxlength="6" required>
-                                    <div class="invalid-feedback">
-                                        {{ __('Vul aub een postcode in') }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="alt-phone-company">{{ __('Telefoon bedrijf') }} *</label>
-                            <input type="tel" class="form-control" name="alt-phone-company" placeholder="{{ __('Telefoon bedrijf') }}" required>
-                            <div class="invalid-feedback">
-                                {{ __('Vul aub een telefoonnummer in') }}
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </div>
-
-            <hr />
-
-            <div class="row mb-3">
-                <div class="col-12 col-md-6">
-                    <h3>{{ __('Betalingsgegevens') }}</h3>
-
-                    <section id="payment" class="mt-5">
-                        <div class="form-group">
-                            <label for="iban">{{ __('IBAN nummer') }} *</label>
-                            <input type="text" class="form-control" name="iban" placeholder="{{ __('IBAN nummer') }}" required>
-                            <div class="invalid-feedback">
-                                {{ __('Vul aub een IBAN nummer in') }}
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="kvk">{{ __('KVK nummer') }} *</label>
-                            <input type="text" class="form-control" name="kvk" placeholder="{{ __('KVK nummer') }}" required>
-                            <div class="invalid-feedback">
-                                {{ __('Vul aub een KVK nummer in') }}
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="vat">{{ __('BTW nummer') }} *</label>
-                            <input type="text" class="form-control" name="vat" placeholder="{{ __('BTW nummer') }}" required>
-                            <div class="invalid-feedback">
-                                {{ __('Vul aub een BTW nummer in') }}
-                            </div>
-                        </div>
-                    </section>
-                </div>
-
-                <div class="col-12 col-md-6">
-                    <h3>{{ __('Overige gegevens') }}</h3>
-
-                    <section id="other" class="mt-5">
-                        <div class="form-group mb-3">
-                            <label for="other-invoice-email">{{ __('Afwijkend e-mail adres voor facturen') }} *</label>
-                            <input type="email" class="form-control" name="other-email" placeholder="{{ __('E-Mail') }}">
-                        </div>
-
-                        <div class="custom-control custom-checkbox mb-3">
-                            <input type="checkbox" class="custom-control-input" name="other-digital" id="other-digital">
-                            <label class="custom-control-label" for="other-digital">{{ __('Digitale orderbevestiging ontvangen') }}</label>
-                        </div>
-
-                        <div class="custom-control custom-checkbox mb-3">
-                            <input type="checkbox" class="custom-control-input" name="other-productfile-email" id="other-productfile-email">
-                            <label class="custom-control-label" for="other-productfile-email">{{ __('Mail ontvangen bij nieuw artikelbestand') }}</label>
-                        </div>
-                    </section>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-12 col-md-6 offset-md-3">
-                    <button class="btn btn-outline-success btn-block" type="submit">
-                        {{ __('Versturen') }}
-                    </button>
-                </div>
-            </div>
-        </form>
+        @include('components.auth.registration.form')
     </div>
 @endsection
 
 @section('extraJS')
     <script>
-        // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function() {
             'use strict';
 
@@ -248,10 +37,10 @@
              */
             function copyFields () {
                 if ($copyContact.is(":checked")) {
-                    $altAddress.val( $contactAddress.val() );
-                    $altCity.val( $contactCity.val() );
-                    $altPostcode.val( $contactPostcode.val() );
-                    $altPhone.val( $contactPhone.val() );
+                    $businessAddress.val( $contactAddress.val() );
+                    $businessCity.val( $contactCity.val() );
+                    $businessPostcode.val( $contactPostcode.val() );
+                    $businessPhone.val( $contactPhone.val() );
                 }
             }
 
@@ -264,23 +53,23 @@
                 if ($copyContact.is(":checked")) {
                     copyFields();
 
-                    $altAddress.attr('readonly', 'readonly');
-                    $altCity.attr('readonly', 'readonly');
-                    $altPostcode.attr('readonly', 'readonly');
-                    $altPhone.attr('readonly', 'readonly');
+                    $businessAddress.attr('readonly', 'readonly');
+                    $businessCity.attr('readonly', 'readonly');
+                    $businessPostcode.attr('readonly', 'readonly');
+                    $businessPhone.attr('readonly', 'readonly');
                 } else {
-                    $altAddress.removeAttr('readonly');
-                    $altCity.removeAttr('readonly');
-                    $altPostcode.removeAttr('readonly');
-                    $altPhone.removeAttr('readonly');
+                    $businessAddress.removeAttr('readonly');
+                    $businessCity.removeAttr('readonly');
+                    $businessPostcode.removeAttr('readonly');
+                    $businessPhone.removeAttr('readonly');
                 }
             }
 
             let $copyContact     = $("#copy-contact");
-            let $altAddress      = $('[name="alt-address"]');
-            let $altCity         = $('[name="alt-city"]');
-            let $altPostcode     = $('[name="alt-postcode"]');
-            let $altPhone        = $('[name="alt-phone-company"]');
+            let $businessAddress      = $('[name="business-address"]');
+            let $businessCity         = $('[name="business-city"]');
+            let $businessPostcode     = $('[name="business-postcode"]');
+            let $businessPhone   = $('[name="business-phone"]');
             let $contactAddress  = $('[name="contact-address"]');
             let $contactCity     = $('[name="contact-city"]');
             let $contactPostcode = $('[name="contact-postcode"]');

@@ -29,30 +29,6 @@
     </div>
 </template>
 
-<style scoped lang="scss">
-    @import url('https://fonts.googleapis.com/css?family=Exo+2:700');
-
-    .gross-price,
-    .net-price {
-        font-family: 'Exo 2', sans-serif;
-        font-size: 20px;
-        color: #125175;
-
-        span {
-            white-space: nowrap;
-        }
-    }
-
-    .price-per {
-        margin-top: 15px;
-    }
-
-    .stock,
-    .price-per {
-        white-space: nowrap;
-    }
-</style>
-
 <script>
     export default {
         props: ['product'],

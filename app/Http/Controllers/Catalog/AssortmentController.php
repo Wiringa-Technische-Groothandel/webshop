@@ -21,13 +21,11 @@ class AssortmentController extends Controller
      */
     public function getAction()
     {
-        $query = Product::query();
-
         $results = collect([
-            'products' => $query->paginate(10),
-            'brands' => (clone $query)->orderBy('brand')->distinct()->pluck('brand'),
-            'series' => (clone $query)->orderBy('series')->distinct()->pluck('series'),
-            'types' => (clone $query)->orderBy('type')->distinct()->pluck('type'),
+            'products' => Product::paginate(10),
+            'brands' => Product::orderBy('brand')->distinct()->pluck('brand'),
+            'series' => Product::orderBy('series')->distinct()->pluck('series'),
+            'types' => Product::orderBy('type')->distinct()->pluck('type'),
         ]);
 
         return view('pages.catalog.assortment', compact('results'));

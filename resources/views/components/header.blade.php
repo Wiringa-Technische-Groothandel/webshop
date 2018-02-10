@@ -4,6 +4,6 @@
     @include('components.navigation')
 
     <div class="container">
-        <carousel :slides="{{ $slides }}"></carousel>
+        @include('components.carousel')
     </div>
 </header>

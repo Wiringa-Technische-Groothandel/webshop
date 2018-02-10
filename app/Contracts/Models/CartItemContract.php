@@ -16,7 +16,7 @@ interface CartItemContract
      * @param  ProductContract|null  $product
      * @return ProductContract|null
      */
-    public function setProduct(ProductContract $product = null): ?ProductContract;
+    public function setProduct(ProductContract $product): ?ProductContract;
 
     /**
      * Get the product.
@@ -28,32 +28,60 @@ interface CartItemContract
     /**
      * Set the cart.
      *
-     * @param  CartContract|null  $cart
-     * @return CartContract
+     * @param  CartContract  $cart
+     * @return CartItemContract
      */
-    public function cart(CartContract $cart = null): CartContract;
+    public function setCart(CartContract $cart): CartItemContract;
 
     /**
-     * Get or set the item quantity.
+     * Get the cart.
      *
-     * @param  float|null  $quantity
+     * @return CartItemContract
+     */
+    public function getCart(): CartItemContract;
+
+    /**
+     * Set the item quantity.
+     *
+     * @param  float  $quantity
+     * @return CartItemContract
+     */
+    public function setQuantity(float $quantity): CartItemContract;
+
+    /**
+     * Get the item quantity.
+     *
      * @return float
      */
-    public function quantity(float $quantity = null): float;
+    public function getQuantity(): ?float;
 
     /**
-     * Get or set the price.
+     * Set the price.
      *
      * @param  string|null  $price
-     * @return string
+     * @return CartItemContract
      */
-    public function price(string $price = null): string;
+    public function setPrice(string $price): CartItemContract;
 
     /**
-     * Get or set the subtotal.
+     * Get the price.
+     *
+     * @return null|string
+     */
+    public function getPrice(): ?string;
+
+    /**
+     * Set the subtotal.
      *
      * @param  string|null  $subtotal
+     * @return CartItemContract
+     */
+    public function setSubtotal(string $subtotal): CartItemContract;
+
+    /**
+     * Get the subtotal.
+     *
      * @return string
      */
-    public function subtotal(string $subtotal = null): string;
+    public function getSubtotal(): ?string;
 }

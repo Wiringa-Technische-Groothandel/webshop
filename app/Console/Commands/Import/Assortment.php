@@ -5,6 +5,7 @@ namespace WTG\Console\Commands\Import;
 use Illuminate\Console\Command;
 use Illuminate\Database\DatabaseManager;
 use WTG\Services\Import\Assortment as Service;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
 /**
  * Import from assortment files.
@@ -66,6 +67,7 @@ class Assortment extends Command
      * Run the import.
      *
      * @return void
+     * @throws FileNotFoundException
      */
     protected function runImport()
     {
@@ -88,6 +90,7 @@ class Assortment extends Command
 
         $this->output->progressStart($files->count() - $startFrom);
 
+        $count = 0;
         $index = $startFrom;
         while ($files->has($index)) {
             $file = $files->get($index);
@@ -97,7 +100,7 @@ class Assortment extends Command
 
             $this->output->progressAdvance();
 
-            $this->service->importProducts($products);
+            $this->service->importProducts($products, $count);
 
             $index++;
         }
@@ -105,5 +108,7 @@ class Assortment extends Command
         $this->output->progressFinish();
 
         $this->service->updateImportData($file);
+
+        $this->output->success('Imported '.$count.' products');
     }
 }

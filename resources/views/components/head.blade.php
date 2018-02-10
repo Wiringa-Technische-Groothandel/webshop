@@ -10,6 +10,8 @@
 <title>WTG - @yield('title')</title>
 
 <link href="https://fonts.googleapis.com/css?family=Muli:300,400,600,800" rel="stylesheet">
+{{--<link href="https://fonts.googleapis.com/css?family=Exo+2:500,700" rel="stylesheet">--}}
+<link href="https://fonts.googleapis.com/css?family=Oswald:500,700" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css"/>
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick-theme.css"/>
 <link rel="stylesheet" href="{{ mix('assets/css/app.css') }}">

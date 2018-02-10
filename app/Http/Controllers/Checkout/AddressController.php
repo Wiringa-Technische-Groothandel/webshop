@@ -6,9 +6,10 @@ use WTG\Models\Address;
 use WTG\Models\Customer;
 use Illuminate\Http\Request;
 use WTG\Http\Controllers\Controller;
+use Illuminate\View\Factory as ViewFactory;
 use WTG\Contracts\Services\CartServiceContract;
 use WTG\Http\Requests\UpdateQuoteAddressRequest;
-use WTG\Contracts\Services\AddressServiceContract;
+use WTG\Contracts\Services\Account\AddressServiceContract;
 
 /**
  * Address controller.
@@ -32,11 +33,14 @@ class AddressController extends Controller
     /**
      * AddressController constructor.
      *
+     * @param  ViewFactory  $view
      * @param  AddressServiceContract  $addressService
      * @param  CartServiceContract  $cartService
      */
-    public function __construct(AddressServiceContract $addressService, CartServiceContract $cartService)
+    public function __construct(ViewFactory $view, AddressServiceContract $addressService, CartServiceContract $cartService)
     {
+        parent::__construct($view);
+
         $this->addressService = $addressService;
         $this->cartService = $cartService;
     }

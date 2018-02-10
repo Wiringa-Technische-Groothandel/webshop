@@ -3,14 +3,15 @@
 namespace WTG\Http\Controllers\Account;
 
 use WTG\Models\Customer;
-use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\View\View;
 use WTG\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
-use WTG\Contracts\Services\AddressServiceContract;
+use Illuminate\View\Factory as ViewFactory;
 use WTG\Http\Requests\Account\Address\CreateRequest;
 use WTG\Http\Requests\Account\Address\DeleteRequest;
+use WTG\Contracts\Services\Account\AddressServiceContract;
 use WTG\Http\Requests\Account\Address\UpdateDefaultRequest;
 
 /**
@@ -30,10 +31,13 @@ class AddressController extends Controller
     /**
      * AddressController constructor.
      *
+     * @param  ViewFactory  $view
      * @param  AddressServiceContract  $addressService
      */
-    public function __construct(AddressServiceContract $addressService)
+    public function __construct(ViewFactory $view, AddressServiceContract $addressService)
     {
+        parent::__construct($view);
+
         $this->addressService = $addressService;
     }
 
@@ -50,7 +54,7 @@ class AddressController extends Controller
         $addresses = $this->addressService->getAddressesForCustomer($customer);
         $defaultAddress = $this->addressService->getDefaultAddressIdForCustomer($customer);
 
-        return view('pages.account.addresses', compact('customer', 'addresses', 'defaultAddress'));
+        return $this->view->make('pages.account.addresses', compact('customer', 'addresses', 'defaultAddress'));
     }
 
     /**
