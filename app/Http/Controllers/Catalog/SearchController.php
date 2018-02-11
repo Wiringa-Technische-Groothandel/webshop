@@ -2,10 +2,11 @@
 
 namespace WTG\Http\Controllers\Catalog;
 
-use Illuminate\Http\Request;
-use WTG\Http\Controllers\Controller;
 use WTG\Models\Product;
+use Illuminate\Http\Request;
 use WTG\Services\SearchService;
+use WTG\Http\Controllers\Controller;
+use Illuminate\View\Factory as ViewFactory;
 
 /**
  * Search controller.
@@ -16,6 +17,24 @@ use WTG\Services\SearchService;
  */
 class SearchController extends Controller
 {
+    /**
+     * @var SearchService
+     */
+    protected $searchService;
+
+    /**
+     * SearchController constructor.
+     *
+     * @param  ViewFactory  $view
+     * @param  SearchService  $searchService
+     */
+    public function __construct(ViewFactory $view, SearchService $searchService)
+    {
+        parent::__construct($view);
+
+        $this->searchService = $searchService;
+    }
+
     /**
      * Search page.
      *
@@ -31,9 +50,7 @@ class SearchController extends Controller
             return back();
         }
 
-        /** @var SearchService $service */
-        $service = app()->make(SearchService::class);
-        $results = $service->searchProducts([
+        $results = $this->searchService->searchProducts([
             'query'     => $searchQuery,
             'brand'     => $request->input('brand'),
             'series'     => $request->input('series'),

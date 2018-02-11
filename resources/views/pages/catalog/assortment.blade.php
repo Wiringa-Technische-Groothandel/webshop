@@ -10,9 +10,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3">
-                <form action="{{ route('catalog.search') }}">
-                    <input type="hidden" name="query" value="{{ request('query') }}">
-
+                <form>
                     @include('components.catalog.filters')
                 </form>
             </div>

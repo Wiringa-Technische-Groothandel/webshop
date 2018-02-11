@@ -2,8 +2,11 @@
 
 namespace WTG\Http\Controllers\Catalog;
 
+use Illuminate\Http\Request;
+use Illuminate\View\Factory as ViewFactory;
 use WTG\Models\Product;
 use WTG\Http\Controllers\Controller;
+use WTG\Services\SearchService;
 
 /**
  * Assortment controller.
@@ -15,18 +18,39 @@ use WTG\Http\Controllers\Controller;
 class AssortmentController extends Controller
 {
     /**
+     * @var SearchService
+     */
+    protected $searchService;
+
+    /**
+     * AssortmentController constructor.
+     *
+     * @param  ViewFactory  $view
+     * @param  SearchService  $searchService
+     */
+    public function __construct(ViewFactory $view, SearchService $searchService)
+    {
+        parent::__construct($view);
+
+        $this->searchService = $searchService;
+    }
+
+    /**
      * Assortment page.
      *
+     * @param  Request  $request
      * @return \Illuminate\View\View
      */
-    public function getAction()
+    public function getAction(Request $request)
     {
-        $results = collect([
-            'products' => Product::paginate(10),
-            'brands' => Product::orderBy('brand')->distinct()->pluck('brand'),
-            'series' => Product::orderBy('series')->distinct()->pluck('series'),
-            'types' => Product::orderBy('type')->distinct()->pluck('type'),
-        ]);
+        $page = (int) $request->input('page', 1);
+
+        $results = $this->searchService->listProducts(
+            $request->input('brand'),
+            $request->input('series'),
+            $request->input('type'),
+            ($page > 0 ? $page : 1)
+        );
 
         return view('pages.catalog.assortment', compact('results'));
     }

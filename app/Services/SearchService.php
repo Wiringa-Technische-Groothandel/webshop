@@ -16,6 +16,49 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class SearchService
 {
     /**
+     * Product listing.
+     *
+     * @param  null|string  $brand
+     * @param  null|string  $series
+     * @param  null|string  $type
+     * @param  int  $page
+     * @return Collection
+     */
+    public function listProducts(?string $brand = null, ?string $series = null, ?string $type = null, int $page = 1): Collection
+    {
+        $query = Product::query();
+
+        if ($brand) {
+            $query->where('brand', $brand);
+
+            if ($series) {
+                $query->where('series', $series);
+
+                if ($type) {
+                    $query->where('type', $type);
+                }
+            }
+        }
+
+        $results = $query->get();
+
+        $paginator = new LengthAwarePaginator($results->forPage($page, 10), $results->count(), 10, $page);
+        $paginator->withPath('assortment');
+        $paginator->appends([
+            'brand' => $brand,
+            'series' => $series,
+            'type' => $type
+        ]);
+
+        return collect([
+            'products' => $paginator,
+            'brands' => $results->pluck('brand')->unique()->sort(),
+            'series' => $results->pluck('series')->unique()->sort(),
+            'types' => $results->pluck('type')->unique()->sort(),
+        ]);
+    }
+
+    /**
      * Search for products.
      *
      * @param  array  $data
@@ -48,6 +91,7 @@ class SearchService
         }
 
         $results = $query->get();
+
         $paginator = new LengthAwarePaginator($results->forPage($page, 10), $results->count(), 10, $page);
         $paginator->withPath('search');
         $paginator->appends($data);
