@@ -80,9 +80,9 @@
                             <b>{{ __('Omschrijving') }}</b>
                         </div>
                         <div class="card-body">
-                            <p class="card-text">
-                                {{ $product->getDescription()->getValue() }}
-                            </p>
+                            <div class="card-text">
+                                {!! $product->getDescription()->getValue() !!}
+                            </div>
                         </div>
                     </div>
                 </div>

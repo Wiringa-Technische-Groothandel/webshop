@@ -3,29 +3,26 @@
 namespace WTG\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use App\Description;
-use App\Content;
-use App\Product;
 
 /**
- * Class ContentController.
+ * Content controller.
  *
- * @package WTG
- * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
+ * @package     WTG
+ * @subpackage  Admin
+ * @author      Thomas Wiringa <thomas.wiringa@gmail.com>
  */
 class ContentController extends Controller
 {
-
     /**
      * Content manager.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
-    public function view()
+    public function getAction()
     {
-        return view('admin.content.index', [
-            'data' => Content::where('hidden', '0')->get()
-        ]);
+        $blocks = collect([]);
+
+        return $this->view->make('admin.content.index', compact('blocks'));
     }
 
     /**

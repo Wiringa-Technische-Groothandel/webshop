@@ -18,11 +18,16 @@ use WTG\Contracts\Models\DescriptionContract;
 class Description extends Model implements DescriptionContract
 {
     /**
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * Product relation.
      *
      * @return BelongsTo
      */
-    protected function product(): BelongsTo
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
@@ -35,6 +40,19 @@ class Description extends Model implements DescriptionContract
     public function getProduct(): ProductContract
     {
         return $this->getAttribute('product');
+    }
+
+    /**
+     * Set the related product.
+     *
+     * @param  ProductContract  $product
+     * @return DescriptionContract
+     */
+    public function setProduct(ProductContract $product): DescriptionContract
+    {
+        $this->product()->associate($product);
+
+        return $this;
     }
 
     /**

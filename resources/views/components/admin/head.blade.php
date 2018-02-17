@@ -16,7 +16,7 @@
 <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
-<script src="//cdn.ckeditor.com/4.7.1/standard/ckeditor.js"></script>
+<script src="//cdn.ckeditor.com/4.8.0/standard/ckeditor.js"></script>
 <script>
     window.Laravel = {
         isLoggedIn: 1

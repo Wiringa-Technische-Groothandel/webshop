@@ -1631,6 +1631,87 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/Admin/Content/Descriptions.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var editor = void 0;
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['url'],
+    data: function data() {
+        return {
+            sku: ''
+        };
+    },
+
+    methods: {
+        getDescription: function getDescription() {
+            var _this = this;
+
+            editor.setData('');
+
+            if (this.$data.sku.length !== 8) {
+                return;
+            }
+
+            axios.post(this.url, {
+                sku: this.$data.sku
+            }).then(function (response) {
+                console.log(response.data.payload);
+
+                if (response.data.payload) {
+                    editor.setData(response.data.payload.value);
+                }
+            }).catch(function (error) {
+                _this.$root.$emit('send-notify', {
+                    success: false,
+                    text: error.response.data.message
+                });
+            });
+        },
+        saveDescription: function saveDescription() {
+            var _this2 = this;
+
+            axios.put(this.url, {
+                sku: this.$data.sku,
+                description: editor.getData()
+            }).then(function (response) {
+                _this2.$root.$emit('send-notify', {
+                    success: response.data.success,
+                    text: response.data.message
+                });
+            }).catch(function (error) {
+                _this2.$root.$emit('send-notify', {
+                    success: false,
+                    text: error.response.data.message
+                });
+            });
+        }
+    },
+    mounted: function mounted() {
+        editor = CKEDITOR.replace('description-editor');
+    }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/Notification.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -66679,6 +66760,72 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-74315478\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/Admin/Content/Descriptions.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("hr"),
+    _vm._v(" "),
+    _c("input", {
+      directives: [
+        { name: "model", rawName: "v-model", value: _vm.sku, expression: "sku" }
+      ],
+      staticClass: "form-control mb-3",
+      attrs: { maxlength: "8", placeholder: "Productnummer" },
+      domProps: { value: _vm.sku },
+      on: {
+        input: [
+          function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.sku = $event.target.value
+          },
+          _vm.getDescription
+        ]
+      }
+    }),
+    _vm._v(" "),
+    _c("textarea", { attrs: { id: "description-editor" } }),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-outline-success mt-3",
+        on: { click: _vm.saveDescription }
+      },
+      [_vm._v("Opslaan")]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h3", [
+      _c("i", { staticClass: "fal fa-fw fa-align-center" }),
+      _vm._v(" Product omschrijvingen")
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-74315478", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue/dist/vue.common.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -77595,47 +77742,14 @@ $(document).ready(function () {
 });
 
 Vue.component('notification', __webpack_require__("./resources/assets/js/components/Notification.vue"));
+Vue.component('descriptions', __webpack_require__("./resources/assets/js/components/Admin/Content/Descriptions.vue"));
 
 window.vm = new Vue({
     el: '#app',
     data: function data() {
         return {
-            skus: [],
             filter: {}
         };
-    },
-
-    methods: {
-        fetchPrices: function fetchPrices() {
-            var _this = this;
-
-            axios.post('/fetchPrices', {
-                skus: this.$data.skus
-            }).then(function (response) {
-                response.data.payload.forEach(function (item) {
-                    _this.$root.$emit('price-fetched-' + item.sku, {
-                        netPrice: item.net_price,
-                        grossPrice: item.gross_price,
-                        pricePer: item.price_per_string,
-                        stock: item.stock_string
-                    });
-                });
-            }).catch(function (error) {
-                console.log(error);
-            });
-        }
-    },
-    created: function created() {
-        var _this2 = this;
-
-        this.$root.$on('fetch-price', function (sku) {
-            _this2.$data.skus.push(sku);
-        });
-    },
-    mounted: function mounted() {
-        if (window.Laravel.isLoggedIn && this.$data.skus.length > 0) {
-            this.fetchPrices();
-        }
     }
 });
 
@@ -77666,6 +77780,54 @@ window.Chart = __webpack_require__("./node_modules/chart.js/src/chart.js");
 window.Vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 window.axios = __webpack_require__("./node_modules/axios/index.js");
 window.randomMC = __webpack_require__("./node_modules/random-material-color/dist/randomColor.js");
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/Admin/Content/Descriptions.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/Admin/Content/Descriptions.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-74315478\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/Admin/Content/Descriptions.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/Admin/Content/Descriptions.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-74315478", Component.options)
+  } else {
+    hotAPI.reload("data-v-74315478", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
 
 /***/ }),
 

@@ -36,43 +36,13 @@ $(document).ready( function() {
 });
 
 Vue.component('notification', require('../components/Notification'));
+Vue.component('descriptions', require('../components/Admin/Content/Descriptions'));
 
 window.vm = new Vue({
     el: '#app',
     data () {
         return {
-            skus: [],
             filter: {}
-        }
-    },
-    methods: {
-        fetchPrices () {
-            axios.post('/fetchPrices', {
-                skus: this.$data.skus
-            })
-                .then((response) => {
-                    response.data.payload.forEach((item) => {
-                        this.$root.$emit('price-fetched-' + item.sku, {
-                            netPrice: item.net_price,
-                            grossPrice: item.gross_price,
-                            pricePer: item.price_per_string,
-                            stock: item.stock_string,
-                        });
-                    });
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        }
-    },
-    created () {
-        this.$root.$on('fetch-price', (sku) => {
-            this.$data.skus.push(sku);
-        });
-    },
-    mounted () {
-        if (window.Laravel.isLoggedIn && this.$data.skus.length > 0) {
-            this.fetchPrices();
         }
     }
 });

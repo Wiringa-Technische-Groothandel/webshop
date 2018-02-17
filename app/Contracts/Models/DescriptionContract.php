@@ -19,6 +19,14 @@ interface DescriptionContract
     public function getProduct(): ProductContract;
 
     /**
+     * Set the related product.
+     *
+     * @param  ProductContract  $product
+     * @return DescriptionContract
+     */
+    public function setProduct(ProductContract $product): DescriptionContract;
+
+    /**
      * Get the description identifier.
      *
      * @return null|string

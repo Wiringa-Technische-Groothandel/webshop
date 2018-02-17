@@ -61,13 +61,11 @@ Route::group($routeOptions, function () {
     });
 
     // Admin content
-    Route::get('content', 'ContentController@view')->name('content');
+    Route::get('content', 'ContentController@getAction')->name('content');
 
-    Route::group(['as' => 'content::', 'prefix' => 'content'], function () {
-        Route::get('get', 'ContentController@content')->name('content');
-        Route::get('description', 'ContentController@description')->name('description');
-        Route::post('save/page', 'ContentController@savePage')->name('save_page');
-        Route::post('save/description', 'ContentController@saveDescription')->name('save_description');
+    Route::group(['as' => 'content.', 'prefix' => 'content', 'namespace' => 'Content'], function () {
+        Route::post('description', 'DescriptionController@postAction')->name('description');
+        Route::put('description', 'DescriptionController@putAction');
     });
 
     // Admin packs
