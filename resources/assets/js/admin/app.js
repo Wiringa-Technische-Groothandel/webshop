@@ -36,6 +36,7 @@ $(document).ready( function() {
 });
 
 Vue.component('notification', require('../components/Notification'));
+Vue.component('block', require('../components/Admin/Content/Block'));
 Vue.component('descriptions', require('../components/Admin/Content/Descriptions'));
 
 window.vm = new Vue({

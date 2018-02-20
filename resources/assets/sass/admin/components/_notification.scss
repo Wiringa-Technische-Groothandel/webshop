@@ -1,13 +1,25 @@
 #notification-wrapper {
+  @include media-breakpoint-up(md) {
+    left: 20px;
+    bottom: 20px;
+  }
+
+  @include media-breakpoint-down(sm) {
+    right: 0;
+  }
+
   position: fixed;
-  bottom: 20px;
-  left: 20px;
-  width: 500px;
   z-index: 999;
+  bottom: 0;
+  width: 0;
+  left: 0;
 
   .notification {
-    min-width: 300px;
-    max-width: 500px;
+    @include media-breakpoint-up(md) {
+      width: 400px;
+    }
+
+    width: 100vw;
     display: inline-block;
     margin-top: 10px;
     padding: 20px;
@@ -21,7 +33,7 @@
     }
 
     &.success {
-      background-color: $brand-success;
+      background: theme-color("success");
       color: white;
 
       &:before {
@@ -30,7 +42,7 @@
     }
 
     &.danger {
-      background-color: $brand-danger;
+      background: theme-color("danger");
       color: white;
 
       &:before {
@@ -39,7 +51,7 @@
     }
 
     &.warning {
-      background-color: $brand-warning;
+      background: theme-color("warning");
       color: white;
 
       &:before {

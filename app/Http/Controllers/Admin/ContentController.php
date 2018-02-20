@@ -3,6 +3,8 @@
 namespace WTG\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use WTG\Contracts\Models\BlockContract;
 
 /**
  * Content controller.
@@ -20,9 +22,10 @@ class ContentController extends Controller
      */
     public function getAction()
     {
-        $blocks = collect([]);
+        /** @var Collection $blocks */
+        $blocks = app()->make(BlockContract::class)->all();
 
-        return $this->view->make('admin.content.index', compact('blocks'));
+        return $this->view->make('pages.admin.content', compact('blocks'));
     }
 
     /**

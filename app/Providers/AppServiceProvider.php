@@ -2,10 +2,12 @@
 
 namespace WTG\Providers;
 
+use WTG\Models\Block;
 use League\Flysystem\Filesystem;
 use WTG\Soap\Service as SoapService;
 use League\Flysystem\Sftp\SftpAdapter;
 use Illuminate\Support\ServiceProvider;
+use WTG\Contracts\Models\BlockContract;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,6 +32,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(BlockContract::class, Block::class);
+
         $this->app->singleton('soap', SoapService::class);
 
         $this->app->when(SoapService::class)

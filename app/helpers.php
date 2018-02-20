@@ -9,7 +9,7 @@ if (! function_exists('block')) {
      */
     function block(string $blockName)
     {
-        $block = \WTG\Models\Block::name($blockName)->first();
+        $block = \WTG\Models\Block::where('name', $blockName)->first();
 
         if ($block === null) {
             return "Block '$blockName' not found";

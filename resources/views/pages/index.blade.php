@@ -8,7 +8,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                {{--@block('news')--}}
+                @block('news')
             </div>
         </div>
     </div>

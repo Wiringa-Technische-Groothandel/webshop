@@ -65,7 +65,10 @@ Route::group($routeOptions, function () {
 
     Route::group(['as' => 'content.', 'prefix' => 'content', 'namespace' => 'Content'], function () {
         Route::post('description', 'DescriptionController@postAction')->name('description');
+        Route::post('block', 'BlockController@postAction')->name('block');
+
         Route::put('description', 'DescriptionController@putAction');
+        Route::put('block', 'BlockController@putAction');
     });
 
     // Admin packs

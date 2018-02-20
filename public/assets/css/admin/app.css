@@ -17625,15 +17625,27 @@ readers do not read off random characters that represent icons */
 
 #notification-wrapper {
   position: fixed;
-  bottom: 20px;
-  left: 20px;
-  width: 500px;
   z-index: 999;
+  bottom: 0;
+  width: 0;
+  left: 0;
+}
+
+@media (min-width: 768px) {
+  #notification-wrapper {
+    left: 20px;
+    bottom: 20px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  #notification-wrapper {
+    right: 0;
+  }
 }
 
 #notification-wrapper .notification {
-  min-width: 300px;
-  max-width: 500px;
+  width: 100vw;
   display: inline-block;
   margin-top: 10px;
   padding: 20px;
@@ -17642,13 +17654,19 @@ readers do not read off random characters that represent icons */
   border-radius: 4px;
 }
 
+@media (min-width: 768px) {
+  #notification-wrapper .notification {
+    width: 400px;
+  }
+}
+
 #notification-wrapper .notification:before {
   font-family: "FontAwesome", sans-serif;
   margin: 0 10px 0 0;
 }
 
 #notification-wrapper .notification.success {
-  background-color: #859900;
+  background: #859900;
   color: white;
 }
 
@@ -17657,7 +17675,7 @@ readers do not read off random characters that represent icons */
 }
 
 #notification-wrapper .notification.danger {
-  background-color: #dc322f;
+  background: #dc322f;
   color: white;
 }
 
@@ -17666,7 +17684,7 @@ readers do not read off random characters that represent icons */
 }
 
 #notification-wrapper .notification.warning {
-  background-color: #b58900;
+  background: #b58900;
   color: white;
 }
 

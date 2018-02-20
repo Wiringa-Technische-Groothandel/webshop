@@ -13,7 +13,7 @@
         <thead>
             <tr>
                 <th width="40">
-                    <button class="btn btn-primary btn-link p-0" data-url="{{ routeIf('account.favorites.addToCart') }}"
+                    <button class="btn btn-link p-0" data-url="{{ routeIf('account.favorites.addToCart') }}"
                             onclick="addSelectedToCart(this)">
                         <i class="fal fa-cart-plus fa-fw fa-2x"></i>
                     </button>
@@ -41,7 +41,7 @@
                             {{ method_field('delete') }}
                             <input type="hidden" value="{{ $favorite->getAttribute('sku') }}" name="sku" />
 
-                            <button class="btn btn-link " type="submit">
+                            <button class="btn btn-link" type="submit">
                                 <i class="fal fa-fw fa-trash-alt"></i>
                             </button>
                         </form>

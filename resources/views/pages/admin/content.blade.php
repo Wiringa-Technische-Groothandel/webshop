@@ -7,17 +7,17 @@
         <div class="row">
             <div class="col-12 col-md-6">
                 <div class="card card-2">
-                    <h3><i class="fal fa-fw fa-edit"></i> {{ __('Blokken') }}</h3>
+                    @if ($blocks->isNotEmpty())
+                        <block url="{{ route('admin.content.block') }}" :blocks="{{ $blocks }}"></block>
+                    @else
+                        <h3><i class="fal fa-fw fa-edit"></i> {{ __('Blokken') }}</h3>
 
-                    <hr />
+                        <hr />
 
-                    @forelse($blocks as $block)
-                        // Blok beheer
-                    @empty
                         <div class="alert alert-warning">
                             {{ __('Er zijn nog geen beheerbare blokken aangemaakt.') }}
                         </div>
-                    @endforelse
+                    @endif
                 </div>
             </div>
 

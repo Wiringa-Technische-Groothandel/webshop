@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('title', __('E-Mail'))
+
 @section('content')
     <div class="container-fluid">
         <div class="row">
