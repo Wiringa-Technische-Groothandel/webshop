@@ -4,6 +4,7 @@ namespace WTG\Http\Controllers\Admin\Customer;
 
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use WTG\Http\Controllers\Admin\Controller;
 
 /**
  * Customer overview controller.
