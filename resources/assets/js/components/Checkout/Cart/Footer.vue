@@ -28,7 +28,7 @@
                         <i class="fal fa-fw fa-chevron-left"></i> Verder winkelen
                     </a>
 
-                    <a class="btn btn-outline-success d-block d-sm-inline" href="/checkout/address">
+                    <a class="btn btn-outline-success d-block d-sm-inline" :href="nextStepUrl">
                         Volgende stap <i class="fal fa-fw fa-chevron-right"></i>
                     </a>
                 </div>
@@ -39,7 +39,7 @@
 
 <script>
     export default {
-        props: ['grandTotal', 'continueUrl'],
+        props: ['grandTotal', 'continueUrl', 'nextStepUrl'],
         mounted: () => {
             console.log('Cart header component mounted');
         }

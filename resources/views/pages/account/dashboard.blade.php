@@ -10,17 +10,17 @@
 
 @section('account.content')
     <div class="row">
-        <div class="col-6">
+        <div class="col-12 col-sm-6">
             @include('components.account.dashboard.delivery-address')
         </div>
     </div>
 
     <div class="row my-4">
-        <div class="col-6">
+        <div class="col-12 col-sm-6 mb-3">
             @include('components.account.dashboard.contact-email')
         </div>
 
-        <div class="col-6">
+        <div class="col-12 col-sm-6">
             @include('components.account.dashboard.confirmation-email')
         </div>
     </div>

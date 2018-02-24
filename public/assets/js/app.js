@@ -2013,7 +2013,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['itemsUrl', 'continueUrl'],
+    props: ['itemsUrl', 'continueUrl', 'nextStepUrl'],
     methods: {
         getItems: function getItems() {
             var _this = this;
@@ -2114,7 +2114,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['grandTotal', 'continueUrl'],
+    props: ['grandTotal', 'continueUrl', 'nextStepUrl'],
     mounted: function mounted() {
         console.log('Cart header component mounted');
     }
@@ -74307,7 +74307,17 @@ var render = function() {
               ]
             ),
             _vm._v(" "),
-            _vm._m(2)
+            _c(
+              "a",
+              {
+                staticClass: "btn btn-outline-success d-block d-sm-inline",
+                attrs: { href: _vm.nextStepUrl }
+              },
+              [
+                _vm._v("\n                    Volgende stap "),
+                _c("i", { staticClass: "fal fa-fw fa-chevron-right" })
+              ]
+            )
           ])
         ]
       )
@@ -74344,22 +74354,6 @@ var staticRenderFns = [
             _vm._v(" Winkelwagen legen\n            ")
           ]
         )
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      {
-        staticClass: "btn btn-outline-success d-block d-sm-inline",
-        attrs: { href: "/checkout/address" }
-      },
-      [
-        _vm._v("\n                    Volgende stap "),
-        _c("i", { staticClass: "fal fa-fw fa-chevron-right" })
       ]
     )
   }
@@ -74566,7 +74560,8 @@ var render = function() {
       _c("cart-footer", {
         attrs: {
           "grand-total": _vm.items.grandTotal,
-          "continue-url": _vm.continueUrl
+          "continue-url": _vm.continueUrl,
+          "next-step-url": _vm.nextStepUrl
         }
       })
     ],

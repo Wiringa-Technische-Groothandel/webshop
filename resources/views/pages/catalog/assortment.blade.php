@@ -9,13 +9,13 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-12 col-md-3 mb-3">
                 <form>
                     @include('components.catalog.filters')
                 </form>
             </div>
 
-            <div class="col-md-9">
+            <div class="col-12 col-md-9">
                 @include('components.catalog.products')
 
                 <div class="my-3 d-none d-sm-block">

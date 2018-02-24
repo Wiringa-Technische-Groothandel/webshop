@@ -13,7 +13,9 @@
         </div>
     </div>
 
-    <div class="img-svg pipe-with-connector"></div>
+    <div class="d-none d-sm-block img-svg pipe-with-connector"></div>
+
+    <hr class="d-block d-sm-none" />
 
     <h2 class="text-center block-title" id="contact">{{ __('Contact') }}</h2>
 
@@ -32,12 +34,14 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                {{--@block('about')--}}
+                @block('about')
             </div>
         </div>
     </div>
 
-    <div class="img-svg pipe-with-connector rotate-180"></div>
+    <div class="d-none d-sm-block img-svg pipe-with-connector rotate-180"></div>
+
+    <hr class="d-block d-sm-none" />
 
     <h2 class="text-center block-title">{{ __('Vestiging') }}</h2>
 

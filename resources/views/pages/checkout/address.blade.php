@@ -31,7 +31,7 @@
 
             <div id="addresses-container">
                 <div class="row mb-3">
-                    <div class="col-12 col-sm-6">
+                    <div class="col-12 col-sm-6 mb-3">
                         <div class="card">
                             <div class="card-header">
                                 {{ __('Afleveradres') }}
@@ -59,15 +59,15 @@
                     </div>
                 </div>
 
-                <div class="row mt-5">
-                    <div class="col-12 col-md-6 order-2 order-md-1 mb-3">
-                        <a class="btn btn-outline-info d-block d-sm-inline" href="{{ routeIf('checkout.cart') }}">
+                <div class="row mt-3 mt-sm-5">
+                    <div class="col-12 col-sm-6 order-2 order-sm-1 mb-3">
+                        <a class="btn btn-outline-info d-inline-block" href="{{ routeIf('checkout.cart') }}">
                             <i class="fal fa-fw fa-chevron-left"></i> {{ __('Vorige stap') }}
                         </a>
                     </div>
 
                     @if ($quoteAddress)
-                        <div class="col-12 col-md-6 mr-auto order-1 order-md-2 mb-3 text-right">
+                        <div class="col-12 col-sm-6 mr-auto order-1 order-sm-2 mb-3 text-right">
                             <button class="btn btn-outline-success d-block d-sm-inline" type="submit">
                                 {{ __('Bestelling afronden') }} <i class="fal fa-fw fa-check"></i>
                             </button>

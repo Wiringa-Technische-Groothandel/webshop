@@ -10,7 +10,7 @@
 
 @section('account.content')
     <div class="row">
-        <div class="col-12">
+        <div class="col-12 mb-3">
             <p>{{ __('Hier kunt u uw kortingsbestand ophalen in CSV of in ICC formaat. Dit bestand kan gedownload worden of naar uw contact e-mail adres (:email) gestuurd worden.', ['email' => $customer->getContact()->getContactEmail() ?: __('Geen contact e-mail adres ingesteld')]) }}</p>
 
             <form method="post">

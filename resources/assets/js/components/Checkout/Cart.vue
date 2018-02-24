@@ -10,7 +10,7 @@
             <cart-item :item="item"></cart-item>
         </div>
 
-        <cart-footer :grand-total="items.grandTotal" :continue-url="continueUrl"></cart-footer>
+        <cart-footer :grand-total="items.grandTotal" :continue-url="continueUrl" :next-step-url="nextStepUrl"></cart-footer>
     </div>
 </template>
 
@@ -20,7 +20,7 @@
     import Footer from './Cart/Footer';
 
     export default {
-        props: ['itemsUrl', 'continueUrl'],
+        props: ['itemsUrl', 'continueUrl', 'nextStepUrl'],
         methods: {
             getItems () {
                 this.$data.showOverlay = true;

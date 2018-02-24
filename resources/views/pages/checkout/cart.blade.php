@@ -26,6 +26,7 @@
 
         @if ($cart->count() > 0)
             <cart items-url="{{ route('checkout.cart.items') }}"
+                  next-step-url="{{ route('checkout.address') }}"
                   continue-url="{{ session('continue.url') }}"></cart>
         @else
             <div class="col-12 col-sm-8 mx-auto">
