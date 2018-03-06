@@ -53,7 +53,7 @@
                             </div>
                             <div class="card-body">
                                 <textarea title="{{ __('Opmerking') }}" name="comment" style="min-height: 126px;"
-                                          class="form-control"></textarea>
+                                          class="form-control" placeholder="{{ __('Optioneel') }}"></textarea>
                             </div>
                         </div>
                     </div>
