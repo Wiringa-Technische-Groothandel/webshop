@@ -8,7 +8,7 @@ use WTG\Contracts\Models\CartContract;
 use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\ProductContract;
 use WTG\Contracts\Models\CartItemContract;
-use WTG\Contracts\Models\CustomerContract;
+use WTG\Contracts\Services\AuthServiceContract;
 use WTG\Contracts\Services\CartServiceContract;
 use WTG\Soap\GetProductPricesAndStocks\Response;
 
@@ -26,24 +26,30 @@ class CartService implements CartServiceContract
     protected $cart;
 
     /**
+     * @var AuthServiceContract
+     */
+    protected $authService;
+
+    /**
      * CartService constructor.
      *
      * @param  CartContract  $cart
+     * @param  AuthServiceContract  $authService
      */
-    public function __construct(CartContract $cart)
+    public function __construct(CartContract $cart, AuthServiceContract $authService)
     {
         $this->cart = $cart;
+        $this->authService = $authService;
     }
 
     /**
      * Add a product by sku.
      *
-     * @param  CustomerContract  $customer
      * @param  string  $sku
      * @param  float  $quantity
      * @return null|CartItemContract
      */
-    public function addProductBySku(CustomerContract $customer, string $sku, float $quantity = 1.0): ?CartItemContract
+    public function addProductBySku(string $sku, float $quantity = 1.0): ?CartItemContract
     {
         $product = $this->findProduct($sku);
 
@@ -51,20 +57,19 @@ class CartService implements CartServiceContract
             return null;
         }
 
-        return $this->addProduct($customer, $product, $quantity);
+        return $this->addProduct($product, $quantity);
     }
 
     /**
      * Add a product.
      *
-     * @param  CustomerContract  $customer
      * @param  ProductContract  $product
      * @param  float  $quantity
      * @return null|CartItemContract
      */
-    public function addProduct(CustomerContract $customer, ProductContract $product, float $quantity = 1.0): ?CartItemContract
+    public function addProduct(ProductContract $product, float $quantity = 1.0): ?CartItemContract
     {
-        $this->cart->loadForCustomer($customer);
+        $this->cart->loadForCustomer($this->authService->getCurrentCustomer());
 
         return $this->cart->addProduct($product, $quantity);
     }
@@ -73,12 +78,11 @@ class CartService implements CartServiceContract
     /**
      * Update a product by sku.
      *
-     * @param  CustomerContract  $customer
      * @param  string  $sku
      * @param  float  $quantity
      * @return null|CartItemContract
      */
-    public function updateProductBySku(CustomerContract $customer, string $sku, float $quantity): ?CartItemContract
+    public function updateProductBySku(string $sku, float $quantity): ?CartItemContract
     {
         $product = $this->findProduct($sku);
 
@@ -86,7 +90,7 @@ class CartService implements CartServiceContract
             return null;
         }
 
-        $this->cart->loadForCustomer($customer);
+        $this->cart->loadForCustomer($this->authService->getCurrentCustomer());
 
         return $this->cart->updateProduct($product, $quantity);
     }
@@ -94,11 +98,10 @@ class CartService implements CartServiceContract
     /**
      * Delete a product by sku.
      *
-     * @param  CustomerContract  $customer
      * @param  string  $sku
      * @return bool
      */
-    public function deleteProductBySku(CustomerContract $customer, string $sku): bool
+    public function deleteProductBySku(string $sku): bool
     {
         $product = $this->findProduct($sku);
 
@@ -106,7 +109,7 @@ class CartService implements CartServiceContract
             return null;
         }
 
-        $this->cart->loadForCustomer($customer);
+        $this->cart->loadForCustomer($this->authService->getCurrentCustomer());
 
         return $this->cart->removeProduct($product);
     }
@@ -114,12 +117,11 @@ class CartService implements CartServiceContract
     /**
      * Get the cart item count.
      *
-     * @param  CustomerContract  $customer
      * @return int
      */
-    public function getItemCount(CustomerContract $customer): int
+    public function getItemCount(): int
     {
-        $this->cart->loadForCustomer($customer);
+        $this->cart->loadForCustomer($this->authService->getCurrentCustomer());
 
         return $this->cart->count();
     }
@@ -127,14 +129,13 @@ class CartService implements CartServiceContract
     /**
      * Get the cart items.
      *
-     * @param  CustomerContract  $customer
      * @param  bool  $withPrices
      * @return Collection
      * @throws \Exception
      */
-    public function getItems(CustomerContract $customer, bool $withPrices = false): Collection
+    public function getItems(bool $withPrices = false): Collection
     {
-        $this->cart->loadForCustomer($customer);
+        $this->cart->loadForCustomer($this->authService->getCurrentCustomer());
         $items = $this->cart->items();
 
         if (! $withPrices) {
@@ -144,10 +145,16 @@ class CartService implements CartServiceContract
         $products = $items->pluck('product');
 
         /** @var Response $response */
-        $response = app('soap')->getProductPricesAndStocks($products, $customer->getCompany()->getCustomerNumber());
+        $response = app('soap')->getProductPricesAndStocks(
+            $products,
+            $this->authService->getCurrentCustomer()->getCompany()->getCustomerNumber()
+        );
 
         if ($response->code !== 200) {
-            throw new \Exception('Failed to load prices for cart items.');
+            \Log::error('Failed to load prices for quote items: ' . $items->implode('id', ', '));
+
+            // Return the items if the prices failed to load.
+            return $items;
         }
 
         $products = collect($response->products);
@@ -163,6 +170,7 @@ class CartService implements CartServiceContract
 
             $item->setPrice(format_price($product->net_price));
             $item->setSubtotal(format_price($product->net_price * $item->getQuantity()));
+            $item->save();
 
             return $item;
         });
@@ -173,12 +181,11 @@ class CartService implements CartServiceContract
     /**
      * Get the delivery address of the cart.
      *
-     * @param  CustomerContract  $customer
      * @return null|AddressContract
      */
-    public function getDeliveryAddress(CustomerContract $customer): ?AddressContract
+    public function getDeliveryAddress(): ?AddressContract
     {
-        $this->cart->loadForCustomer($customer);
+        $this->cart->loadForCustomer($this->authService->getCurrentCustomer());
 
         return $this->cart->getAddress();
     }
@@ -186,13 +193,12 @@ class CartService implements CartServiceContract
     /**
      * Set the delivery address for the cart.
      *
-     * @param  CustomerContract  $customer
      * @param  AddressContract  $address
      * @return bool
      */
-    public function setDeliveryAddress(CustomerContract $customer, AddressContract $address): bool
+    public function setDeliveryAddress(AddressContract $address): bool
     {
-        $this->cart->loadForCustomer($customer);
+        $this->cart->loadForCustomer($this->authService->getCurrentCustomer());
         $this->cart->setAddress($address);
 
         return $this->cart->save();

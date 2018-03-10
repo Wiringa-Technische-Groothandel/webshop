@@ -2,8 +2,8 @@
 
 namespace Tests\Functional;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use WTG\Soap\Service as SoapService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 /**
  * Functional test case.
@@ -14,7 +14,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
  */
 abstract class TestCase extends \Tests\TestCase
 {
-    use DatabaseTransactions, DatabaseMigrations;
+    use RefreshDatabase;
 
     /**
      * Preparation stuff.

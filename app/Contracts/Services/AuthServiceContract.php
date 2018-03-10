@@ -21,4 +21,11 @@ interface AuthServiceContract
      * @return null|CustomerContract
      */
     public function authenticateByRequest(Request $request): ?CustomerContract;
+
+    /**
+     * Get the currently authenticated user.
+     *
+     * @return null|CustomerContract
+     */
+    public function getCurrentCustomer(): ?CustomerContract;
 }
