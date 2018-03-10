@@ -2,11 +2,12 @@
 
 namespace WTG\Http\Controllers\Checkout;
 
-use WTG\Models\Order;
-use WTG\Models\Customer;
-use WTG\Models\OrderItem;
 use Illuminate\Http\Request;
+use WTG\Services\CheckoutService;
 use WTG\Http\Controllers\Controller;
+use Illuminate\View\Factory as ViewFactory;
+use WTG\Exceptions\Checkout\EmptyCartException;
+use WTG\Contracts\Services\CheckoutServiceContract;
 
 /**
  * Finish controller.
@@ -17,6 +18,24 @@ use WTG\Http\Controllers\Controller;
  */
 class FinishController extends Controller
 {
+    /**
+     * @var CheckoutService
+     */
+    protected $checkoutService;
+
+    /**
+     * FinishController constructor.
+     *
+     * @param  ViewFactory  $view
+     * @param  CheckoutServiceContract  $checkoutService
+     */
+    public function __construct(ViewFactory $view, CheckoutServiceContract $checkoutService)
+    {
+        parent::__construct($view);
+
+        $this->checkoutService = $checkoutService;
+    }
+
     /**
      * @return \Illuminate\View\View
      */
@@ -39,55 +58,19 @@ class FinishController extends Controller
      */
     public function postAction(Request $request)
     {
-        /** @var Customer $customer */
-        $customer = $request->user();
-        $quote = $customer->getActiveQuote();
-        $address = $quote->getAddress();
-
-        if ($quote->getItemCount() === 0) {
-            return back()->withErrors(__("U kunt geen bestelling afronden met een lege winkelwagen."));
-        }
-
-        \DB::beginTransaction();
-
         try {
-            $order = new Order;
-
-            $order->setAttribute('company_id', $customer->getAttribute('company_id'));
-            $order->setAttribute('customer_number', $customer->company->getAttribute('customer_number'));
-            $order->setAttribute('name', $address->getAttribute('name'));
-            $order->setAttribute('street', $address->getAttribute('street'));
-            $order->setAttribute('postcode', $address->getAttribute('postcode'));
-            $order->setAttribute('city', $address->getAttribute('city'));
-            $order->setAttribute('comment', $request->input('comment'));
-
-            $order->save();
-
-            foreach ($quote->items as $item) {
-                $orderItem = new OrderItem;
-
-                $orderItem->setAttribute('order_id', $order->getAttribute('id'));
-                $orderItem->setAttribute('name', $item->product->getAttribute('name'));
-                $orderItem->setAttribute('sku', $item->product->getAttribute('sku'));
-                $orderItem->setAttribute('qty', $item->getAttribute('qty'));
-                $orderItem->setAttribute('price', $item->product->getPrice(true));
-                $orderItem->setAttribute('subtotal', $item->product->getPrice(true, $item->getAttribute('qty')));
-
-                $orderItem->save();
-            }
-
-            $quote->delete();
-
-            \DB::commit();
+            $this->checkoutService->createOrder(
+                $request->input('comment')
+            );
+        } catch (EmptyCartException $e) {
+            return redirect()
+                ->back()
+                ->withErrors(__('U kunt geen bestelling afronden met een lege winkelwagen.'));
         } catch (\Exception $e) {
-            \DB::rollBack();
-
-            dd($e);
-
-            return back()->withErrors(__("Er is een fout opgetreden tijdens het opslaan van de bestelling."));
+            return redirect()
+                ->back()
+                ->withErrors($e->getMessage());
         }
-
-        session()->flash('order', $order);
 
         return redirect()->route('checkout.finished');
     }

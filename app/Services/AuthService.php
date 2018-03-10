@@ -60,4 +60,14 @@ class AuthService implements AuthServiceContract
 
         return $request->user();
     }
+
+    /**
+     * Get the currently authenticated user.
+     *
+     * @return null|CustomerContract
+     */
+    public function getCurrentCustomer(): ?CustomerContract
+    {
+        return $this->auth->guard()->user();
+    }
 }
