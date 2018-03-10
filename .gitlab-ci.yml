@@ -15,8 +15,8 @@ variables:
 # http://docs.gitlab.com/ce/ci/yaml/README.html#cache
 cache:
   paths:
-  - vendor/
-  - node_modules/
+    - vendor/
+    - node_modules/
 
 # This is a basic example for a gem or script which doesn't use
 # services such as redis or postgres
@@ -30,18 +30,10 @@ before_script:
   - npm install -s
 
   # Copy over testing configuration.
-  # Don't forget to set the database config in .env.testing correctly
-  # DB_HOST=mysql
-  # DB_DATABASE=project_name
-  # DB_USERNAME=root
-  # DB_PASSWORD=secret
   - cp .env.testing .env
 
   # Run npm build
-  # comment this out if you don't have a frontend build
-  # you can change this to to your frontend building script like
-  # npm run build
-  - npm run prod -s
+  - npm run prod
 
   # Generate an application key. Re-cache.
   - php artisan key:generate
@@ -54,6 +46,11 @@ before_script:
   - php artisan db:seed
 
 test:
+  only:
+    - development
+    - release
+    - master
+
   script:
   # run laravel tests
   - php vendor/bin/phpunit --coverage-text --colors=never 
