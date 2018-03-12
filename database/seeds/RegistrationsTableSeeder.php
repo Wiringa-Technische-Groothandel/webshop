@@ -1,5 +1,7 @@
 <?php
 
+use WTG\Models\Registration;
+
 /**
  * Registrations table seeder.
  *
@@ -14,7 +16,8 @@ class RegistrationsTableSeeder extends \Illuminate\Database\Seeder
      */
     public function run()
     {
-        \WTG\Models\Registration::create([
+        Registration::create([
+            'id'                    => 1,
             'contact-company'       => 'Test company',
             'contact-name'          => 'Test Name',
             'contact-address'       => 'Street 4321',

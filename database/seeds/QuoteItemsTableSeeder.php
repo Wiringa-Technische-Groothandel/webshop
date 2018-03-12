@@ -17,6 +17,7 @@ class QuoteItemsTableSeeder extends \Illuminate\Database\Seeder
     public function run()
     {
         QuoteItem::create([
+            'id' => 1,
             'product_id' => 1,
             'quote_id' => 1,
             'qty' => 2,

@@ -17,6 +17,7 @@ class AddressTableSeeder extends \Illuminate\Database\Seeder
     public function run()
     {
         Address::create([
+            'id' => 1,
             'company_id' => 1,
             'name'       => 'Breezehome',
             'street'     => 'Foobar 1',

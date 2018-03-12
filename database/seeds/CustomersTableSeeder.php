@@ -17,6 +17,7 @@ class CustomersTableSeeder extends \Illuminate\Database\Seeder
     public function run()
     {
         Customer::create([
+            'id' => 1,
             'company_id' => 1,
             'username'   => 'foobar',
             'password'   => bcrypt('test'),

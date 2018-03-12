@@ -17,6 +17,7 @@ class ProductsTableSeeder extends \Illuminate\Database\Seeder
     public function run()
     {
         Product::create([
+            'id'            => 1,
             'sku'           => '1234',
             'group'         => '4321',
             'name'          => 'Test product 1',

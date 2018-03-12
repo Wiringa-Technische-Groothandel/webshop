@@ -1,9 +1,6 @@
 # Pre-built image with dependencies already installed
 image: lunamoonfang/wtg-php:build-7.2
 
-# Pick zero or more services to be used on all builds.
-# Only needed when using a docker container to run your tests in.
-# Check out: http://docs.gitlab.com/ce/ci/docker/using_docker_images.html#what-is-a-service
 services:
   - mysql:latest
 
@@ -16,43 +13,59 @@ cache:
     - vendor/
     - node_modules/
 
-before_script:
-  # Install Composer and project dependencies.
-  - curl -sS https://getcomposer.org/installer | php
-  - php composer.phar install --no-progress
+stages:
+  - build
+  - test
+  - deploy
 
-  # Install Node dependencies.
-  # comment this out if you don't have a node dependency
-  - npm install -s
+build_job:
+  stage: build
 
-  # Copy over testing configuration.
-  - cp .env.testing .env
+  script:
+    # Install Composer and project dependencies.
+    - curl -sS https://getcomposer.org/installer | php
+    - php composer.phar install --no-progress
 
-  # Run npm build
-  - npm run prod
+    # Install Node dependencies.
+    - npm install -s
 
-  # Generate an application key. Re-cache.
-  - php artisan key:generate
-  - php artisan config:cache
+    # Copy over testing configuration.
+    - cp .env.testing .env
 
-  # Run database migrations.
-  #- php artisan migrate
+    # Generate an application key. Re-cache.
+    - php artisan key:generate
+    - php artisan config:cache
 
-  # Run database seed
-  #- php artisan db:seed
+    # Build the assets
+    - npm run prod
 
-test:
+test_job:
+  stage: test
+
+  script:
+    # Run laravel tests
+    - php vendor/bin/phpunit --coverage-text --colors=never
+
+deploy_staging_job:
+  stage: deploy
+
+  when: manual
+
   only:
-    - development
     - release
+
+  script:
+    # Release to staging
+    - vendor/bin/dep deploy staging
+
+deploy_production_job:
+  stage: deploy
+
+  when: manual
+
+  only:
     - master
 
   script:
-  # run laravel tests
-  - php vendor/bin/phpunit --coverage-text --colors=never 
-
-  # run frontend tests
-  # if you have any task for testing frontend
-  # set it in your package.json script
-  # comment this out if you don't have a frontend test
-  #- npm test
+    # Release to production
+    - vendor/bin/dep deploy production

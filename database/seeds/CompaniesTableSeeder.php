@@ -17,6 +17,7 @@ class CompaniesTableSeeder extends \Illuminate\Database\Seeder
     public function run()
     {
         Company::create([
+            'id' => 1,
             'customer_number'   => '12345',
             'name'              => 'Test company 1',
             'street'            => 'Street 1',

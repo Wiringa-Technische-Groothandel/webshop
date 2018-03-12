@@ -2,7 +2,6 @@
 
 namespace Tests\Functional;
 
-use WTG\Soap\Service as SoapService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 /**

@@ -17,6 +17,7 @@ class QuotesTableSeeder extends \Illuminate\Database\Seeder
     public function run()
     {
         Quote::create([
+            'id' => 1,
             'customer_id' => 1,
         ]);
     }
