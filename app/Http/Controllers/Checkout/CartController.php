@@ -5,6 +5,7 @@ namespace WTG\Http\Controllers\Checkout;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use WTG\Http\Controllers\Controller;
+use Illuminate\View\Factory as ViewFactory;
 use WTG\Contracts\Services\CartServiceContract;
 use WTG\Http\Requests\Checkout\Cart\UpdateRequest;
 use WTG\Http\Requests\Checkout\Cart\AddProductRequest;
@@ -26,10 +27,13 @@ class CartController extends Controller
     /**
      * CartController constructor.
      *
+     * @param  ViewFactory  $view
      * @param  CartServiceContract  $cartService
      */
-    public function __construct(CartServiceContract $cartService)
+    public function __construct(ViewFactory $view, CartServiceContract $cartService)
     {
+        parent::__construct($view);
+
         $this->cartService = $cartService;
     }
 
@@ -58,7 +62,6 @@ class CartController extends Controller
     public function putAction(AddProductRequest $request): JsonResponse
     {
         $cartItem = $this->cartService->addProductBySku(
-            $request->user(),
             $request->input('product'),
             $request->input('quantity')
         );
@@ -84,7 +87,6 @@ class CartController extends Controller
     public function patchAction(UpdateRequest $request)
     {
         $cartItem = $this->cartService->updateProductBySku(
-            $request->user(),
             $request->input('sku'),
             $request->input('quantity')
         );
@@ -108,10 +110,7 @@ class CartController extends Controller
      */
     public function deleteAction(Request $request, string $sku)
     {
-        $isSuccess = $this->cartService->deleteProductBySku(
-            $request->user(),
-            $sku
-        );
+        $isSuccess = $this->cartService->deleteProductBySku($sku);
 
         if (! $isSuccess) {
             return $this->productNotFoundResponse($sku);

@@ -58,30 +58,30 @@ interface CartItemContract
     /**
      * Set the price.
      *
-     * @param  string|null  $price
+     * @param  float  $price
      * @return CartItemContract
      */
-    public function setPrice(string $price): CartItemContract;
+    public function setPrice(float $price): CartItemContract;
 
     /**
      * Get the price.
      *
-     * @return null|string
+     * @return null|float
      */
-    public function getPrice(): ?string;
+    public function getPrice(): ?float;
 
     /**
      * Set the subtotal.
      *
-     * @param  string|null  $subtotal
+     * @param  float  $subtotal
      * @return CartItemContract
      */
-    public function setSubtotal(string $subtotal): CartItemContract;
+    public function setSubtotal(float $subtotal): CartItemContract;
 
     /**
      * Get the subtotal.
      *
-     * @return string
+     * @return null|float
      */
-    public function getSubtotal(): ?string;
+    public function getSubtotal(): ?float;
 }

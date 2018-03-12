@@ -2236,23 +2236,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log(error);
             });
         },
-        update: function update() {
+        update: function update(event) {
             var _this2 = this;
 
-            this.$root.$emit('show-cart-overlay');
+            var currentQty = this.$data.quantity;
 
-            axios.patch('/checkout/cart', {
-                sku: this.item.product.sku,
-                quantity: this.$data.quantity
-            }).then(function (response) {
-                if (response.data.success) {
-                    _this2.$root.$emit('fetch-cart-items');
+            setTimeout(function () {
+                if (currentQty !== _this2.$data.quantity) {
+                    return;
                 }
-            }).catch(function (error) {
-                _this2.$root.$emit('hide-cart-overlay');
 
-                console.log(error);
-            });
+                event.target.blur();
+
+                _this2.$root.$emit('show-cart-overlay');
+
+                axios.patch('/checkout/cart', {
+                    sku: _this2.item.product.sku,
+                    quantity: _this2.$data.quantity
+                }).then(function (response) {
+                    if (response.data.success) {
+                        _this2.$root.$emit('fetch-cart-items');
+                    }
+                }).catch(function (error) {
+                    _this2.$root.$emit('hide-cart-overlay');
+
+                    console.log(error);
+                });
+            }, 1000); // Wait 1 second for more input
         }
     },
     data: function data() {
@@ -74698,7 +74708,11 @@ var render = function() {
         [
           _c("div", { staticClass: "cart-item-price text-left" }, [
             _c("i", { staticClass: "far fa-fw fa-euro-sign" }),
-            _vm._v(" " + _vm._s(_vm.item.price) + "\n            ")
+            _vm._v(
+              " " +
+                _vm._s(_vm.item.price.toFixed(2).replace(".", ",")) +
+                "\n            "
+            )
           ])
         ]
       ),
@@ -74726,13 +74740,15 @@ var render = function() {
               },
               domProps: { value: _vm.quantity },
               on: {
-                change: this.update,
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.quantity = $event.target.value
-                }
+                input: [
+                  function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.quantity = $event.target.value
+                  },
+                  this.update
+                ]
               }
             })
           ])
@@ -74742,7 +74758,11 @@ var render = function() {
       _c("div", { staticClass: "col-4 col-sm-2 order-sm-1" }, [
         _c("div", { staticClass: "cart-item-subtotal text-right" }, [
           _c("i", { staticClass: "far fa-fw fa-euro-sign" }),
-          _vm._v(" " + _vm._s(_vm.item.subtotal) + "\n            ")
+          _vm._v(
+            " " +
+              _vm._s(_vm.item.subtotal.toFixed(2).replace(".", ",")) +
+              "\n            "
+          )
         ])
       ])
     ])

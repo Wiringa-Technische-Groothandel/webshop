@@ -19,20 +19,20 @@
 
             <div class="col-4 col-sm-2 order-sm-1 d-none d-md-block d-lg-block d-xl-block">
                 <div class="cart-item-price text-left">
-                    <i class="far fa-fw fa-euro-sign"></i> {{ item.price }}
+                    <i class="far fa-fw fa-euro-sign"></i> {{ item.price.toFixed(2).replace(".", ",") }}
                 </div>
             </div>
 
             <div class="col-4 col-md-2 col-lg-1 col-sm-3 order-sm-1">
                 <div class="cart-item-qty text-right">
                     <input type="number" class="form-control" placeholder="Aantal" min="1" step="1"
-                           v-model="quantity" v-on:change="this.update" />
+                           v-model="quantity" v-on:input="this.update" />
                 </div>
             </div>
 
             <div class="col-4 col-sm-2 order-sm-1">
                 <div class="cart-item-subtotal text-right">
-                    <i class="far fa-fw fa-euro-sign"></i> {{ item.subtotal }}
+                    <i class="far fa-fw fa-euro-sign"></i> {{ item.subtotal.toFixed(2).replace(".", ",") }}
                 </div>
             </div>
         </div>
@@ -63,23 +63,33 @@
                         console.log(error);
                     });
             },
-            update () {
-                this.$root.$emit('show-cart-overlay');
+            update (event) {
+                let currentQty = this.$data.quantity;
 
-                axios.patch('/checkout/cart', {
-                    sku: this.item.product.sku,
-                    quantity: this.$data.quantity
-                })
-                    .then((response) => {
-                        if (response.data.success) {
-                            this.$root.$emit('fetch-cart-items');
-                        }
+                setTimeout(() => {
+                    if (currentQty !== this.$data.quantity) {
+                        return;
+                    }
+
+                    event.target.blur();
+
+                    this.$root.$emit('show-cart-overlay');
+
+                    axios.patch('/checkout/cart', {
+                        sku: this.item.product.sku,
+                        quantity: this.$data.quantity
                     })
-                    .catch((error) => {
-                        this.$root.$emit('hide-cart-overlay');
+                        .then((response) => {
+                            if (response.data.success) {
+                                this.$root.$emit('fetch-cart-items');
+                            }
+                        })
+                        .catch((error) => {
+                            this.$root.$emit('hide-cart-overlay');
 
-                        console.log(error);
-                    });
+                            console.log(error);
+                        });
+                }, 1000); // Wait 1 second for more input
             }
         },
         data () {

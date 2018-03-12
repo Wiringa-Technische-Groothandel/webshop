@@ -65,6 +65,13 @@ interface CartServiceContract
     public function getItems(bool $withPrices = false): Collection;
 
     /**
+     * Get the grand total price.
+     *
+     * @return float
+     */
+    public function getGrandTotal(): float;
+
+    /**
      * Get the delivery address of the cart.
      *
      * @return null|AddressContract

@@ -168,14 +168,24 @@ class CartService implements CartServiceContract
                 return $item;
             }
 
-            $item->setPrice(format_price($product->net_price));
-            $item->setSubtotal(format_price($product->net_price * $item->getQuantity()));
+            $item->setPrice((float) $product->net_price);
+            $item->setSubtotal($product->net_price * $item->getQuantity());
             $item->save();
 
             return $item;
         });
 
         return $items;
+    }
+
+    /**
+     * @return float
+     */
+    public function getGrandTotal(): float
+    {
+        return $this->cart->items()->sum(function (CartItemContract $item) {
+            return $item->getPrice() * $item->getQuantity();
+        });
     }
 
     /**

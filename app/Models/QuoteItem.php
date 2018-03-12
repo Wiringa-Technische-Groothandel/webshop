@@ -109,10 +109,10 @@ class QuoteItem extends Model implements CartItemContract
     /**
      * Set the price.
      *
-     * @param  string  $price
+     * @param  float  $price
      * @return CartItemContract
      */
-    public function setPrice(string $price): CartItemContract
+    public function setPrice(float $price): CartItemContract
     {
         return $this->setAttribute('price', $price);
     }
@@ -120,9 +120,9 @@ class QuoteItem extends Model implements CartItemContract
     /**
      * Get the price.
      *
-     * @return null|string
+     * @return null|float
      */
-    public function getPrice(): ?string
+    public function getPrice(): ?float
     {
         return $this->getAttribute('price');
     }
@@ -130,10 +130,10 @@ class QuoteItem extends Model implements CartItemContract
     /**
      * Set the subtotal.
      *
-     * @param  string  $subtotal
+     * @param  float  $subtotal
      * @return CartItemContract
      */
-    public function setSubtotal(string $subtotal): CartItemContract
+    public function setSubtotal(float $subtotal): CartItemContract
     {
         return $this->setAttribute('subtotal', $subtotal);
     }
@@ -141,9 +141,9 @@ class QuoteItem extends Model implements CartItemContract
     /**
      * Get the subtotal.
      *
-     * @return string
+     * @return null|float
      */
-    public function getSubtotal(): ?string
+    public function getSubtotal(): ?float
     {
         return $this->getAttribute('subtotal');
     }

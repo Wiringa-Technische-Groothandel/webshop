@@ -43,17 +43,12 @@ class ItemsController extends Controller
      */
     public function getAction(Request $request)
     {
-        $items = $this->cartService->getItems(
-            $request->user(),
-            true
-        );
+        $items = $this->cartService->getItems(true);
 
         return response()->json([
             'payload' => [
                 'items' => $items,
-                'grandTotal' => format_price($items->sum(function (CartItemContract $item) {
-                    return str_replace(',', '.', $item->getPrice()) * $item->getQuantity();
-                }))
+                'grandTotal' => format_price($this->cartService->getGrandTotal())
             ]
         ]);
     }
