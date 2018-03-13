@@ -73,7 +73,7 @@ class CartController extends Controller
         return response()->json([
             'message' => __('Het product is toegevoegd aan uw winkelwagen.'),
             'success' => true,
-            'count' => $this->cartService->getItemCount($request->user()),
+            'count' => $this->cartService->getItemCount(),
             'code' => 200
         ]);
     }
@@ -118,6 +118,7 @@ class CartController extends Controller
 
         return response()->json([
             'message' => __('Het product is verwijderd uit uw winkelwagen.'),
+            'count' => $this->cartService->getItemCount(),
             'success' => true,
             'code' => 200
         ]);

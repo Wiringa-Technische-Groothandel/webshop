@@ -50,7 +50,7 @@
                     .then((response) => {
                         if (response.data.success) {
                             this.$root.$emit('fetch-cart-items');
-
+                            this.$root.$emit('update-cart-count', response.data.count);
                             this.$root.$emit('send-notify', {
                                 text: response.data.message,
                                 success: true

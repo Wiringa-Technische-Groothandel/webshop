@@ -2023,6 +2023,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.get(this.itemsUrl).then(function (response) {
                 var payload = response.data.payload;
 
+                if (payload.items.length === 0) {
+                    window.location.reload();
+                }
+
                 _this.$data.items.products = payload.items;
                 _this.$data.items.grandTotal = payload.grandTotal;
 
@@ -2224,7 +2228,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.delete('/checkout/cart/product/' + this.item.product.sku).then(function (response) {
                 if (response.data.success) {
                     _this.$root.$emit('fetch-cart-items');
-
+                    _this.$root.$emit('update-cart-count', response.data.count);
                     _this.$root.$emit('send-notify', {
                         text: response.data.message,
                         success: true

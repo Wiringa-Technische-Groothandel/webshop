@@ -29,6 +29,10 @@
                     .then((response) => {
                         const payload = response.data.payload;
 
+                        if (payload.items.length === 0) {
+                            window.location.reload();
+                        }
+
                         this.$data.items.products = payload.items;
                         this.$data.items.grandTotal = payload.grandTotal;
 
