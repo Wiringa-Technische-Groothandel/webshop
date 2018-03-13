@@ -2,14 +2,14 @@
 
 namespace WTG\Http\Controllers\Favorites;
 
-use WTG\Contracts\Services\FavoritesServiceContract;
-use WTG\Exceptions\ProductNotFoundException;
 use WTG\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use WTG\Http\Controllers\Controller;
 use WTG\Contracts\Models\CustomerContract;
 use Illuminate\View\Factory as ViewFactory;
+use WTG\Exceptions\ProductNotFoundException;
+use WTG\Contracts\Services\FavoritesServiceContract;
 
 /**
  * Favorites index controller.

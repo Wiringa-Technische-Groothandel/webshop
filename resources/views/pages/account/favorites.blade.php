@@ -100,14 +100,20 @@
                     var message = response.data.message;
 
                     if (errors.length) {
-                        notification.show(errors.join("<br />"), "danger");
+                        window.vm.$root.$emit('send-notify', {
+                            text: errors.join("<br />"),
+                            success: false
+                        });
                     }
 
                     if (message) {
-                        notification.show(message);
+                        window.vm.$root.$emit('send-notify', {
+                            text: message,
+                            success: true
+                        });
                     }
 
-                    $('#cart-badge').html(response.data.cartQty)
+                    window.vm.$root.$emit('update-cart-qty', response.data.cartQty);
                 })
                 .catch(function (response) {
                     alert(response);

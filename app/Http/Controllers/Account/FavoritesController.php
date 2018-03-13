@@ -71,8 +71,6 @@ class FavoritesController extends Controller
      */
     public function putAction(AddFavoritesToCartRequest $request)
     {
-        /** @var Customer $customer */
-        $customer = $request->user();
         $errors = [];
 
         foreach ($request->input('products') as $productId) {
@@ -84,114 +82,13 @@ class FavoritesController extends Controller
                 continue;
             }
 
-            $this->cartService->addProduct($customer, $product);
+            $this->cartService->addProduct($product);
         }
 
         return response()->json([
             'message' => __("De producten zijn toegevoegd aan uw winkelwagen."),
             'errors'  => $errors,
-            'cartQty' => $this->cartService->getItemCount($customer)
-        ]);
-    }
-
-    /**
-     * Check if a product is in the users favorites
-     *
-     * @param  CheckFavoriteRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function check(CheckFavoriteRequest $request)
-    {
-        $productId = $request->input('product');
-
-        /** @var FavoriteInterface $favorite */
-        $favorite = app()->make(FavoriteInterface::class)
-            ->customer(Auth::id())
-            ->get()
-            ->first(function ($favorite) use ($productId) {
-                /** @var FavoriteInterface $favorite */
-                return $favorite->getProductId() === $productId;
-            });
-
-        if ($favorite === null) {
-            return response([
-                'success' => true,
-                'toggle_url' => route('customer::account.favorites::add', ['product' => $productId]),
-                'text' => trans('customer::button.add')
-            ]);
-        }
-
-        return response([
-            'success' => true,
-            'toggle_url' => route('customer::account.favorites::delete', ['favorite' => $favorite->getId()]),
-            'text' => trans('customer::button.delete')
-        ]);
-    }
-
-    /**
-     * Add a product to the favorites
-     *
-     * @param  AddFavoriteRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function add(AddFavoriteRequest $request)
-    {
-        $productId = $request->input('product');
-
-        /** @var FavoriteInterface $favorite */
-        $favorite = app()->make(FavoriteInterface::class)
-            ->add(
-                Auth::id(),
-                $productId
-            );
-
-        if ($favorite) {
-            return response([
-                'success' => true,
-                'message' => trans('customer::favorite.added'),
-                'toggle_url' => route('customer::account.favorites::delete', ['favorite' => $favorite->getId()]),
-                'text' => trans('customer::button.delete')
-            ]);
-        }
-
-        return response([
-            'success' => false,
-            'message' => trans('customer::favorite.already_added')
-        ], 400);
-    }
-
-    /**
-     * Remove a product from the users favorites
-     *
-     * @param  DeleteFavoriteRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function delete(DeleteFavoriteRequest $request)
-    {
-        $favoriteId = $request->input('favorite');
-
-        /** @var FavoriteInterface $favorite */
-        $favorite = app()->make(FavoriteInterface::class)
-            ->customer(Auth::id())
-            ->find($favoriteId);
-
-        if ($favorite === null) {
-            return response([
-                'success' => false,
-                'message' => trans('customer::favorite.not_found'),
-                'toggle_url' => route('customer::account.favorites::delete', ['favorite' => $favoriteId]),
-                'text' => trans('customer::favorite.delete'),
-            ]);
-        }
-
-        $productId = $favorite->getProductId();
-        $favorite->delete();
-
-        return response([
-            'success' => true,
-            'message' => trans('customer::favorite.deleted'),
-            'toggle_url' => route('customer::account.favorites::add', ['product' => $productId]),
-            'text' => trans('customer::button.add')
+            'cartQty' => $this->cartService->getItemCount()
         ]);
     }
 }
