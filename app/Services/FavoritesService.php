@@ -2,10 +2,11 @@
 
 namespace WTG\Services;
 
-use WTG\Contracts\Models\CustomerContract;
+use Illuminate\Support\Collection;
 use WTG\Contracts\Models\ProductContract;
-use WTG\Contracts\Services\FavoritesServiceContract;
 use WTG\Exceptions\ProductNotFoundException;
+use WTG\Contracts\Services\AuthServiceContract;
+use WTG\Contracts\Services\FavoritesServiceContract;
 
 /**
  * Favorites service.
@@ -16,13 +17,42 @@ use WTG\Exceptions\ProductNotFoundException;
 class FavoritesService implements FavoritesServiceContract
 {
     /**
+     * @var AuthServiceContract
+     */
+    protected $authService;
+
+    /**
+     * CartService constructor.
+     *
+     * @param  AuthServiceContract  $authService
+     */
+    public function __construct(AuthServiceContract $authService)
+    {
+        $this->authService = $authService;
+    }
+
+    /**
+     * Get the favorites grouped by the series.
+     *
+     * @return Collection
+     */
+    public function getGroupedProducts(): Collection
+    {
+        return $this->authService
+            ->getCurrentCustomer()
+            ->getFavorites()
+            ->mapToGroups(function (ProductContract $item) {
+                return [$item->getSeries() => $item];
+            });
+    }
+
+    /**
      * Add a list of favorites to the cart.
      *
-     * @param  CustomerContract  $customer
      * @param  array  $productIds
      * @return void
      */
-    public function addFavoritesToCart(CustomerContract $customer, array $productIds)
+    public function addFavoritesToCart(array $productIds): void
     {
         //
     }
@@ -30,12 +60,11 @@ class FavoritesService implements FavoritesServiceContract
     /**
      * Check if a product is marked as favorite.
      *
-     * @param  CustomerContract  $customer
      * @param  string  $sku
      * @return bool
      * @throws ProductNotFoundException
      */
-    public function isFavorite(CustomerContract $customer, string $sku): bool
+    public function isFavorite(string $sku): bool
     {
         $product = app()->make(ProductContract::class)->findBySku($sku);
 
@@ -43,7 +72,7 @@ class FavoritesService implements FavoritesServiceContract
             throw new ProductNotFoundException(__('Geen product gevonden voor sku :sku', ['sku' => $sku]));
         }
 
-        return $customer->hasFavorite($product);
+        return $this->authService->getCurrentCustomer()->hasFavorite($product);
     }
 
     /**
@@ -52,13 +81,13 @@ class FavoritesService implements FavoritesServiceContract
      * True: Product is marked as favorite
      * False: Product is removed from favorites
      *
-     * @param  CustomerContract  $customer
      * @param  string  $sku
      * @return bool
      */
-    public function toggleFavorite(CustomerContract $customer, string $sku): bool
+    public function toggleFavorite(string $sku): bool
     {
-        $isFavorite = $this->isFavorite($customer, $sku);
+        $customer = $this->authService->getCurrentCustomer();
+        $isFavorite = $this->isFavorite($sku);
         $product = app()->make(ProductContract::class)->findBySku($sku);
 
         if ($isFavorite) {

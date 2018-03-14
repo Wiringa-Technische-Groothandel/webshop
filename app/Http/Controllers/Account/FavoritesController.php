@@ -51,14 +51,11 @@ class FavoritesController extends Controller
     /**
      * List of favorites
      *
-     * @param  Request  $request
      * @return \Illuminate\View\View
      */
-    public function getAction(Request $request)
+    public function getAction()
     {
-        /** @var Customer $customer */
-        $customer = $request->user();
-        $favorites = $customer->getFavorites()->sortBy('name');
+        $favorites = $this->favoritesService->getGroupedProducts();
 
         return view('pages.account.favorites', compact('favorites'));
     }

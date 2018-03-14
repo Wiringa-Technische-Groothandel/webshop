@@ -48,12 +48,10 @@ class IndexController extends Controller
      */
     public function postAction(Request $request): JsonResponse
     {
-        /** @var CustomerContract $customer */
-        $customer = $request->user();
         $sku = $request->input('sku');
 
         try {
-            $isFavorite = $this->favoritesService->isFavorite($customer, $sku);
+            $isFavorite = $this->favoritesService->isFavorite($sku);
         } catch (ProductNotFoundException $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -78,12 +76,10 @@ class IndexController extends Controller
      */
     public function patchAction(Request $request): JsonResponse
     {
-        /** @var CustomerContract $customer */
-        $customer = $request->user();
         $sku = $request->input('sku');
 
         try {
-            $added = $this->favoritesService->toggleFavorite($customer, $sku);
+            $added = $this->favoritesService->toggleFavorite($sku);
         } catch (ProductNotFoundException $e) {
             return response()->json([
                 'message' => $e->getMessage(),

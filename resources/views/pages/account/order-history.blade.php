@@ -40,7 +40,7 @@
                 <tr>
                     <td colspan="3">
                         <div class="alert alert-warning">
-                            {{ __('U hebt nog geen orders geplaatst.') }}
+                            {{ __('U hebt nog geen bestellingen geplaatst.') }}
                         </div>
                     </td>
                 </tr>

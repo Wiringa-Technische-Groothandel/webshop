@@ -31,7 +31,7 @@
 
                     <hr />
 
-                    @include('components.catalog.products')
+                    @include('components.catalog.products', [ 'products' => $results->get('products') ])
                 @endif
 
                 <div class="my-3 d-none d-sm-block">

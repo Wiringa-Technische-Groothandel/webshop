@@ -16,7 +16,7 @@
             </div>
 
             <div class="col-12 col-md-9">
-                @include('components.catalog.products')
+                @include('components.catalog.products', [ 'products' => $results->get('products') ])
 
                 <div class="my-3 d-none d-sm-block">
                     {{ $results->get('products')->links('pagination::bootstrap-4') }}

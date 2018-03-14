@@ -5,7 +5,7 @@
 
     <hr />
 
-    <div class="container">
+    <div class="container mb-3">
         <div class="row">
             <div class="col-12 col-md-4 col-lg-3">
                 @include('components.navigation.account')

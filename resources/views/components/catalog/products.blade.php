@@ -1,4 +1,4 @@
-@foreach ($results->get('products') as $product)
+@foreach ($products as $product)
     <div class="product-listing" id="product-{{ $product->getId() }}">
         <div class="row">
             <div class="col-2 d-none d-sm-block">
