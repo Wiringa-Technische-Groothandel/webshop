@@ -2,6 +2,7 @@
 
 namespace WTG\Contracts\Models;
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -80,21 +81,36 @@ interface CartContract
      * Set the delivery address.
      *
      * @param  AddressContract  $address
-     * @return AddressContract
+     * @return CartContract
      */
-    public function setAddress(AddressContract $address): AddressContract;
+    public function setAddress(AddressContract $address): CartContract;
+
+    /**
+     * Set the finished at timestamp.
+     *
+     * @param  Carbon  $carbon
+     * @return CartContract
+     */
+    public function setFinishedAt(Carbon $carbon): CartContract;
+
+    /**
+     * Get the finished at timestamp.
+     *
+     * @return null|Carbon
+     */
+    public function getFinishedAt(): ?Carbon;
 
     /**
      * Get the items currently in the cart.
      *
      * @return Collection
      */
-    public function items(): Collection;
+    public function getItems(): Collection;
 
     /**
      * Amount of items currently in the cart.
      *
      * @return int
      */
-    public function count(): int;
+    public function getCount(): int;
 }

@@ -8,8 +8,8 @@
                             <b>{{ address.name }}</b><br />
                             {{ address.street }} <br />
                             {{ address.postcode }} {{ address.city }} <br />
-                            <i class="fal fa-fw fa-phone" v-if="address.phone"></i> {{ address.phone }} <br />
-                            <i class="fal fa-fw fa-mobile" v-if="address.mobile"></i> {{ address.mobile }}
+                            <i class="fal fa-fw fa-phone"></i> {{ address.phone || '-' }} <br />
+                            <i class="fal fa-fw fa-mobile"></i> {{ address.mobile || '-' }}
                         </address>
 
                         <button @click="setDefault(address.id)" v-if="address.id !== defaultAddressId"

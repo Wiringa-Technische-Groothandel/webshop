@@ -2,7 +2,9 @@
 
 namespace Tests\Functional;
 
+use Illuminate\Support\Testing\Fakes\MailFake;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Contracts\Mail\Mailer as MailerContract;
 
 /**
  * Functional test case.
@@ -16,6 +18,11 @@ abstract class TestCase extends \Tests\TestCase
     use RefreshDatabase;
 
     /**
+     * @var MailFake
+     */
+    protected $mailFake;
+
+    /**
      * Preparation stuff.
      *
      * @return void
@@ -25,5 +32,8 @@ abstract class TestCase extends \Tests\TestCase
         parent::setUp();
 
         $this->artisan('db:seed');
+
+        $this->mailFake = new MailFake;
+        $this->app->instance(MailerContract::class, $this->mailFake);
     }
 }

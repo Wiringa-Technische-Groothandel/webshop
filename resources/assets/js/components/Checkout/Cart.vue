@@ -20,7 +20,7 @@
     import Footer from './Cart/Footer';
 
     export default {
-        props: ['itemsUrl', 'continueUrl', 'nextStepUrl'],
+        props: ['itemsUrl', 'continueUrl', 'nextStepUrl', 'destroyUrl', 'confirmMessage'],
         methods: {
             getItems () {
                 this.$data.showOverlay = true;
@@ -31,6 +31,8 @@
 
                         if (payload.items.length === 0) {
                             window.location.reload();
+
+                            return;
                         }
 
                         this.$data.items.products = payload.items;
@@ -40,6 +42,27 @@
                     })
                     .catch((error) => {
                         console.log(error);
+                    });
+            },
+
+            destroyCart () {
+                this.$data.showOverlay = true;
+
+                if (! confirm(this.confirmMessage)) {
+                    this.$data.showOverlay = false;
+
+                    return;
+                }
+
+                axios.delete(this.destroyUrl)
+                    .then(() => {
+                        window.location.reload();
+                    })
+                    .catch((error) => {
+                        this.$root.$emit('send-notify', {
+                            message: error.response.data.message,
+                            success: false
+                        });
                     });
             }
         },
@@ -53,6 +76,10 @@
             };
         },
         created () {
+            this.$root.$on('cart-destroy', () => {
+                this.destroyCart();
+            });
+
             this.$root.$on('fetch-cart-items', () => {
                 this.getItems();
             });

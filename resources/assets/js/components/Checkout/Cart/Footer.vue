@@ -17,7 +17,7 @@
 
         <div class="row cart-footer-buttons">
             <div class="col-12 col-md-4 order-2 order-md-1 mb-3">
-                <button class="btn btn-outline-danger d-block d-sm-inline">
+                <button class="btn btn-outline-danger d-block d-sm-inline" v-on:click="destroyCart">
                     <i class="fal fa-fw fa-trash-alt"></i> Winkelwagen legen
                 </button>
             </div>
@@ -40,7 +40,12 @@
 <script>
     export default {
         props: ['grandTotal', 'continueUrl', 'nextStepUrl'],
-        mounted: () => {
+        methods: {
+            destroyCart () {
+                this.$root.$emit('cart-destroy');
+            }
+        },
+        mounted ()  {
             console.log('Cart header component mounted');
         }
     }

@@ -2013,7 +2013,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['itemsUrl', 'continueUrl', 'nextStepUrl'],
+    props: ['itemsUrl', 'continueUrl', 'nextStepUrl', 'destroyUrl', 'confirmMessage'],
     methods: {
         getItems: function getItems() {
             var _this = this;
@@ -2025,6 +2025,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 if (payload.items.length === 0) {
                     window.location.reload();
+
+                    return;
                 }
 
                 _this.$data.items.products = payload.items;
@@ -2033,6 +2035,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.$data.showOverlay = false;
             }).catch(function (error) {
                 console.log(error);
+            });
+        },
+        destroyCart: function destroyCart() {
+            var _this2 = this;
+
+            this.$data.showOverlay = true;
+
+            if (!confirm(this.confirmMessage)) {
+                this.$data.showOverlay = false;
+
+                return;
+            }
+
+            axios.delete(this.destroyUrl).then(function () {
+                window.location.reload();
+            }).catch(function (error) {
+                _this2.$root.$emit('send-notify', {
+                    message: error.response.data.message,
+                    success: false
+                });
             });
         }
     },
@@ -2046,18 +2068,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     created: function created() {
-        var _this2 = this;
+        var _this3 = this;
+
+        this.$root.$on('cart-destroy', function () {
+            _this3.destroyCart();
+        });
 
         this.$root.$on('fetch-cart-items', function () {
-            _this2.getItems();
+            _this3.getItems();
         });
 
         this.$root.$on('show-cart-overlay', function () {
-            _this2.$data.showOverlay = true;
+            _this3.$data.showOverlay = true;
         });
 
         this.$root.$on('hide-cart-overlay', function () {
-            _this2.$data.showOverlay = false;
+            _this3.$data.showOverlay = false;
         });
 
         this.getItems();
@@ -2119,6 +2145,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['grandTotal', 'continueUrl', 'nextStepUrl'],
+    methods: {
+        destroyCart: function destroyCart() {
+            this.$root.$emit('cart-destroy');
+        }
+    },
     mounted: function mounted() {
         console.log('Cart header component mounted');
     }
@@ -74299,7 +74330,19 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row cart-footer-buttons" }, [
-      _vm._m(1),
+      _c("div", { staticClass: "col-12 col-md-4 order-2 order-md-1 mb-3" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-outline-danger d-block d-sm-inline",
+            on: { click: _vm.destroyCart }
+          },
+          [
+            _c("i", { staticClass: "fal fa-fw fa-trash-alt" }),
+            _vm._v(" Winkelwagen legen\n            ")
+          ]
+        )
+      ]),
       _vm._v(" "),
       _c(
         "div",
@@ -74351,25 +74394,6 @@ var staticRenderFns = [
         _c("span", { staticClass: "small" }, [_vm._v("Prijs excl. BTW")])
       ])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "col-12 col-md-4 order-2 order-md-1 mb-3" },
-      [
-        _c(
-          "button",
-          { staticClass: "btn btn-outline-danger d-block d-sm-inline" },
-          [
-            _c("i", { staticClass: "fal fa-fw fa-trash-alt" }),
-            _vm._v(" Winkelwagen legen\n            ")
-          ]
-        )
-      ]
-    )
   }
 ]
 render._withStripped = true
@@ -74821,17 +74845,15 @@ var render = function() {
                       ),
                       _c("br"),
                       _vm._v(" "),
-                      address.phone
-                        ? _c("i", { staticClass: "fal fa-fw fa-phone" })
-                        : _vm._e(),
-                      _vm._v(" " + _vm._s(address.phone) + " "),
+                      _c("i", { staticClass: "fal fa-fw fa-phone" }),
+                      _vm._v(" " + _vm._s(address.phone || "-") + " "),
                       _c("br"),
                       _vm._v(" "),
-                      address.mobile
-                        ? _c("i", { staticClass: "fal fa-fw fa-mobile" })
-                        : _vm._e(),
+                      _c("i", { staticClass: "fal fa-fw fa-mobile" }),
                       _vm._v(
-                        " " + _vm._s(address.mobile) + "\n                    "
+                        " " +
+                          _vm._s(address.mobile || "-") +
+                          "\n                    "
                       )
                     ]),
                     _vm._v(" "),

@@ -3,6 +3,8 @@
 namespace WTG\Contracts\Services;
 
 use WTG\Contracts\Models\OrderContract;
+use WTG\Contracts\Models\CartItemContract;
+use WTG\Contracts\Models\OrderItemContract;
 
 /**
  * Checkout service contract.
@@ -20,4 +22,12 @@ interface CheckoutServiceContract
      * @return OrderContract
      */
     public function createOrder(?string $comment = null): OrderContract;
+
+    /**
+     * Turn a quote item into an order item.
+     *
+     * @param  CartItemContract  $item
+     * @return OrderItemContract
+     */
+    public function createOrderItem(CartItemContract $item): OrderItemContract;
 }

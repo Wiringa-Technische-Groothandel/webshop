@@ -59,16 +59,20 @@ class FinishController extends Controller
     public function postAction(Request $request)
     {
         try {
-            $this->checkoutService->createOrder(
+            $order = $this->checkoutService->createOrder(
                 $request->input('comment')
             );
+
+            session()->flash('order', $order);
         } catch (EmptyCartException $e) {
             return redirect()
                 ->back()
+                ->withInput($request->input())
                 ->withErrors(__('U kunt geen bestelling afronden met een lege winkelwagen.'));
         } catch (\Exception $e) {
             return redirect()
                 ->back()
+                ->withInput($request->input())
                 ->withErrors($e->getMessage());
         }
 

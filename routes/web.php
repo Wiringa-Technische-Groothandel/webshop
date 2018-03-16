@@ -77,6 +77,7 @@ Route::group([
     Route::patch('cart', 'CartController@patchAction');
     Route::patch('address', 'AddressController@patchAction');
 
+    Route::delete('cart', 'CartController@deleteAction')->name('cart.destroy');
     Route::delete('cart/product/{sku}', 'CartController@deleteAction');
 });
 

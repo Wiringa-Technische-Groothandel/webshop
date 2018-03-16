@@ -17,7 +17,7 @@
                 <ul class="nav navbar-nav">
                     @auth
                         <li class="nav-item mx-md-3 {{ request()->is('cart') ? 'active' : '' }}">
-                            <mini-cart :count="{{ $cart->count() }}" cart-url="{{ route('checkout.cart') }}"></mini-cart>
+                            <mini-cart :count="{{ $cart->getCount() }}" cart-url="{{ route('checkout.cart') }}"></mini-cart>
                         </li>
 
                         <li class="d-none d-md-inline nav-item dropdown {{ request()->is('account/*') ? 'active' : '' }}">

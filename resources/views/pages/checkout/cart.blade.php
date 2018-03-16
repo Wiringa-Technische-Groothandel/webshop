@@ -8,7 +8,7 @@
     </h2>
 
     <div class="container">
-        @if ($cart->count() > 0)
+        @if ($cart->getCount() > 0)
             <div class="progress" style="height: 20px;">
                 <div class="progress-bar bg-primary" role="progressbar" style="width: 33%; height: 20px">
                     {{ __('Overzicht') }}
@@ -24,10 +24,12 @@
             <hr />
         @endif
 
-        @if ($cart->count() > 0)
+        @if ($cart->getCount() > 0)
             <cart items-url="{{ route('checkout.cart.items') }}"
                   next-step-url="{{ route('checkout.address') }}"
-                  continue-url="{{ session('continue.url') }}"></cart>
+                  continue-url="{{ session('continue.url') }}"
+                  destroy-url="{{ route('checkout.cart.destroy') }}"
+                  confirm-message="{{ __('Weet u zeker dat u uw winkelwagen wil legen?') }}"></cart>
         @else
             <div class="col-12 col-sm-8 mx-auto">
                 <div class="alert alert-warning text-center">

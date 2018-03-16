@@ -104,20 +104,29 @@ class CartController extends Controller
     /**
      * Remove an item from the cart.
      *
-     * @param  Request  $request
-     * @param  string  $sku
+     * @param  null|string  $sku
      * @return \Illuminate\Http\JsonResponse
      */
-    public function deleteAction(Request $request, string $sku)
+    public function deleteAction(?string $sku = null)
     {
-        $isSuccess = $this->cartService->deleteProductBySku($sku);
-
-        if (! $isSuccess) {
-            return $this->productNotFoundResponse($sku);
+        try {
+            if ($sku) {
+                $this->cartService->deleteProductBySku($sku);
+            } else {
+                $this->cartService->destroy();
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'success' => false,
+                'code' => 400
+            ]);
         }
 
         return response()->json([
-            'message' => __('Het product is verwijderd uit uw winkelwagen.'),
+            'message' => $sku ?
+                __('Het product is verwijderd uit uw winkelwagen.') :
+                __('De producten zijn verwijderd uit uw winkelwagen.'),
             'count' => $this->cartService->getItemCount(),
             'success' => true,
             'code' => 200

@@ -2,6 +2,8 @@
 
 namespace WTG\Contracts\Models;
 
+use Illuminate\Support\Collection;
+
 /**
  * Order contract.
  *
@@ -17,6 +19,13 @@ interface OrderContract
      * @return null|string
      */
     public function getId(): ?string;
+
+    /**
+     * Get the order items.
+     *
+     * @return Collection
+     */
+    public function getItems(): Collection;
 
     /**
      * Set the customer number.

@@ -2,6 +2,7 @@
 
 namespace WTG\Services;
 
+use Carbon\Carbon;
 use WTG\Models\Quote;
 use Illuminate\Support\Collection;
 use WTG\Contracts\Models\CartContract;
@@ -115,6 +116,19 @@ class CartService implements CartServiceContract
     }
 
     /**
+     * Destroy the cart.
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function destroy(): bool
+    {
+        $this->cart->loadForCustomer($this->authService->getCurrentCustomer());
+
+        return $this->cart->delete();
+    }
+
+    /**
      * Get the cart item count.
      *
      * @return int
@@ -123,7 +137,7 @@ class CartService implements CartServiceContract
     {
         $this->cart->loadForCustomer($this->authService->getCurrentCustomer());
 
-        return $this->cart->count();
+        return $this->cart->getCount();
     }
 
     /**
@@ -136,7 +150,7 @@ class CartService implements CartServiceContract
     public function getItems(bool $withPrices = false): Collection
     {
         $this->cart->loadForCustomer($this->authService->getCurrentCustomer());
-        $items = $this->cart->items();
+        $items = $this->cart->getItems();
 
         if (! $withPrices) {
             return $items;
@@ -183,7 +197,7 @@ class CartService implements CartServiceContract
      */
     public function getGrandTotal(): float
     {
-        return $this->cart->items()->sum(function (CartItemContract $item) {
+        return $this->cart->getItems()->sum(function (CartItemContract $item) {
             return $item->getPrice() * $item->getQuantity();
         });
     }
@@ -210,6 +224,19 @@ class CartService implements CartServiceContract
     {
         $this->cart->loadForCustomer($this->authService->getCurrentCustomer());
         $this->cart->setAddress($address);
+
+        return $this->cart->save();
+    }
+
+    /**
+     * Mark the cart as finished.
+     *
+     * @return bool
+     */
+    public function markFinished(): bool
+    {
+        $this->cart->loadForCustomer($this->authService->getCurrentCustomer());
+        $this->cart->setFinishedAt(Carbon::now());
 
         return $this->cart->save();
     }

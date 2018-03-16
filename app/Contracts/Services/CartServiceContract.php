@@ -50,6 +50,13 @@ interface CartServiceContract
     public function deleteProductBySku(string $sku): bool;
 
     /**
+     * Destroy the cart.
+     *
+     * @return bool
+     */
+    public function destroy(): bool;
+
+    /**
      * Get the cart item count.
      *
      * @return int
@@ -85,4 +92,11 @@ interface CartServiceContract
      * @return bool
      */
     public function setDeliveryAddress(AddressContract $address): bool;
+
+    /**
+     * Mark the cart as finished.
+     *
+     * @return bool
+     */
+    public function markFinished(): bool;
 }

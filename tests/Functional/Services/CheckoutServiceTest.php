@@ -2,16 +2,12 @@
 
 namespace Tests\Functional\Services;
 
-use WTG\Models\Order;
+use WTG\Mail\Order;
 use WTG\Models\Address;
 use WTG\Models\Customer;
-use WTG\Models\OrderItem;
-use WTG\Models\Product;
 use WTG\Models\QuoteItem;
 use Tests\Functional\TestCase;
 use WTG\Services\CheckoutService;
-use WTG\Contracts\Models\OrderContract;
-use WTG\Contracts\Models\OrderItemContract;
 use WTG\Contracts\Services\CartServiceContract;
 
 /**
@@ -23,6 +19,9 @@ use WTG\Contracts\Services\CartServiceContract;
  */
 class CheckoutServiceTest extends TestCase
 {
+    /**
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();
@@ -81,5 +80,23 @@ class CheckoutServiceTest extends TestCase
         $order = $checkoutService->createOrder();
 
         $this->assertNull($order->getComment());
+    }
+
+    /**
+     * @test
+     */
+    public function sendsOrderConfirmationMail(): void
+    {
+        $cartMock = $this->createMock(CartServiceContract::class);
+        $cartMock->method('getItems')->willReturn(QuoteItem::all());
+        $cartMock->method('getDeliveryAddress')->willReturn(Address::find(1));
+
+        app()->instance(CartServiceContract::class, $cartMock);
+
+        /** @var CheckoutService $checkoutService */
+        $checkoutService = app()->make(CheckoutService::class);
+        $checkoutService->createOrder();
+
+        $this->mailFake->assertSent(Order::class);
     }
 }

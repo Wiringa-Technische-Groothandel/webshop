@@ -2,6 +2,7 @@
 
 namespace WTG\Http\Controllers\Checkout\Cart;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use WTG\Http\Controllers\Controller;
 use WTG\Contracts\Models\CartItemContract;
@@ -38,10 +39,9 @@ class ItemsController extends Controller
     /**
      * Get the items in the cart.
      *
-     * @param  Request  $request
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function getAction(Request $request)
+    public function getAction(): JsonResponse
     {
         $items = $this->cartService->getItems(true);
 

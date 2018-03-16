@@ -2,12 +2,12 @@
 
 namespace WTG\Providers;
 
-use function Deployer\option;
 use WTG\Models\Order;
 use WTG\Models\Quote;
 use WTG\Models\OrderItem;
 use WTG\Models\QuoteItem;
 use WTG\Services\CartService;
+use WTG\Services\CheckoutService;
 use Illuminate\Support\Facades\View;
 use WTG\Contracts\Models\CartContract;
 use WTG\Contracts\Models\OrderContract;
@@ -16,6 +16,7 @@ use WTG\Contracts\Models\CartItemContract;
 use WTG\Contracts\Models\CustomerContract;
 use WTG\Contracts\Models\OrderItemContract;
 use WTG\Contracts\Services\CartServiceContract;
+use WTG\Contracts\Services\CheckoutServiceContract;
 
 /**
  * Checkout service provider.
@@ -43,6 +44,7 @@ class CheckoutServiceProvider extends ServiceProvider
         $this->app->bind(CartContract::class, Quote::class);
         $this->app->bind(CartItemContract::class, QuoteItem::class);
         $this->app->bind(CartServiceContract::class, CartService::class);
+        $this->app->bind(CheckoutServiceContract::class, CheckoutService::class);
 
         $this->app->singleton(CartContract::class, function () {
             return new Quote();

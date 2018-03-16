@@ -2,6 +2,7 @@
 
 namespace WTG\Models;
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use WTG\Contracts\Models\CartContract;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,8 @@ use WTG\Contracts\Models\ProductContract;
 use WTG\Contracts\Models\CartItemContract;
 use WTG\Contracts\Models\CustomerContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Quote model.
@@ -35,7 +38,7 @@ class Quote extends Model implements CartContract
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function customer()
+    public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
     }
@@ -45,7 +48,7 @@ class Quote extends Model implements CartContract
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function quoteItems()
+    public function items(): HasMany
     {
         return $this->hasMany(QuoteItem::class);
     }
@@ -55,7 +58,7 @@ class Quote extends Model implements CartContract
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function address()
+    public function address(): BelongsTo
     {
         return $this->belongsTo(Address::class);
     }
@@ -82,13 +85,34 @@ class Quote extends Model implements CartContract
      * Set the delivery address.
      *
      * @param  AddressContract  $address
-     * @return AddressContract
+     * @return CartContract
      */
-    public function setAddress(AddressContract $address): AddressContract
+    public function setAddress(AddressContract $address): CartContract
     {
         $this->address()->associate($address);
 
-        return $address;
+        return $this;
+    }
+
+    /**
+     * Set the finished at timestamp.
+     *
+     * @param  Carbon  $carbon
+     * @return CartContract
+     */
+    public function setFinishedAt(Carbon $carbon): CartContract
+    {
+        return $this->setAttribute('finished_at', $carbon);
+    }
+
+    /**
+     * Get the finished at timestamp.
+     *
+     * @return null|Carbon
+     */
+    public function getFinishedAt(): ?Carbon
+    {
+        return $this->getAttribute('finished_at');
     }
 
     /**
@@ -101,7 +125,8 @@ class Quote extends Model implements CartContract
     {
         $this->forceFill(
             $this->firstOrCreate([
-                'customer_id' => $customer->getId()
+                'customer_id' => $customer->getId(),
+                'finished_at' => null
             ])->toArray()
         );
 
@@ -203,9 +228,7 @@ class Quote extends Model implements CartContract
      */
     public function findProduct(ProductContract $product): ?CartItemContract
     {
-        return $this->items()->first(function (CartItemContract $item) use ($product) {
-            return $item->getProduct()->getId() === $product->getId();
-        });
+        return $this->items()->where('product_id', $product->getId())->first();
     }
 
     /**
@@ -224,9 +247,9 @@ class Quote extends Model implements CartContract
      *
      * @return Collection
      */
-    public function items(): Collection
+    public function getItems(): Collection
     {
-        return $this->quoteItems()->with('product')->get();
+        return $this->items()->with('product')->get();
     }
 
     /**
@@ -234,7 +257,7 @@ class Quote extends Model implements CartContract
      *
      * @return int
      */
-    public function count(): int
+    public function getCount(): int
     {
         return $this->items()->count();
     }

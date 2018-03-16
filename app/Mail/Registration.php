@@ -5,24 +5,30 @@ namespace WTG\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use WTG\Models\Registration as RegistrationModel;
 
+/**
+ * Registration mailable.
+ *
+ * @package     WTG\Mail
+ * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
+ */
 class Registration extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
-     * @var \WTG\Models\Registration
+     * @var RegistrationModel
      */
     public $registration;
 
     /**
      * Create a new message instance.
      *
-     * @param  \WTG\Models\Registration  $registration
+     * @param  RegistrationModel  $registration
      * @return void
      */
-    public function __construct(\WTG\Models\Registration $registration)
+    public function __construct(RegistrationModel $registration)
     {
         $this->registration = $registration;
     }

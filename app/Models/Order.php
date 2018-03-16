@@ -3,6 +3,7 @@
 namespace WTG\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use WTG\Contracts\Models\CompanyContract;
 use WTG\Contracts\Models\OrderContract;
 
@@ -43,6 +44,16 @@ class Order extends Model implements OrderContract
     public function getId(): ?string
     {
         return $this->getAttribute('id');
+    }
+
+    /**
+     * Get the order items.
+     *
+     * @return Collection
+     */
+    public function getItems(): Collection
+    {
+        return $this->items()->get();
     }
 
     /**
