@@ -7,7 +7,7 @@ require 'recipe/laravel.php';
 set('application', 'WTG Webshop');
 
 // Project repository
-set('repository', 'git@github.com:Wiringa-Technische-Groothandel/webshop');
+set('repository', 'git+ssh://git@git.tjwiringa.nl:22222/luna/wtg.git');
 
 set('http_user', 'wiringa');
 
@@ -32,7 +32,12 @@ set('bin/composer', 'composer');
 host('artemis')
     ->stage('staging')
     ->set('deploy_path', '/httpdocs')
-    ->set('branch', 'development');
+    ->set('branch', 'release');
+
+host('artemis')
+    ->stage('production')
+    ->set('deploy_path', '/httpdocs')
+    ->set('branch', 'production');
 
 // Tasks
 //
