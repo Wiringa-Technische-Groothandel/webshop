@@ -34,11 +34,6 @@ host('artemis')
     ->set('deploy_path', '/httpdocs')
     ->set('branch', 'release');
 
-host('artemis')
-    ->stage('production')
-    ->set('deploy_path', '/httpdocs')
-    ->set('branch', 'production');
-
 // Tasks
 //
 //task('build', function () {
