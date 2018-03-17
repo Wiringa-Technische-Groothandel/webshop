@@ -1,13 +1,6 @@
 # Pre-built image with dependencies already installed
 image: lunamoonfang/wtg-php:build-7.2
 
-services:
-  - mysql:latest
-
-variables:
-  MYSQL_DATABASE: wiringa
-  MYSQL_ROOT_PASSWORD: secret
-
 cache:
   paths:
     - vendor/
@@ -22,6 +15,23 @@ build_job:
   stage: build
 
   script:
+    # Install ssh-agent if not already installed
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+
+    # Run ssh-agent
+    - eval $(ssh-agent -s)
+
+    # Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+
+    # Create the SSH directory and give it the right permissions
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+
+    # Known host checking
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+
     # Install Composer and project dependencies.
     - curl -sS https://getcomposer.org/installer | php
     - php composer.phar install --no-progress
@@ -41,6 +51,13 @@ build_job:
 
 test_job:
   stage: test
+
+  services:
+    - mysql:latest
+
+  variables:
+    MYSQL_DATABASE: wiringa
+    MYSQL_ROOT_PASSWORD: secret
 
   script:
     # Run laravel tests
