@@ -83,7 +83,7 @@ Route::group([
 
 Route::group([
     'as' => 'account.',
-    'prefix' => 'account',
+    'prefix' => 'customer',
     'namespace' => 'Account',
     'middleware' => ['auth']
 ], function () {

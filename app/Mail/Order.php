@@ -47,9 +47,9 @@ class Order extends Mailable
      */
     public function build()
     {
-        if ($this->customer->getContact()->getContactEmail()) {
+        if ($this->customer->getContact()->getOrderEmail()) {
             $this->to(
-                $this->customer->getContact()->getContactEmail(),
+                $this->customer->getContact()->getOrderEmail(),
                 $this->customer->getCompany()->getName()
             );
         }
