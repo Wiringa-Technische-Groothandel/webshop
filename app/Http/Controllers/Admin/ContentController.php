@@ -1,29 +1,31 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace WTG\Http\Controllers\Admin;
 
-use App\Content;
-use App\Product;
-use App\Description;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use WTG\Contracts\Models\BlockContract;
 
 /**
- * Class ContentController.
+ * Content controller.
  *
- * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
+ * @package     WTG
+ * @subpackage  Admin
+ * @author      Thomas Wiringa <thomas.wiringa@gmail.com>
  */
 class ContentController extends Controller
 {
     /**
      * Content manager.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
-    public function view()
+    public function getAction()
     {
-        return view('admin.content.index', [
-            'data' => Content::where('hidden', '0')->get(),
-        ]);
+        /** @var Collection $blocks */
+        $blocks = app()->make(BlockContract::class)->all();
+
+        return $this->view->make('pages.admin.content', compact('blocks'));
     }
 
     /**
@@ -150,4 +152,5 @@ class ContentController extends Controller
                 ->withErrors($validator->errors());
         }
     }
+
 }

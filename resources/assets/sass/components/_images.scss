@@ -1,0 +1,37 @@
+.img-svg {
+  padding: 10px 0;
+  margin: 50px 0;
+
+  &.rotate-180 {
+    transform: rotateY(180deg);
+  }
+
+  &.pipe {
+    background: url('/img/pipe.svg') no-repeat;
+    background-size: 50%;
+    height: 100px;
+  }
+
+  &.pipe-with-connector {
+    background: url('/img/pipe-with-connector.svg');
+    height: 110px;
+  }
+
+  &.broken-pipe {
+    background-image: url('/img/broken-pipe.svg');
+    height: 50%;
+  }
+}
+
+.img-png {
+  &.cover-image {
+    height: 500px;
+    background-size: cover;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
+  }
+
+  &.company-image {
+    background: url('/img/about-header.jpg') bottom;
+    background-size: cover;
+  }
+}

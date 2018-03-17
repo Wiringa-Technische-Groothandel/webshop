@@ -1,0 +1,71 @@
+# Pre-built image with dependencies already installed
+image: lunamoonfang/wtg-php:build-7.2
+
+services:
+  - mysql:latest
+
+variables:
+  MYSQL_DATABASE: wiringa
+  MYSQL_ROOT_PASSWORD: secret
+
+cache:
+  paths:
+    - vendor/
+    - node_modules/
+
+stages:
+  - build
+  - test
+  - deploy
+
+build_job:
+  stage: build
+
+  script:
+    # Install Composer and project dependencies.
+    - curl -sS https://getcomposer.org/installer | php
+    - php composer.phar install --no-progress
+
+    # Install Node dependencies.
+    - npm install -s
+
+    # Copy over testing configuration.
+    - cp .env.testing .env
+
+    # Generate an application key. Re-cache.
+    - php artisan key:generate
+    - php artisan config:cache
+
+    # Build the assets
+    - npm run prod
+
+test_job:
+  stage: test
+
+  script:
+    # Run laravel tests
+    - php vendor/bin/phpunit --coverage-text --colors=never
+
+deploy_staging_job:
+  stage: deploy
+
+  when: manual
+
+  only:
+    - release
+
+  script:
+    # Release to staging
+    - vendor/bin/dep deploy staging
+
+deploy_production_job:
+  stage: deploy
+
+  when: manual
+
+  only:
+    - master
+
+  script:
+    # Release to production
+    - vendor/bin/dep deploy production

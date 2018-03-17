@@ -1,35 +1,125 @@
 <?php
 
-namespace App\Http\Controllers\Account;
+namespace WTG\Http\Controllers\Account;
 
-use Auth;
-use App\User;
-use Response;
+use WTG\Models\Company;
+use WTG\Models\Contact;
+use WTG\Models\Customer;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
+use WTG\Http\Controllers\Controller;
+use WTG\Http\Requests\CreateAccountRequest;
 
 /**
- * Class SubAccountController.
- * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
+ * Sub account controller.
+ *
+ * @package     WTG\Http
+ * @subpackage  Controllers\Account
+ * @author      Thomas Wiringa <thomas.wiringa@gmail.com>
  */
 class SubAccountController extends Controller
 {
+    /**
+     * SubAccountController constructor.
+     */
     public function __construct()
     {
-        $this->middleware('manager');
+        $this->middleware('can:view accounts');
     }
 
     /**
-     * Get the sub accounts.
+     * Main sub accounts page
      *
+     * @param  Request  $request
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function getAction(Request $request)
     {
-        return view('account.sub_accounts', [
-            'accounts' => Auth::user()->subAccounts(),
-        ]);
+        /** @var Customer $customer */
+        $customer = $request->user();
+        $accounts = $customer->company->getAttribute('customers');
+
+        return view('pages.account.sub-accounts', compact('accounts'));
     }
+
+    /**
+     * Add a new account.
+     *
+     * @param  CreateAccountRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function putAction(CreateAccountRequest $request)
+    {
+        \DB::beginTransaction();
+
+        try {
+            /** @var Customer $customer */
+            $customer = $request->user();
+            /** @var Company $company */
+            $company = $customer->getAttribute('company');
+
+            $usernameExists = $customer
+                ->company
+                ->customers()
+                ->where('username', $request->input('username'))
+                ->exists();
+
+            if ($usernameExists) {
+                return back()
+                    ->withInput($request->except(['password', 'password_confirmation']))
+                    ->withErrors(
+                        __("Er is al een account gekoppeld aan uw debiteur nummer met de zelfde gebruikersnaam.")
+                    );
+            }
+
+            $account = new Customer;
+
+            $account->setAttribute('company_id', $company->getAttribute('id'));
+            $account->setAttribute('username', $request->input('username'));
+            $account->setAttribute('password', bcrypt($request->input('password')));
+
+            if (! $account->save()) {
+                return $this->createAccountFailed($request);
+            }
+
+            $contact = new Contact;
+
+            $contact->setAttribute('customer_id', $account->getAttribute('id'));
+            $contact->setAttribute('contact_email', $request->input('email'));
+
+            if (! $contact->save()) {
+                return $this->createAccountFailed($request);
+            }
+
+            $account->assignRole($request->input('role'));
+
+            \DB::commit();
+
+            return back()
+                ->with('status', __("Het account is succesvol aangemaakt."));
+        } catch (\Exception $e) {
+            dd($e);
+
+            return $this->createAccountFailed($request);
+        }
+    }
+
+    /**
+     * Account creation failed response.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function createAccountFailed(Request $request)
+    {
+        \DB::rollBack();
+
+        return back()
+            ->withInput($request->except(['password', 'password_confirmation']))
+            ->withErrors(__("Er is een fout opgetreden tijdens het opslaan van het account."));
+    }
+
+    // TODO: Make the stuff below work
 
     /**
      * Store a newly created resource in storage.

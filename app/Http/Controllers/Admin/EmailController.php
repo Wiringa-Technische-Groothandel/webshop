@@ -1,30 +1,51 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace WTG\Http\Controllers\Admin;
 
 use GuzzleHttp\Client;
+use Illuminate\Mail\Mailer;
 use Illuminate\Http\Request;
 use GuzzleHttp\Exception\TransferException;
+use WTG\Mail\Test;
 
 /**
- * Class EmailController.
+ * Email controller.
  *
- * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
+ * @package     WTG\Http
+ * @subpackage  Controllers\Admin
+ * @author      Thomas Wiringa <thomas.wiringa@gmail.com>
  */
 class EmailController extends Controller
 {
     /**
+     * @var Mailer
+     */
+    protected $mailer;
+
+    /**
+     * EmailController constructor.
+     *
+     * @param  Mailer  $mailer
+     */
+    public function __construct(Mailer $mailer)
+    {
+        $this->mailer = $mailer;
+    }
+
+    /**
+     * Email page.
+     *
      * @return \Illuminate\View\View
      */
-    public function view()
+    public function getAction()
     {
-        return view('admin.email.index', [
-            'mailstats' => $this->stats(request()),
+        return view('pages.admin.email', [
+            'mailstats' => $this->stats(request())
         ]);
     }
 
     /**
-     * Attempt to send a test email.
+     * Attempt to send a test email
      *
      * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
@@ -32,15 +53,11 @@ class EmailController extends Controller
     public function test(Request $request)
     {
         $validator = \Validator::make($request->input(), [
-            'email' => 'required|email',
+            'email' => 'required|email'
         ]);
 
         if ($validator->passes()) {
-            $mail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-            $mail->send('email.test', [], function ($m) use ($request) {
-                $m->subject('Test email');
-                $m->to($request->input('email'));
-            });
+            $this->mailer->to($request->input('email'))->send(new Test());
 
             return redirect()
                 ->back()
@@ -55,6 +72,7 @@ class EmailController extends Controller
     /**
      * Get mailgun stats.
      *
+     * @param  Request  $request
      * @return bool|string
      */
     public function stats(Request $request)
@@ -63,15 +81,15 @@ class EmailController extends Controller
 
         $client = new Client([
             'base_uri' => 'https://api.mailgun.net/v3/',
-            'auth' => ['api', config('services.mailgun.secret')],
+            'auth' => ['api', config('services.mailgun.secret')]
         ]);
 
         try {
-            $response = $client->get(config('services.mailgun.domain').'/stats/total', [
+            $response = $client->get(config('services.mailgun.domain')."/stats/total", [
                 'query' => [
-                    'event' => ['accepted', 'delivered', 'failed'],
-                    'duration' => $duration,
-                ],
+                    'event' => array('accepted', 'delivered', 'failed'),
+                    'duration' => $duration
+                ]
             ]);
         } catch (TransferException $e) {
             \Log::error($e->getMessage());

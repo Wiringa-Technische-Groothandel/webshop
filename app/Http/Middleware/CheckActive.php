@@ -1,58 +1,39 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace WTG\Http\Middleware;
 
-use Closure;
-use Illuminate\Contracts\Auth\Guard;
+use WTG\Contracts\Models\CustomerContract;
 
+/**
+ * Check active middleware.
+ *
+ * @package     WTG\Http
+ * @subpackage  Middleware
+ * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
+ */
 class CheckActive
 {
     /**
-     * The Guard implementation.
-     *
-     * @var Guard
-     */
-    protected $auth;
-
-    /**
-     * Create a new filter instance.
-     *
-     * @param Guard $auth
-     */
-    public function __construct(Guard $auth)
-    {
-        $this->auth = $auth;
-    }
-
-    /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, \Closure $next)
     {
-        // If the app is testing, ignore this middleware
-        if (app()->environment('testing')) {
-            return $next($request);
+        if (auth()->check()) {
+            /** @var CustomerContract $customer */
+            $customer = $request->user();
+
+            if (! $customer->getActive()) {
+                auth()->logout();
+
+                return redirect(route('home'))
+                    ->withErrors(__('Uw account is gedeactiveerd. Voor meer informatie, neem dan contact op met ons of uw account beheerder.'));
+            }
         }
 
-        // Ignore this middleware if the user is not logged in
-        if ($this->auth->guest()) {
-            return $next($request);
-        }
-
-        // If the account is active, let them through
-        if ($this->auth->user()->company->active) {
-            return $next($request);
-        }
-
-        // Whoops, the account is not active, better log them out again!
-        $this->auth->logout();
-
-        return redirect('/')
-            ->withErrors('Dit account is niet actief, als u denkt dat dit een fout is, neem dan contact met ons op');
+        return $next($request);
     }
 }

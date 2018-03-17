@@ -1,0 +1,26 @@
+footer {
+  background-color: $footer-default-bg;
+  padding: 25px 0;
+  color: white;
+
+  &.footer-fixed-bottom {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+  }
+
+  a {
+    color: white;
+
+    &:hover {
+      color: white;
+      border-bottom: 1px solid white;
+      text-decoration: none;
+    }
+  }
+
+  hr {
+    margin-top: 0;
+  }
+}

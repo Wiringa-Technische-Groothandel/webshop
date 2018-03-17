@@ -1,93 +1,51 @@
-@import "https://fonts.googleapis.com/css?family=Titillium+Web:200,300,400,500,600";
-@import "https://fonts.googleapis.com/css?family=Muli:300,400";
-@import "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css";
+// Variables
+@import "variables";
 
-// Helpers
-@import "helpers/variables";
+// Imports
+@import "~bootstrap/scss/bootstrap";
+@import "../packages/fontawesome-pro/scss/fontawesome.scss";
+@import "../packages/fontawesome-pro/scss/fa-solid.scss";
+@import "../packages/fontawesome-pro/scss/fa-regular.scss";
+@import "../packages/fontawesome-pro/scss/fa-light.scss";
+@import "~animate.css/animate";
+@import "~tiny-slider/src/tiny-slider.scss";
+@import "~lightbox2/dist/css/lightbox";
 
 // Components
-@import "components/blocks";
-@import "components/button";
-@import "components/carousel";
-@import "components/keyframes";
+@import "components/notification";
+@import "components/catalog";
+@import "components/account";
+@import "components/header";
+@import "components/images";
 @import "components/navbar";
-@import "components/panel";
-@import "components/alert";
+@import "components/blocks";
+@import "components/footer";
+@import "components/errors";
+@import "components/cart";
+@import "components/carousel";
 
-html ,
 body {
-	min-height: 100%;
-	font-size: 16px;
-	letter-spacing: 1px;
-	font-weight: 300;
-	font-family: "Titillium Web", sans-serif;
-	overflow-x: hidden;
-
-	& > .container {
-		padding-bottom: 20px;
-		margin-bottom: 20px;
-		padding-top: 20px;
-		background-color: rgb(255,255,255);
-		border-radius: 0 0 10px 10px;
-		-moz-border-radius: 0 0 10px 10px;
-		-webkit-border-radius: 0 0 10px 10px;
-	}
-
-	& > .background {
-		background: url("/img/site-bg.jpg");
-		background-size: cover;
-		background-repeat: no-repeat;
-		position: fixed;
-		left: 0;
-		right: 0;
-		top: 0;
-		bottom: 0;
-		z-index: -1;
-	}
+  text-rendering: optimizeLegibility;
 }
 
-html:not([data-useragent*="MSIE"]) .ie-only {
-	display: none;
+.pagination {
+  justify-content: center;
 }
 
-html[data-useragent~="MSIE"] .ie-only {
-	display: block !important;
+.separator {
+  height: $separator-height;
 }
 
-b {
-	font-weight: 600;
+.separator-half {
+  height: ($separator-height / 2);
 }
 
-.row {
-	padding: 0;
+.template {
+  display: none;
 }
 
-img {
-	max-width: 100%;
-	max-height: 400px;
-	vertical-align: middle;
-	margin: 0 auto;
-	padding: 5px;
-}
-
-.no-padding {
-	padding: 0;
-}
-
-.hidden {
-	display: none;
-}
-
-.modal {
-	overflow-y: hidden;
-}
-
-.slick-prev:before ,
-.slick-next:before {
-	color: #bbb;
-}
-
-.well,
-.table-striped > tbody > tr:nth-child(odd) {
-	background-color: rgb(245,245,245) !important;
+.btn {
+  &:hover {
+    cursor: pointer;
+  }
 }

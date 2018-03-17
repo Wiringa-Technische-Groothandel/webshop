@@ -1,66 +1,55 @@
 @extends('admin.master')
 
 @section('document_start')
-    @if($opcache_enabled)
-        @include('admin.cache.components.modal')
-    @endif
+    @include('admin.cache.components.modal')
 @endsection
 
 @section('content')
-    @if(!$opcache_enabled)
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-4 col-sm-offset-4">
-                    <div class="card card-2">
-                        <h3><i class="fa fa-fw fa-close"></i> Opcache disabled</h3>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-md-8 col-md-offset-2">
+                <div class="card card-2">
+                    <button data-target="#resetCacheModal" data-toggle="modal" class="btn btn-danger btn-block">Reset cache</button>
+                </div>
+            </div>
+        </div>
 
-                        <hr />
+        <div class="row">
+            <div class="col-xs-6 col-md-4 col-md-offset-2">
+                <div class="card card-2">
+                    <h3>Geheugen gebruik</h3>
 
-                        <p>
-                            De PHP module 'opcache' staat niet aan. <br />
-                            Deze kan worden geactiveerd via de PHP configuratie op de server.
-                        </p>
+                    <hr />
+
+                    <div style="height: 200px;">
+                        <canvas id="memoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6 col-md-4">
+                <div class="card card-2">
+                    <h3>Cache hitrate {{ round(($opcache_stats->get('hits') / ($opcache_stats->get('hits') + $opcache_stats->get('misses'))) * 100, 1) }}%</h3>
+
+                    <hr />
+
+                    <div style="height: 200px;">
+                        <canvas id="hitsChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
-    @else
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xs-12 col-md-8 col-md-offset-2">
-                    <div class="card card-2">
-                        <button data-target="#resetCacheModal" data-toggle="modal" class="btn btn-danger btn-block">Reset cache</button>
-                    </div>
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col-xs-6 col-md-4 col-md-offset-2">
-                    <div class="card card-2">
-                        @include('admin.cache.components.memory-chart')
-                    </div>
-                </div>
-
-                <div class="col-xs-6 col-md-4">
-                    <div class="card card-2">
-                        @include('admin.cache.components.hitrate-chart')
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-xs-12 col-md-8 col-md-offset-2">
-                    <div class="card card-2">
-                        @include('admin.cache.components.information')
-                    </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-8 col-md-offset-2">
+                <div class="card card-2">
+                    @include('admin.cache.components.information')
                 </div>
             </div>
         </div>
-    @endif
+    </div>
 @endsection
 
 @section('document_end')
-    @if($opcache_enabled)
-        @include('admin.cache.components.javascript')
-    @endif
+    @include('admin.cache.components.javascript')
 @endsection

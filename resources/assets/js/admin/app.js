@@ -1,53 +1,28 @@
-// I have no idea what this is, but it's here anyway. Deal with it!
-window._ = require('lodash');
 
-// jQuery
-window.$ = window.jQuery = require('jquery');
+/**
+ * First we will load all of this project's JavaScript dependencies which
+ * includes Vue and other libraries. It is a great starting point when
+ * building robust, powerful web applications using Vue and Laravel.
+ */
 
-// Random material color generator
-window.randomMC = require('random-material-color');
+require('./bootstrap');
+
+// ChartJS
+window.Chart.defaults.global.maintainAspectRatio = false;
+
+// Axios
+window.axios.defaults.headers.common = {
+    'X-Requested-With': 'XMLHttpRequest'
+};
+
 window.randomColor = function () {
     return randomMC.getColor();
 };
 
-// Boostrap
-require('bootstrap-sass');
-
-// ChartJS
-window.Chart = require('chart.js');
-window.Chart.defaults.global.maintainAspectRatio = false;
-
 // Names of the months
 window.months = ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December'];
 
-$(document).on('change', '.btn-file :file', function() {
-    var input = $(this),
-        numFiles = input.get(0).files ? input.get(0).files.length : 1,
-        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-
-    input.trigger('fileselect', [numFiles, label]);
-});
-
 $(document).ready( function() {
-    $('.btn-file :file').on('fileselect', function(event, numFiles, label) {
-
-        var input = $(this).parents('.input-group').find(':text'),
-            log = numFiles > 1 ? numFiles + ' files selected' : label;
-
-        if( input.length ) {
-            input.val(log);
-        } else {
-            if( log ) alert(log);
-        }
-    });
-
-    var $notification = $('.notification');
-
-    setTimeout(function () {
-        $notification.removeClass('fadeInLeft');
-        $notification.addClass('fadeOutLeft');
-    }, 5000);
-
     var $page = $('#page-wrapper');
     var $navToggle = $('#toggle-navigation');
 
@@ -58,4 +33,17 @@ $(document).ready( function() {
             $page.addClass('show-nav');
         }
     });
+});
+
+Vue.component('notification', require('../components/Notification'));
+Vue.component('block', require('../components/Admin/Content/Block'));
+Vue.component('descriptions', require('../components/Admin/Content/Descriptions'));
+
+window.vm = new Vue({
+    el: '#app',
+    data () {
+        return {
+            filter: {}
+        }
+    }
 });

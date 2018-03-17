@@ -1,0 +1,26 @@
+#companies-table {
+  .company-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .company-status {
+    width: 50px;
+  }
+}
+
+#company-filter-wrapper {
+  margin-bottom: 10px
+}
+
+#companies-table,
+#accounts-table {
+  .edit-button {
+    padding: 0;
+
+    a {
+      font-size: 16px;
+    }
+  }
+}

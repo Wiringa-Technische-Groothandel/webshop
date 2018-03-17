@@ -1,8 +1,12 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Database seeder.
+ *
+ * @author  Thomas Wiringa  <thomas.wiringa@gmail.com>
+ */
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -12,8 +16,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
-
-        // $this->call('UserTableSeeder');
+        $this->call(CompaniesTableSeeder::class);
+        $this->call(CustomersTableSeeder::class);
+        $this->call(AddressTableSeeder::class);
+        $this->call(ProductsTableSeeder::class);
+        $this->call(QuotesTableSeeder::class);
+        $this->call(QuoteItemsTableSeeder::class);
+        $this->call(RegistrationsTableSeeder::class);
     }
 }

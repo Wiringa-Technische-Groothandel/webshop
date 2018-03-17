@@ -1,5 +1,3 @@
-@import "../variables";
-
 #page-wrapper {
   background-color: $admin-page-bg;
   position: fixed;
@@ -13,6 +11,10 @@
     position: relative;
     min-height: 100vh;
     overflow: hidden;
+  }
+
+  .breadcrumb {
+    margin-bottom: 0;
   }
 }
 

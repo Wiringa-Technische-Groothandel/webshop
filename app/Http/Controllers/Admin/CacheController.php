@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
-
-use App\Helper;
+namespace WTG\Http\Controllers\Admin;
 
 /**
- * Class CacheController.
+ * Cache controller.
  *
- * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
+ * @package     WTG\Http
+ * @subpackage  Controllers\Admin
+ * @author      Thomas Wiringa <thomas.wiringa@gmail.com>
  */
 class CacheController extends Controller
 {
@@ -16,27 +16,26 @@ class CacheController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function view()
+    public function getAction()
     {
-        $opcache = opcache_get_status();
-
-        if ($opcache === false) {
-            return view('admin.cache.index', [
-                'opcache_enabled'       => false,
+        if (! extension_loaded('opcache')) {
+            return view('pages.admin.cache', [
+                'opcache_loaded'  => false,
+                'opcache_enabled' => false,
+                'opcache_full'    => false,
+                'opcache_stats'   => collect(),
+                'opcache_memory'  => collect(),
             ]);
         }
 
-        $opcache_stats = collect($opcache['opcache_statistics']);
+        $opcache        = opcache_get_status();
+        $opcache_stats  = collect($opcache['opcache_statistics']);
+        $free_memory    = $opcache['memory_usage']['free_memory'];
+        $used_memory    = $opcache['memory_usage']['used_memory'];
+        $wasted_memory  = $opcache['memory_usage']['wasted_memory'];
+        $total_memory   = $free_memory + $used_memory + $wasted_memory;
 
-        $free_memory = $opcache['memory_usage']['free_memory'];
-        $used_memory = $opcache['memory_usage']['used_memory'];
-        $wasted_memory = $opcache['memory_usage']['wasted_memory'];
-
-        $total_memory = $free_memory + $used_memory + $wasted_memory;
-
-        /*
-         * Calculate opcache memory in MB
-         */
+        // Calculate opcache memory in MB
         $opcache_memory = collect([
             'total'  => Helper::convertByte($total_memory),
             'free'   => Helper::convertByte($free_memory),
@@ -45,6 +44,7 @@ class CacheController extends Controller
         ]);
 
         return view('admin.cache.index', [
+            'opcache_loaded'        => true,
             'opcache_enabled'       => $opcache['opcache_enabled'],
             'opcache_full'          => $opcache['cache_full'],
             'opcache_stats'         => $opcache_stats,
@@ -75,4 +75,5 @@ class CacheController extends Controller
                 ->withErrors('Er is een fout opgetreden tijdens het resetten van de cache. De \'OpCache module is niet geinstalleerd.\'');
         }
     }
+
 }

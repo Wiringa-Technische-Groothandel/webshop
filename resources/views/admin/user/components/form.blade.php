@@ -1,4 +1,4 @@
-<h3>
+    <h3>
     <i class="fa fa-fw fa-user-plus"></i> Debiteur toevoegen/aanpassen
 </h3>
 
