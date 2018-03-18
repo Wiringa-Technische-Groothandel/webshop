@@ -29,7 +29,9 @@ set('allow_anonymous_stats', false);
 set('bin/php', 'cd ~/docker/wiringa.nl && docker-compose exec -T php php');
 set('bin/composer', 'composer');
 
-host('artemis')
+host('artemis.wiringa.nl')
+    ->user('wiringa')
+    ->port(2222)
     ->stage('staging')
     ->set('deploy_path', '/httpdocs')
     ->set('branch', 'release');
