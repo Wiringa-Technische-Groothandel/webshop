@@ -55,14 +55,8 @@ deploy_staging_job:
     - release
 
   script:
-    # Install ssh-agent if not already installed
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-
-    # Run ssh-agent
-    - eval $(ssh-agent -s)
-
-    # Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    # Install ssh if not already installed
+    - 'which ssh || ( apt-get update -y && apt-get install openssh-client -y )'
 
     # Create the SSH directory and give it the right permissions
     - mkdir -p ~/.ssh
@@ -70,6 +64,17 @@ deploy_staging_job:
 
     # Known host checking
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+    # Add keypair
+    - echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+
+    # Add SSH config
+    - echo "$SSH_CONFIG" > ~/.ssh/config
+
+    # Fix permissions
+    - chmod 600 ~/.ssh/id_rsa*
+    - chmod 600 ~/.ssh/config
     - chmod 644 ~/.ssh/known_hosts
 
     # Release to staging
