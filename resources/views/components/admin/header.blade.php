@@ -23,9 +23,13 @@
                         <a href="#" data-target="#resetCacheModal" data-toggle="modal" title="Reset cache"><i class="fal fa-fw fa-microchip"></i></a>
                     </li>
                     <li role="presentation">
-                        <a href="{{ route('auth.logout') }}" title="Logout"><i class="fal fa-fw fa-power-off"></i></a>
+                        <a href="#" onclick="document.getElementById('logout-form').submit()" title="Logout"><i class="fal fa-fw fa-power-off"></i></a>
                     </li>
                 </ul>
+
+                <form style="display: none;" id="logout-form" method="post" action="{{ route('admin.auth.logout') }}">
+                    {{ csrf_field() }}
+                </form>
             </div>
         </div>
     </header>

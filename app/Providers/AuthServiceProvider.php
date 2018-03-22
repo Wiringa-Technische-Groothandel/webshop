@@ -40,5 +40,6 @@ class AuthServiceProvider extends ServiceProvider
         $this->app->bind(AuthServiceContract::class, AuthService::class);
         $this->app->bind(RegistrationContract::class, Registration::class);
         $this->app->bind(RegistrationServiceContract::class, RegistrationService::class);
+        $this->app->bind(\WTG\Contracts\Services\Admin\AuthServiceContract::class, \WTG\Services\Admin\AuthService::class);
     }
 }
