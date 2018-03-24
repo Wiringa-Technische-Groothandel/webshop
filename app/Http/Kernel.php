@@ -34,8 +34,7 @@ class Kernel extends HttpKernel
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \WTG\Http\Middleware\VerifyCsrfToken::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \WTG\Http\Middleware\CheckActive::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class
         ],
 
         'api' => [
@@ -57,6 +56,7 @@ class Kernel extends HttpKernel
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \WTG\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class
+        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'active' => \WTG\Http\Middleware\CheckActive::class,
     ];
 }

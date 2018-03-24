@@ -171,10 +171,8 @@ return [
          * Application Service Providers...
          */
         WTG\Providers\AppServiceProvider::class,
-        WTG\Providers\AccountServiceProvider::class,
         WTG\Providers\AuthServiceProvider::class,
         WTG\Providers\BladeServiceProvider::class,
-        WTG\Providers\CheckoutServiceProvider::class,
         WTG\Providers\CatalogServiceProvider::class,
         WTG\Providers\CarouselServiceProvider::class,
         WTG\Providers\LogServiceProvider::class,

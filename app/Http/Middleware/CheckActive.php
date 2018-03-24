@@ -22,15 +22,15 @@ class CheckActive
      */
     public function handle($request, \Closure $next)
     {
-        if (auth()->check()) {
+        if (auth('web')->check()) {
             /** @var CustomerContract $customer */
             $customer = $request->user();
 
             if (! $customer->getActive()) {
-                auth()->logout();
+                auth('web')->logout();
 
                 return redirect(route('home'))
-                    ->withErrors(__('Uw account is gedeactiveerd. Voor meer informatie, neem dan contact op met ons of uw account beheerder.'));
+                    ->withErrors(__('Uw account is gedeactiveerd. Neem contact met ons of uw accountbeheerder op voor meer informatie.'));
             }
         }
 

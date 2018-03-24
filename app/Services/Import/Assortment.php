@@ -19,6 +19,7 @@ use Illuminate\Filesystem\FilesystemManager;
  */
 class Assortment
 {
+    const FILENAME_PATTERN = '/Compleet[0-9]+\.xml$/';
     const MUTATION_DELETE = 'D';
     const MUTATION_UPDATE = 'U';
 
@@ -94,8 +95,10 @@ class Assortment
         }
 
         $this->files = collect(
-            $this->fs->disk('sftp')->allFiles('assortment')
-        );
+                $this->fs->disk('sftp')->allFiles('assortment')
+            )->filter(function ($filename) {
+                return preg_match(self::FILENAME_PATTERN, $filename);
+            });
 
         return $this->files;
     }
@@ -202,7 +205,9 @@ class Assortment
 
             $product = ProductModel::createFromSoapProduct($soapProduct);
             $product->setAttribute('synchronized_at', $this->runTime);
-            $product->setAttribute('deleted_at', null);
+            $product->setAttribute('deleted_at',
+                ($soapProduct->inactive || $soapProduct->blocked || $soapProduct->discontinued) ? Carbon::now() : null
+            );
 
             $product->save();
 

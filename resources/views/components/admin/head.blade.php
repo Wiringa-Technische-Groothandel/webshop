@@ -19,6 +19,6 @@
 <script src="//cdn.ckeditor.com/4.8.0/standard/ckeditor.js"></script>
 <script>
     window.Laravel = {
-        isLoggedIn: 1
+        isLoggedIn: {{ (int) auth('admin')->check() }}
     };
 </script>

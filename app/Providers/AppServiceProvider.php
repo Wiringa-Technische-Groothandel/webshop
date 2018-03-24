@@ -2,12 +2,36 @@
 
 namespace WTG\Providers;
 
+use WTG\Models\Admin;
 use WTG\Models\Block;
+use WTG\Models\Order;
+use WTG\Models\Quote;
+use WTG\Models\Company;
+use WTG\Models\Contact;
+use WTG\Models\Customer;
+use WTG\Models\OrderItem;
+use WTG\Models\QuoteItem;
+use WTG\Services\CartService;
 use League\Flysystem\Filesystem;
+use WTG\Services\CheckoutService;
+use WTG\Services\FavoritesService;
 use WTG\Soap\Service as SoapService;
 use League\Flysystem\Sftp\SftpAdapter;
+use WTG\Contracts\Models\CartContract;
+use WTG\Contracts\Models\OrderContract;
 use Illuminate\Support\ServiceProvider;
+use WTG\Contracts\Models\AdminContract;
 use WTG\Contracts\Models\BlockContract;
+use WTG\Services\Account\AddressService;
+use WTG\Contracts\Models\CompanyContract;
+use WTG\Contracts\Models\ContactContract;
+use WTG\Contracts\Models\CustomerContract;
+use WTG\Contracts\Models\CartItemContract;
+use WTG\Contracts\Models\OrderItemContract;
+use WTG\Contracts\Services\CartServiceContract;
+use WTG\Contracts\Services\CheckoutServiceContract;
+use WTG\Contracts\Services\FavoritesServiceContract;
+use WTG\Contracts\Services\Account\AddressServiceContract;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +47,15 @@ class AppServiceProvider extends ServiceProvider
 
             return new Filesystem($adapter);
         });
+
+        view()->composer('*', function ($view) {
+            if (auth('web')->check()) {
+                /** @var CustomerContract $customer */
+                $customer = auth('web')->user();
+
+                $view->with('cart', app()->make(CartContract::class)->loadForCustomer($customer));
+            }
+        });
     }
 
     /**
@@ -32,7 +65,23 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(CartContract::class, Quote::class);
+        $this->app->bind(AdminContract::class, Admin::class);
         $this->app->bind(BlockContract::class, Block::class);
+        $this->app->bind(OrderContract::class, Order::class);
+        $this->app->bind(CompanyContract::class, Company::class);
+        $this->app->bind(ContactContract::class, Contact::class);
+        $this->app->bind(CustomerContract::class, Customer::class);
+        $this->app->bind(CartItemContract::class, QuoteItem::class);
+        $this->app->bind(OrderItemContract::class, OrderItem::class);
+        $this->app->bind(CartServiceContract::class, CartService::class);
+        $this->app->bind(AddressServiceContract::class, AddressService::class);
+        $this->app->bind(CheckoutServiceContract::class, CheckoutService::class);
+        $this->app->bind(FavoritesServiceContract::class, FavoritesService::class);
+
+        $this->app->singleton(CartContract::class, function () {
+            return new Quote();
+        });
 
         $this->app->singleton('soap', SoapService::class);
 
