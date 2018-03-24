@@ -35,7 +35,7 @@
                             <input type="password" class="form-control" name="password" placeholder="{{ __('Wachtwoord') }}">
                         </div>
 
-                        <button type="submit" class="btn btn-outline-success">{{ __('Login') }}</button>
+                        <button type="submit" class="btn btn-outline-success float-right">{{ __('Login') }}</button>
                     </form>
                 </div>
             </div>
