@@ -14450,7 +14450,7 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 900;
   src: url(/fonts/fa-solid-900.eot?881dc7cfff910fc3ebae32ebfed0e22d);
-  src: url(/fonts/fa-solid-900.eot?881dc7cfff910fc3ebae32ebfed0e22d) format("embedded-opentype"), url(/fonts/fa-solid-900.woff2?5229fc2de01ebaf2f66ea0906d99934d) format("woff2"), url(/fonts/fa-solid-900.woff?bc595bb4122771431b7cf5953f32957f) format("woff"), url(/fonts/fa-solid-900.ttf?bacbaa4247764ec86608f2fbe4e7347f) format("truetype"), url(/fonts/fa-solid-900.svg?711643fb2882d05fcafed9e00f342b91) format("svg");
+  src: url(/fonts/fa-solid-900.eot?881dc7cfff910fc3ebae32ebfed0e22d) format("embedded-opentype"), url(/fonts/fa-solid-900.woff2?5229fc2de01ebaf2f66ea0906d99934d) format("woff2"), url(/fonts/fa-solid-900.woff?bc595bb4122771431b7cf5953f32957f) format("woff"), url(/fonts/fa-solid-900.ttf?bacbaa4247764ec86608f2fbe4e7347f) format("truetype"), url(/fonts/fa-solid-900.svg?1492b1ffaca4f7f3e2b36e1cbfc08ac0) format("svg");
 }
 
 .fa,
@@ -14469,7 +14469,7 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 400;
   src: url(/fonts/fa-regular-400.eot?16f04cc3263785dc7f411e12c5869baa);
-  src: url(/fonts/fa-regular-400.eot?16f04cc3263785dc7f411e12c5869baa) format("embedded-opentype"), url(/fonts/fa-regular-400.woff2?1b8460876060f25c32aea45299537695) format("woff2"), url(/fonts/fa-regular-400.woff?47ffb280272d333cb8f92a71bdfc3961) format("woff"), url(/fonts/fa-regular-400.ttf?bbd1e7a4e8b9df3408636ca26fc49e7c) format("truetype"), url(/fonts/fa-regular-400.svg?291b91911996aab41b6c5cb7a93b8702) format("svg");
+  src: url(/fonts/fa-regular-400.eot?16f04cc3263785dc7f411e12c5869baa) format("embedded-opentype"), url(/fonts/fa-regular-400.woff2?1b8460876060f25c32aea45299537695) format("woff2"), url(/fonts/fa-regular-400.woff?47ffb280272d333cb8f92a71bdfc3961) format("woff"), url(/fonts/fa-regular-400.ttf?bbd1e7a4e8b9df3408636ca26fc49e7c) format("truetype"), url(/fonts/fa-regular-400.svg?39661f2a08f5ad003c93d3a7a553af84) format("svg");
 }
 
 .far {
@@ -14487,7 +14487,7 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 300;
   src: url(/fonts/fa-light-300.eot?ef489bc9f442711732d334ca834f3805);
-  src: url(/fonts/fa-light-300.eot?ef489bc9f442711732d334ca834f3805) format("embedded-opentype"), url(/fonts/fa-light-300.woff2?25ea1f58b39fcf5a5caa3e67d54ea1d3) format("woff2"), url(/fonts/fa-light-300.woff?1420ebcb2cacc5385901cddce035c824) format("woff"), url(/fonts/fa-light-300.ttf?3645a24cedd6a4a8217bb3b28e233a75) format("truetype"), url(/fonts/fa-light-300.svg?c3941ebc908a9da4d16d8a4def7859ec) format("svg");
+  src: url(/fonts/fa-light-300.eot?ef489bc9f442711732d334ca834f3805) format("embedded-opentype"), url(/fonts/fa-light-300.woff2?25ea1f58b39fcf5a5caa3e67d54ea1d3) format("woff2"), url(/fonts/fa-light-300.woff?1420ebcb2cacc5385901cddce035c824) format("woff"), url(/fonts/fa-light-300.ttf?3645a24cedd6a4a8217bb3b28e233a75) format("truetype"), url(/fonts/fa-light-300.svg?4cf66f8146939d1c1ab1f9a75cdb1fc5) format("svg");
 }
 
 .fal {
