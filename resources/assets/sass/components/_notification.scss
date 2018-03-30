@@ -28,7 +28,7 @@
     border-radius: 4px;
 
     &:before {
-      font-family: "FontAwesome", sans-serif;
+      font-family: $font-family-fa;
       margin: 0 10px 0 0;
     }
 
@@ -37,7 +37,7 @@
       color: white;
 
       &:before {
-        content: "\f058";
+        content: fa-content($fa-var-check-circle);
       }
     }
 
@@ -46,7 +46,7 @@
       color: white;
 
       &:before {
-        content: "\f057";
+        content: fa-content($fa-var-times-circle);
       }
     }
 
@@ -55,7 +55,7 @@
       color: white;
 
       &:before {
-        content: "\f06a";
+        content: fa-content($fa-var-exclamation-triangle);
       }
     }
   }
