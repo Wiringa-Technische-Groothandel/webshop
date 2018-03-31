@@ -28,6 +28,6 @@
 
         <script src="{{ mix('assets/js/app.js') }}"></script>
 
-        @yield('extraJS')
+        @stack('scripts')
     </body>
 </html>

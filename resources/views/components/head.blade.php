@@ -34,7 +34,3 @@
         isLoggedIn: {{ (int) auth()->check() }}
     };
 </script>
-
-@if (auth()->check() && auth()->user()->hasRole(\WTG\Models\Customer::CUSTOMER_ROLE_SUPER_ADMIN))
-    <script src="//cdn.ckeditor.com/4.7.1/standard/ckeditor.js"></script>
-@endif

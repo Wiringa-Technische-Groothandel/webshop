@@ -13,17 +13,13 @@
             <b>Let op:</b> {{ __('Zonder contact e-mail kunt u uw wachtwoord niet resetten als u deze bent vergeten.') }}
         </div>
 
-        <form method="POST">
-            {{ csrf_field() }}
+        <input class="form-control" title="Contact email" name="contact_email" oninput="toggleSaveButton()"
+               value="{{ $customer->getContact()->getContactEmail() }}" type="email"
+               data-initial="{{ $customer->getContact()->getContactEmail() }}"
+               data-required="false" />
 
-            <input class="form-control" title="Contact email" name="contact_email" oninput="toggleSaveButton()"
-                   value="{{ $customer->getContact()->getContactEmail() }}" type="email"
-                   data-initial="{{ $customer->getContact()->getContactEmail() }}"
-                   data-required="false" />
-
-            <button type="submit" class="btn btn-success my-2" style="display: none;">
-                {{ __('Opslaan') }}
-            </button>
-        </form>
+        <button type="submit" class="btn btn-success my-2" style="display: none;">
+            {{ __('Opslaan') }}
+        </button>
     </div>
 </div>

@@ -15,6 +15,7 @@ use WTG\Services\CartService;
 use League\Flysystem\Filesystem;
 use WTG\Services\CheckoutService;
 use WTG\Services\FavoritesService;
+use WTG\Services\RecaptchaService;
 use WTG\Soap\Service as SoapService;
 use League\Flysystem\Sftp\SftpAdapter;
 use WTG\Contracts\Models\CartContract;
@@ -65,6 +66,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->alias(RecaptchaService::class, 'captcha');
+
         $this->app->bind(CartContract::class, Quote::class);
         $this->app->bind(AdminContract::class, Admin::class);
         $this->app->bind(BlockContract::class, Block::class);

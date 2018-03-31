@@ -68,11 +68,11 @@ class Handler extends ExceptionHandler
     public function render($request, \Exception $exception)
     {
         if ($exception instanceof TokenMismatchException) {
-            return back()->withErrors(__("Uw sessie is verlopen, probeer het opnieuw."));
+            return back()->withInput($request->except('password'))->withErrors(__("Uw sessie is verlopen, probeer het opnieuw."));
         }
 
         if ($exception instanceof AuthorizationException) {
-            return back()->withErrors(__('U hebt onvoldoende rechten om deze actie uit te voeren.'));
+            return back()->withInput($request->except('password'))->withErrors(__('U hebt onvoldoende rechten om deze actie uit te voeren.'));
         }
 
         return parent::render($request, $exception);

@@ -4,7 +4,7 @@
 
 @section('account.title')
     <h2 class="text-center block-title">
-        {{ trans('titles.account.dashboard', ['company' => $customer->getCompany()->getName() ]) }}
+        {{ trans('titles.account.dashboard', [ 'company' => $customer->getCompany()->getName() ]) }}
     </h2>
 @endsection
 
@@ -16,17 +16,21 @@
     </div>
 
     <div class="row my-4">
-        <div class="col-12 col-sm-6 mb-3">
-            @include('components.account.dashboard.contact-email')
-        </div>
+        <form method="POST">
+            {{ csrf_field() }}
 
-        <div class="col-12 col-sm-6">
-            @include('components.account.dashboard.confirmation-email')
-        </div>
+            <div class="col-12 col-sm-6 mb-3">
+                @include('components.account.dashboard.contact-email')
+            </div>
+
+            <div class="col-12 col-sm-6">
+                @include('components.account.dashboard.confirmation-email')
+            </div>
+        </form>
     </div>
 @endsection
 
-@section('extraJS')
+@push('scripts')
     <script>
         /**
          * Toggle the save button below the contact input fields.
@@ -39,9 +43,7 @@
 
             if (
                 $target.data('initial') === $target.val() ||
-                (
-                    $target.val() === "" && $target.data('required')
-                )
+                ( $target.val() === "" && $target.data('required') )
             ) {
                 $button.slideUp();
             } else {
@@ -49,4 +51,4 @@
             }
         }
     </script>
-@endsection
+@endpush
