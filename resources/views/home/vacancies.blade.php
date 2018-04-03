@@ -32,7 +32,7 @@
             </ul>
 
             <p>Indien je denkt dat jij de juiste man bent voor de job reageer dan via onze website met je uitgebreide
-            CV en overtuig ons om je uit te nodigen voor een prettig sollicitatiegesprek. Gaarne je CV als PDF meesturen.</p>
+            CV en overtuig ons om je uit te nodigen voor een prettig sollicitatiegesprek. Gaarne je CV als PDF meesturen naar <a href="mailto:peter@wiringa.nl">peter@wiringa.nl</a>.</p>
 
             <br />
 
