@@ -78,6 +78,7 @@
                             <li><a href="{{ url('clearance') }}">Opruiming</a></li>
                         </ul>
                     </li>
+                    <li><a href="{{ url('vacancies') }}">Vacatures</a></li>
                     @if(Auth::check() && Auth::user()->isAdmin)
                         <li class="@if( substr(Route::current()->getUri(), 0, 5) === 'admin' ) active @endif"><a href="{{ url('admin') }}">Admin</a></li>
                     @endif
@@ -106,7 +107,7 @@
                     <br />
 
                     <form action="{{ url('search') }}" method="GET" class="navbar-form hidden-xs" role="search">
-                        {{ csrf_field() }}
+              )         {{ csrf_field() }}
                         <div class="form-group search-field has-feedback">
                             <input id="searchInput" value="{{ request('q') }}" name="q" type="text" required="" class="form-control" placeholder="Zoeken">
                             <button type="submit" class="btn btn-link"><i class="glyphicon glyphicon-search form-control-feedback"></i></button>
@@ -132,11 +133,13 @@
 
     <div class="container content">
 
-        <div class="row">
-            <div class="col-md-12 bg-primary site-title">
-                @yield('title')
+        @if ((isset($hideTitle) && !$hideTitle) || !isset($hideTitle))
+            <div class="row">
+                <div class="col-md-12 bg-primary site-title">
+                    @yield('title')
+                </div>
             </div>
-        </div>
+        @endif
 
         @if( Route::current()->getUri() === '/' )
             <div class="well well-sm text-center ie-only">

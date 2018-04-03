@@ -103,4 +103,14 @@ class HomeController extends Controller
             }
         }
     }
+
+    /**
+     * Vacancies page.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function vacancies()
+    {
+        return view('home.vacancies');
+    }
 }
