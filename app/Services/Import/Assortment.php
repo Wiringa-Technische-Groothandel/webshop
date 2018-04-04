@@ -159,9 +159,10 @@ class Assortment
         foreach ($products->children() as $xmlProduct) {
             $mutation = substr((string) $xmlProduct->Mutation, 0, 1) ?: self::MUTATION_UPDATE;
             $sku = (string) $xmlProduct->ProductId;
+            $unit = (string) $xmlProduct->UnitId;
 
             if ($mutation === self::MUTATION_DELETE) {
-                $product = ProductModel::findBySku($sku);
+                $product = $this->findProduct($sku, $unit);
 
                 if (! $product) {
                     continue;
@@ -187,7 +188,7 @@ class Assortment
             $soapProduct->inactive        = ((string) $xmlProduct->Inactive) === "true";
             $soapProduct->discontinued    = ((string) $xmlProduct->Discontinued) === "true";
             $soapProduct->vat             = (float) $xmlProduct->VatPercentage;
-            $soapProduct->sales_unit      = (string) $xmlProduct->UnitId;
+            $soapProduct->sales_unit      = $unit;
             $soapProduct->packing_unit    = (string) $xmlProduct->PackagingUnitId;
             $soapProduct->width           = (float) $xmlProduct->ProductWidthCm;
             $soapProduct->length          = (float) $xmlProduct->ProductLengthCm;
@@ -269,5 +270,20 @@ class Assortment
                     break;
             }
         }
+    }
+
+    /**
+     * Find a product for the import process.
+     *
+     * @param  string  $sku
+     * @param  string  $unit
+     * @return null|Product
+     */
+    public static function findProduct(string $sku, string $unit): ?Product
+    {
+        return app()->make(ProductModel::class)
+            ->where('sku', $sku)
+            ->where('sales_unit', $unit)
+            ->first();
     }
 }
