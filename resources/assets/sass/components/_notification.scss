@@ -37,7 +37,7 @@
       color: white;
 
       &:before {
-        content: fa-content($fa-var-check-circle);
+        content: "\f058"; // check-circle
       }
     }
 
@@ -46,7 +46,7 @@
       color: white;
 
       &:before {
-        content: fa-content($fa-var-times-circle);
+        content: "\f2f0"; // times-octagon
       }
     }
 
@@ -55,7 +55,7 @@
       color: white;
 
       &:before {
-        content: fa-content($fa-var-exclamation-triangle);
+        content: "\f071"; // exclamation-triangle
       }
     }
   }

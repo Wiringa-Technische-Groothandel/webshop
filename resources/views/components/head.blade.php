@@ -9,6 +9,8 @@
 
 <title>WTG - @yield('title')</title>
 
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.0.10/css/all.css"
+      integrity="sha384-KwxQKNj2D0XKEW5O/Y6haRH39PE/xry8SAoLbpbCMraqlX7kUP6KHOnrlrtvuJLR" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css?family=Muli:300,400,600,800" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Oswald:500,700" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css"/>
