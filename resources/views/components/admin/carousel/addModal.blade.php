@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Toevoegen</button>
+                    <button type="submit" class="btn btn-raised btn-primary">Toevoegen</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Sluiten</button>
                 </div>
             </form>

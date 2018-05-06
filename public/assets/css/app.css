@@ -14134,73 +14134,35 @@ html.lb-disable-scrolling {
   opacity: 1;
 }
 
-#notification-wrapper {
-  position: fixed;
-  z-index: 999;
-  bottom: 0;
-  width: 0;
-  left: 0;
-}
-
 @media (min-width: 768px) {
   #notification-wrapper {
-    left: 20px;
-    bottom: 20px;
+    left: 20px !important;
+    bottom: 20px !important;
   }
 }
 
 @media (max-width: 767.98px) {
   #notification-wrapper {
-    right: 0;
+    right: 0 !important;
   }
-}
-
-#notification-wrapper .notification {
-  width: 100vw;
-  display: inline-block;
-  margin-top: 10px;
-  padding: 20px;
-  font-size: 15px;
-  font-weight: 300;
-  border-radius: 4px;
 }
 
 @media (min-width: 768px) {
   #notification-wrapper .notification {
-    width: 400px;
+    width: 400px !important;
   }
 }
 
-#notification-wrapper .notification:before {
-  font-family: "Font Awesome 5 Pro";
-  margin: 0 10px 0 0;
-}
-
 #notification-wrapper .notification.success {
-  background: #28a745;
-  color: white;
-}
-
-#notification-wrapper .notification.success:before {
-  content: "\F058";
+  background: #28a745 !important;
 }
 
 #notification-wrapper .notification.danger {
-  background: #dc3545;
-  color: white;
-}
-
-#notification-wrapper .notification.danger:before {
-  content: "\F2F0";
+  background: #dc3545 !important;
 }
 
 #notification-wrapper .notification.warning {
-  background: #ffc107;
-  color: white;
-}
-
-#notification-wrapper .notification.warning:before {
-  content: "\F071";
+  background: #ffc107 !important;
 }
 
 .product-listing {

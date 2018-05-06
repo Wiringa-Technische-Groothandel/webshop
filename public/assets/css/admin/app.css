@@ -23583,6 +23583,37 @@ h6 {
   background-color: #F01030;
 }
 
+@media (min-width: 768px) {
+  #notification-wrapper {
+    left: 20px !important;
+    bottom: 20px !important;
+  }
+}
+
+@media (max-width: 767.98px) {
+  #notification-wrapper {
+    right: 0 !important;
+  }
+}
+
+@media (min-width: 768px) {
+  #notification-wrapper .notification {
+    width: 400px !important;
+  }
+}
+
+#notification-wrapper .notification.success {
+  background: #4caf50 !important;
+}
+
+#notification-wrapper .notification.danger {
+  background: #f44336 !important;
+}
+
+#notification-wrapper .notification.warning {
+  background: #ff5722 !important;
+}
+
 html,
 body {
   font-family: "Poppins", sans-serif;

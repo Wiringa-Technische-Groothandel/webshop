@@ -5,6 +5,8 @@
 </head>
 <body>
 
+@yield('pre-content')
+
 @include('components.admin.navigation')
 
 <div class="container-fluid">
