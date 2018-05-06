@@ -4,6 +4,7 @@ namespace WTG\Models;
 
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
+use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\CompanyContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -113,7 +114,7 @@ class Company extends Model implements CompanyContract
     /**
      * Get the addresses.
      *
-     * @return Collection
+     * @return Collection|AddressContract[]
      */
     public function getAddresses(): Collection
     {
@@ -121,33 +122,86 @@ class Company extends Model implements CompanyContract
     }
 
     /**
-     * Change the default address.
+     * Set the street.
      *
-     * @param  int|Address  $address
-     * @return bool
+     * @param  string  $street
+     * @return CompanyContract
      */
-//    public function setDefaultAddress($address): bool
-//    {
-//        if (! $address instanceof Address) {
-//            $address = Address::where('company_id', $this->getAttribute('id'))
-//                ->where('id', $address)
-//                ->first();
-//
-//            if ($address === null) {
-//                return false;
-//            }
-//        }
-//
-//        if ($address->getAttribute('company_id') !== $this->getAttribute('id')) {
-//            return false;
-//        }
-//
-//        $this->addresses()->where(Address::COLUMN_IS_DEFAULT, true)->update([
-//            Address::COLUMN_IS_DEFAULT => false
-//        ]);
-//
-//        $address->setAttribute(Address::COLUMN_IS_DEFAULT, true);
-//
-//        return $address->save();
-//    }
+    public function setStreet(string $street): CompanyContract
+    {
+        return $this->setAttribute('street', $street);
+    }
+
+    /**
+     * Get the street.
+     *
+     * @return null|string
+     */
+    public function getStreet(): ?string
+    {
+        return $this->getAttribute('street');
+    }
+
+    /**
+     * Set the postcode.
+     *
+     * @param  null|string  $postcode
+     * @return CompanyContract
+     */
+    public function setPostcode(string $postcode): CompanyContract
+    {
+        return $this->setAttribute('postcode', $postcode);
+    }
+
+    /**
+     * Get the postcode.
+     *
+     * @return null|string
+     */
+    public function getPostcode(): ?string
+    {
+        return $this->getAttribute('postcode');
+    }
+
+    /**
+     * Set the city.
+     *
+     * @param  null|string  $city
+     * @return CompanyContract
+     */
+    public function setCity(string $city): CompanyContract
+    {
+        return $this->setAttribute('city', $city);
+    }
+
+    /**
+     * Get the city.
+     *
+     * @return null|string
+     */
+    public function getCity(): ?string
+    {
+        return $this->getAttribute('city');
+    }
+
+    /**
+     * Set the active state.
+     *
+     * @param  bool  $active
+     * @return CompanyContract
+     */
+    public function setActive(bool $active): CompanyContract
+    {
+        return $this->setAttribute('active', $active);
+    }
+
+    /**
+     * Get the active state.
+     *
+     * @return null|bool
+     */
+    public function getActive(): ?bool
+    {
+        return $this->getAttribute('active');
+    }
 }

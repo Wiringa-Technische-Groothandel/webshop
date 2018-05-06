@@ -43,6 +43,13 @@ class Customer extends Authenticatable implements CustomerContract
     ];
 
     /**
+     * @var array
+     */
+    protected $hidden = [
+        'password'
+    ];
+
+    /**
      * Company relation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

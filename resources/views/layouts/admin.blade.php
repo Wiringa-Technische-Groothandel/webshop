@@ -4,28 +4,24 @@
     @include('components.admin.head')
 </head>
 <body>
-@yield('document_start')
 
-<div id="app" class="container-fluid">
-    @include('components.admin.navigation')
+@include('components.admin.navigation')
 
-    <div id="page-wrapper">
-        @yield('before-page')
+<div class="container-fluid">
+    <div class="row">
+        @include('components.admin.sidebar')
 
-        <div id="page">
-            @include('components.admin.header')
+        <main id="app" role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3">
+            @yield('content')
 
-            @include('components.admin.content')
-        </div>
-
-        @yield('after-page')
+            <notification :php-errors="{{ $errors->toJson() }}"
+                          php-success="{{ session('status') }}"></notification>
+        </main>
     </div>
-
-    <notification :php-errors="{{ $errors->toJson() }}"
-                  php-success="{{ session('status') }}"></notification>
 </div>
 
 <script src="{{ elixir('assets/js/admin/app.js') }}"></script>
+<script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
 <script>
     function makeChart (context, type, data, options) {
         options = options ? options : {};
@@ -38,6 +34,7 @@
     }
 </script>
 
-@yield('document_end')
+@stack('scripts')
+
 </body>
 </html>

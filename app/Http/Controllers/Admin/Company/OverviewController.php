@@ -1,9 +1,10 @@
 <?php
 
-namespace WTG\Http\Controllers\Admin;
+namespace WTG\Http\Controllers\Admin\Company;
 
 use Illuminate\Contracts\View\View;
 use WTG\Contracts\Models\CompanyContract;
+use WTG\Http\Controllers\Admin\Controller;
 
 /**
  * Company manager controller.
@@ -12,7 +13,7 @@ use WTG\Contracts\Models\CompanyContract;
  * @subpackage  Controllers\Admin
  * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
-class CompanyManagerController extends Controller
+class OverviewController extends Controller
 {
     /**
      * Company list.
@@ -21,8 +22,8 @@ class CompanyManagerController extends Controller
      */
     public function getAction(): View
     {
-        return $this->view->make('pages.admin.company-manager', [
-            'companies' => app()->make(CompanyContract::class)->paginate(10)
+        return $this->view->make('pages.admin.companies', [
+            'companies' => app()->make(CompanyContract::class)->with('customers')->paginate(10)
         ]);
     }
 }

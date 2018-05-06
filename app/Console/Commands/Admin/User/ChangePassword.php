@@ -7,13 +7,13 @@ use Illuminate\Console\Command;
 use WTG\Contracts\Models\AdminContract;
 
 /**
- * Admin user create command.
+ * Admin user change password command.
  *
  * @package     WTG\Console
  * @subpackage  Commands
  * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
-class Create extends Command
+class ChangePassword extends Command
 {
     const MIN_USERNAME_LENGTH = 3;
     const MIN_PASSWORD_LENGTH = 5;
@@ -23,14 +23,14 @@ class Create extends Command
      *
      * @var string
      */
-    protected $signature = 'admin:user:create';
+    protected $signature = 'admin:user:change-password';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create an admin account';
+    protected $description = 'Change the password of an admin account';
 
     /**
      * Create a new command instance.
@@ -51,13 +51,17 @@ class Create extends Command
     public function handle(): void
     {
         $username = $this->ask('Username');
-        $password = $this->secret('Password (input will be hidden)');
 
-        if (! $username || strlen($username) < self::MIN_USERNAME_LENGTH) {
-            $this->error(__('The username must be at least :length characters long.', ['length' => self::MIN_USERNAME_LENGTH]));
+        /** @var Admin $admin */
+        $admin = app()->make(AdminContract::class)->where('username', $username)->first();
+
+        if (! $admin) {
+            $this->error('No admin user was found with the given username.');
 
             return;
         }
+
+        $password = $this->secret('Password (input will be hidden)');
 
         if (! $password || strlen($password) < self::MIN_PASSWORD_LENGTH) {
             $this->error(__('The password must be at least :length characters long.', ['length' => self::MIN_PASSWORD_LENGTH]));
@@ -65,12 +69,9 @@ class Create extends Command
             return;
         }
 
-        /** @var Admin $admin */
-        $admin = app()->make(AdminContract::class);
-        $admin->setUsername($username);
         $admin->setPassword(bcrypt($password));
         $admin->saveOrFail();
 
-        $this->output->success(__('The admin user has been created successfully.'));
+        $this->output->success(__('The password has been changed successfully.'));
     }
 }
