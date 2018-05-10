@@ -22,8 +22,8 @@ class OverviewController extends Controller
      */
     public function getAction(): View
     {
-        return $this->view->make('pages.admin.companies', [
-            'companies' => app()->make(CompanyContract::class)->with('customers')->paginate(10)
-        ]);
+        $companies = app()->make(CompanyContract::class)->with('customers')->orderBy('customer_number')->paginate(10);
+
+        return $this->view->make('pages.admin.companies', compact('companies'));
     }
 }

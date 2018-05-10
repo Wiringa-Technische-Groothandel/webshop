@@ -8,7 +8,7 @@
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <a class="btn btn-default" href="{{ url()->previous() }}">
+                        <a class="btn btn-default" href="{{ $previousUrl }}">
                             <i class="fal fa-fw fa-chevron-left"></i> {{ __('Terug naar overzicht') }}
                         </a>
 
@@ -25,6 +25,12 @@
 
             <div class="col-sm-6">
                 @include('components.admin.company.sales')
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-12">
+                @include('components.admin.company.accounts')
             </div>
         </div>
     </div>

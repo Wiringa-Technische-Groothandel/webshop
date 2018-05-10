@@ -16,32 +16,27 @@
 </template>
 
 <script>
-    let editor;
-
     export default {
         props: ['url', 'blocks'],
         data () {
             return {
+                editor: null,
                 sku: '',
                 selected: 0
             }
         },
         methods: {
             getBlock () {
-                editor.setData('');
+                this.$data.editor.setData('');
 
                 if (this.$data.selected == 0) {
                     return;
                 }
 
-                axios.post(this.url, {
-                    block: this.$data.selected
-                })
+                axios.get(this.url + '/' + this.$data.selected)
                     .then((response) => {
-                        console.log(response.data.payload);
-
                         if (response.data.payload) {
-                            editor.setData(response.data.payload.content);
+                            this.$data.editor.setData(response.data.payload.content);
                         }
                     })
                     .catch((error) => {
@@ -54,7 +49,7 @@
             saveBlock () {
                 axios.put(this.url, {
                     block: this.$data.selected,
-                    data: editor.getData()
+                    data: this.$data.editor.getData()
                 })
                     .then((response) => {
                         this.$root.$emit('send-notify', {
@@ -71,7 +66,7 @@
             }
         },
         mounted () {
-            editor = CKEDITOR.replace('block-editor');
+            this.$data.editor = CKEDITOR.replace('block-editor');
         }
     }
 </script>

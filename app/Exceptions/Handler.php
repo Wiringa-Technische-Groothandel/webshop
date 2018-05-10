@@ -105,11 +105,11 @@ class Handler extends ExceptionHandler
             /** @var null|CustomerContract $customer */
             $customer = auth()->user();
 
-            return array_filter([
+            return [
                 'userId' => auth()->id(),
                 'email' => $customer ? $customer->getContact()->contactEmail() : null,
                 'customer_number' => $customer ? $customer->getCompany()->customerNumber() : null,
-            ]);
+            ];
         } catch (\Exception $e) {
             return [];
         }

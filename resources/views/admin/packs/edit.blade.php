@@ -1,7 +1,7 @@
 @extends('admin.master')
 
 @section('document_start')
-    <form action="{{ route('admin.packs::add') }}" method="POST" enctype="multipart/form-data" class="form form-horizontal">
+    <form action="{{ route('admin.packs.add') }}" method="POST" enctype="multipart/form-data" class="form form-horizontal">
         <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="#addProductLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">

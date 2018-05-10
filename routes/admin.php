@@ -50,17 +50,20 @@ Route::group([
         Route::get('companies', 'Company\OverviewController@getAction')->name('companies');
 
         Route::group(['as' => 'company.', 'prefix' => 'company'], function () {
-            Route::get('{id}', 'Company\DetailController@getAction')->name('edit');
+            Route::get('{company}', 'Company\DetailController@getAction')->name('edit');
+            Route::get('{company}/customer/{customer}', 'Company\DetailController@getAction')->name('customer.edit');
+
+            Route::post('{company}', 'Company\DetailController@postAction');
         });
 
         // Admin user manager
-        Route::group(['as' => 'user.', 'prefix' => 'user'], function () {
-            Route::get('manager', 'UserController@view')->name('manager');
-            Route::get('get', 'UserController@get')->name('get');
-            Route::get('added', 'UserController@added')->name('added');
-
-            Route::post('update', 'UserController@update')->name('update');
-        });
+//        Route::group(['as' => 'user.', 'prefix' => 'user'], function () {
+//            Route::get('manager', 'UserController@view')->name('manager');
+//            Route::get('get', 'UserController@get')->name('get');
+//            Route::get('added', 'UserController@added')->name('added');
+//
+//            Route::post('update', 'UserController@update')->name('update');
+//        });
 
         // Admin carousel manager
         Route::get('carousel', 'CarouselController@getAction')->name('carousel');
@@ -83,15 +86,15 @@ Route::group([
         Route::get('content', 'ContentController@getAction')->name('content');
 
         Route::group(['as' => 'content.', 'prefix' => 'content', 'namespace' => 'Content'], function () {
-            Route::post('description', 'DescriptionController@postAction')->name('description');
-            Route::post('block', 'BlockController@postAction')->name('block');
+            Route::get('description/{sku?}', 'DescriptionController@getAction')->name('description');
+            Route::get('block/{id?}', 'BlockController@getAction')->name('block');
 
             Route::put('description', 'DescriptionController@putAction');
             Route::put('block', 'BlockController@putAction');
         });
 
         // Admin packs
-        Route::get('packs', 'PacksController@view')->name('packs');
+        Route::get('packs', 'Packs\OverviewController@getAction')->name('packs');
 
         Route::group(['as' => 'packs.', 'prefix' => 'packs'], function () {
             Route::get('edit/{id}', 'PacksController@edit')->name('edit');

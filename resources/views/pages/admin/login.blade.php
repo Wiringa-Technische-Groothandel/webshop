@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    @include('components.head')
+    @include('components.admin.head', ['title' => 'Login'])
 </head>
 <body>
 
@@ -35,7 +35,7 @@
                             <input type="password" class="form-control" name="password" placeholder="{{ __('Wachtwoord') }}">
                         </div>
 
-                        <button type="submit" class="btn btn-outline-success float-right">{{ __('Login') }}</button>
+                        <button type="submit" class="btn btn-raised btn-success float-right">{{ __('Login') }}</button>
                     </form>
                 </div>
             </div>

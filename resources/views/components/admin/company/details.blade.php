@@ -39,8 +39,12 @@
                 </dd>
 
                 <dt class="col-sm-4">{{ __('Is actief') }}</dt>
-                <dd class="col-sm-8 input-switch" data-checked="{{ $company->getActive() }}" data-type="checkbox" data-name="active">
-                    {{ $company->getActive() ? 'Ja' : 'Nee' }}
+                <dd class="col-sm-8">
+                    <div class="checkbox">
+                        <label>
+                            <input id="active" name="active" type="checkbox" {{ $company->getActive() ? 'checked' : '' }} disabled>
+                        </label>
+                    </div>
                 </dd>
             </dl>
 
@@ -49,12 +53,28 @@
     </div>
 </div>
 
+@push('styles')
+    <style>
+        .checkbox label .checkbox-decorator {
+            padding-left: 10px;
+            padding-top: 5px;
+        }
+
+        .checkbox label #active:not([disabled="disabled"]) + .checkbox-decorator .check,
+        .checkbox label #active:not([disabled="disabled"]) + .checkbox-decorator .check::before {
+            color: #F01030 !important;
+            border-color: #F01030 !important;
+        }
+    </style>
+@endpush
+
 @push('scripts')
     <script>
         $('.toggle-edit').on('click', function () {
             $(this).hide();
 
             $($(this).data('toggle')).show();
+            $('#active').removeAttr('disabled');
 
             $('.input-switch').each(function () {
                 let $this = $(this);

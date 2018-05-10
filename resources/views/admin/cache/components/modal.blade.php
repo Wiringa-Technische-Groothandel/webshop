@@ -1,4 +1,4 @@
-<form action="{{ route('admin.cache::reset') }}">
+<form action="{{ route('admin.cache.reset') }}">
     <div class="modal fade" id="resetCacheModal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">

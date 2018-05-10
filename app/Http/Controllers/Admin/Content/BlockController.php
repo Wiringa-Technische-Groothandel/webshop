@@ -2,11 +2,11 @@
 
 namespace WTG\Http\Controllers\Admin\Content;
 
+use WTG\Models\Block;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use WTG\Contracts\Models\BlockContract;
 use WTG\Http\Controllers\Admin\Controller;
-use WTG\Models\Block;
 
 /**
  * Block controller.
@@ -20,21 +20,12 @@ class BlockController extends Controller
     /**
      * Get the block details.
      *
-     * @param  Request  $request
+     * @param  int  $id
      * @return JsonResponse
      */
-    public function postAction(Request $request): JsonResponse
+    public function getAction(int $id): JsonResponse
     {
-        $id = $request->input('block');
-        $block = app()->make(BlockContract::class)->find($id);
-
-        if (! $block) {
-            return response()->json([
-                'success' => false,
-                'message' => __('Geen blok gevonden met het opgegeven id.'),
-                'code' => 404
-            ], 404);
-        }
+        $block = app()->make(BlockContract::class)->findOrFail($id);
 
         return response()->json([
             'success' => true,

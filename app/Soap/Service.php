@@ -2,6 +2,7 @@
 
 namespace WTG\Soap;
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use WTG\Services\AbstractSoapService;
 use WTG\Contracts\Models\ProductContract;
@@ -9,8 +10,7 @@ use WTG\Contracts\Models\ProductContract;
 /**
  * Soap service.
  *
- * @package     WTG
- * @subpackage  Soap
+ * @package     WTG\Soap
  * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
 class Service extends AbstractSoapService
@@ -59,5 +59,21 @@ class Service extends AbstractSoapService
         /** @var GetProductPricesAndStocks\Service $service */
         $service = app()->make(GetProductPricesAndStocks\Service::class);
         return $service->handle($products, $customerId);
+    }
+
+    /**
+     * Calls: GetSalesOrderHeaderCount
+     *
+     * @soap
+     * @param  string  $customerId
+     * @param  Carbon|null  $from
+     * @param  Carbon|null  $to
+     * @return GetOrderCount\Response
+     */
+    public function getOrderCount(string $customerId, ?Carbon $from = null, ?Carbon $to = null)
+    {
+        /** @var GetOrderCount\Service $service */
+        $service = app()->make(GetOrderCount\Service::class);
+        return $service->handle($customerId, $from, $to);
     }
 }

@@ -4,7 +4,7 @@
 
 <hr />
 
-<form action="{{ route('admin.import::download') }}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+<form action="{{ route('admin.import.download') }}" method="POST" enctype="multipart/form-data" class="form-horizontal">
     {{ csrf_field() }}
 
     <div class="form-group">

@@ -2,12 +2,12 @@
 
 namespace WTG\Http\Controllers\Admin\Content;
 
+use WTG\Models\Description;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use WTG\Contracts\Models\DescriptionContract;
 use WTG\Contracts\Models\ProductContract;
 use WTG\Http\Controllers\Admin\Controller;
-use WTG\Models\Description;
+use WTG\Contracts\Models\DescriptionContract;
 
 /**
  * Description controller.
@@ -21,31 +21,28 @@ class DescriptionController extends Controller
     /**
      * Get the description for a product if available.
      *
-     * @param  Request  $request
+     * @param  string  $sku
      * @return JsonResponse
      */
-    public function postAction(Request $request): JsonResponse
+    public function getAction(string $sku): JsonResponse
     {
-        $sku = $request->input('sku');
         /** @var ProductContract $product */
-        $product = app()->make(ProductContract::class)->where('sku', $sku)->first();
-
-        if (! $product) {
-            return response()->json([
-                'message' => __('Geen product gevonden met nummer :sku', ['sku' => $sku]),
-                'success' => false,
-                'code' => 404
-            ], 404);
-        }
+        $product = app()->make(ProductContract::class)->where('sku', $sku)->firstOrFail();
 
         return response()->json([
-            'message' => __('Omschrijving voor product :sku', ['sku' => $sku]),
             'success' => true,
             'payload' => $product->getDescription(),
             'code' => 200
         ]);
     }
 
+    /**
+     * Update a product description.
+     *
+     * @param  Request  $request
+     * @return JsonResponse
+     * @throws \Exception
+     */
     public function putAction(Request $request): JsonResponse
     {
         $sku = $request->input('sku');

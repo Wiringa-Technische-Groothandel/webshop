@@ -1,6 +1,6 @@
 <div class="container-fluid" id="before-content">
     <div class="row mb-3">
-        <div class="col-sm-3 animated fadeInRightBig">
+        <div class="col-sm-3">
             <div class="card">
                 <div class="card-body">
                     <table class="header-stat">
@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <div class="col-sm-3 animated fadeInRightBig">
+        <div class="col-sm-3">
             <div class="card">
                 <div class="card-body">
                     <table class="header-stat">
@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <div class="col-sm-3 animated fadeInRightBig">
+        <div class="col-sm-3">
             <div class="card">
                 <div class="card-body">
                     <table class="header-stat">
@@ -54,7 +54,7 @@
             </div>
         </div>
 
-        <div class="col-sm-3 animated fadeInRightBig">
+        <div class="col-sm-3">
             <div class="card">
                 <div class="card-body">
                     <table class="header-stat">

@@ -15,17 +15,7 @@ use Illuminate\Http\Request;
  */
 class PacksController extends Controller
 {
-    /**
-     * Overview of special product packs.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function view()
-    {
-        return view('admin.packs.index', [
-            'packs' => Pack::all(),
-        ]);
-    }
+
 
     /**
      * Edit a special product pack.

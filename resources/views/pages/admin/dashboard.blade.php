@@ -83,7 +83,7 @@
 
             function getOrderChartData() {
                 $.ajax({
-                    url: "{{ route('admin.dashboard::chart', [ 'type' => 'orders' ]) }}",
+                    url: "{{ route('admin.dashboard.chart', [ 'type' => 'orders' ]) }}",
                     type: "GET",
                     data: { year : $('#yearSelect').val() },
                     dataType: "json",
