@@ -1,62 +1,28 @@
 #notification-wrapper {
   @include media-breakpoint-up(md) {
-    left: 20px;
-    bottom: 20px;
+    left: 20px !important;
+    bottom: 20px !important;
   }
 
   @include media-breakpoint-down(sm) {
-    right: 0;
+    right: 0 !important;
   }
-
-  position: fixed;
-  z-index: 999;
-  bottom: 0;
-  width: 0;
-  left: 0;
 
   .notification {
     @include media-breakpoint-up(md) {
-      width: 400px;
-    }
-
-    width: 100vw;
-    display: inline-block;
-    margin-top: 10px;
-    padding: 20px;
-    font-size: 15px;
-    font-weight: 300;
-    border-radius: 4px;
-
-    &:before {
-      font-family: $font-family-fa;
-      margin: 0 10px 0 0;
+      width: 400px !important;
     }
 
     &.success {
-      background: theme-color("success");
-      color: white;
-
-      &:before {
-        content: fa-content($fa-var-check-circle);
-      }
+      background: theme-color("success") !important;
     }
 
     &.danger {
-      background: theme-color("danger");
-      color: white;
-
-      &:before {
-        content: fa-content($fa-var-times-circle);
-      }
+      background: theme-color("danger") !important;
     }
 
     &.warning {
-      background: theme-color("warning");
-      color: white;
-
-      &:before {
-        content: fa-content($fa-var-exclamation-triangle);
-      }
+      background: theme-color("warning") !important;
     }
   }
 }

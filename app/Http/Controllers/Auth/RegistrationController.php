@@ -2,12 +2,12 @@
 
 namespace WTG\Http\Controllers\Auth;
 
-use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
 use WTG\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\Factory as ViewFactory;
 use WTG\Contracts\Services\RegistrationServiceContract;
-use WTG\Models\Registration;
 
 /**
  * Registration controller.
@@ -26,10 +26,13 @@ class RegistrationController extends Controller
     /**
      * RegistrationController constructor.
      *
+     * @param  ViewFactory  $view
      * @param  RegistrationServiceContract  $registrationService
      */
-    public function __construct(RegistrationServiceContract $registrationService)
+    public function __construct(ViewFactory $view, RegistrationServiceContract $registrationService)
     {
+        parent::__construct($view);
+
         $this->registrationService = $registrationService;
     }
 
@@ -39,9 +42,9 @@ class RegistrationController extends Controller
      *
      * @return View
      */
-    public function getAction()
+    public function getAction(): View
     {
-        return view('pages.auth.registration');
+        return $this->view->make('pages.auth.registration');
     }
 
     /**
@@ -52,8 +55,14 @@ class RegistrationController extends Controller
      */
     public function putAction(Request $request): RedirectResponse
     {
+        if (! app('captcha')->check((string) $request->input('g-recaptcha-response'))) {
+            return back()
+                ->withErrors(__('Vul aub de recaptcha in.'))
+                ->withInput($request->input());
+        }
+
         try {
-            $this->registrationService->create($request->all());
+            $this->registrationService->create($request->except('g-recaptcha-response'));
         } catch (\Exception $e) {
             return back()
                 ->withErrors($e->getMessage())

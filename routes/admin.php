@@ -32,7 +32,7 @@ Route::group([
         Route::post('logout', 'Auth\LogoutController@postAction')->name('auth.logout');
 
         // Admin API Routes
-        Route::group(['as' => 'dashboard::', 'prefix' => 'api'], function () {
+        Route::group(['as' => 'dashboard.', 'prefix' => 'api'], function () {
             Route::get('stats', 'DashboardController@stats')->name('stats');
             Route::get('chart/{type}', 'DashboardController@chart')->name('chart');
         });
@@ -40,23 +40,30 @@ Route::group([
         // Admin import page
         Route::get('import', 'ImportController@view')->name('import');
 
-        Route::group(['as' => 'import::'], function () {
+        Route::group(['as' => 'import.'], function () {
             Route::post('import/product', 'ImportController@product')->name('product');
             Route::post('import/image', 'ImportController@image')->name('image');
             Route::post('import/discount', 'ImportController@discount')->name('discount');
             Route::post('import/download', 'ImportController@download')->name('download');
         });
 
-        Route::get('company', 'CompanyManagerController@getAction')->name('company-manager');
+        Route::get('companies', 'Company\OverviewController@getAction')->name('companies');
+
+        Route::group(['as' => 'company.', 'prefix' => 'company'], function () {
+            Route::get('{company}', 'Company\DetailController@getAction')->name('edit');
+            Route::get('{company}/customer/{customer}', 'Company\DetailController@getAction')->name('customer.edit');
+
+            Route::post('{company}', 'Company\DetailController@postAction');
+        });
 
         // Admin user manager
-        Route::group(['as' => 'user::', 'prefix' => 'user'], function () {
-            Route::get('manager', 'UserController@view')->name('manager');
-            Route::get('get', 'UserController@get')->name('get');
-            Route::get('added', 'UserController@added')->name('added');
-
-            Route::post('update', 'UserController@update')->name('update');
-        });
+//        Route::group(['as' => 'user.', 'prefix' => 'user'], function () {
+//            Route::get('manager', 'UserController@view')->name('manager');
+//            Route::get('get', 'UserController@get')->name('get');
+//            Route::get('added', 'UserController@added')->name('added');
+//
+//            Route::post('update', 'UserController@update')->name('update');
+//        });
 
         // Admin carousel manager
         Route::get('carousel', 'CarouselController@getAction')->name('carousel');
@@ -70,7 +77,7 @@ Route::group([
         // Admin export
         Route::get('export', 'ExportController@view')->name('export');
 
-        Route::group(['as' => 'export::', 'prefix' => 'export'], function () {
+        Route::group(['as' => 'export.', 'prefix' => 'export'], function () {
             Route::post('catalog', 'ExportController@catalog')->name('catalog');
             Route::post('pricelist', 'ExportController@pricelist')->name('pricelist');
         });
@@ -79,17 +86,17 @@ Route::group([
         Route::get('content', 'ContentController@getAction')->name('content');
 
         Route::group(['as' => 'content.', 'prefix' => 'content', 'namespace' => 'Content'], function () {
-            Route::post('description', 'DescriptionController@postAction')->name('description');
-            Route::post('block', 'BlockController@postAction')->name('block');
+            Route::get('description/{sku?}', 'DescriptionController@getAction')->name('description');
+            Route::get('block/{id?}', 'BlockController@getAction')->name('block');
 
             Route::put('description', 'DescriptionController@putAction');
             Route::put('block', 'BlockController@putAction');
         });
 
         // Admin packs
-        Route::get('packs', 'PacksController@view')->name('packs');
+        Route::get('packs', 'Packs\OverviewController@getAction')->name('packs');
 
-        Route::group(['as' => 'packs::', 'prefix' => 'packs'], function () {
+        Route::group(['as' => 'packs.', 'prefix' => 'packs'], function () {
             Route::get('edit/{id}', 'PacksController@edit')->name('edit');
 
             Route::post('add', 'PacksController@create')->name('create');
@@ -101,14 +108,14 @@ Route::group([
         // Admin cache
         Route::get('cache', 'CacheController@getAction')->name('cache');
 
-        Route::group(['as' => 'cache::', 'prefix' => 'cache'], function () {
+        Route::group(['as' => 'cache.', 'prefix' => 'cache'], function () {
             Route::get('reset', 'CacheController@reset')->name('reset');
         });
 
         // Admin e-mail
         Route::get('email', 'EmailController@getAction')->name('email');
 
-        Route::group(['as' => 'email::', 'prefix' => 'email'], function () {
+        Route::group(['as' => 'email.', 'prefix' => 'email'], function () {
             Route::get('stats', 'EmailController@stats')->name('stats');
             Route::post('test', 'EmailController@test')->name('test');
         });

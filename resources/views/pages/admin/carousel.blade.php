@@ -1,23 +1,27 @@
 @extends('layouts.admin')
 
-@section('title', 'Carousel')
+@section('title', __('Carousel'))
 
-@section('document_start')
+@section('pre-content')
     @include('components.admin.carousel.addModal')
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-12 col-sm-8 offset-sm-2">
-                <div class="card card-2">
-                    <button class="btn btn-success btn-block" data-toggle="modal" data-target="#addSlide">
-                        <i class="fal fa-fw fa-plus"></i> {{ __('Slide toevoegen aan de carousel') }}
-                    </button>
-                </div>
-            </div>
-        </div>
+    <button class="btn btn-success bmd-btn-fab" data-toggle="modal" data-target="#addSlide" title="{{ __('Slide toevoegen aan de carousel') }}">
+        <i class="fal fa-fw fa-plus"></i>
+    </button>
 
+    <div class="container-fluid">
         @include('components.admin.carousel.cards')
     </div>
 @endsection
+
+@push('styles')
+    <style>
+        .bmd-btn-fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+    </style>
+@endpush

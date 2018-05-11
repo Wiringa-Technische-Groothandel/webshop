@@ -2,11 +2,11 @@
 
 namespace WTG\Http\Controllers\Admin;
 
-use GuzzleHttp\Client;
+use WTG\Mail\Test;
 use Illuminate\Mail\Mailer;
 use Illuminate\Http\Request;
-use GuzzleHttp\Exception\TransferException;
-use WTG\Mail\Test;
+use Illuminate\Contracts\View\View;
+use Illuminate\View\Factory as ViewFactory;
 
 /**
  * Email controller.
@@ -25,23 +25,25 @@ class EmailController extends Controller
     /**
      * EmailController constructor.
      *
+     * @param  ViewFactory  $view
      * @param  Mailer  $mailer
      */
-    public function __construct(Mailer $mailer)
+    public function __construct(ViewFactory $view, Mailer $mailer)
     {
+        parent::__construct($view);
+
         $this->mailer = $mailer;
     }
+
 
     /**
      * Email page.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
-    public function getAction()
+    public function getAction(): View
     {
-        return view('pages.admin.email', [
-            'mailstats' => $this->stats(request())
-        ]);
+        return $this->view->make('pages.admin.email');
     }
 
     /**
@@ -67,36 +69,5 @@ class EmailController extends Controller
                 ->back()
                 ->withErrors($validator->errors());
         }
-    }
-
-    /**
-     * Get mailgun stats.
-     *
-     * @param  Request  $request
-     * @return bool|string
-     */
-    public function stats(Request $request)
-    {
-        $duration = $request->has('period') ? $request->input('period') : '31d';
-
-        $client = new Client([
-            'base_uri' => 'https://api.mailgun.net/v3/',
-            'auth' => ['api', config('services.mailgun.secret')]
-        ]);
-
-        try {
-            $response = $client->get(config('services.mailgun.domain')."/stats/total", [
-                'query' => [
-                    'event' => array('accepted', 'delivered', 'failed'),
-                    'duration' => $duration
-                ]
-            ]);
-        } catch (TransferException $e) {
-            \Log::error($e->getMessage());
-
-            return false;
-        }
-
-        return $response->getBody()->getContents();
     }
 }

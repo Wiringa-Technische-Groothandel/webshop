@@ -8,13 +8,14 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 class RouteServiceProvider extends ServiceProvider
 {
     /**
-     * This namespace is applied to your controller routes.
-     *
-     * In addition, it is set as the URL generator's root namespace.
-     *
      * @var string
      */
     protected $namespace = 'WTG\Http\Controllers';
+
+    /**
+     * @var string
+     */
+    protected $apiNamespace = 'WTG\Http\Controllers\Api';
 
     /**
      * @var string
@@ -40,7 +41,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-//        $this->mapApiRoutes();
+        $this->mapApiRoutes();
 
         $this->mapWebRoutes();
 
@@ -85,8 +86,9 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes()
     {
         Route::prefix('api')
-             ->middleware('api')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/api.php'));
+            ->as('api.')
+            ->middleware('api')
+            ->namespace($this->apiNamespace)
+            ->group(base_path('routes/api.php'));
     }
 }

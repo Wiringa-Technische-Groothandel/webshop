@@ -13,31 +13,26 @@
 </template>
 
 <script>
-    let editor;
-
     export default {
         props: ['url'],
         data () {
             return {
+                editor: null,
                 sku: ''
             }
         },
         methods: {
             getDescription () {
-                editor.setData('');
+                this.$data.editor.setData('');
 
                 if (this.$data.sku.length !== 8) {
                     return;
                 }
 
-                axios.post(this.url, {
-                    sku: this.$data.sku
-                })
+                axios.get(this.url + '/' + this.$data.sku)
                     .then((response) => {
-                        console.log(response.data.payload);
-
                         if (response.data.payload) {
-                            editor.setData(response.data.payload.value);
+                            this.$data.editor.setData(response.data.payload.value);
                         }
                     })
                     .catch((error) => {
@@ -50,7 +45,7 @@
             saveDescription () {
                 axios.put(this.url, {
                     sku: this.$data.sku,
-                    description: editor.getData()
+                    description: this.$data.editor.getData()
                 })
                     .then((response) => {
                         this.$root.$emit('send-notify', {
@@ -67,7 +62,7 @@
             }
         },
         mounted () {
-            editor = CKEDITOR.replace('description-editor');
+            this.$data.editor = CKEDITOR.replace('description-editor');
         }
     }
 </script>

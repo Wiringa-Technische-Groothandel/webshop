@@ -265,7 +265,8 @@ class Product extends Model implements ProductContract
     {
         /** @var static $model */
         $model = static::withTrashed()->firstOrNew([
-            'sku' => $product->sku
+            'sku' => $product->sku,
+            'sales_unit' => $product->sales_unit
         ]);
 
         foreach (get_object_vars($product) as $key => $value) {

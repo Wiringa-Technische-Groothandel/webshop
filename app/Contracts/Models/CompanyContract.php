@@ -59,7 +59,67 @@ interface CompanyContract
     /**
      * Get the addresses.
      *
-     * @return Collection
+     * @return Collection|AddressContract[]
      */
     public function getAddresses(): Collection;
+
+    /**
+     * Set the street.
+     *
+     * @param  string  $street
+     * @return CompanyContract
+     */
+    public function setStreet(string $street): CompanyContract;
+
+    /**
+     * Get the street.
+     *
+     * @return null|string
+     */
+    public function getStreet(): ?string;
+
+    /**
+     * Set the postcode.
+     *
+     * @param  null|string  $postcode
+     * @return CompanyContract
+     */
+    public function setPostcode(string $postcode): CompanyContract;
+
+    /**
+     * Get the postcode.
+     *
+     * @return null|string
+     */
+    public function getPostcode(): ?string;
+
+    /**
+     * Set the city.
+     *
+     * @param  null|string  $city
+     * @return CompanyContract
+     */
+    public function setCity(string $city): CompanyContract;
+
+    /**
+     * Get the city.
+     *
+     * @return null|string
+     */
+    public function getCity(): ?string;
+
+    /**
+     * Set the active state.
+     *
+     * @param  bool  $active
+     * @return CompanyContract
+     */
+    public function setActive(bool $active): CompanyContract;
+
+    /**
+     * Get the active state.
+     *
+     * @return null|bool
+     */
+    public function getActive(): ?bool;
 }

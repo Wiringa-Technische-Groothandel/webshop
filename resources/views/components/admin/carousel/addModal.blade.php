@@ -6,7 +6,7 @@
                 {{ method_field('put') }}
 
                 <div class="modal-header">
-                    <h5 class="modal-title">Slide toevoegen</h5>
+                    <h5 class="modal-title">{{ __('Slide toevoegen') }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -14,7 +14,7 @@
 
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="imageFile">Afbeelding</label>
+                        <label for="imageFile">{{ __('Afbeelding') }}</label>
 
                         <div class="custom-file">
                             <input type="file" name="image" class="custom-file-input" id="imageFile" accept="image/*">
@@ -23,21 +23,21 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="title">Titel</label>
-                        <input value="{{ old('title') }}" class="form-control" placeholder="Titel" type="text"
+                        <label for="title">{{ __('Titel') }}</label>
+                        <input value="{{ old('title') }}" class="form-control" placeholder="{{ __('Titel') }}" type="text"
                                name="title" maxlength="100" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="caption">Omschrijving</label>
-                        <input value="{{ old('caption') }}" class="form-control" placeholder="Omschrijving"
+                        <label for="caption">{{ __('Omschrijving') }}</label>
+                        <input value="{{ old('caption') }}" class="form-control" placeholder="{{ __('Omschrijving') }}"
                                type="text" name="caption" maxlength="200" required>
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Toevoegen</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Sluiten</button>
+                    <button type="submit" class="btn btn-raised btn-primary">{{ __('Toevoegen') }}</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">{{ __('Sluiten') }}</button>
                 </div>
             </form>
         </div>

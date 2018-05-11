@@ -1,24 +1,53 @@
 @extends('layouts.admin')
 
+@section('title', __('Dashboard'))
+
 @section('content')
+    @include('components.admin.dashboard.stats')
+
     <div class="container-fluid">
-        <div class="row">
+        <div class="row mb-3">
             <div class="col-sm-8">
-                <div class="card card-2">
-                    @include('components.admin.dashboard.order-chart')
+                <div class="card">
+                    <div class="card-body">
+                        @include('components.admin.dashboard.order-chart')
+                    </div>
                 </div>
             </div>
 
             <div class="col-sm-4">
-                <div class="card card-2">
-                    @include('components.admin.dashboard.import-data')
+                <div class="card">
+                    <div class="card-body">
+                        @include('components.admin.dashboard.import-data')
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
 
-@section('document_end')
+@push('styles')
+    <style>
+        .header-stat {
+            width: 100%;
+        }
+
+        .header-stat .icon {
+            text-align: center;
+            padding: 0 5px;
+        }
+
+        .header-stat .title {
+            font-size: 15px;
+        }
+
+        .header-stat .value {
+            font-size: 30px;
+        }
+    </style>
+@endpush
+
+@push('scripts')
     @if ($years->isNotEmpty())
         <script type="text/javascript">
             var chartColors = months.map(randomColor);
@@ -54,7 +83,7 @@
 
             function getOrderChartData() {
                 $.ajax({
-                    url: "{{ route('admin.dashboard::chart', [ 'type' => 'orders' ]) }}",
+                    url: "{{ route('admin.dashboard.chart', [ 'type' => 'orders' ]) }}",
                     type: "GET",
                     data: { year : $('#yearSelect').val() },
                     dataType: "json",
@@ -83,4 +112,4 @@
             });
         </script>
     @endif
-@endsection
+@endpush

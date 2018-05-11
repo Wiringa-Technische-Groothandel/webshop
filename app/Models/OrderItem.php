@@ -5,6 +5,7 @@ namespace WTG\Models;
 use Illuminate\Database\Eloquent\Model;
 use WTG\Contracts\Models\OrderContract;
 use WTG\Contracts\Models\OrderItemContract;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Order item model.
@@ -20,7 +21,7 @@ class OrderItem extends Model implements OrderItemContract
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function order()
+    public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }

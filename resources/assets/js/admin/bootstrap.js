@@ -11,7 +11,8 @@ window.$ = window.jQuery = require('jquery');
 import Popper from 'popper.js';
 window.Popper = Popper;
 
-require('bootstrap');
+// require('bootstrap');
+require('bootstrap-material-design');
 
 window.Chart = require('chart.js');
 window.Vue = require('vue');

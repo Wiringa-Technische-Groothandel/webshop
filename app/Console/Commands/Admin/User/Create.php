@@ -54,13 +54,13 @@ class Create extends Command
         $password = $this->secret('Password (input will be hidden)');
 
         if (! $username || strlen($username) < self::MIN_USERNAME_LENGTH) {
-            $this->error(__('De gebruikersnaam moet minimaal :length karakters lang zijn.', ['length' => self::MIN_USERNAME_LENGTH]));
+            $this->error(__('The username must be at least :length characters long.', ['length' => self::MIN_USERNAME_LENGTH]));
 
             return;
         }
 
         if (! $password || strlen($password) < self::MIN_PASSWORD_LENGTH) {
-            $this->error(__('Het wachtwoord moet minimaal 5 karakters lang zijn.', ['length' => self::MIN_PASSWORD_LENGTH]));
+            $this->error(__('The password must be at least :length characters long.', ['length' => self::MIN_PASSWORD_LENGTH]));
 
             return;
         }
@@ -71,6 +71,6 @@ class Create extends Command
         $admin->setPassword(bcrypt($password));
         $admin->saveOrFail();
 
-        $this->output->success(__('De admin gebruiker is succesvol aangemaakt.'));
+        $this->output->success(__('The admin user has been created successfully.'));
     }
 }

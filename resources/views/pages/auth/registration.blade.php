@@ -14,9 +14,10 @@
     </div>
 @endsection
 
-@section('extraJS')
+@push('scripts')
+    <script src='https://www.google.com/recaptcha/api.js'></script>
     <script>
-        (function() {
+        (function () {
             'use strict';
 
             window.addEventListener('load', function() {
@@ -80,6 +81,8 @@
             $contactCity.on('input', copyFields);
             $contactPostcode.on('input', copyFields);
             $contactPhone.on('input', copyFields);
+
+            toggleReadOnly();
         })();
     </script>
-@endsection
+@endpush

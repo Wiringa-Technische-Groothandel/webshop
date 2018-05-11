@@ -58,3 +58,55 @@
         }
     }
 </script>
+
+<style lang="scss">
+    #notification-wrapper {
+        position: fixed;
+        z-index: 999;
+        bottom: 0;
+        width: 0;
+        left: 0;
+
+        .notification {
+            width: 100vw;
+            display: inline-block;
+            margin-top: 10px;
+            padding: 20px;
+            font-size: 15px;
+            font-weight: 300;
+            border-radius: 4px;
+
+            &:before {
+                font-family: "Font Awesome 5 Pro", sans-serif;
+                margin: 0 10px 0 0;
+            }
+
+            &.success {
+                background: green;
+                color: white;
+
+                &:before {
+                    content: "\f058"; // check-circle
+                }
+            }
+
+            &.danger {
+                background: red;
+                color: white;
+
+                &:before {
+                    content: "\f2f0"; // times-octagon
+                }
+            }
+
+            &.warning {
+                background: yellow;
+                color: white;
+
+                &:before {
+                    content: "\f071"; // exclamation-triangle
+                }
+            }
+        }
+    }
+</style>
