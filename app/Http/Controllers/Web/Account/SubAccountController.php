@@ -1,6 +1,6 @@
 <?php
 
-namespace WTG\Http\Controllers\Account;
+namespace WTG\Http\Controllers\Web\Account;
 
 use WTG\Models\Company;
 use WTG\Models\Contact;

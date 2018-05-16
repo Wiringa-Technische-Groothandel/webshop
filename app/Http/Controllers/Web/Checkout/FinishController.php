@@ -1,6 +1,6 @@
 <?php
 
-namespace WTG\Http\Controllers\Checkout;
+namespace WTG\Http\Controllers\Web\Checkout;
 
 use Illuminate\Http\Request;
 use WTG\Services\CheckoutService;

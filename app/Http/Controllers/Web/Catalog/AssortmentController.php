@@ -1,6 +1,6 @@
 <?php
 
-namespace WTG\Http\Controllers\Catalog;
+namespace WTG\Http\Controllers\Web\Catalog;
 
 use Illuminate\Http\Request;
 use Illuminate\View\Factory as ViewFactory;

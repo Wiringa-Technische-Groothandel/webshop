@@ -1,6 +1,6 @@
 <?php
 
-namespace WTG\Http\Controllers\Favorites;
+namespace WTG\Http\Controllers\Web\Favorites;
 
 use WTG\Models\Product;
 use Illuminate\Http\Request;

@@ -1,6 +1,6 @@
 <?php
 
-namespace WTG\Http\Controllers\Checkout;
+namespace WTG\Http\Controllers\Web\Checkout;
 
 use WTG\Models\Address;
 use WTG\Models\Customer;

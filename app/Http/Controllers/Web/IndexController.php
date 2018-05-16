@@ -1,8 +1,9 @@
 <?php
 
-namespace WTG\Http\Controllers;
+namespace WTG\Http\Controllers\Web;
 
 use Illuminate\Contracts\View\View;
+use WTG\Http\Controllers\Controller;
 use Illuminate\View\Factory as ViewFactory;
 use WTG\Contracts\Services\CarouselServiceContract;
 

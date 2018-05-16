@@ -1,6 +1,6 @@
 <?php
 
-namespace WTG\Http\Controllers\Catalog;
+namespace WTG\Http\Controllers\Web\Catalog;
 
 use WTG\Models\Product;
 use Illuminate\Http\Request;

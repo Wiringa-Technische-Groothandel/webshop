@@ -1,9 +1,10 @@
 <?php
 
-namespace WTG\Http\Controllers;
+namespace WTG\Http\Controllers\Web;
 
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use WTG\Http\Controllers\Controller;
 
 /**
  * Downloads Controller

@@ -5,12 +5,18 @@ namespace WTG\Providers;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
+/**
+ * Route service provider.
+ *
+ * @package     WTG\Providers
+ * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
+ */
 class RouteServiceProvider extends ServiceProvider
 {
     /**
      * @var string
      */
-    protected $namespace = 'WTG\Http\Controllers';
+    protected $webNamespace = 'WTG\Http\Controllers\Web';
 
     /**
      * @var string
@@ -58,7 +64,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWebRoutes()
     {
         Route::middleware(['web', 'active'])
-             ->namespace($this->namespace)
+             ->namespace($this->webNamespace)
              ->group(base_path('routes/web.php'));
     }
 

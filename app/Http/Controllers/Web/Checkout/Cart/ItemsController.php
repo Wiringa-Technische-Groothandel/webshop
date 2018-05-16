@@ -1,6 +1,6 @@
 <?php
 
-namespace WTG\Http\Controllers\Checkout\Cart;
+namespace WTG\Http\Controllers\Web\Checkout\Cart;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

@@ -1,6 +1,6 @@
 <?php
 
-namespace WTG\Http\Controllers\Auth;
+namespace WTG\Http\Controllers\Web\Auth;
 
 use Illuminate\Http\Request;
 use WTG\Http\Controllers\Controller;
