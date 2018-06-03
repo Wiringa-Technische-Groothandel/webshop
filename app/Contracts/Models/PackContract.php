@@ -2,6 +2,8 @@
 
 namespace WTG\Contracts\Models;
 
+use Illuminate\Support\Collection;
+
 /**
  * Pack contract.
  *
@@ -32,4 +34,11 @@ interface PackContract
      * @return ProductContract
      */
     public function getProduct(): ProductContract;
+
+    /**
+     * Get the items.
+     *
+     * @return Collection
+     */
+    public function getItems(): Collection;
 }

@@ -2,29 +2,25 @@
 
 namespace WTG\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use Carbon\Carbon;
-use App\Content;
-use Validator;
-use Helper;
+use Illuminate\Contracts\View\View;
 
 /**
- * Class ImportController.
+ * Import controller.
  *
- * @package WTG
- * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
+ * @package     WTG\Http
+ * @subpackage  Controllers\Admin
+ * @author      Thomas Wiringa <thomas.wiringa@gmail.com>
  */
 class ImportController extends Controller
 {
-
     /**
      * The import page.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
-    public function view()
+    public function view(): View
     {
-        return view('admin.import.index');
+        return $this->view->make('pages.admin.import');
     }
 
     /**

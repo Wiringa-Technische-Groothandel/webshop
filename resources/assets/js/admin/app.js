@@ -10,15 +10,6 @@ require('./bootstrap');
 // ChartJS
 window.Chart.defaults.global.maintainAspectRatio = false;
 
-// Axios
-window.axios.defaults.headers.common = {
-    'X-Requested-With': 'XMLHttpRequest'
-};
-
-window.randomColor = function () {
-    return randomMC.getColor();
-};
-
 // Names of the months
 window.months = ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December'];
 

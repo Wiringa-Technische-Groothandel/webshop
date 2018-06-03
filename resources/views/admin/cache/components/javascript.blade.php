@@ -1,34 +1,49 @@
 <script>
-    var $memoryChart = document.getElementById('memoryChart');
-    var $hitsChart = document.getElementById('hitsChart');
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
 
-    var memoryChart = new Chart($memoryChart, {
+    function resetCache () {
+        if (! confirm('{{ __('Weet u zeker dat u de cache wilt legen?') }}')) {
+            return;
+        }
+
+        axios.delete('')
+            .then(() => {
+                window.location.reload();
+            })
+            .catch((error) => {
+                alert(error);
+            });
+    }
+
+    let $memoryChart = document.getElementById('memoryChart');
+    let $hitsChart = document.getElementById('hitsChart');
+
+    let memoryChart = new Chart($memoryChart, {
         type: 'doughnut',
         data: {
-            labels: ["MB Used", "MB Free", "MB Wasted"],
+            labels: ["In gebruik", "Vrij"],
             datasets: [
                 {
                     data: [
-                        '{{ $opcache_memory->get('used') }}',
+                        '{{ $opcache_memory->get('used') + $opcache_memory->get('wasted') }}',
                         '{{ $opcache_memory->get('free') }}',
-                        '{{ $opcache_memory->get('wasted') }}'
                     ],
                     backgroundColor: [
                         "#F44336",
-                        "#4CAF50",
-                        "#FF9800"
+                        "#4CAF50"
                     ],
                     hoverBackgroundColor: [
                         "#FF5252",
-                        "#69F0AE",
-                        "#FFAB40"
+                        "#69F0AE"
                     ]
                 }
             ]
         }
     });
 
-    var hitsChart = new Chart($hitsChart, {
+    let hitsChart = new Chart($hitsChart, {
         type: 'doughnut',
         data: {
             labels: ["Misses", "Hits"],

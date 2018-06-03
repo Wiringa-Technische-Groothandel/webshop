@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#c2272d">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<title>WTG Admin - @yield('title')</title>
+<title>WTG Admin - @yield('title', $title ?? 'Untitled')</title>
 
 <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.0.10/css/all.css"
       integrity="sha384-KwxQKNj2D0XKEW5O/Y6haRH39PE/xry8SAoLbpbCMraqlX7kUP6KHOnrlrtvuJLR" crossorigin="anonymous">
