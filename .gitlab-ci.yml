@@ -80,12 +80,12 @@ deploy_staging_job:
     - chmod 644 ~/.ssh/known_hosts
 
     # Release to staging
-    - ssh $SSH_HOSTNAME "cd ~/docker/staging.wiringa.nl \
-      && docker-compose pull \
-      && docker-compose up -d \
-      && docker-compose exec app artisan config:cache \
-      && docker-compose exec app artisan view:clear \
-      && docker-compose exec app artisan cache:clear \
+    - ssh $SSH_HOSTNAME "cd ~/docker/staging.wiringa.nl
+      && docker-compose pull
+      && docker-compose up -d
+      && docker-compose exec app artisan config:cache
+      && docker-compose exec app artisan view:clear
+      && docker-compose exec app artisan cache:clear
       && docker-compose exec app artisan migrate"
 
 deploy_production_job:
