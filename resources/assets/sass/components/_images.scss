@@ -1,6 +1,6 @@
 .img-svg {
   padding: 10px 0;
-  margin: 50px 0;
+  margin: 100px 0;
 
   &.rotate-180 {
     transform: rotateY(180deg);
@@ -27,7 +27,6 @@
   &.cover-image {
     height: 500px;
     background-size: cover;
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
   }
 
   &.company-image {

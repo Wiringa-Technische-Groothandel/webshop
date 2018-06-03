@@ -7,7 +7,7 @@ require 'recipe/laravel.php';
 set('application', 'WTG Webshop');
 
 // Project repository
-set('repository', 'git+ssh://git@git.tjwiringa.nl:22222/luna/wtg.git');
+set('repository', 'git+ssh://git@git.tjwiringa.nl:22222/wtg/webshop.git');
 
 set('http_user', 'wiringa');
 
@@ -22,7 +22,7 @@ set('shared_dirs', [
 // Laravel shared file
 set('shared_files', []);
 
-// Writable dirs by web server 
+// Writable dirs by web server
 set('writable_dirs', []);
 set('allow_anonymous_stats', false);
 

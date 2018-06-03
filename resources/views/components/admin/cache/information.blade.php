@@ -1,20 +1,20 @@
-<h3>Information</h3>
+<h3>{{ __('Informatie') }}</h3>
 
 <hr />
 
 <div class="row">
     <div class="col-sm-6">
         <table class="table table-striped">
-            <thead><tr><th colspan="2" class="text-center">Status</th></tr></thead>
+            <thead><tr><th colspan="2" class="text-center">{{ __('Status') }}</th></tr></thead>
             <tbody>
             <tr>
-                <td>Status</td>
-                <td class="text-right"><span class="label label-{{ $opcache_enabled ? 'success' : 'danger' }}">{{ $opcache_enabled ? 'Enabled' : 'Disabled' }}</span></td>
+                <td>{{ __('Status') }}</td>
+                <td class="text-right"><span class="label label-{{ $opcache_enabled ? 'success' : 'danger' }}">{{ $opcache_enabled ? 'Aan' : 'Uit' }}</span></td>
             </tr>
 
             <tr>
-                <td>Cache full</td>
-                <td class="text-right"><span class="label label-{{ !$opcache_full ? 'success' : 'danger' }}">{{ !$opcache_full ? 'No' : 'Yes' }}</span></td>
+                <td>{{ __('Cache vol') }}</td>
+                <td class="text-right"><span class="label label-{{ !$opcache_full ? 'success' : 'danger' }}">{{ !$opcache_full ? __('Nee') : __('Ja') }}</span></td>
             </tr>
             </tbody>
         </table>
@@ -22,30 +22,30 @@
 
     <div class="col-sm-6">
         <table class="table table-striped">
-            <thead><tr><th colspan="2" class="text-center">Statistics</th></tr></thead>
+            <thead><tr><th colspan="2" class="text-center">{{ __('Statistieken') }}</th></tr></thead>
             <tbody>
             <tr>
-                <td>Cached scripts</td>
+                <td>{{ __('Cached scripts') }}</td>
                 <td class="text-right">{{ $opcache_stats->get('num_cached_scripts') }}</td>
             </tr>
 
             <tr>
-                <td>Cached keys</td>
+                <td>{{ __('Cached keys') }}</td>
                 <td class="text-right">{{ $opcache_stats->get('num_cached_keys') }}</td>
             </tr>
 
             <tr>
-                <td>Max cached keys</td>
+                <td>{{ __('Max cached keys') }}</td>
                 <td class="text-right">{{ $opcache_stats->get('max_cached_keys') }}</td>
             </tr>
 
             <tr>
-                <td>Cache hits</td>
+                <td>{{ __('Cache hits') }}</td>
                 <td class="text-right">{{ $opcache_stats->get('hits') }}</td>
             </tr>
 
             <tr>
-                <td>Cache misses</td>
+                <td>{{ __('Cache misses') }}</td>
                 <td class="text-right">{{ $opcache_stats->get('misses') }}</td>
             </tr>
             </tbody>

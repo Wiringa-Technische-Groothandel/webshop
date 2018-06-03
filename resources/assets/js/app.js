@@ -25,7 +25,7 @@ import VueGoogleMaps from 'vue-googlemaps'
 
 Vue.use(VueGoogleMaps, {
     load: {
-        apiKey: 'AIzaSyAQ1vHHgU-naArhlFsQOZKcy_Lp3yPHh7Y',
+        apiKey: window.Laravel.googleMapsApiKey,
         libraries: ['places'],
     },
 });

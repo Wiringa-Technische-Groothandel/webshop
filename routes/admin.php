@@ -95,22 +95,19 @@ Route::group([
 
         // Admin packs
         Route::get('packs', 'Packs\OverviewController@getAction')->name('packs');
+        Route::put('packs', 'Packs\OverviewController@putAction')->name('create');
 
         Route::group(['as' => 'packs.', 'prefix' => 'packs'], function () {
             Route::get('edit/{id}', 'PacksController@edit')->name('edit');
 
-            Route::post('add', 'PacksController@create')->name('create');
             Route::post('addProduct', 'PacksController@addProduct')->name('add');
             Route::post('remove', 'PacksController@destroy')->name('delete');
             Route::post('removeProduct', 'PacksController@removeProduct')->name('remove');
         });
 
         // Admin cache
-        Route::get('cache', 'CacheController@getAction')->name('cache');
-
-        Route::group(['as' => 'cache.', 'prefix' => 'cache'], function () {
-            Route::get('reset', 'CacheController@reset')->name('reset');
-        });
+        Route::get('cache', 'Cache\IndexController@getAction')->name('cache');
+        Route::delete('cache', 'Cache\IndexController@deleteAction')->name('cache.reset');
 
         // Admin e-mail
         Route::get('email', 'EmailController@getAction')->name('email');

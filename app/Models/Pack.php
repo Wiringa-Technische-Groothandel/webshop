@@ -2,6 +2,7 @@
 
 namespace WTG\Models;
 
+use Illuminate\Support\Collection;
 use WTG\Contracts\Models\PackContract;
 use Illuminate\Database\Eloquent\Model;
 use WTG\Contracts\Models\ProductContract;
@@ -31,7 +32,7 @@ class Pack extends Model implements PackContract
      *
      * @return HasMany
      */
-    public function products(): HasMany
+    public function items(): HasMany
     {
         return $this->hasMany(PackProduct::class);
     }
@@ -67,5 +68,15 @@ class Pack extends Model implements PackContract
     public function getProduct(): ProductContract
     {
         return $this->getAttribute('product');
+    }
+
+    /**
+     * Get the items.
+     *
+     * @return Collection
+     */
+    public function getItems(): Collection
+    {
+        return $this->getAttribute('items');
     }
 }
