@@ -8,7 +8,7 @@
     <div class="carousel-inner">
         @foreach ($slides as $slide)
             <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                <div class="d-block w-100 carousel-image" style="background: url('{{ asset('img/carousel/' . $slide->getImage()) }}') center no-repeat; background-size: contain;"></div>
+                <div class="d-block w-100 carousel-image" style="background: url('{{ asset('storage/uploads/images/carousel/' . $slide->getImage()) }}') center no-repeat; background-size: contain;"></div>
                 <div class="carousel-caption d-none d-md-block">
                     <h5>{{ $slide->getTitle() }}</h5>
                     <p>{{ $slide->getCaption() }}</p>

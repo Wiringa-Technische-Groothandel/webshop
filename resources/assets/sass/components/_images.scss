@@ -7,18 +7,18 @@
   }
 
   &.pipe {
-    background: url('/img/pipe.svg') no-repeat;
+    background: url('/storage/static/images/pipe.svg') no-repeat;
     background-size: 50%;
     height: 100px;
   }
 
   &.pipe-with-connector {
-    background: url('/img/pipe-with-connector.svg');
+    background: url('/storage/static/images/pipe-with-connector.svg');
     height: 110px;
   }
 
   &.broken-pipe {
-    background-image: url('/img/broken-pipe.svg');
+    background-image: url('/storage/static/images/broken-pipe.svg');
     height: 50%;
   }
 }
@@ -30,7 +30,7 @@
   }
 
   &.company-image {
-    background: url('/img/about-header.jpg') bottom;
+    background: url('/storage/static/images/about-header.jpg') bottom;
     background-size: cover;
   }
 }

@@ -2,9 +2,9 @@
     <div class="container">
         <a class="navbar-brand" href="{{ routeIf('home') }}">
             @if (Route::is('home'))
-                <img src="{{ asset('img/nav-logo.png') }}" alt="Logo">
+                <img src="{{ asset('storage/static/images/nav-logo.png') }}" alt="Logo">
             @else
-                <img src="{{ asset('img/nav-logov3.png') }}" alt="Logo">
+                <img src="{{ asset('storage/static/images/nav-logov3.png') }}" alt="Logo">
             @endif
         </a>
 

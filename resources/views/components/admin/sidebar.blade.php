@@ -2,7 +2,7 @@
     <div class="sidebar-sticky">
         <ul class="nav flex-column">
             <li class="navbar-brand mb-3">
-                <a class="nav-link p-0" href="/"><img height="45" class="d-block mx-auto" src="{{ asset('img/nav-logov2.png') }}" /></a>
+                <a class="nav-link p-0" href="/"><img height="45" class="d-block mx-auto" src="{{ asset('storage/static/images/nav-logov2.png') }}" /></a>
             </li>
 
             <li class="nav-item">

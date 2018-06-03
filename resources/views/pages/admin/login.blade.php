@@ -8,7 +8,7 @@
 <div id="app" class="container-fluid">
     <div class="row align-items-center" style="height: 100vh;">
         <div class="col-12 col-md-4 mx-auto">
-            <img class="img-fluid mb-3" src="{{ asset('img/logov2.png') }}" alt="WTG Logo">
+            <img class="img-fluid mb-3" src="{{ asset('storage/static/images/logov2.png') }}" alt="WTG Logo">
 
             <div class="card">
                 <div class="card-body">

@@ -85,7 +85,7 @@ class CarouselService implements CarouselServiceContract
 
             $slide->save();
 
-            $image->move(public_path('img/carousel'), $image->getClientOriginalName());
+            $image->storePubliclyAs('uploads/images/carousel', $image->getClientOriginalName());
         } catch (\Exception $e) {
             $this->db->rollBack();
 

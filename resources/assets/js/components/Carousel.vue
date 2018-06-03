@@ -7,7 +7,7 @@
 
         <div class="carousel-inner">
             <div class="carousel-item" :class="{active: slide.order === 0}" v-for="slide in slides">
-                <img :src="'/img/carousel/' + slide.image" :alt="slide.image" class="carousel-image float-md-right">
+                <img :src="'/storage/static/images/carousel/' + slide.image" :alt="slide.image" class="carousel-image float-md-right">
                 <div class="carousel-caption">
                     <h3>{{ slide.title }}</h3>
                     <p>{{ slide.caption }}</p>

@@ -97,7 +97,7 @@
                         <tbody>
                             @foreach($pack->products as $prod)
                                 <tr>
-                                    <td class="product-thumbnail"><img src="/img/products/{{ $prod->details->image }}"></td>
+                                    <td class="product-thumbnail"><img src="{{ asset('storage/uploads/images/products/' . $prod->details->image) }}"></td>
                                     <td>{{ $prod->details->number }}</td>
                                     <td><a href="/product/{{ $prod->details->number }}">{{ $prod->details->name }}</a></td>
                                     <td>{{ $prod->amount }}</td>

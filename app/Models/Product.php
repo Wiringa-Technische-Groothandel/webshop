@@ -299,7 +299,7 @@ class Product extends Model implements ProductContract
     public function getImageUrl()
     {
         return asset(
-            sprintf("img/products/%s.jpg", $this->getAttribute('sku'))
+            sprintf("storage/uploads/images/products/%s.jpg", $this->getAttribute('sku'))
         );
     }
 
