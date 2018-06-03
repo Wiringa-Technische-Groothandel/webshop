@@ -81,7 +81,7 @@ deploy_staging_job:
 
     # Release to staging
     - ssh $SSH_HOSTNAME "cd ~/docker/staging.wiringa.nl
-      && docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
+      && docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY_HOST
       && docker-compose pull
       && docker-compose up -d
       && docker-compose exec app artisan config:cache
