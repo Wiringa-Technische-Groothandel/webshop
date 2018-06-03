@@ -84,6 +84,7 @@ deploy_staging_job:
       && docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY_HOST
       && docker-compose pull
       && docker-compose up -d
+      && docker-compose exec -T app artisan storage:link
       && docker-compose exec -T app artisan config:cache
       && docker-compose exec -T app artisan view:clear
       && docker-compose exec -T app artisan cache:clear
