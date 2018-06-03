@@ -73650,7 +73650,7 @@ var render = function() {
                   _c("img", {
                     staticClass: "carousel-image float-md-right",
                     attrs: {
-                      src: "/img/carousel/" + slide.image,
+                      src: "/storage/static/images/carousel/" + slide.image,
                       alt: slide.image
                     }
                   }),

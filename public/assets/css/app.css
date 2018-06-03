@@ -14197,18 +14197,18 @@ header #header-carousel .carousel-item .carousel-caption {
 }
 
 .img-svg.pipe {
-  background: url("/img/pipe.svg") no-repeat;
+  background: url("/storage/static/images/pipe.svg") no-repeat;
   background-size: 50%;
   height: 100px;
 }
 
 .img-svg.pipe-with-connector {
-  background: url("/img/pipe-with-connector.svg");
+  background: url("/storage/static/images/pipe-with-connector.svg");
   height: 110px;
 }
 
 .img-svg.broken-pipe {
-  background-image: url("/img/broken-pipe.svg");
+  background-image: url("/storage/static/images/broken-pipe.svg");
   height: 50%;
 }
 
@@ -14218,7 +14218,7 @@ header #header-carousel .carousel-item .carousel-caption {
 }
 
 .img-png.company-image {
-  background: url("/img/about-header.jpg") bottom;
+  background: url("/storage/static/images/about-header.jpg") bottom;
   background-size: cover;
 }
 
@@ -14367,7 +14367,7 @@ footer hr {
   bottom: 20px;
   right: 0;
   left: 0;
-  background: url("/img/broken-pipe-system.svg") no-repeat center;
+  background: url("/storage/static/images/broken-pipe-system.svg") no-repeat center;
   background-size: cover;
   height: 80vh;
 }
