@@ -27,6 +27,7 @@
         </div>
 
         <script src="{{ mix('assets/js/app.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.10.0/js/lightbox.min.js"></script>
 
         @stack('scripts')
     </body>

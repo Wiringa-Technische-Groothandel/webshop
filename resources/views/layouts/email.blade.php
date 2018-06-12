@@ -8,7 +8,12 @@
         <header class="mb-5">
             <div class="row">
                 <div class="col-4">
-                    <img src="{{ Image::make(storage_path('public/static/images/logo.png'))->encode('data-url') }}" alt="Logo" class="img-fluid" />
+                    @php
+                        $imageSrc = cache()->rememberForever('images.email-logo', function () {
+                            return Image::make(storage_path('public/static/images/logo.png'))->encode('data-url');
+                        });
+                    @endphp
+                    <img src="{{ $imageSrc }}" alt="Logo" class="img-fluid" />
                 </div>
                 <div class="col-8 text-center">
                     @yield('title')

@@ -9,6 +9,10 @@
         <div class="row mb-3">
             <div class="d-none d-sm-block col-4 mb-3" id="image">
                 <div class="text-center">
+                    <a href="{{ $previousUrl ?? route('catalog.assortment') }}" class="btn btn-link mb-3">
+                        <i class="fal fa-fw fa-chevron-left"></i> {{ __('Terug naar overzicht') }}
+                    </a>
+
                     <a href="{{ $product->getImageUrl() }}" data-alt="{{ $product->getName() }}"
                        data-caption="{{ $product->getName() }}" data-lightbox="desktop-product-image">
                         <img src="{{ $product->getImageUrl() }}" alt="{{ $product->getName() }}" class="img-thumbnail">

@@ -1,3 +1,21 @@
+@if (auth()->guest())
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">{{ __('Klant login') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @include('components.auth.login.form')
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
 <nav class="navbar navbar-expand-md navbar-dark {{ Route::is('home') ? 'bg-transparent' : 'bg-gradient' }}" id="navbar-second">
     <div class="container">
         <div class="collapse navbar-collapse" id="navbar-links">
@@ -60,7 +78,10 @@
                             <a class="nav-link register-button" href="{{ route('auth.register') }}">{{ trans('navigation.items.register') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('auth.login', ['toUrl' => url()->current()]) }}">{{ trans('navigation.items.login') }}</a>
+                            <a class="nav-link" onclick="event.preventDefault()" data-toggle="modal"
+                               data-target="#loginModal" href="{{ route('auth.login', ['toUrl' => url()->current()]) }}">
+                                {{ trans('navigation.items.login') }}
+                            </a>
                         </li>
                     @endauth
                 </ul>
