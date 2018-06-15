@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('import:assortment')->everyFiveMinutes()->between('5:00', '23:00');
+        $schedule->command('import:assortment')->everyFifteenMinutes()->between('5:00', '23:00');
     }
 
     /**
