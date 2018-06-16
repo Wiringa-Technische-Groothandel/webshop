@@ -17,6 +17,13 @@
                     <small class="d-block">{{ __('Artikelnummer') }}: {{ $product->getSku() }}</small>
                     <small class="product-path">{{ $product->getPath() }}</small>
                 </div>
+
+                @auth
+                    <add-to-cart sku="{{ $product->getSku() }}"
+                                 sales-unit-single="{{ ucfirst(unit_to_str($product->getSalesUnit(), false)) }}"
+                                 sales-unit-plural="{{ ucfirst(unit_to_str($product->getSalesUnit())) }}"
+                                 submit-url="{{ route('checkout.cart') }}"></add-to-cart>
+                @endauth
             </div>
 
             <div class="col-4 col-sm-3 text-right">
