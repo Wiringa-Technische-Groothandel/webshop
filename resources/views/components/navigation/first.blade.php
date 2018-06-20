@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-light bg-transparent" id="navbar-first">
     <div class="container">
-        <a class="navbar-brand" href="{{ routeIf('home') }}">
+        <a class="navbar-brand" href="{{ route('home') }}">
             @if (Route::is('home'))
                 <img src="{{ asset('storage/static/images/nav-logo.png') }}" alt="Logo">
             @else

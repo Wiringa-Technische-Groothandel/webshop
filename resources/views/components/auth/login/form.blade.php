@@ -25,7 +25,7 @@
             <input type="password" class="form-control" autocomplete="off" required name="password"
                    placeholder="{{ __("Wachtwoord") }}">
             <small class="form-text">
-                <a href="{{ routeIf('auth.password.email') }}">{{ __("Wachtwoord vergeten?") }}</a>
+                <a href="{{ route('auth.password.email') }}">{{ __("Wachtwoord vergeten?") }}</a>
             </small>
         </div>
     </div>

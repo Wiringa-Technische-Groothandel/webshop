@@ -9,7 +9,7 @@
 
             <div class="col-8 col-sm-7">
                 <a class="product-name d-block mb-2"
-                   href="{{ routeIf('catalog.product', [ 'sku' => $product->getSku() ]) }}">
+                   href="{{ route('catalog.product', [ 'sku' => $product->getSku() ]) }}">
                     {{ $product->getName() }}
                 </a>
 

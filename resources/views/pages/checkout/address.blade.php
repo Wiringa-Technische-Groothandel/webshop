@@ -26,7 +26,7 @@
 
         <hr />
 
-        <form method="post" action="{{ routeIf('checkout.finish') }}">
+        <form method="post" action="{{ route('checkout.finish') }}">
             {{ csrf_field() }}
 
             <div id="addresses-container">
@@ -61,7 +61,7 @@
 
                 <div class="row mt-3 mt-sm-5">
                     <div class="col-12 col-sm-6 order-2 order-sm-1 mb-3">
-                        <a class="btn btn-outline-info d-inline-block" href="{{ routeIf('checkout.cart') }}">
+                        <a class="btn btn-outline-info d-inline-block" href="{{ route('checkout.cart') }}">
                             <i class="fal fa-fw fa-chevron-left"></i> {{ __('Vorige stap') }}
                         </a>
                     </div>
