@@ -23,7 +23,6 @@
     "lodash": "^4.17.10",
     "popper.js": "^1.14.3",
     "promise-polyfill": "^7.1.2",
-    "random-material-color": "^1.0.3",
     "sweetalert": "^2.1.0",
     "vue": "^2.5.16",
     "vue-googlemaps": "0.0.6"

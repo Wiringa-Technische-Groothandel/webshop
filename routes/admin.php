@@ -110,11 +110,7 @@ Route::group([
         Route::delete('cache', 'Cache\IndexController@deleteAction')->name('cache.reset');
 
         // Admin e-mail
-        Route::get('email', 'EmailController@getAction')->name('email');
-
-        Route::group(['as' => 'email.', 'prefix' => 'email'], function () {
-            Route::get('stats', 'EmailController@stats')->name('stats');
-            Route::post('test', 'EmailController@test')->name('test');
-        });
+        Route::get('email', 'Email\IndexController@getAction')->name('email');
+        Route::post('email', 'Email\IndexController@postAction')->name('email.test');
     });
 });

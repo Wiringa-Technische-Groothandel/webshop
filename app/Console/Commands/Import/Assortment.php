@@ -2,8 +2,10 @@
 
 namespace WTG\Console\Commands\Import;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Support\Collection;
 use WTG\Services\Import\Assortment as Service;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
@@ -19,7 +21,7 @@ class Assortment extends Command
     /**
      * @var string
      */
-    protected $signature = 'import:assortment';
+    protected $signature = 'import:assortment {--no-progress : Disable progress display}';
 
     /**
      * @var string
@@ -35,6 +37,16 @@ class Assortment extends Command
      * @var DatabaseManager
      */
     protected $dm;
+
+    /**
+     * @var int
+     */
+    protected $productCount = 0;
+
+    /**
+     * @var bool
+     */
+    protected $noProgress = false;
 
     /**
      * AssortmentFiles constructor.
@@ -58,6 +70,8 @@ class Assortment extends Command
      */
     public function handle()
     {
+        $this->noProgress = $this->option('no-progress');
+
         $this->dm->transaction(function () {
             $this->runImport();
         });
@@ -67,48 +81,52 @@ class Assortment extends Command
      * Run the import.
      *
      * @return void
-     * @throws FileNotFoundException
      */
     protected function runImport()
     {
-        $files = $this->service->getFileList();
+        $newUploads = $this->service->getNewUploads();
 
-        $this->output->text('Found '.$files->count().' files.');
-
-        $lastImportedFile = $this->service->getLastImportedFile();
-        $newestFile = $this->service->getNewestFile();
-
-        if ($newestFile === $lastImportedFile) {
-            $this->output->text('No new files to be imported.');
+        if ($newUploads->isEmpty()) {
+            $this->output->success('No new files to be imported.');
 
             return;
         }
 
-        $startFrom = $this->service->getStartFromIndex();
+        $this->output->text(
+            sprintf('%d new uploads since %s', $newUploads->count(), $this->service->getLastImportDate()->format('Y-m-d H:i'))
+        );
 
-        $this->output->text('Starting from file '.($startFrom));
+        $count = 1;
+        $newUploads->each(function (Collection $fileGroup) use (&$count) {
+            $this->output->text(sprintf('Processing filegroup %d', $count));
 
-        $this->output->progressStart($files->count() - $startFrom);
+            if (! $this->noProgress) {
+                $this->output->progressStart($fileGroup->get('count'));
+            }
 
-        $count = 0;
-        $index = $startFrom;
-        while ($files->has($index)) {
-            $file = $files->get($index);
-            $products = simplexml_load_string(
-                $this->service->readFile($file)
-            );
+            $fileGroup->get('files')->each(function ($filename) {
+                $xml = simplexml_load_string(
+                    $this->service->readFile($filename)
+                );
 
-            $this->output->progressAdvance();
+                $this->service->importProducts($xml, $this->productCount);
 
-            $this->service->importProducts($products, $count);
+                if (! $this->noProgress) {
+                    $this->output->progressAdvance();
+                }
+            });
 
-            $index++;
-        }
+            if (! $this->noProgress) {
+                $this->output->progressFinish();
+            }
 
-        $this->output->progressFinish();
+            $count++;
+        });
 
-        $this->service->updateImportData($file);
+        $this->service->updateImportData();
 
-        $this->output->success('Imported '.$count.' products');
+        $this->output->success(
+            sprintf('Processed %d products', $this->productCount)
+        );
     }
 }

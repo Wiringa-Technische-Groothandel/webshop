@@ -18,7 +18,7 @@
     <div class="row cart-footer-buttons">
         <div class="col-12 col-md-4 order-2 order-md-1 mb-3">
             <button class="btn btn-outline-danger d-block d-sm-inline" onclick="cart.destroy(this)"
-                    data-destroy-url="{{ routeIf('checkout.cart.destroy') }}">
+                    data-destroy-url="{{ route('checkout.cart.destroy') }}">
                 <i class="fa fa-trash-o"></i> {{ __('Winkelwagen legen') }}
             </button>
         </div>
@@ -30,7 +30,7 @@
                 </a>
 
                 @if ($cart->count() > 0)
-                    <a class="btn btn-outline-success d-block d-sm-inline" href="{{ routeIf('checkout.address') }}">
+                    <a class="btn btn-outline-success d-block d-sm-inline" href="{{ route('checkout.address') }}">
                         {{ __('Volgende stap') }} <i class="fa fa-arrow-circle-right fa-fw"></i>
                     </a>
                 @endif

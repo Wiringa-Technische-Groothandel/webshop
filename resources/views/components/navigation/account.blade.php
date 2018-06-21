@@ -21,6 +21,10 @@
        class="list-group-item {{ Route::is('account.order-history') ? 'active' : '' }}">
         {{ __('Bestelhistorie') }}
     </a>
+    <a href="{{ route('account.invoices') }}"
+       class="list-group-item {{ Route::is('account.invoices') ? 'active' : '' }}">
+        {{ __('Facturen') }}
+    </a>
     <a href="{{ route('account.addresses') }}"
        class="list-group-item {{ Route::is('account.addresses') ? 'active' : '' }}">
         {{ __('Adressen') }}

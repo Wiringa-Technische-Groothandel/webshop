@@ -71,7 +71,10 @@ class CartController extends Controller
         }
 
         return response()->json([
-            'message' => __('Het product is toegevoegd aan uw winkelwagen.'),
+            'message' => __("Toegevoegd aan uw winkelwagen: <br><br> :quantity x :product", [
+                'quantity' => $request->input('quantity'),
+                'product' => $cartItem->getProduct()->getName()
+            ]),
             'success' => true,
             'count' => $this->cartService->getItemCount(),
             'code' => 200

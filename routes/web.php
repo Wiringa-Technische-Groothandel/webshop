@@ -92,6 +92,8 @@ Route::group([
     Route::get('password', 'PasswordController@getAction')->name('change_password');
     Route::get('favorites', 'FavoritesController@getAction')->name('favorites');
     Route::get('order-history', 'OrderHistoryController@getAction')->name('order-history');
+    Route::get('invoices', 'InvoiceController@getAction')->name('invoices');
+    Route::get('invoices/{file}', 'InvoiceController@viewAction')->name('invoices.view');
     Route::get('addresses', 'AddressController@getAction')->name('addresses');
     Route::get('discount', 'DiscountController@getAction')->name('discount');
 

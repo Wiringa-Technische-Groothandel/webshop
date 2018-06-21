@@ -71570,24 +71570,21 @@ var render = function() {
     "div",
     { attrs: { id: "notification-wrapper" } },
     _vm._l(_vm.messages, function(message) {
-      return _c(
-        "div",
-        {
-          staticClass: "notification animated",
-          class: {
-            success: message.success,
-            danger: !message.success,
-            fadeInLeft: message.show,
-            fadeOutLeft: !message.show
-          },
-          on: {
-            click: function($event) {
-              message.show = false
-            }
-          }
+      return _c("div", {
+        staticClass: "notification animated",
+        class: {
+          success: message.success,
+          danger: !message.success,
+          fadeInLeft: message.show,
+          fadeOutLeft: !message.show
         },
-        [_vm._v("\n        " + _vm._s(message.text) + " "), _c("br")]
-      )
+        domProps: { innerHTML: _vm._s(message.text) },
+        on: {
+          click: function($event) {
+            message.show = false
+          }
+        }
+      })
     })
   )
 }

@@ -24,11 +24,28 @@ class ProductController extends Controller
     public function getAction(string $sku): View
     {
         $product = Product::findBySku($sku);
+        $previousUrl = $this->getAssortmentUrl();
 
         if (! $product) {
             abort(404, __("Er is geen product gevonden met productnummer :sku", ['sku' => $sku]));
         }
 
-        return view('pages.catalog.product', compact('product'));
+        return view('pages.catalog.product', compact('product', 'previousUrl'));
+    }
+
+    /**
+     * Get the last url or return the assortment url.
+     *
+     * @return string
+     */
+    protected function getAssortmentUrl(): string
+    {
+        $lastUrl = url()->previous();
+
+        if (strpos($lastUrl, route('catalog.assortment')) !== false) {
+            return $lastUrl;
+        }
+
+        return route('catalog.assortment');
     }
 }

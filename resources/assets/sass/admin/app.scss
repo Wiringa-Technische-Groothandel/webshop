@@ -6,11 +6,9 @@
 @import "variables";
 
 // Packages
-//@import "~bootstrap/scss/bootstrap";
 @import "~bootstrap-material-design/scss/bootstrap-material-design";
-@import "~animate.css/animate";
 
-//// Components
+// Components
 @import "components/sidebar";
 @import "components/navigation";
 //@import "components/header";

@@ -1,21 +1,23 @@
 <?php
 
-namespace WTG\Http\Controllers\Admin;
+namespace WTG\Http\Controllers\Admin\Email;
 
 use WTG\Mail\Test;
-use Illuminate\Mail\Mailer;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
+use Illuminate\Contracts\Mail\Mailer;
+use Illuminate\Http\RedirectResponse;
+use WTG\Http\Controllers\Admin\Controller;
 use Illuminate\View\Factory as ViewFactory;
 
 /**
- * Email controller.
+ * Admin email index controller.
  *
  * @package     WTG\Http
- * @subpackage  Controllers\Admin
- * @author      Thomas Wiringa <thomas.wiringa@gmail.com>
+ * @subpackage  Controllers\Admin\Email
+ * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
-class EmailController extends Controller
+class IndexController extends Controller
 {
     /**
      * @var Mailer
@@ -35,11 +37,10 @@ class EmailController extends Controller
         $this->mailer = $mailer;
     }
 
-
     /**
      * Email page.
      *
-     * @return \Illuminate\Contracts\View\View
+     * @return View
      */
     public function getAction(): View
     {
@@ -47,27 +48,27 @@ class EmailController extends Controller
     }
 
     /**
-     * Attempt to send a test email
+     * Attempt to send a test email.
      *
      * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function test(Request $request)
+    public function postAction(Request $request): RedirectResponse
     {
         $validator = \Validator::make($request->input(), [
             'email' => 'required|email'
         ]);
 
         if ($validator->passes()) {
-            $this->mailer->to($request->input('email'))->send(new Test());
+            $this->mailer->to($request->input('email'))->send(new Test);
 
             return redirect()
                 ->back()
                 ->with('status', 'De email is verzonden');
-        } else {
-            return redirect()
-                ->back()
-                ->withErrors($validator->errors());
         }
+
+        return redirect()
+            ->back()
+            ->withErrors($validator->errors());
     }
 }

@@ -3,12 +3,12 @@
 namespace WTG\Services\Import;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use WTG\Models\ImportData;
 use Illuminate\Support\Collection;
 use WTG\Models\Product as ProductModel;
 use WTG\Soap\GetProducts\Response\Product;
 use Illuminate\Filesystem\FilesystemManager;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
 /**
  * Assortment import.
@@ -19,7 +19,7 @@ use Illuminate\Filesystem\FilesystemManager;
  */
 class Assortment
 {
-    const FILENAME_PATTERN = '/Compleet[0-9]+\.xml$/';
+    const FILENAME_PATTERN = '/compleet(?P<date>[0-9]{14})(?P<item>[0-9]{6})\.xml$/';
     const MUTATION_DELETE = 'D';
     const MUTATION_UPDATE = 'U';
 
@@ -54,32 +54,36 @@ class Assortment
      * Run the importer.
      *
      * @return void
-     * @throws FileNotFoundException
      */
     public function run(): void
     {
-        $files = $this->getFileList();
-        $lastImportedFile = $this->getLastImportedFile();
-        $newestFile = $this->getNewestFile();
+        $newUploads = $this->getNewUploads();
 
-        if ($newestFile === $lastImportedFile) {
+        if ($newUploads->isEmpty()) {
             return;
         }
 
-        $index = $this->getStartFromIndex();
+        $newUploads->each(function (Collection $fileGroup) {
+            $fileGroup->get('files')->each(function ($filename) {
+                $xml = simplexml_load_string(
+                    $this->readFile($filename)
+                );
 
-        while ($files->has($index)) {
-            $file = $files->get($index);
-            $products = simplexml_load_string(
-                $this->readFile($file)
-            );
+                $this->importProducts($xml);
+            });
+        });
+    }
 
-            $this->importProducts($products);
-
-            $index++;
-        }
-
-        $this->updateImportData($file);
+    /**
+     * Get the newly uploaded file groups.
+     *
+     * @return Collection
+     */
+    public function getNewUploads(): Collection
+    {
+        return $this->getFileList()->filter(function (Collection $fileGroup) {
+            return $fileGroup->get('date')->timestamp > $this->getLastImportDate()->timestamp;
+        });
     }
 
     /**
@@ -96,33 +100,34 @@ class Assortment
 
         $this->files = collect(
                 $this->fs->disk('sftp')->allFiles('assortment')
-            )->filter(function ($filename) {
-                return preg_match(self::FILENAME_PATTERN, $filename);
+            )->map(function ($filename) {
+                if (! preg_match(self::FILENAME_PATTERN, $filename, $match)) {
+                    return null;
+                }
+
+                return collect([
+                    'filename' => $filename,
+                    'date' => Carbon::createFromFormat('YmdHis', $match['date'], 'Europe/Amsterdam'),
+                    'item' => (int) $match['item']
+                ]);
+            })
+            ->filter()
+            ->groupBy(function (Collection $item) {
+                return $item->get('date')->timestamp;
+            })
+            ->map(function (Collection $fileGroup) {
+                $files = $fileGroup->map(function (Collection $file) {
+                    return $file->get('filename');
+                });
+
+                return collect([
+                    'files' => $files,
+                    'count' => $files->count(),
+                    'date'  => $fileGroup->first()->get('date')
+                ]);
             });
 
         return $this->files;
-    }
-
-    /**
-     * Get the newest file name from the list.
-     *
-     * @return string
-     */
-    public function getNewestFile(): string
-    {
-        return $this->getFileList()->last() ?: '';
-    }
-
-    /**
-     * Get the start index based on the last imported file.
-     *
-     * @return int
-     */
-    public function getStartFromIndex(): int
-    {
-        return (int) $this->getFileList()->search(
-            $this->getLastImportedFile()
-        );
     }
 
     /**
@@ -145,6 +150,18 @@ class Assortment
     public function getLastImportedFile(): ?string
     {
         return ImportData::key(ImportData::KEY_LAST_ASSORTMENT_FILE)->value('value');
+    }
+
+    /**
+     * Get the name of the last import date.
+     *
+     * @return Carbon
+     */
+    public function getLastImportDate(): Carbon
+    {
+        return Carbon::parse(
+            ImportData::key(ImportData::KEY_LAST_ASSORTMENT_RUN_TIME)->value('value')
+        );
     }
 
     /**
@@ -199,7 +216,7 @@ class Assortment
 
             // Skip this product
             if (! $soapProduct->webshop) {
-                \Log::debug(sprintf('[Product import] Skipped %s. Reason: %s', $sku, 'webshop is false'));
+                \Log::debug(sprintf('[Product import] Skipped %s. Reason: %s', $sku, 'products is not enabled for the webshop'));
 
                 continue;
             }
@@ -223,15 +240,10 @@ class Assortment
     /**
      * Update the last import data.
      *
-     * @param  string  $file
      * @return void
      */
-    public function updateImportData(string $file): void
+    public function updateImportData(): void
     {
-        ImportData::key(ImportData::KEY_LAST_ASSORTMENT_FILE)->update([
-            'value' => $file ?? $this->getLastImportedFile()
-        ]);
-
         ImportData::key(ImportData::KEY_LAST_ASSORTMENT_RUN_TIME)->update([
             'value' => $this->runTime
         ]);
