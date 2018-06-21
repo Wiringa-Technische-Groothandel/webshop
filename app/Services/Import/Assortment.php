@@ -3,12 +3,12 @@
 namespace WTG\Services\Import;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use WTG\Models\ImportData;
 use Illuminate\Support\Collection;
 use WTG\Models\Product as ProductModel;
 use WTG\Soap\GetProducts\Response\Product;
 use Illuminate\Filesystem\FilesystemManager;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
 /**
  * Assortment import.
@@ -101,7 +101,7 @@ class Assortment
         $this->files = collect(
                 $this->fs->disk('sftp')->allFiles('assortment')
             )->map(function ($filename) {
-                if (preg_match(self::FILENAME_PATTERN, $filename, $match) === false) {
+                if (! preg_match(self::FILENAME_PATTERN, $filename, $match)) {
                     return null;
                 }
 

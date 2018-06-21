@@ -1,8 +1,8 @@
 <template>
     <div id="notification-wrapper">
         <div v-for="message in messages" class="notification animated" v-on:click="message.show = false"
+             v-html="message.text"
              :class="{ success: message.success, danger: !message.success, fadeInLeft: message.show, fadeOutLeft: !message.show }">
-            {{ message.text }} <br />
         </div>
     </div>
 </template>
