@@ -12,8 +12,9 @@
     <table class="table" id="invoice-table">
         <thead>
             <tr>
-                <th class="w-25">{{ __('PDF Downloaden') }}</th>
                 <th class="w-50">{{ __('Factuurnummer') }}</th>
+                <th class="w-25">{{ __('Datum') }}</th>
+                <th class="w-25"></th>
             </tr>
         </thead>
 

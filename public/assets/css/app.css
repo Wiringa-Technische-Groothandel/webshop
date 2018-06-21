@@ -10907,6 +10907,11 @@ body {
   display: none;
 }
 
+.table th,
+.table td {
+  vertical-align: middle;
+}
+
 .btn:hover {
   cursor: pointer;
 }

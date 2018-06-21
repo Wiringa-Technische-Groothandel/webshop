@@ -41,6 +41,7 @@ class OrderHistoryController extends Controller
      *
      * @param  DownloadOrderRequest  $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * @throws \Throwable
      */
     public function postAction(DownloadOrderRequest $request)
     {
@@ -52,9 +53,8 @@ class OrderHistoryController extends Controller
             ->where('id', $request->input('order'))
             ->first();
 
-        if (!$order) {
-            return back()
-                ->withErrors(__("Er was geen order gevonden met het opgegeven id."));
+        if (! $order) {
+            return back()->withErrors(__("Er was geen order gevonden met het opgegeven id."));
         }
 
         $snappy = app()->make('snappy.pdf');
