@@ -10,7 +10,7 @@
                 <div class="col-4">
                     @php
                         $imageSrc = cache()->rememberForever('images.email-logo', function () {
-                            return Image::make(storage_path('public/static/images/logo.png'))->encode('data-url');
+                            return Image::make(storage_path('app/public/static/images/logo.png'))->encode('data-url');
                         });
                     @endphp
                     <img src="{{ $imageSrc }}" alt="Logo" class="img-fluid" />

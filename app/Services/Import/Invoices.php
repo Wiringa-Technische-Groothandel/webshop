@@ -17,7 +17,7 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
  */
 class Invoices
 {
-    const FILENAME_PATTERN = '/Verzamelfactuur_(?P<invoice>[0-9]{8})_(?P<customer>[0-9]{5})\.PDF$/';
+    const FILENAME_PATTERN = '/(?P<invoice>[0-9]{8})_(?P<customer>[0-9]{5})_(?P<date>[0-9]{8})_(?P<time>[0-9]{6})\.PDF$/';
     const MUTATION_DELETE = 'D';
     const MUTATION_UPDATE = 'U';
 
@@ -73,13 +73,15 @@ class Invoices
             return $this->files;
         }
 
-        $this->files = \Cache::remember('invoice_files', 60 * 12, function () {
+        $this->files = \Cache::remember('invoice_files', 60 * 24, function () {
             return collect(
                 $this->fs->disk('sftp')->allFiles('invoices')
             )->map(function ($filename) {
                 if (! preg_match(self::FILENAME_PATTERN, $filename, $match)) {
+                    \Log::notice( sprintf("%s: Removing file '%s' because the name does not match the given pattern.", __CLASS__, $filename));
+
                     // Remove the files that should not be in the folder
-                    $this->fs->delete($filename);
+                    $this->fs->disk('sftp')->delete($filename);
 
                     return null;
                 }
@@ -87,7 +89,8 @@ class Invoices
                 return collect([
                     'filename' => $filename,
                     'customer' => (int) $match['customer'],
-                    'invoice'  => (int) $match['invoice']
+                    'invoice'  => (int) $match['invoice'],
+                    'date'     => Carbon::createFromFormat('dmYHis', ($match['date'] . $match['time']))
                 ]);
             })
             ->filter()
@@ -96,23 +99,22 @@ class Invoices
             })
             ->map(function (Collection $fileGroup, int $customerNumber) {
                 $files = $fileGroup->map(function (Collection $file) {
-                    return $file->get('filename');
+                    return $file->only([
+                        'filename',
+                        'invoice',
+                        'date'
+                    ]);
                 });
-
-                $invoices = $fileGroup->map(function (Collection $file) {
-                    return $file->get('invoice');
-                })->sort()->reverse();
 
                 $company = Company::where('customer_number', $customerNumber)->first();
 
                 if (! $company) {
-                    \Log::notice('Found invoice files for non-existant customer ' . $customerNumber);
+                    \Log::notice(sprintf('%s: Found invoice files for non-existant customer %s', __CLASS__, $customerNumber));
                 }
 
                 return collect([
                     'company' => $company,
                     'files' => $files,
-                    'invoices' => $invoices,
                     'count' => $files->count()
                 ]);
             });

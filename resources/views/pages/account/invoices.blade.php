@@ -12,19 +12,20 @@
     <table class="table" id="invoice-table">
         <thead>
             <tr>
-                <th class="w-25">{{ __('PDF Downloaden') }}</th>
                 <th class="w-50">{{ __('Factuurnummer') }}</th>
+                <th class="w-25">{{ __('Datum') }}</th>
+                <th class="w-25 text-right">{{ __('PDF Downloaden') }}</th>
             </tr>
         </thead>
 
         <tbody>
-            @forelse(($invoices->get('invoices') ?? []) as $key => $invoice)
+            @forelse(($invoices->get('files') ?? []) as $key => $invoice)
                 <tr>
-                    <td>
+                    <td>{{ $invoice->get('invoice') }}</td>
+                    <td>{{ $invoice->get('date')->format('d-m-Y H:i:s') }}</td>
+                    <td class="text-right">
                         <a href="{{ route('account.invoices.view', ['file' => $key]) }}" class="btn btn-sm btn-outline-dark"><i class="fa fa-fw fa-download"></i></a>
                     </td>
-                    <td>{{ $invoice }}</td>
-                    <td></td>
                 </tr>
             @empty
                 <tr>
