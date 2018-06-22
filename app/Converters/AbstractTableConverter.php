@@ -76,7 +76,7 @@ abstract class AbstractTableConverter implements TableConverter
 
         $file = fopen($this->filePath, "r");
 
-        while (($data = fgetcsv($file, 1)) !== FALSE) {
+        while (($data = fgetcsv($file)) !== FALSE) {
             $lines[] = $data;
         }
         fclose($file);
@@ -117,6 +117,8 @@ abstract class AbstractTableConverter implements TableConverter
      */
     public function mapCsvFields(array $data)
     {
+        dump($data);
+
         return array_combine($this->csvFields, $data);
     }
 }
