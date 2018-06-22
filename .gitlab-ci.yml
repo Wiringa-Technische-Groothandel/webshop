@@ -8,6 +8,7 @@ cache:
 
 stages:
   - build
+  - docker
   - test
   - deploy
 
@@ -63,9 +64,11 @@ build_docker_image_job:
   services:
     - docker:dind
 
-  stage: build
+  stage: docker
 
   script:
+    - echo "Logging in to $DOCKER_REGISTRY_HOST"
+
     - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY_HOST
 
     - echo "Building docker.wiringa.nl/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG"
