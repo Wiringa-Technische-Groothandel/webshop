@@ -23,9 +23,9 @@ build_job:
     - npm install -s
 
     # Build the assets
-    - npm run prod
+    - npm run prod-silent
 
-    - tar --exclude=./build --exclude=./node_modules --exclude=./.env.example --exclude=./.env.testing --exclude=./package.json --exclude=./package-lock.json --exclude=./webpack.mix.js -cvzf build/deployment.tar.gz
+    - tar --exclude=./build --exclude=./node_modules --exclude=./.env.example --exclude=./.env.testing --exclude=./package.json --exclude=./package-lock.json --exclude=./webpack.mix.js -cvzf build/deployment.tar.gz .
 
   artifacts:
     paths:
