@@ -54,7 +54,7 @@ test_job:
     # Run laravel tests
     - php vendor/bin/phpunit --coverage-text --colors=never
 
-deploy_staging_job:
+build_docker_image_job:
   image: docker:stable
 
   variables:
@@ -63,6 +63,19 @@ deploy_staging_job:
   services:
     - docker:dind
 
+  stage: build
+
+  script:
+    - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY_HOST
+
+    - echo "Building docker.wiringa.nl/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG"
+
+    # Build the docker image
+    - docker build --build-arg SHA=$CI_COMMIT_SHA -t docker.wiringa.nl/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG build
+
+    - docker push docker.wiringa.nl/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG
+
+deploy_staging_job:
   stage: deploy
 
   when: manual
@@ -92,9 +105,6 @@ deploy_staging_job:
     - chmod 600 ~/.ssh/id_rsa*
     - chmod 600 ~/.ssh/config
     - chmod 644 ~/.ssh/known_hosts
-
-    # Build the docker image
-    - docker build --build-arg SHA=$CI_COMMIT_SHA -t docker.wiringa.nl/wtg/webshop:1.0-dev build
 
     # Release to staging
     - ssh $SSH_HOSTNAME "cd ~/docker/staging.wiringa.nl
