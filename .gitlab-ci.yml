@@ -66,6 +66,9 @@ build_docker_image_job:
 
   stage: docker
 
+  dependencies:
+    - build_job
+
   script:
     - echo "Logging in to $DOCKER_REGISTRY_HOST"
 
