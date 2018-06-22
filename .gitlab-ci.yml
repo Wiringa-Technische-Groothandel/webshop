@@ -75,7 +75,7 @@ build_docker_image_job:
     - echo "Building docker.wiringa.nl/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG"
 
     # Build the docker image
-    - docker build --build-arg SHA=$CI_COMMIT_SHA -t docker.wiringa.nl/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG build
+    - docker build  -t docker.wiringa.nl/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG build
 
     - docker push docker.wiringa.nl/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG
 

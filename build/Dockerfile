@@ -43,17 +43,8 @@ RUN apt-get clean -y \
 
 WORKDIR /var/www/html
 
-ARG SHA
-
-ADD ./deployment.tar.gz /tmp/deployment.tar.gz
-
-USER www-data
-
-# Extract to the webroot
-RUN tar xfv /tmp/deployment.tar.gz -C /var/www/html
-
-# Change user back to root
-USER root
+# Add and extract the tar to the webroot
+ADD ./deployment.tar.gz /var/www/html
 
 # Copy the apache vhost config
 COPY vhost.conf /etc/apache2/sites-available/000-default.conf
