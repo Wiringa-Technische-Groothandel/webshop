@@ -8,7 +8,6 @@ cache:
 
 stages:
   - build
-  - docker
   - test
   - deploy
 
@@ -26,7 +25,7 @@ build_job:
     # Build the assets
     - npm run prod-silent
 
-    - tar --exclude=./build --exclude=./node_modules --exclude=./.env.example --exclude=./.env.testing --exclude=./package.json --exclude=./package-lock.json --exclude=./webpack.mix.js -cvzf build/deployment.tar.gz .
+    - tar --exclude=./build --exclude=./.git --exclude=./node_modules --exclude=./.env.example --exclude=./.env.testing --exclude=./package.json --exclude=./package-lock.json --exclude=./webpack.mix.js -cvzf build/deployment.tar.gz *
 
   artifacts:
     paths:
@@ -64,14 +63,9 @@ build_docker_image_job:
   services:
     - docker:dind
 
-  stage: docker
-
-  dependencies:
-    - build_job
+  stage: build
 
   script:
-    - echo "Logging in to $DOCKER_REGISTRY_HOST"
-
     - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY_HOST
 
     - echo "Building docker.wiringa.nl/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG"
