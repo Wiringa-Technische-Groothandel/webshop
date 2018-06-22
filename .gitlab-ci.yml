@@ -8,6 +8,7 @@ cache:
 
 stages:
   - build
+  - docker
   - test
   - deploy
 
@@ -59,11 +60,15 @@ build_docker_image_job:
 
   variables:
     DOCKER_DRIVER: overlay2
+    GIT_STRATEGY: none
 
   services:
     - docker:dind
 
-  stage: build
+  stage: docker
+
+  dependencies:
+    - build_job
 
   script:
     - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY_HOST

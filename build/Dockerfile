@@ -45,7 +45,9 @@ WORKDIR /var/www/html
 
 ARG SHA
 
-ADD ./deployment.tar.gz /tmp
+ADD ./deployment.tar.gz /tmp/deployment.tar.gz
+
+USER www-data
 
 # Extract to the webroot
 RUN tar xfv /tmp/deployment.tar.gz -C /var/www/html
