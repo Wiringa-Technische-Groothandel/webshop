@@ -2,13 +2,11 @@
 
 namespace WTG\Http\Controllers\Web\Account;
 
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\Response;
-use Illuminate\View\Factory as ViewFactory;
-use WTG\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Contracts\View\View;
 use WTG\Http\Controllers\Controller;
-use WTG\Http\Requests\DownloadOrderRequest;
+use Illuminate\View\Factory as ViewFactory;
 use WTG\Services\Import\Invoices as InvoiceService;
 
 /**
@@ -47,7 +45,7 @@ class InvoiceController extends Controller
     public function getAction(Request $request): View
     {
         $invoices = $this->service->getForCustomer(
-            $request->user()->getCompany()->getCustomerNumber()
+            10013 ?: $request->user()->getCompany()->getCustomerNumber()
         );
 
         return view('pages.account.invoices', compact('invoices'));
@@ -63,15 +61,17 @@ class InvoiceController extends Controller
     public function viewAction(Request $request, int $file)
     {
         $invoices = $this->service->getForCustomer(
-            $request->user()->getCompany()->getCustomerNumber()
+            10013 ?:$request->user()->getCompany()->getCustomerNumber()
         );
 
         $filenames = $invoices->get('files');
-        $filename = $filenames[$file] ?? false;
+        $invoice = $filenames[$file] ?? false;
 
-        if (! $filename) {
+        if (! $invoice) {
             return back()->withErrors(__('De opgevraagde factuur is niet gevonden'));
         }
+
+        $filename = $invoice->get('filename');
 
         try {
             $data = $this->service->readFile($filename);

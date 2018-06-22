@@ -73,7 +73,7 @@ class Invoices
             return $this->files;
         }
 
-        $this->files = \Cache::remember('invoice_files', 60 * 12, function () {
+        $this->files = \Cache::remember('invoice_files', 60 * 24, function () {
             return collect(
                 $this->fs->disk('sftp')->allFiles('invoices')
             )->map(function ($filename) {
@@ -81,7 +81,7 @@ class Invoices
                     \Log::notice( sprintf("%s: Removing file '%s' because the name does not match the given pattern.", __CLASS__, $filename));
 
                     // Remove the files that should not be in the folder
-                    $this->fs->delete($filename);
+                    $this->fs->disk('sftp')->delete($filename);
 
                     return null;
                 }

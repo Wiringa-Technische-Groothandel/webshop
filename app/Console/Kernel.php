@@ -2,6 +2,7 @@
 
 namespace WTG\Console;
 
+use WTG\Services\Import\Invoices;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -25,6 +26,15 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('import:assortment')->everyFifteenMinutes()->between('5:00', '23:00');
+
+        // Re-cache the invoice files
+        $schedule->call(function () {
+            \Cache::forget('invoice_files');
+
+            /** @var Invoices $service */
+            $service = app()->make(Invoices::class);
+            $service->getFileList(true);
+        })->dailyAt('21:30');
     }
 
     /**
