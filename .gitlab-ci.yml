@@ -3,7 +3,8 @@ image: lunamoonfang/wtg-php:build-7.2
 
 cache:
   paths:
-    - vendor/
+    - vendor
+    - node_modules
 
 stages:
   - build
@@ -21,18 +22,16 @@ build_job:
     # Install Node dependencies.
     - npm install -s
 
-    # Copy over testing configuration.
-    - cp .env.testing .env
-
-    # Generate an application key. Re-cache.
-    - php artisan key:generate
-    - php artisan config:cache
-
     # Build the assets
     - npm run prod
 
-    # Cleanup node modules
-    - rm -rf node_modules
+    - tar --exclude=./build --exclude=./node_modules --exclude=./.env.example --exclude=./.env.testing --exclude=./package.json --exclude=./package-lock.json --exclude=./webpack.mix.js -cvzf build/deployment.tar.gz
+
+  artifacts:
+    paths:
+      - build/deployment.tar.gz
+
+    expire_in: 1 week
 
 test_job:
   stage: test
@@ -45,10 +44,25 @@ test_job:
     MYSQL_ROOT_PASSWORD: secret
 
   script:
+    # Copy over testing configuration.
+    - cp .env.testing .env
+
+    # Generate an application key. Re-cache.
+    - php artisan key:generate
+    - php artisan config:cache
+
     # Run laravel tests
     - php vendor/bin/phpunit --coverage-text --colors=never
 
 deploy_staging_job:
+  image: docker:stable
+
+  variables:
+    DOCKER_DRIVER: overlay2
+
+  services:
+    - docker:dind
+
   stage: deploy
 
   when: manual
@@ -78,6 +92,9 @@ deploy_staging_job:
     - chmod 600 ~/.ssh/id_rsa*
     - chmod 600 ~/.ssh/config
     - chmod 644 ~/.ssh/known_hosts
+
+    # Build the docker image
+    - docker build --build-arg SHA=$CI_COMMIT_SHA -t docker.wiringa.nl/wtg/webshop:1.0-dev build
 
     # Release to staging
     - ssh $SSH_HOSTNAME "cd ~/docker/staging.wiringa.nl
