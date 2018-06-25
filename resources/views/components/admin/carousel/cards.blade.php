@@ -2,7 +2,7 @@
     @foreach($slides as $slide)
         <div class="col-sm-6 col-md-4">
             <div class="card">
-                <img src="{{ asset('img/carousel/'.$slide->getImage()) }}" alt="{{ $slide->getImage() }}" class="card-img-top">
+                <img src="{{ asset('storage/uploads/images/carousel/' . $slide->getImage()) }}" alt="{{ $slide->getImage() }}" class="card-img-top">
 
                 <div class="card-body">
                     <div class="caption">

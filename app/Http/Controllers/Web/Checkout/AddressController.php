@@ -53,10 +53,14 @@ class AddressController extends Controller
      */
     public function getAction(Request $request)
     {
+        if (! $this->cartService->getItemCount()) {
+            return redirect(route('checkout.cart'));
+        }
+
         /** @var Customer $customer */
         $customer = $request->user();
         $addresses = $this->addressService->getAddressesForCustomer($customer);
-        $quoteAddress = $this->cartService->getDeliveryAddress($customer);
+        $quoteAddress = $this->cartService->getDeliveryAddress();
 
         return view('pages.checkout.address', compact('customer', 'addresses', 'quoteAddress'));
     }
@@ -81,7 +85,7 @@ class AddressController extends Controller
             ], 400);
         }
 
-        $isSuccess = $this->cartService->setDeliveryAddress($customer, $address);
+        $isSuccess = $this->cartService->setDeliveryAddress($address);
 
         return response()->json([
             'message' => $isSuccess ? __('Het afleveradres is aangepast.') : __('Er is een fout opgetreden tijdens het aanpassen van het afleveradres.'),

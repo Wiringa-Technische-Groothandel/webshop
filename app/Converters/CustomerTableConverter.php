@@ -47,7 +47,7 @@ class CustomerTableConverter extends AbstractTableConverter
         $company = app()->make(CompanyContract::class)->where('customer_number', $data['company_id'])->first();
 
         if ($company === null) {
-            \Log::warning('[Customer table conversion] No company was found for customer number '.$data['User_id']);
+            \Log::warning('[Customer table conversion] No company was found for customer number '.$data['company_id']);
 
             return null;
         }
@@ -108,7 +108,6 @@ class CustomerTableConverter extends AbstractTableConverter
         }
 
         if ($cart === false) {
-            dd("Invalid cart " . $cartData);
             \Log::warning(sprintf("[Customer table conversion] Customer %s had an invalid cart.", $customer->getAttribute('id')));
 
             return null;

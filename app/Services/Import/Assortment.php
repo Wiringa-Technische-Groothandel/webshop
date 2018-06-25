@@ -159,9 +159,14 @@ class Assortment
      */
     public function getLastImportDate(): Carbon
     {
-        return Carbon::parse(
-            ImportData::key(ImportData::KEY_LAST_ASSORTMENT_RUN_TIME)->value('value')
-        );
+        $value = ImportData::key(ImportData::KEY_LAST_ASSORTMENT_RUN_TIME)->value('value');
+
+        if ($value === null) {
+            // If no import has ever been executed, default to 1970-01-01
+            return Carbon::createFromDate(1970, 1, 1);
+        }
+
+        return Carbon::parse($value);
     }
 
     /**

@@ -79,14 +79,14 @@
     </div>
 @endsection
 
-@section('extraJS')
+@push('scripts')
     <script>
-        var $deliveryAddress = $("#delivery-address");
-        var $changeAddressModal = $('#change-address-modal');
+        const $deliveryAddress = $("#delivery-address");
+        const $changeAddressModal = $('#change-address-modal');
 
         $('.change-address-button').on('click', function () {
-            var $this = $(this);
-            var $selectedAddress = $($this.data('target'));
+            const $this = $(this);
+            const $selectedAddress = $($this.data('target'));
 
             $deliveryAddress.html($selectedAddress.html());
             $changeAddressModal.modal('hide');
@@ -99,4 +99,4 @@
                 });
         });
     </script>
-@endsection
+@endpush

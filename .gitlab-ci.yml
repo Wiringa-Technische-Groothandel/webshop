@@ -72,12 +72,12 @@ build_docker_image_job:
   script:
     - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY_HOST
 
-    - echo "Building docker.wiringa.nl/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG"
+    - echo "Building $DOCKER_REGISTRY_HOST/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG"
 
     # Build the docker image
-    - docker build  -t docker.wiringa.nl/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG build
+    - docker build -t $DOCKER_REGISTRY_HOST/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG build
 
-    - docker push docker.wiringa.nl/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG
+    - docker push $DOCKER_REGISTRY_HOST/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG
 
 deploy_staging_job:
   stage: deploy

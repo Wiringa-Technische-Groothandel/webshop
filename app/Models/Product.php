@@ -20,6 +20,8 @@ class Product extends Model implements ProductContract
 {
     use Searchable, SoftDeletes;
 
+    const IMAGE_PLACEHOLDER_PATH = 'storage/static/images/product-image-placeholder.png';
+
     /**
      * @var array
      */
@@ -298,9 +300,13 @@ class Product extends Model implements ProductContract
      */
     public function getImageUrl()
     {
-        return asset(
-            sprintf("storage/uploads/images/products/%s.jpg", $this->getAttribute('sku'))
-        );
+        $path = sprintf("storage/uploads/images/products/%s.jpg", $this->getAttribute('sku'));
+
+        if (! file_exists(public_path($path))) {
+            $path = static::IMAGE_PLACEHOLDER_PATH;
+        }
+
+        return asset($path);
     }
 
     /**

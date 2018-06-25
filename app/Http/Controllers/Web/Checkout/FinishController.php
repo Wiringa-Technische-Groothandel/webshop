@@ -2,8 +2,11 @@
 
 namespace WTG\Http\Controllers\Web\Checkout;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use WTG\Models\Order;
 use WTG\Services\CheckoutService;
+use Illuminate\Contracts\View\View;
 use WTG\Http\Controllers\Controller;
 use Illuminate\View\Factory as ViewFactory;
 use WTG\Exceptions\Checkout\EmptyCartException;
@@ -37,7 +40,9 @@ class FinishController extends Controller
     }
 
     /**
-     * @return \Illuminate\View\View
+     * Order finished page.
+     *
+     * @return \Illuminate\Contracts\View\View|RedirectResponse
      */
     public function getAction()
     {
@@ -47,16 +52,16 @@ class FinishController extends Controller
             return back();
         }
 
-        return view('pages.checkout.finished', compact('order'));
+        return $this->view->make('pages.checkout.finished', compact('order'));
     }
 
     /**
      * Finish order action.
      *
      * @param  Request  $request
-     * @return \Illuminate\View\View
+     * @return RedirectResponse
      */
-    public function postAction(Request $request)
+    public function postAction(Request $request): RedirectResponse
     {
         try {
             $order = $this->checkoutService->createOrder(
