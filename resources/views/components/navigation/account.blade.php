@@ -1,7 +1,7 @@
 <div class="list-group pb-3">
-    <a href="{{ route('account.dashboard') }}"
-       class="list-group-item {{ Route::is('account.dashboard') ? 'active' : '' }}">
-        {{ __('Dashboard') }}
+    <a href="{{ route('account.my-account') }}"
+       class="list-group-item {{ Route::is('account.my-account') ? 'active' : '' }}">
+        {{ __('Mijn Account') }}
     </a>
     @if (auth()->user()->can('view accounts'))
         <a href="{{ route('account.sub_accounts') }}"

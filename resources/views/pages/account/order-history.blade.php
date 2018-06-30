@@ -4,7 +4,7 @@
 
 @section('account.title')
     <h2 class="text-center block-title">
-        {{ trans('titles.account.order-history') }}
+        {{ __('Bestelhistorie') }}
     </h2>
 @endsection
 

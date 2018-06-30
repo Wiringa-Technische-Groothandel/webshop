@@ -4,7 +4,7 @@
 
 @section('account.title')
     <h2 class="text-center block-title">
-        {{ __('titles.account.change-password') }}
+        {{ __('Wachtwoord wijzigen') }}
     </h2>
 @endsection
 

@@ -1,17 +1,17 @@
 @extends('layouts.account')
 
-@section('title', __('Account / Dashboard'))
+@section('title', __('Account / Mijn Account'))
 
 @section('account.title')
     <h2 class="text-center block-title">
-        {{ trans('titles.account.dashboard', [ 'company' => $customer->getCompany()->getName() ]) }}
+        {{ __('Welkom, :company', [ 'company' => $customer->getCompany()->getName() ]) }}
     </h2>
 @endsection
 
 @section('account.content')
     <div class="row">
         <div class="col-12 col-sm-6">
-            @include('components.account.dashboard.delivery-address')
+            @include('components.account.my-account.delivery-address')
         </div>
     </div>
 
@@ -20,11 +20,11 @@
             {{ csrf_field() }}
 
             <div class="col-12 col-sm-6 mb-3">
-                @include('components.account.dashboard.contact-email')
+                @include('components.account.my-account.contact-email')
             </div>
 
             <div class="col-12 col-sm-6">
-                @include('components.account.dashboard.confirmation-email')
+                @include('components.account.my-account.confirmation-email')
             </div>
         </form>
     </div>
@@ -38,8 +38,8 @@
          * @return void
          */
         function toggleSaveButton () {
-            var $target = $(event.target);
-            var $button = $target.parent('form').find('.btn');
+            const $target = $(event.target);
+            const $button = $target.parent('form').find('.btn');
 
             if (
                 $target.data('initial') === $target.val() ||
