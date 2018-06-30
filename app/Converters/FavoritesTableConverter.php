@@ -2,10 +2,10 @@
 
 namespace WTG\Converters;
 
-use Illuminate\Database\Eloquent\Model;
+use WTG\Models\Product;
 use WTG\Models\Customer;
 use WTG\Models\Favorite;
-use WTG\Models\Product;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Favorites table converter.

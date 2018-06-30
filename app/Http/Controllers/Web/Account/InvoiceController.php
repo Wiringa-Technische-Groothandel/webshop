@@ -45,7 +45,7 @@ class InvoiceController extends Controller
     public function getAction(Request $request): View
     {
         $invoices = $this->service->getForCustomer(
-            10013 ?: $request->user()->getCompany()->getCustomerNumber()
+            $request->user()->getCompany()->getCustomerNumber()
         );
 
         return view('pages.account.invoices', compact('invoices'));
@@ -61,7 +61,7 @@ class InvoiceController extends Controller
     public function viewAction(Request $request, int $file)
     {
         $invoices = $this->service->getForCustomer(
-            10013 ?:$request->user()->getCompany()->getCustomerNumber()
+            $request->user()->getCompany()->getCustomerNumber()
         );
 
         $filenames = $invoices->get('files');

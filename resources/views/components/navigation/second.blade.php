@@ -43,30 +43,30 @@
                                 <i class="far fa-fw fa-user"></i>
                             </a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ route('account.dashboard') }}">
-                                    <i class="far fa-fw fa-sliders-h"></i> {{ trans('navigation.items.dashboard') }}
+                                <a class="dropdown-item" href="{{ route('account.my-account') }}">
+                                    <i class="far fa-fw fa-sliders-h"></i> {{ __('Mijn Account') }}
                                 </a>
                                 <a class="dropdown-item" href="{{ route('account.favorites') }}">
-                                    <i class="far fa-fw fa-heart"></i> {{ trans('navigation.items.favorites') }}
+                                    <i class="far fa-fw fa-heart"></i> {{ __('Favorieten') }}
                                 </a>
                                 <a class="dropdown-item" href="{{ route('account.order-history') }}">
-                                    <i class="far fa-fw fa-history"></i> {{ trans('navigation.items.order_history') }}
+                                    <i class="far fa-fw fa-history"></i> {{ __('Bestelhistorie') }}
                                 </a>
                                 <a class="dropdown-item" href="{{ route('account.discount') }}">
-                                    <i class="far fa-fw fa-percent"></i> {{ trans('navigation.items.discount_file') }}
+                                    <i class="far fa-fw fa-percent"></i> {{ __('Kortingsbestand') }}
                                 </a>
 
                                 <div class="dropdown-divider"></div>
 
                                 <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit()">
-                                    <i class="far fa-fw fa-sign-out"></i> {{ trans('navigation.items.logout') }}
+                                    <i class="far fa-fw fa-sign-out"></i> {{ __('Uitloggen') }}
                                 </a>
                             </div>
                         </li>
 
                         <li class="d-inline d-md-none nav-item {{ request()->is('account/*') ? 'active' : '' }}">
-                            <a class="nav-link" href="{{ route('account.dashboard') }}">
-                                {{ trans('navigation.items.account') }}
+                            <a class="nav-link" href="{{ route('account.my-account') }}">
+                                {{ __('Mijn account') }}
                             </a>
                         </li>
 
@@ -75,12 +75,12 @@
                         </form>
                     @else
                         <li class="nav-item">
-                            <a class="nav-link register-button" href="{{ route('auth.register') }}">{{ trans('navigation.items.register') }}</a>
+                            <a class="nav-link register-button" href="{{ route('auth.register') }}">{{ __('Registreren') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" onclick="event.preventDefault()" data-toggle="modal"
                                data-target="#loginModal" href="{{ route('auth.login', ['toUrl' => url()->current()]) }}">
-                                {{ trans('navigation.items.login') }}
+                                {{ __('Login') }}
                             </a>
                         </li>
                     @endauth

@@ -87,7 +87,7 @@ Route::group([
     'namespace' => 'Account',
     'middleware' => ['auth']
 ], function () {
-    Route::get('/', 'DashboardController@getAction')->name('dashboard');
+    Route::get('/', 'MyAccountController@getAction')->name('my-account');
     Route::get('accounts', 'SubAccountController@getAction')->name('sub_accounts');
     Route::get('password', 'PasswordController@getAction')->name('change_password');
     Route::get('favorites', 'FavoritesController@getAction')->name('favorites');
