@@ -3,7 +3,7 @@
         <div class="input-group-prepend">
             <span class="input-group-text">{{ quantity > 1 ? salesUnitPlural : salesUnitSingle }}</span>
         </div>
-        <input type="text" class="form-control" placeholder="Aantal" v-model="quantity">
+        <input type="number" step="1" min="1" class="form-control" placeholder="Aantal" v-model="quantity">
         <div class="input-group-append">
             <button class="btn btn-outline-success" v-on:click="this.addToCart">
                 <span><i class="fas fa-fw fa-cart-plus"></i></span>
