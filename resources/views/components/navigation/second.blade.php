@@ -1,20 +1,30 @@
-@if (auth()->guest())
+@guest
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">{{ __('Klant login') }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title mx-auto">{{ __('Klant login') }}</h5>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 20px; top: 18px;">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+
                 <div class="modal-body">
                     @include('components.auth.login.form')
                 </div>
             </div>
         </div>
     </div>
-@endif
+
+    @push('scripts')
+        <script>
+            $('#loginModal').on('shown.bs.modal', function () {
+                $('input[name="company"]').trigger('focus')
+            })
+        </script>
+    @endpush
+@endguest
 
 <nav class="navbar navbar-expand-md navbar-dark {{ Route::is('home') ? 'bg-transparent' : 'bg-gradient' }}" id="navbar-second">
     <div class="container">

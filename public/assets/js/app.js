@@ -73733,7 +73733,7 @@ var render = function() {
         }
       ],
       staticClass: "form-control",
-      attrs: { type: "text", placeholder: "Aantal" },
+      attrs: { type: "number", step: "1", min: "1", placeholder: "Aantal" },
       domProps: { value: _vm.quantity },
       on: {
         input: function($event) {
