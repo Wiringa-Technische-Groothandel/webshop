@@ -9,7 +9,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-12 col-md-3 mb-3">
                 <form>
                     <input type="hidden" name="query" value="{{ request('query') }}">
 
@@ -17,7 +17,7 @@
                 </form>
             </div>
 
-            <div class="col-md-9">
+            <div class="col-12 col-md-9">
                 @if ($results->get('products')->isEmpty())
                     <div class="alert alert-warning">
                         {{ __("Geen resultaten gevonden voor ':query'", ['query' => request('query')]) }}

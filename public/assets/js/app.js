@@ -1859,9 +1859,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['product'],
+    props: ['product', 'logged-in', 'auth-url'],
     data: function data() {
         return {
             fetching: true,
@@ -1874,15 +1879,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     created: function created() {
         var _this = this;
 
-        this.$root.$emit('fetch-price', this.product.sku);
+        if (this.loggedIn) {
+            this.$root.$emit('fetch-price', this.product.sku);
 
-        this.$root.$on('price-fetched-' + this.product.sku, function (data) {
-            _this.$data.fetching = false;
-            _this.$data.netPrice = data.netPrice.toFixed(2);
-            _this.$data.grossPrice = data.grossPrice.toFixed(2);
-            _this.$data.pricePer = data.pricePer;
-            _this.$data.stock = data.stock;
-        });
+            this.$root.$on('price-fetched-' + this.product.sku, function (data) {
+                _this.$data.fetching = false;
+                _this.$data.netPrice = data.netPrice.toFixed(2);
+                _this.$data.grossPrice = data.grossPrice.toFixed(2);
+                _this.$data.pricePer = data.pricePer;
+                _this.$data.stock = data.stock;
+            });
+        } else {
+            this.$data.fetching = false;
+        }
     }
 });
 
@@ -73270,6 +73279,24 @@ var render = function() {
             _c("br"),
             _vm._v(" "),
             _c("i", { staticClass: "fal fa-sync fa-spin" })
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.loggedIn
+        ? _c("div", [
+            _c(
+              "a",
+              {
+                attrs: {
+                  href: _vm.authUrl,
+                  onclick: "event.preventDefault()",
+                  "data-toggle": "modal",
+                  "data-target": "#loginModal"
+                }
+              },
+              [_vm._v("Log in")]
+            ),
+            _vm._v(" om uw persoonlijke prijs te bekijken.\n    ")
           ])
         : _vm._e(),
       _vm._v(" "),

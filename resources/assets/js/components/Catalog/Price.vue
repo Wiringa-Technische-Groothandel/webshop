@@ -5,6 +5,11 @@
             <i class="fal fa-sync fa-spin"></i>
         </div>
 
+        <div v-if="! loggedIn">
+            <a :href="authUrl" onclick="event.preventDefault()" data-toggle="modal"
+               data-target="#loginModal">Log in</a> om uw persoonlijke prijs te bekijken.
+        </div>
+
         <div class="gross-price" v-if="grossPrice !== false">
             Bruto:
             <span class="d-block d-sm-inline">
@@ -31,7 +36,7 @@
 
 <script>
     export default {
-        props: ['product'],
+        props: ['product', 'logged-in', 'auth-url'],
         data () {
             return {
                 fetching: true,
@@ -42,15 +47,19 @@
             }
         },
         created () {
-            this.$root.$emit('fetch-price', this.product.sku);
+            if (this.loggedIn) {
+                this.$root.$emit('fetch-price', this.product.sku);
 
-            this.$root.$on('price-fetched-' + this.product.sku, (data) => {
+                this.$root.$on('price-fetched-' + this.product.sku, (data) => {
+                    this.$data.fetching = false;
+                    this.$data.netPrice = data.netPrice.toFixed(2);
+                    this.$data.grossPrice = data.grossPrice.toFixed(2);
+                    this.$data.pricePer = data.pricePer;
+                    this.$data.stock = data.stock;
+                });
+            } else {
                 this.$data.fetching = false;
-                this.$data.netPrice = data.netPrice.toFixed(2);
-                this.$data.grossPrice = data.grossPrice.toFixed(2);
-                this.$data.pricePer = data.pricePer;
-                this.$data.stock = data.stock;
-            });
+            }
         }
     }
 </script>
