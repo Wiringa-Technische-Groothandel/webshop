@@ -20,16 +20,6 @@ Vue.component('address-list', require('./components/Account/AddressList'));
 Vue.component('cart-address', require('./components/Checkout/Address/CartAddress'));
 Vue.component('quick-search', require('./components/Search/QuickSearch'));
 
-import 'vue-googlemaps/dist/vue-googlemaps.css'
-import VueGoogleMaps from 'vue-googlemaps'
-
-Vue.use(VueGoogleMaps, {
-    load: {
-        apiKey: window.Laravel.googleMapsApiKey,
-        libraries: ['places'],
-    },
-});
-
 window.vm = new Vue({
     el: '#app',
     data () {

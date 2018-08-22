@@ -22,7 +22,6 @@
 
 <script>
     window.Laravel = {
-        isLoggedIn: {{ (int) auth()->check() }},
-        googleMapsApiKey: '{{ config('wtg.maps-api-key') }}'
+        isLoggedIn: {{ (int) auth()->check() }}
     };
 </script>
