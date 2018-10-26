@@ -28,7 +28,7 @@
 
             <div class="col-4 col-sm-3 text-right">
                 @auth
-                    <price :product="{{ $product }}"></price>
+                    <price :product="{{ $product }}" logged-in="{{ auth()->check() }}"></price>
                 @endauth
             </div>
         </div>

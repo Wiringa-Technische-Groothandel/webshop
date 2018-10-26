@@ -150,6 +150,27 @@ class Customer extends Authenticatable implements CustomerContract
     }
 
     /**
+     * Set the password.
+     *
+     * @param  string  $password
+     * @return CustomerContract
+     */
+    public function setPassword(string $password): CustomerContract
+    {
+        return $this->setAttribute('password', $password);
+    }
+
+    /**
+     * Get the password.
+     *
+     * @return null|string
+     */
+    public function getPassword(): ?string
+    {
+        return $this->getAttribute('password');
+    }
+
+    /**
      * Set the active.
      *
      * @param  bool  $active

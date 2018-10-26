@@ -1,6 +1,9 @@
 .block-title {
   padding: 15px 0;
-  margin: 50px 0;
+
+  @include media-breakpoint-up(md) {
+    margin: 50px 0;
+  }
 }
 
 .news {

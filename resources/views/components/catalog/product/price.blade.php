@@ -1,10 +1,10 @@
-@auth
-    <price :product="{{ $product }}"></price>
+<price :product="{{ $product }}" :logged-in="{{ auth()->check() }}" auth-url="{{ route('auth.login', ['toUrl' => url()->current()]) }}"></price>
 
+@auth
     <br />
 
     <div class="row">
-        <div class="col-12 col-md-10 mb-3">
+        <div class="col-12 mb-3">
             <add-to-cart sku="{{ $product->getSku() }}"
                          sales-unit-single="{{ ucfirst(unit_to_str($product->getSalesUnit(), false)) }}"
                          sales-unit-plural="{{ ucfirst(unit_to_str($product->getSalesUnit())) }}"
@@ -17,6 +17,4 @@
                                      toggle-url="{{ route('favorites.toggle') }}"></favorites-toggle-button>
         </div>
     </div>
-@else
-    <price :product="{{ $product }}" :logged-in="0" auth-url="{{ route('auth.login', ['toUrl' => url()->current()]) }}"></price>
 @endauth

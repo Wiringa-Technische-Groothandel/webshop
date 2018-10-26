@@ -10786,7 +10786,12 @@ header #header-carousel .carousel-item .carousel-caption {
 
 .block-title {
   padding: 15px 0;
-  margin: 50px 0;
+}
+
+@media (min-width: 768px) {
+  .block-title {
+    margin: 50px 0;
+  }
 }
 
 .news {

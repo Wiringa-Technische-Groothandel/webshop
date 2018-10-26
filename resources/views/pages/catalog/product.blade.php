@@ -7,9 +7,15 @@
 
     <div class="container">
         <div class="row mb-3">
+            <div class="col-12 d-block d-md-none">
+                <a href="{{ $previousUrl ?? route('catalog.assortment') }}" class="btn btn-link mb-3 px-0">
+                    <i class="fal fa-fw fa-chevron-left"></i> {{ __('Terug naar overzicht') }}
+                </a>
+            </div>
+
             <div class="d-none d-sm-block col-4 mb-3" id="image">
                 <div class="text-center">
-                    <a href="{{ $previousUrl ?? route('catalog.assortment') }}" class="btn btn-link mb-3">
+                    <a href="{{ $previousUrl ?? route('catalog.assortment') }}" class="btn btn-link mb-3 d-none d-md-block">
                         <i class="fal fa-fw fa-chevron-left"></i> {{ __('Terug naar overzicht') }}
                     </a>
 
@@ -26,7 +32,7 @@
                 <hr />
 
                 <div class="row">
-                    <div class="col-12 col-sm-8 col-md-6 mb-3">
+                    <div class="col-12 col-md-6 mb-3">
                         <a href="{{ $product->getImageUrl() }}" data-alt="{{ $product->getName() }}"
                            data-caption="{{ $product->getName() }}" data-lightbox="mobile-product-image"
                            class="d-block d-sm-none">
@@ -36,12 +42,6 @@
                         @include('components.catalog.product.price')
                     </div>
                 </div>
-
-                @if ($product->hasDescription())
-                    @include('components.catalog.product.description')
-                @endif
-
-                @include('components.catalog.product.details')
 
                 {{--@if (count($pack_list) >= 1)--}}
                 {{--<div class="alert alert-warning text-center">--}}
@@ -54,6 +54,16 @@
                 {{--</p>--}}
                 {{--</div>--}}
                 {{--@endif--}}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-8 offset-md-4">
+                @if ($product->hasDescription())
+                    @include('components.catalog.product.description')
+                @endif
+
+                @include('components.catalog.product.details')
             </div>
         </div>
     </div>

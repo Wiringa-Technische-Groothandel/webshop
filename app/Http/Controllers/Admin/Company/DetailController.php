@@ -54,6 +54,18 @@ class DetailController extends Controller
         /** @var Company $company */
         $company = app()->make(CompanyContract::class)->findOrFail($id);
 
+        if ($request->input('customer-number') !== $company->getCustomerNumber()) {
+            $duplicate = app()->make(CompanyContract::class)
+                ->where('customer_number', $request->input('customer-number'))
+                ->exists();
+
+            if ($duplicate) {
+                return back()->withErrors(__('Er bestaat reeds een debiteur met nummer :number.', [
+                    'number' => $request->input('customer-number')
+                ]));
+            }
+        }
+
         $company->setName($request->input('name'));
         $company->setCustomerNumber($request->input('customer-number'));
         $company->setStreet($request->input('street'));
