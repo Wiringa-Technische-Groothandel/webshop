@@ -24,7 +24,7 @@ class SubAccountController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('can:view accounts');
+        $this->middleware('can:subaccounts-view');
     }
 
     /**
@@ -37,7 +37,7 @@ class SubAccountController extends Controller
     {
         /** @var Customer $customer */
         $customer = $request->user();
-        $accounts = $customer->company->getAttribute('customers');
+        $accounts = $customer->getCompany()->getAttribute('customers');
 
         return view('pages.account.sub-accounts', compact('accounts'));
     }
@@ -50,17 +50,17 @@ class SubAccountController extends Controller
      */
     public function putAction(CreateAccountRequest $request)
     {
-        \DB::beginTransaction();
-
         try {
+            \DB::beginTransaction();
+
             /** @var Customer $customer */
             $customer = $request->user();
             /** @var Company $company */
             $company = $customer->getAttribute('company');
 
             $usernameExists = $customer
-                ->company
-                ->customers()
+                ->getCompany()
+                ->getCustomers()
                 ->where('username', $request->input('username'))
                 ->exists();
 
@@ -94,14 +94,12 @@ class SubAccountController extends Controller
             $account->assignRole($request->input('role'));
 
             \DB::commit();
-
-            return back()
-                ->with('status', __("Het account is succesvol aangemaakt."));
         } catch (\Exception $e) {
-            dd($e);
-
             return $this->createAccountFailed($request);
         }
+
+        return back()
+            ->with('status', __("Het account is succesvol aangemaakt."));
     }
 
     /**

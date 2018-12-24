@@ -52,8 +52,8 @@
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
                                 <i class="far fa-fw fa-user"></i>
                             </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ route('account.my-account') }}">
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="{{ route('account.profile') }}">
                                     <i class="far fa-fw fa-sliders-h"></i> {{ __('Mijn Account') }}
                                 </a>
                                 <a class="dropdown-item" href="{{ route('account.favorites') }}">
@@ -75,7 +75,7 @@
                         </li>
 
                         <li class="d-inline d-md-none nav-item {{ request()->is('account/*') ? 'active' : '' }}">
-                            <a class="nav-link" href="{{ route('account.my-account') }}">
+                            <a class="nav-link" href="{{ route('account.profile') }}">
                                 {{ __('Mijn account') }}
                             </a>
                         </li>

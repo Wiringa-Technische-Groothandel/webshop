@@ -1,17 +1,17 @@
 <?php
 
-namespace WTG\Http\Requests\Account\Dashboard;
+namespace WTG\Http\Requests\Account\Profile;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Update contact email request.
+ * Create address request.
  *
  * @package     WTG\Http
- * @subpackage  Requests\Account\Dashboard
+ * @subpackage  Requests\Account\Profile
  * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
-class UpdateContactEmailRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,7 +31,8 @@ class UpdateContactEmailRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['required', 'email']
+            'contact-email' => ['email'],
+            'order-email'   => ['email'],
         ];
     }
 }

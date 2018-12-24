@@ -18,7 +18,7 @@
         $.ajax({
             url: $(target).attr('data-url'),
             method: 'POST',
-            data: { _token: '{{ csrf_token() }}' },
+            data: {  },
             dataType: 'json',
             success: function (data) {
                 $(target).prop('checked', target.checked);

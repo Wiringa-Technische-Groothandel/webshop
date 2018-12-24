@@ -19,7 +19,6 @@
         "league/flysystem-sftp": "^1.0",
         "predis/predis": "^1.1",
         "sentry/sentry-laravel": "^0.8.0",
-        "spatie/laravel-permission": "^2.6",
         "tamayo/laravel-scout-elastic": "^3.0"
     },
     "require-dev": {

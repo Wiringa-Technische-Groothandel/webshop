@@ -1,17 +1,17 @@
 @extends('layouts.main')
 
-@section('title', __('Login'))
+@section('title', __('Wachtwoord vergeten'))
 
 @section('content')
-    <h2 class="text-center block-title" id="login">Login</h2>
+    <h2 class="text-center block-title">{{ __('Wachtwoord vergeten') }}</h2>
 
-    <hr />
+    <hr>
 
     <div class="container">
         <div class="row">
             <div class="col-12 mb-3">
                 <div class="well mx-auto" style="max-width: 300px;">
-                    @include('components.auth.login.form')
+                    @include('components.auth.forgot-password.form')
                 </div>
             </div>
         </div>

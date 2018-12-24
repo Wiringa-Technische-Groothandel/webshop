@@ -2,8 +2,11 @@
 
 namespace WTG\Providers;
 
+use Illuminate\Support\Facades\Gate;
+use WTG\Models\Customer;
 use WTG\Models\Registration;
 use WTG\Services\AuthService;
+use WTG\Policies\SubAccountPolicy;
 use WTG\Services\RegistrationService;
 use WTG\Contracts\Models\RegistrationContract;
 use WTG\Contracts\Services\AuthServiceContract;
@@ -25,7 +28,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'WTG\Model' => 'WTG\Policies\ModelPolicy',
+        Customer::class => SubAccountPolicy::class,
     ];
 
     /**
@@ -36,6 +39,10 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+
+        Gate::define('subaccounts-view', 'WTG\Policies\SubAccountPolicy@view');
+        Gate::define('subaccounts-assign-admin', 'WTG\Policies\SubAccountPolicy@assignAdminRole');
+        Gate::define('subaccounts-assign-manager', 'WTG\Policies\SubAccountPolicy@assignManagerRole');
 
         $this->app->bind(AuthServiceContract::class, AuthService::class);
         $this->app->bind(RegistrationContract::class, Registration::class);

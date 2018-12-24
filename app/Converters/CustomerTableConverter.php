@@ -9,6 +9,7 @@ use WTG\Models\Customer;
 use WTG\Models\QuoteItem;
 use Illuminate\Database\Eloquent\Model;
 use WTG\Contracts\Models\CompanyContract;
+use WTG\Models\Role;
 
 /**
  * Customer table converter.
@@ -57,6 +58,7 @@ class CustomerTableConverter extends AbstractTableConverter
         $customer->setAttribute('company_id', $company->getId());
         $customer->setAttribute('username', $data['username']);
         $customer->setAttribute('password', $data['password']);
+        $customer->setRole($this->determineRole($data));
 
         $customer->save();
 
@@ -65,8 +67,6 @@ class CustomerTableConverter extends AbstractTableConverter
         if ($data['cart'] && $data['cart'] !== "NULL") {
             $this->createQuote($customer, $data['cart']);
         }
-
-        $customer->assignRole($this->determineRole($data));
 
         return null;
     }
@@ -159,24 +159,18 @@ class CustomerTableConverter extends AbstractTableConverter
      * Determine the role of the customer.
      *
      * @param  array  $data
-     * @return string
+     * @return Role
      */
-    private function determineRole(array $data)
+    private function determineRole(array $data): Role
     {
-        if ($data['isAdmin']) {
-            return Customer::CUSTOMER_ROLE_SUPER_ADMIN;
-        }
-
-        if ($data['company_id'] === $data['username']) {
-            return Customer::CUSTOMER_ROLE_ADMIN;
+        if ($data['isAdmin'] || $data['company_id'] === $data['username']) {
+            return Role::level(Role::ROLE_ADMIN)->first();
         }
 
         if ($data['manager'] === "1") {
-            return Customer::CUSTOMER_ROLE_MANAGER;
+            return Role::level(Role::ROLE_MANAGER)->first();
         }
 
-        if ($data['manager'] === "0") {
-            return Customer::CUSTOMER_ROLE_USER;
-        }
+        return Role::level(Role::ROLE_USER)->first();
     }
 }

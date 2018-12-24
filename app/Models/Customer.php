@@ -3,13 +3,19 @@
 namespace WTG\Models;
 
 use Illuminate\Support\Collection;
-use Spatie\Permission\Traits\HasRoles;
+use WTG\Notifications\ResetPassword;
+use WTG\Contracts\Models\RoleContract;
+use Illuminate\Notifications\Notifiable;
 use WTG\Contracts\Models\CompanyContract;
 use WTG\Contracts\Models\ContactContract;
 use WTG\Contracts\Models\ProductContract;
 use WTG\Contracts\Models\CustomerContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 /**
  * Customer model.
@@ -20,17 +26,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class Customer extends Authenticatable implements CustomerContract
 {
-    use SoftDeletes, HasRoles;
-
-    const CUSTOMER_ROLE_SUPER_ADMIN = 'super-admin';
-    const CUSTOMER_ROLE_ADMIN = 'admin';
-    const CUSTOMER_ROLE_MANAGER = 'manager';
-    const CUSTOMER_ROLE_USER = 'user';
-
-    /**
-     * @var string
-     */
-    protected $guard_name = 'web';
+    use SoftDeletes, Notifiable;
 
     /**
      * @var array
@@ -50,13 +46,52 @@ class Customer extends Authenticatable implements CustomerContract
     ];
 
     /**
+     * Get the password reset email.
+     *
+     * @return string|null
+     */
+    public function getEmailForPasswordReset(): ?string
+    {
+        return $this->getContact()->getContactEmail();
+    }
+
+    /**
+     * @return string|null
+     */
+    public function routeNotificationForMail()
+    {
+        return $this->getContact()->getContactEmail();
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPassword($token));
+    }
+
+    /**
      * Company relation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function company()
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * Role relation.
+     *
+     * @return BelongsTo
+     */
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
     }
 
     /**
@@ -64,7 +99,7 @@ class Customer extends Authenticatable implements CustomerContract
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function contact()
+    public function contact(): HasOne
     {
         return $this->hasOne(Contact::class);
     }
@@ -74,7 +109,7 @@ class Customer extends Authenticatable implements CustomerContract
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function favorites()
+    public function favorites(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'favorites');
     }
@@ -84,7 +119,7 @@ class Customer extends Authenticatable implements CustomerContract
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function quote()
+    public function quote(): HasOne
     {
         return $this->hasOne(Quote::class);
     }
@@ -94,7 +129,7 @@ class Customer extends Authenticatable implements CustomerContract
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
      */
-    public function quoteItems()
+    public function quoteItems(): HasManyThrough
     {
         return $this->hasManyThrough(QuoteItem::class, Quote::class);
     }
@@ -242,5 +277,26 @@ class Customer extends Authenticatable implements CustomerContract
     public function removeFavorite(ProductContract $product): void
     {
         $this->favorites()->detach($product->getId());
+    }
+
+    /**
+     * Set the customer role.
+     *
+     * @param  RoleContract  $role
+     * @return CustomerContract
+     */
+    public function setRole(RoleContract $role): CustomerContract
+    {
+        return $this->setAttribute('role_id', $role->getId());
+    }
+
+    /**
+     * Get the customer role.
+     *
+     * @return RoleContract
+     */
+    public function getRole(): RoleContract
+    {
+        return $this->getAttribute('role');
     }
 }
