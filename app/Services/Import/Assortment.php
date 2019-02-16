@@ -294,9 +294,9 @@ class Assortment
      *
      * @param  string  $sku
      * @param  string  $unit
-     * @return null|Product
+     * @return null|ProductModel
      */
-    public static function findProduct(string $sku, string $unit): ?Product
+    public static function findProduct(string $sku, string $unit): ?ProductModel
     {
         return app()->make(ProductModel::class)
             ->where('sku', $sku)

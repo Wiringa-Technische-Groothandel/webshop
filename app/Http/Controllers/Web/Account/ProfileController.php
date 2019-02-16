@@ -4,10 +4,10 @@ namespace WTG\Http\Controllers\Web\Account;
 
 use WTG\Models\Customer;
 use Illuminate\Http\Request;
+use Psr\Log\LoggerInterface as Log;
 use Illuminate\Contracts\View\View;
 use WTG\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Contracts\Logging\Log;
 use Illuminate\View\Factory as ViewFactory;
 use WTG\Http\Requests\Account\Profile\UpdateRequest;
 

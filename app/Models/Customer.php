@@ -45,6 +45,10 @@ class Customer extends Authenticatable implements CustomerContract
         'password'
     ];
 
+    protected $with = [
+        'contact'
+    ];
+
     /**
      * Get the password reset email.
      *

@@ -13,7 +13,6 @@
         <div class="col-12 col-sm-8 mx-auto mb-3">
             <form method="POST">
                 {{ csrf_field() }}
-                {{ method_field('put') }}
 
                 <div class="form-group">
                     <label for="password_old" class="control-label">{{ __("Huidig wachtwoord") }}</label>

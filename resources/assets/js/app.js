@@ -17,6 +17,7 @@ Vue.component('footer-block', require('./components/Footer'));
 Vue.component('logs', require('./components/Log'));
 Vue.component('contact-email', require('./components/Account/ContactEmail'));
 Vue.component('address-list', require('./components/Account/AddressList'));
+Vue.component('sub-account', require('./components/Account/SubAccount'));
 Vue.component('cart-address', require('./components/Checkout/Address/CartAddress'));
 Vue.component('quick-search', require('./components/Search/QuickSearch'));
 

@@ -463,7 +463,7 @@ Axios.prototype.request = function request(config) {
     }, arguments[1]);
   }
 
-  config = utils.merge(defaults, this.defaults, { method: 'get' }, config);
+  config = utils.merge(defaults, {method: 'get'}, this.defaults, config);
   config.method = config.method.toLowerCase();
 
   // Hook up interceptors middleware
@@ -852,6 +852,10 @@ var defaults = {
     return data;
   }],
 
+  /**
+   * A timeout in milliseconds to abort a request. If set to 0 (default) a
+   * timeout is not created.
+   */
   timeout: 0,
 
   xsrfCookieName: 'XSRF-TOKEN',
@@ -994,9 +998,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
       if (utils.isArray(val)) {
         key = key + '[]';
-      }
-
-      if (!utils.isArray(val)) {
+      } else {
         val = [val];
       }
 
@@ -1777,6 +1779,62 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     created: function created() {
         this.$data.newEmail = this.email;
+    }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/Account/SubAccount.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__("./node_modules/axios/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['canEdit', 'account', 'canAssignAdmin', 'canAssignManager', 'roleUser', 'roleManager', 'roleAdmin', 'currentRole'],
+    data: function data() {
+        return {
+            role: this.currentRole,
+            showSpinner: false
+        };
+    },
+
+    methods: {
+        updateRole: function updateRole() {
+            console.log('update ' + this.account.id);
+        }
+    },
+    mounted: function mounted() {
+        console.log(this.account);
     }
 });
 
@@ -71038,6 +71096,94 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-ba8c9ff4\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Account/SubAccount.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "card mb-3" }, [
+    _c("div", { staticClass: "card-body" }, [
+      _c("dl", [
+        _c("dt", [_vm._v("Gebruikersnaam")]),
+        _vm._v(" "),
+        _c("dd", [_vm._v(_vm._s(_vm.account.username))]),
+        _vm._v(" "),
+        _c("dt", [_vm._v("E-Mail")]),
+        _vm._v(" "),
+        _c("dd", [_vm._v(_vm._s(_vm.account.contact.contactEmail))]),
+        _vm._v(" "),
+        _c("dt", [_vm._v("Rol")]),
+        _vm._v(" "),
+        _c("dd", [
+          _vm.showSpinner
+            ? _c("div", { staticClass: "fa fa-spinner fa-spin" })
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.role,
+                  expression: "role"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { disabled: Boolean(_vm.canEdit) },
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.role = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  _vm.updateRole
+                ]
+              }
+            },
+            [
+              _c("option", { domProps: { value: _vm.roleAdmin } }, [
+                _vm._v("Admin")
+              ]),
+              _vm._v(" "),
+              _c("option", { domProps: { value: _vm.roleManager } }, [
+                _vm._v("Manager")
+              ]),
+              _vm._v(" "),
+              _c("option", { domProps: { value: _vm.roleUser } }, [
+                _vm._v("Gebruiker")
+              ])
+            ]
+          )
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-ba8c9ff4", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-c466d48e\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Checkout/MiniCart.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -82407,6 +82553,7 @@ Vue.component('footer-block', __webpack_require__("./resources/assets/js/compone
 Vue.component('logs', __webpack_require__("./resources/assets/js/components/Log.vue"));
 Vue.component('contact-email', __webpack_require__("./resources/assets/js/components/Account/ContactEmail.vue"));
 Vue.component('address-list', __webpack_require__("./resources/assets/js/components/Account/AddressList.vue"));
+Vue.component('sub-account', __webpack_require__("./resources/assets/js/components/Account/SubAccount.vue"));
 Vue.component('cart-address', __webpack_require__("./resources/assets/js/components/Checkout/Address/CartAddress.vue"));
 Vue.component('quick-search', __webpack_require__("./resources/assets/js/components/Search/QuickSearch.vue"));
 
@@ -82597,6 +82744,54 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-8ce88856", Component.options)
   } else {
     hotAPI.reload("data-v-8ce88856", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/Account/SubAccount.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/Account/SubAccount.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-ba8c9ff4\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Account/SubAccount.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/Account/SubAccount.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-ba8c9ff4", Component.options)
+  } else {
+    hotAPI.reload("data-v-ba8c9ff4", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
