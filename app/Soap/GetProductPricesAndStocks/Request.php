@@ -49,6 +49,11 @@ class Request extends AbstractRequest
     public $isInclStocks = true;
 
     /**
+     * @var string
+     */
+    public $warehouseGroupId = 'CENTRAAL';
+
+    /**
      * Request constructor.
      */
     public function __construct()
