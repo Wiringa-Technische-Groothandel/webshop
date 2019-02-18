@@ -23,7 +23,6 @@ class CreateRolesTable extends Migration
         $roles = [
             ['level' => \WTG\Models\Role::ROLE_USER, 'name' => 'user'],
             ['level' => \WTG\Models\Role::ROLE_MANAGER, 'name' => 'manager'],
-            ['level' => \WTG\Models\Role::ROLE_ADMIN, 'name' => 'admin'],
         ];
 
         foreach ($roles as $role) {

@@ -8,12 +8,10 @@
                 <dt>E-Mail</dt>
                 <dd>{{ account.contact.contactEmail }}</dd>
 
-                <dt>Rol</dt>
+                <dt>Rol  <i class="fa fa-spinner fa-spin" v-if="showSpinner"></i></dt>
                 <dd>
-                    <div class="fa fa-spinner fa-spin" v-if="showSpinner"></div>
-
-                    <select class="form-control" v-model="role" :disabled="Boolean(canEdit)" @change="updateRole">
-                        <option :value="roleAdmin">Admin</option>
+                    <select class="form-control" v-model="role" :readonly="showSpinner"
+                            :disabled="Boolean(canEdit)" @change="updateRole">
                         <option :value="roleManager">Manager</option>
                         <option :value="roleUser">Gebruiker</option>
                     </select>
@@ -28,8 +26,7 @@
 
     export default {
         props: [
-            'canEdit', 'account', 'canAssignAdmin', 'canAssignManager',
-            'roleUser', 'roleManager', 'roleAdmin', 'currentRole'
+            'canEdit', 'account', 'roleUser', 'roleManager', 'roleAdmin', 'currentRole', 'updateRoleUrl'
         ],
         data () {
             return {
@@ -39,11 +36,32 @@
         },
         methods: {
             updateRole () {
-                console.log('update ' + this.account.id)
+                if (this.$data.showSpinner) {
+                    return;
+                }
+
+                this.$data.showSpinner = true;
+
+                axios.post(this.updateRoleUrl, {
+                        account: this.account.id,
+                        role: this.$data.role
+                    })
+                    .then((resp) => {
+                        this.$root.$emit('send-notify', {
+                            text: resp.data.message,
+                            success: true
+                        });
+                    })
+                    .catch((error) => {
+                        this.$root.$emit('send-notify', {
+                            success: false,
+                            text: error
+                        });
+                    })
+                    .then(() => {
+                        this.$data.showSpinner = false;
+                    })
             }
-        },
-        mounted() {
-            console.log(this.account)
         }
     }
 </script>

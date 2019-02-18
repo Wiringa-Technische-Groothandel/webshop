@@ -105,6 +105,7 @@ Route::group([
     Route::post('edit', 'ProfileController@postAction');
     Route::post('password', 'PasswordController@postAction');
     Route::post('order-history', 'OrderHistoryController@postAction');
+    Route::post('update-role', 'SubAccountController@postAction')->name('update-role');
     Route::post('discount', 'DiscountController@postAction');
 
     Route::put('accounts', 'SubAccountController@putAction');

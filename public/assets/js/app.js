@@ -1814,13 +1814,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['canEdit', 'account', 'canAssignAdmin', 'canAssignManager', 'roleUser', 'roleManager', 'roleAdmin', 'currentRole'],
+    props: ['canEdit', 'account', 'roleUser', 'roleManager', 'roleAdmin', 'currentRole', 'updateRoleUrl'],
     data: function data() {
         return {
             role: this.currentRole,
@@ -1830,11 +1828,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         updateRole: function updateRole() {
-            console.log('update ' + this.account.id);
+            var _this = this;
+
+            if (this.$data.showSpinner) {
+                return;
+            }
+
+            this.$data.showSpinner = true;
+
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(this.updateRoleUrl, {
+                account: this.account.id,
+                role: this.$data.role
+            }).then(function (resp) {
+                _this.$root.$emit('send-notify', {
+                    text: resp.data.message,
+                    success: true
+                });
+            }).catch(function (error) {
+                _this.$root.$emit('send-notify', {
+                    success: false,
+                    text: error
+                });
+            }).then(function () {
+                _this.$data.showSpinner = false;
+            });
         }
-    },
-    mounted: function mounted() {
-        console.log(this.account);
     }
 });
 
@@ -71114,13 +71132,14 @@ var render = function() {
         _vm._v(" "),
         _c("dd", [_vm._v(_vm._s(_vm.account.contact.contactEmail))]),
         _vm._v(" "),
-        _c("dt", [_vm._v("Rol")]),
+        _c("dt", [
+          _vm._v("Rol  "),
+          _vm.showSpinner
+            ? _c("i", { staticClass: "fa fa-spinner fa-spin" })
+            : _vm._e()
+        ]),
         _vm._v(" "),
         _c("dd", [
-          _vm.showSpinner
-            ? _c("div", { staticClass: "fa fa-spinner fa-spin" })
-            : _vm._e(),
-          _vm._v(" "),
           _c(
             "select",
             {
@@ -71133,7 +71152,10 @@ var render = function() {
                 }
               ],
               staticClass: "form-control",
-              attrs: { disabled: Boolean(_vm.canEdit) },
+              attrs: {
+                readonly: _vm.showSpinner,
+                disabled: Boolean(_vm.canEdit)
+              },
               on: {
                 change: [
                   function($event) {
@@ -71154,10 +71176,6 @@ var render = function() {
               }
             },
             [
-              _c("option", { domProps: { value: _vm.roleAdmin } }, [
-                _vm._v("Admin")
-              ]),
-              _vm._v(" "),
               _c("option", { domProps: { value: _vm.roleManager } }, [
                 _vm._v("Manager")
               ]),

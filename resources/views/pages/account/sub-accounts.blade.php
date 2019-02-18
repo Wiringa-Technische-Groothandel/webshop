@@ -29,12 +29,10 @@
         @foreach($accounts as $account)
             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-6">
                 <sub-account
+                        update-role-url="{{ route('account.update-role', [ 'account' => $account->getId() ]) }}"
                         :can-edit="{{ (int) ($account->getAttribute('username') === auth()->user()->getAttribute('username')) }}"
                         :account="{{ $account }}"
                         :current-role="{{ $account->getRole()->getLevel() }}"
-                        :can-assign-admin="{{ (int) Gate::allows('subaccounts-assign-admin') }}"
-                        :can-assign-manager="{{ (int) Gate::allows('subaccounts-assign-manager') }}"
-                        :role-admin="{{ \WTG\Models\Role::ROLE_ADMIN }}"
                         :role-manager="{{ \WTG\Models\Role::ROLE_MANAGER }}"
                         :role-user="{{ \WTG\Models\Role::ROLE_USER }}"
                 ></sub-account>

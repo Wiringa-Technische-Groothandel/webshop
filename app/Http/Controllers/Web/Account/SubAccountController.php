@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use WTG\Http\Controllers\Controller;
 use WTG\Http\Requests\CreateAccountRequest;
+use WTG\Models\Role;
 
 /**
  * Sub account controller.
@@ -42,6 +43,48 @@ class SubAccountController extends Controller
         return view('pages.account.sub-accounts', compact('accounts'));
     }
 
+    public function postAction(Request $request)
+    {
+        try {
+            \DB::beginTransaction();
+
+            /** @var Customer $customer */
+            $customer = $request->user();
+            /** @var Company $company */
+            $company = $customer->getAttribute('company');
+            /** @var Customer $account */
+            $account = $company
+                ->getCustomers()
+                ->where('id', $request->input('account'))
+                ->first();
+            /** @var Role $role */
+            $role = Role::level($request->input('role'))->firstOrFail();
+
+            if (! $account) {
+                \DB::rollBack();
+
+                return response()->json([
+                    'message' => __('Dit sub-account behoort niet bij het hoofdaccount')
+                ], 403);
+            }
+
+            $account->setRole($role);
+            $account->save();
+
+            \DB::commit();
+        } catch (\Exception $e) {
+            logger()->warning($e->getMessage());
+
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 400);
+        }
+
+        return response()->json([
+            'message' => __("De rol van de gebruiker is aangepast.")
+        ]);
+    }
+
     /**
      * Add a new account.
      *
@@ -57,6 +100,8 @@ class SubAccountController extends Controller
             $customer = $request->user();
             /** @var Company $company */
             $company = $customer->getAttribute('company');
+            /** @var Role $role */
+            $role = Role::level($request->input('role'))->firstOrFail();
 
             $usernameExists = $customer
                 ->getCompany()
@@ -91,7 +136,7 @@ class SubAccountController extends Controller
                 return $this->createAccountFailed($request);
             }
 
-            $account->assignRole($request->input('role'));
+            $account->setRole($role);
 
             \DB::commit();
         } catch (\Exception $e) {

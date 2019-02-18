@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class Role extends Model implements RoleContract
 {
-    const ROLE_ADMIN = 300;
     const ROLE_MANAGER = 200;
     const ROLE_USER = 100;
 

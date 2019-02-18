@@ -163,11 +163,7 @@ class CustomerTableConverter extends AbstractTableConverter
      */
     private function determineRole(array $data): Role
     {
-        if ($data['isAdmin'] || $data['company_id'] === $data['username']) {
-            return Role::level(Role::ROLE_ADMIN)->first();
-        }
-
-        if ($data['manager'] === "1") {
+        if ($data['manager'] === "1" || $data['company_id'] === $data['username']) {
             return Role::level(Role::ROLE_MANAGER)->first();
         }
 
