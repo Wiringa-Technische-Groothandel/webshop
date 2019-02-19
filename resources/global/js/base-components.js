@@ -18,6 +18,8 @@ window.Chart = require('chart.js');
 // VueJS
 window.Vue = require('vue');
 
+require('animate.css');
+
 // Axios
 window.axios = require('axios');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';

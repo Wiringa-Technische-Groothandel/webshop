@@ -63,7 +63,8 @@ class AddressService implements AddressServiceContract
     public function createForCustomer(CustomerContract $customer, string $name, string $street, string $postcode,
                                       string $city, ?string $phone = null, ?string $mobile = null): bool
     {
-        $address = new Address;
+        /** @var AddressContract $address */
+        $address = app()->make(AddressContract::class);
         $address->setCompany($customer->getCompany());
         $address->setName($name);
         $address->setStreet($street);
@@ -133,5 +134,15 @@ class AddressService implements AddressServiceContract
         $defaultAddress = $this->getDefaultAddressForCustomer($customer);
 
         return $defaultAddress ? $defaultAddress->getId() : null;
+    }
+
+    /**
+     * Get the default shipping address.
+     *
+     * @return AddressContract
+     */
+    public function getDefaultAddress(): AddressContract
+    {
+        return app(Address::class)->find(Address::DEFAULT_ID);
     }
 }

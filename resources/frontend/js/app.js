@@ -1,25 +1,24 @@
-require('./bootstrap');
-
 var doc = document.documentElement;
 doc.setAttribute('data-useragent', navigator.userAgent);
 
 // ChartJS Stuff
 Chart.defaults.global.defaultFontFamily = "'Titillium Web', sans-serif";
 
-Vue.component('carousel', require('./components/Carousel'));
-Vue.component('price', require('./components/Catalog/Price'));
-Vue.component('cart', require('./components/Checkout/Cart'));
-Vue.component('add-to-cart', require('./components/Checkout/AddToCart'));
-Vue.component('mini-cart', require('./components/Checkout/MiniCart'));
-Vue.component('favorites-toggle-button', require('./components/Favorites/ToggleButton'));
-Vue.component('notification', require('./components/Notification'));
-Vue.component('footer-block', require('./components/Footer'));
-Vue.component('logs', require('./components/Log'));
-Vue.component('contact-email', require('./components/Account/ContactEmail'));
-Vue.component('address-list', require('./components/Account/AddressList'));
-Vue.component('sub-account', require('./components/Account/SubAccount'));
-Vue.component('cart-address', require('./components/Checkout/Address/CartAddress'));
-Vue.component('quick-search', require('./components/Search/QuickSearch'));
+Vue.component('notification', require('../../global/vue/Notification'));
+
+Vue.component('carousel', require('../vue/Carousel'));
+Vue.component('price', require('../vue/Catalog/Price'));
+Vue.component('cart', require('../vue/Checkout/Cart'));
+Vue.component('add-to-cart', require('../vue/Checkout/AddToCart'));
+Vue.component('mini-cart', require('../vue/Checkout/MiniCart'));
+Vue.component('favorites-toggle-button', require('../vue/Favorites/ToggleButton'));
+Vue.component('footer-block', require('../vue/Footer'));
+Vue.component('logs', require('../vue/Log'));
+Vue.component('contact-email', require('../vue/Account/ContactEmail'));
+Vue.component('address-list', require('../vue/Account/AddressList'));
+Vue.component('sub-account', require('../vue/Account/SubAccount'));
+Vue.component('cart-address', require('../vue/Checkout/Address/CartAddress'));
+Vue.component('quick-search', require('../vue/Search/QuickSearch'));
 
 window.vm = new Vue({
     el: '#app',

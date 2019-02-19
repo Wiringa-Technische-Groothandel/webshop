@@ -36,7 +36,20 @@
 
 <script>
     export default {
-        props: ['product', 'logged-in', 'auth-url'],
+        props: {
+            'product': {
+                type: Object,
+                required: true
+            },
+            'logged-in': {
+                type: Boolean,
+                required: true
+            },
+            'auth-url': {
+                type: String,
+                required: true
+            }
+        },
         data () {
             return {
                 fetching: true,

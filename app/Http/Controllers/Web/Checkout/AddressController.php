@@ -73,10 +73,16 @@ class AddressController extends Controller
      */
     public function patchAction(UpdateQuoteAddressRequest $request)
     {
+        $addressId = $request->input('addressId');
         /** @var Customer $customer */
         $customer = $request->user();
-        /** @var Address $address */
-        $address = $this->addressService->getAddressForCustomerById($customer, $request->input('addressId'));
+
+        if ($addressId === Address::DEFAULT_ID) {
+            $address = $this->addressService->getDefaultAddress();
+        } else {
+            /** @var Address $address */
+            $address = $this->addressService->getAddressForCustomerById($customer, $addressId);
+        }
 
         if (!$address) {
             return response()->json([

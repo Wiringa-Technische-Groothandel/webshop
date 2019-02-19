@@ -1,12 +1,3 @@
-
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
-require('./bootstrap');
-
 // ChartJS
 window.Chart.defaults.global.maintainAspectRatio = false;
 
@@ -26,9 +17,9 @@ $(document).ready( function() {
     });
 });
 
-Vue.component('notification', require('../components/Notification'));
-Vue.component('block', require('../components/Admin/Content/Block'));
-Vue.component('descriptions', require('../components/Admin/Content/Descriptions'));
+Vue.component('notification', require('../../global/vue/Notification'));
+Vue.component('block', require('../vue/Content/Block'));
+Vue.component('descriptions', require('../vue/Content/Descriptions'));
 
 window.vm = new Vue({
     el: '#app',

@@ -1,4 +1,8 @@
-<price :product="{{ $product }}" :logged-in="{{ auth()->check() }}" auth-url="{{ route('auth.login', ['toUrl' => url()->current()]) }}"></price>
+<price
+        :product="{{ $product }}"
+        :logged-in="{{ auth()->check() ? 'true' : 'false' }}"
+        auth-url="{{ route('auth.login', ['toUrl' => url()->current()]) }}"
+></price>
 
 @auth
     <br />
