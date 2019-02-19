@@ -22,7 +22,7 @@ class AddDefaultAddress extends Migration
         /** @var Address $address */
         $address = Address::create([
             'id' => Address::DEFAULT_ID,
-            'name' => 'Wiringa Technische Groothandel',
+            'name' => 'Afhalen op locatie',
             'street' => 'Bovenstreek 1',
             'postcode' => '9731 DH',
             'city' => 'Groningen',

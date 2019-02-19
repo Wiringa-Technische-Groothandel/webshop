@@ -23,13 +23,19 @@ class AddressService implements AddressServiceContract
      * Get all available addresses for a customer;
      *
      * @param  CustomerContract  $customer
+     * @param  bool  $withDefault
      * @return Collection
      */
-    public function getAddressesForCustomer(CustomerContract $customer): Collection
+    public function getAddressesForCustomer(CustomerContract $customer, $withDefault = true): Collection
     {
         $company = $customer->getCompany();
+        $addresses = $company->getAddresses();
 
-        return $company->getAddresses();
+        if ($withDefault) {
+            $addresses->prepend($this->getDefaultAddress());
+        }
+
+        return $addresses;
     }
 
     /**

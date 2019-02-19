@@ -2,8 +2,10 @@
 
 namespace WTG\Providers;
 
+use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\PackProductContract;
 use WTG\Contracts\Services\CompanyServiceContract;
+use WTG\Models\Address;
 use WTG\Models\Admin;
 use WTG\Models\Block;
 use WTG\Models\Order;
@@ -82,6 +84,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AdminContract::class, Admin::class);
         $this->app->bind(BlockContract::class, Block::class);
         $this->app->bind(OrderContract::class, Order::class);
+        $this->app->bind(AddressContract::class, Address::class);
         $this->app->bind(CompanyContract::class, Company::class);
         $this->app->bind(ContactContract::class, Contact::class);
         $this->app->bind(CustomerContract::class, Customer::class);
