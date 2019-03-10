@@ -1,5 +1,10 @@
 <?php
 
+const ENV_LOCAL = 'local';
+const ENV_TESTING = 'testing';
+const ENV_STAGING = 'staging';
+const ENV_PROD = 'production';
+
 if (! function_exists('block')) {
     /**
      * Find a block by name.

@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', __('Product - :product', [ 'product' => $product->getSku() ]))
+@section('title', __(':product', [ 'product' => $product->getName() ]))
 
 @section('content')
     <hr />

@@ -93,7 +93,7 @@ class Invoices
             \Cache::forget('invoice_files');
         }
 
-        $this->files = \Cache::remember('invoice_files', 60 * 24, function () {
+        $this->files = \Cache::remember('invoice_files', 60 * 60 * 24, function () {
             return collect(
                 $this->fs->disk('sftp')->allFiles('invoices')
             )->map(function ($filename) {
