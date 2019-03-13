@@ -162,6 +162,7 @@ return [
         WTG\Providers\EventServiceProvider::class,
         WTG\Providers\RouteServiceProvider::class,
 
+        Luna\SeoUrls\SeoUrlServiceProvider::class
     ],
 
     /*

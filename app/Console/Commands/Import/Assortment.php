@@ -123,6 +123,7 @@ class Assortment extends Command
             $count++;
         });
 
+        $this->service->createSeoUrls();
         $this->service->updateImportData();
 
         $this->output->success(

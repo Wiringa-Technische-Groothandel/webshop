@@ -4,6 +4,7 @@ namespace WTG\Models;
 
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
+use Luna\SeoUrls\SeoUrl;
 use WTG\Contracts\Models\ProductContract;
 use WTG\Contracts\Models\DescriptionContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -35,6 +36,16 @@ class Product extends Model implements ProductContract
     protected function description(): HasOne
     {
         return $this->hasOne(Description::class);
+    }
+
+    /**
+     * SeoUrl relation.
+     *
+     * @return HasOne
+     */
+    protected function seoUrl(): HasOne
+    {
+        return $this->hasOne(SeoUrl::class);
     }
 
     /**
@@ -322,5 +333,26 @@ class Product extends Model implements ProductContract
             $this->getAttribute('series'),
             $this->getAttribute('type')
         );
+    }
+
+    /**
+     * Get the url for the product.
+     *
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        /** @var SeoUrl $seoUrl */
+        $seoUrl = $this->getAttribute('seo_url');
+
+        if (! $seoUrl) {
+            $seoUrl = new SeoUrl;
+            $seoUrl->target_path = 'product/' . $this->getSku();
+            $seoUrl->is_redirect = false;
+            $seoUrl->source_path = '/' . str_slug($this->getName());
+            $seoUrl->product_id = $this->getId();
+        }
+
+        return $seoUrl->source_path;
     }
 }
