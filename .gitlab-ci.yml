@@ -21,7 +21,7 @@ build_job:
     - php composer.phar install --no-progress
 
     # Install Node dependencies.
-    - npm install -s
+    - npm ci
 
     # Build the assets
     - npm run prod-silent

@@ -17,6 +17,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class OrderItem extends Model implements OrderItemContract
 {
     /**
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * Order relation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
