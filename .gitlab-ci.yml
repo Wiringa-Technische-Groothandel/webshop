@@ -4,7 +4,6 @@ image: lunamoonfang/wtg-php:build-7.2
 cache:
   paths:
     - vendor
-    - node_modules
 
 stages:
   - build
@@ -18,7 +17,7 @@ build_job:
   script:
     # Install Composer and project dependencies.
     - curl -sS https://getcomposer.org/installer | php
-    - php composer.phar install --no-progress --no-dev
+    - php composer.phar install --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 
     # Install Node dependencies.
     - npm ci
@@ -89,7 +88,8 @@ deploy_staging_job:
   when: manual
 
   only:
-    - release
+    - development
+#    - release
 
   script:
     # Install ssh if not already installed
@@ -114,9 +114,13 @@ deploy_staging_job:
     - chmod 600 ~/.ssh/config
     - chmod 644 ~/.ssh/known_hosts
 
+    # Test ssh connection
+    - ssh $SSH_HOSTNAME "echo $0"
+
     # Release to staging
+    - curl -sS https://getcomposer.org/installer | php
     - cd build && php ../composer.phar install --no-progress
-    - build/vendor/bin/dep deploy staging
+    - vendor/bin/dep -vvv deploy staging
     #    - ssh $SSH_HOSTNAME "cd ~/docker/staging.wiringa.nl
     #      && docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY_HOST
     #      && docker-compose pull

@@ -3,34 +3,33 @@ namespace Deployer;
 
 require 'recipe/common.php';
 
-// [Optional] Allocate tty for git clone. Default value is false.
-set('git_tty', true); 
-
 // Shared files/dirs between deploys 
-set('shared_files', []);
-set('shared_dirs', []);
+set('shared_files', [
+    '.env'
+]);
+
+set('shared_dirs', [
+    'storage/logs',
+    'storage/app/public/uploads'
+]);
 
 // Writable dirs by web server 
 set('writable_dirs', []);
 set('allow_anonymous_stats', false);
 
-// Hosts
-
-host(getenv('SSH_HOSTNAME'))
-    ->stage('staging')
+host('staging')
+    ->hostname('artemis.wiringa.nl')
     ->set('deploy_path', '~/sites/staging.wiringa.nl');
 
-host(getenv('SSH_HOSTNAME'))
-    ->stage('production')
+host('production')
+    ->stage('artemis.wiringa.nl')
     ->set('deploy_path', '~/sites/www.wiringa.nl');
 
 // Tasks
 
 task('deploy:update_code', function () {
-    $remote = getenv('SSH_HOSTNAME');
-
     // Copying artifacts to remote
-    runLocally('scp build/deployment.tar.gz ' . $remote . ':sites/staging.wiringa.nl');
+    runLocally('scp deployment.tar.gz artemis.wiringa.nl:sites/staging.wiringa.nl');
 
     run('cd {{deploy_path}}; tar zxvf -C {{release_path}} deployment.tar.gz');
 });
@@ -51,6 +50,11 @@ task('deploy', [
     'cleanup',
     'success'
 ]);
+
+//task('deploy:symlink:storage', function () {
+//    run('php artisan storage:link');
+//});
+//after('deploy:symlink', 'deploy:symlink:storage');
 
 // [Optional] If deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
