@@ -15,14 +15,12 @@
 <link href="https://fonts.googleapis.com/css?family=Oswald:500,700" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css"/>
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick-theme.css"/>
-<link rel="stylesheet" href="{{ mix('assets/css/vendor.css') }}">
-<link rel="stylesheet" href="{{ mix('assets/css/app.css') }}">
+<link rel="stylesheet" href="{{ mix('assets/frontend/css/app.css') }}">
 <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
 <script>
     window.Laravel = {
-        isLoggedIn: {{ (int) auth()->check() }},
-        googleMapsApiKey: '{{ config('wtg.maps-api-key') }}'
+        isLoggedIn: {{ (int) auth()->check() }}
     };
 </script>

@@ -4,6 +4,8 @@
  * Configuration for the soap service.
  */
 return [
+    'logging' => env('SOAP_LOGGING', false),
+
     'wsdl' => env('SOAP_WSDL'),
 
     'user' => env('SOAP_USER'),

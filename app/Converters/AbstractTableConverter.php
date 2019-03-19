@@ -117,8 +117,6 @@ abstract class AbstractTableConverter implements TableConverter
      */
     public function mapCsvFields(array $data)
     {
-        dump($data);
-
         return array_combine($this->csvFields, $data);
     }
 }

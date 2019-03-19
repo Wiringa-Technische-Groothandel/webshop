@@ -5,6 +5,7 @@ namespace WTG\Soap\GetProductPricesAndStocks;
 use Exception;
 use WTG\Soap\AbstractService;
 use Illuminate\Support\Collection;
+use WTG\Services\Stock\Service as StockService;
 
 /**
  * GetProductPricesAndStocks service.
@@ -36,12 +37,22 @@ class Service extends AbstractService
     protected $customerId;
 
     /**
-     * Service constructor.
+     * @var StockService
      */
-    public function __construct()
+    protected $stockService;
+
+    /**
+     * Service constructor.
+     *
+     * @param  Request  $request
+     * @param  Response  $response
+     * @param  StockService  $stockService
+     */
+    public function __construct(Request $request, Response $response, StockService $stockService)
     {
-        $this->request = app()->make(Request::class);
-        $this->response = app()->make(Response::class);
+        $this->request = $request;
+        $this->response = $response;
+        $this->stockService = $stockService;
     }
 
     /**
@@ -132,11 +143,11 @@ class Service extends AbstractService
 
             $product->price_per_string = $pricePerString;
 
-            $stockString = sprintf('Voorraad: %s %s',
-                $product->stock, unit_to_str($product->sales_unit, $product->stock !== 1)
-            );
+//            $stockString = sprintf('Voorraad: %s %s',
+//                $product->stock, unit_to_str($product->sales_unit, $product->stock !== 1)
+//            );
 
-            $product->stock_string = $stockString;
+//            $product->stock_string = $stockString;
 
             $this->response->products[] = $product;
         }

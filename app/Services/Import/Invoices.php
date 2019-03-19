@@ -18,8 +18,8 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 class Invoices
 {
     const FILENAME_PATTERN = '/(?P<invoice>[0-9]{8})_(?P<customer>[0-9]{5})_(?P<date>[0-9]{8})_(?P<time>[0-9]{6})\.PDF$/';
-    const MUTATION_DELETE = 'D';
-    const MUTATION_UPDATE = 'U';
+    const SORT_ORDER_ASC = 1;
+    const SORT_ORDER_DESC = 2;
 
     /**
      * @var FilesystemManager
@@ -49,16 +49,32 @@ class Invoices
     }
 
     /**
-     * Run the importer.
+     * Get the invoice collection for a customer.
      *
      * @param  int  $customerNumber
+     * @param  bool  $sort
+     * @param  int  $sortOrder
      * @return \Illuminate\Support\Collection
      */
-    public function getForCustomer(int $customerNumber): Collection
+    public function getForCustomer(int $customerNumber, bool $sort = true, int $sortOrder = self::SORT_ORDER_DESC): Collection
     {
-        $files = $this->getFileList();
+        /** @var Collection $files */
+        $files = $this->getFileList()->get($customerNumber, collect());
 
-        return $files->get($customerNumber, collect());
+        if ($sort) {
+            $files = $files->sortBy(function (Collection $file) {
+                /** @var Carbon $date */
+                $date = $file->get('date');
+
+                return $date->timestamp;
+            });
+        }
+
+        if ($sortOrder === self::SORT_ORDER_DESC) {
+            $files = $files->reverse();
+        }
+
+        return $files;
     }
 
     /**
@@ -73,7 +89,11 @@ class Invoices
             return $this->files;
         }
 
-        $this->files = \Cache::remember('invoice_files', 60 * 24, function () {
+        if ($force) {
+            \Cache::forget('invoice_files');
+        }
+
+        $this->files = \Cache::remember('invoice_files', 60 * 60 * 24, function () {
             return collect(
                 $this->fs->disk('sftp')->allFiles('invoices')
             )->map(function ($filename) {
@@ -98,25 +118,23 @@ class Invoices
                 return $item->get('customer');
             })
             ->map(function (Collection $fileGroup, int $customerNumber) {
-                $files = $fileGroup->map(function (Collection $file) {
-                    return $file->only([
-                        'filename',
-                        'invoice',
-                        'date'
-                    ]);
+                $files = $fileGroup->mapWithKeys(function (Collection $file) {
+                    return [
+                        $file->get('invoice') => $file->only([
+                            'filename',
+                            'invoice',
+                            'date'
+                        ])
+                    ];
                 });
 
                 $company = Company::where('customer_number', $customerNumber)->first();
 
                 if (! $company) {
-                    \Log::notice(sprintf('%s: Found invoice files for non-existant customer %s', __CLASS__, $customerNumber));
+                    \Log::notice(sprintf('%s: Found invoice files for non-existent customer %s', __CLASS__, $customerNumber));
                 }
 
-                return collect([
-                    'company' => $company,
-                    'files' => $files,
-                    'count' => $files->count()
-                ]);
+                return $files;
             });
         });
 

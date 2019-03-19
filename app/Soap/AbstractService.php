@@ -22,15 +22,19 @@ abstract class AbstractService
     {
         $properties = $this->createPropertyMap($request);
 
-        \Log::debug(sprintf('Send SOAP request for %s', $action), [
-            'request' => $properties
-        ]);
+        if (config('soap.logging')) {
+            \Log::debug(sprintf('Send SOAP request for %s', $action), [
+                'request' => $properties
+            ]);
+        }
 
         $response = app('soap')->soapCall($action, $properties);
 
-        \Log::debug(sprintf('Received SOAP response for %s', $action), [
-            'response' => $response
-        ]);
+        if (config('soap.logging')) {
+            \Log::debug(sprintf('Received SOAP response for %s', $action), [
+                'response' => $response
+            ]);
+        }
 
         return $response;
     }

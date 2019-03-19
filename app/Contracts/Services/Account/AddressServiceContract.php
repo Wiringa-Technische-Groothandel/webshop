@@ -18,10 +18,11 @@ interface AddressServiceContract
     /**
      * Get all available addresses for a customer.
      *
-     * @param  CustomerContract  $customer
+     * @param  CustomerContract $customer
+     * @param  bool  $withDefault
      * @return Collection
      */
-    public function getAddressesForCustomer(CustomerContract $customer): Collection;
+    public function getAddressesForCustomer(CustomerContract $customer, $withDefault = true): Collection;
 
     /**
      * Get an address for a customer by id.
@@ -80,4 +81,11 @@ interface AddressServiceContract
      * @return null|string
      */
     public function getDefaultAddressIdForCustomer(CustomerContract $customer): ?string;
+
+    /**
+     * Get the default shipping address.
+     *
+     * @return AddressContract
+     */
+    public function getDefaultAddress(): AddressContract;
 }

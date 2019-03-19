@@ -11,13 +11,10 @@ const mix = require('laravel-mix');
  |
  */
 
-mix
-    .sass("resources/assets/sass/app.scss", 'public/assets/css')
-    .sass('resources/assets/sass/admin/app.scss', 'public/assets/css/admin/')
-    .styles([
-        'node_modules/animate.css/animate.min.css',
-    ], 'public/assets/css/vendor.css')
-    .js('resources/assets/js/app.js', 'public/assets/js/app.js')
-    .js('resources/assets/js/admin/app.js', 'public/assets/js/admin/app.js')
+mix.sass("resources/frontend/sass/app.scss", 'public/assets/frontend/css')
+    .js('resources/frontend/js/vendors.js', 'public/assets/frontend/js/vendors.js')
+    .js('resources/frontend/js/app.js', 'public/assets/frontend/js/app.js')
+    .sass('resources/admin/sass/app.scss', 'public/assets/admin/css/')
+    .js('resources/admin/js/vendors.js', 'public/assets/admin/js/vendors.js')
+    .js('resources/admin/js/app.js', 'public/assets/admin/js/app.js')
     .version();
-

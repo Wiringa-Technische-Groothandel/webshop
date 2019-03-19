@@ -37,6 +37,10 @@ class CompanyTableConverter extends AbstractTableConverter
      */
     public function createModel(array $data): ?Model
     {
+        if ($data['active'] === 'active') {
+            return null;
+        }
+
         $company = new Company;
 
         $company->setAttribute('customer_number', $data['login']);

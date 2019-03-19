@@ -35,6 +35,21 @@ interface CustomerContract
     public function getUsername(): ?string;
 
     /**
+     * Set the password.
+     *
+     * @param  string  $password
+     * @return CustomerContract
+     */
+    public function setPassword(string $password): CustomerContract;
+
+    /**
+     * Get the password.
+     *
+     * @return null|string
+     */
+    public function getPassword(): ?string;
+
+    /**
      * Set the active.
      *
      * @param  bool  $active

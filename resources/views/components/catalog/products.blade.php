@@ -28,7 +28,9 @@
 
             <div class="col-4 col-sm-3 text-right">
                 @auth
-                    <price :product="{{ $product }}"></price>
+                    <price :product="{{ $product }}"
+                           auth-url="{{ route('auth.login', ['toUrl' => url()->current()]) }}"
+                           :logged-in="{{ auth()->check() ? 'true' : 'false' }}"></price>
                 @endauth
             </div>
         </div>

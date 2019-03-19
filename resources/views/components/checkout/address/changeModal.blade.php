@@ -9,13 +9,13 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    @forelse ($addresses as $address)
+                    @foreach ($addresses as $address)
                         <div class="col-xs-12 col-sm-6">
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <address id="address-{{ $address->getId() }}">
-                                        <b>{{ $address->getName() }}</b><br />
-                                        {{ $address->getStreet() }} <br />
+                                        <b>{{ $address->getName() }}</b><br>
+                                        {{ $address->getStreet() }} <br>
                                         {{ $address->getPostcode() }} {{ $address->getCity() }}
                                     </address>
 
@@ -27,11 +27,7 @@
                                 </div>
                             </div>
                         </div>
-                    @empty
-                        <div class="alert alert-warning">
-                            {{ __("U hebt nog geen addressen gekoppeld aan uw account.") }}
-                        </div>
-                    @endforelse
+                    @endforeach
                 </div>
             </div>
             <div class="modal-footer">

@@ -7,7 +7,8 @@
 @endsection
 
 @section('content')
-    <button class="btn btn-success bmd-btn-fab" data-toggle="modal" data-target="#addSlide" title="{{ __('Slide toevoegen aan de carousel') }}">
+    <button class="btn btn-success bmd-btn-fab" id="add-slide-button"
+            data-toggle="modal" data-target="#addSlide" title="{{ __('Slide toevoegen aan de carousel') }}">
         <i class="fal fa-fw fa-plus"></i>
     </button>
 
@@ -15,6 +16,12 @@
         @include('components.admin.carousel.cards')
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $('#add-slide-button').tooltip()
+    </script>
+@endpush
 
 @push('styles')
     <style>

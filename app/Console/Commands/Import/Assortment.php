@@ -21,7 +21,7 @@ class Assortment extends Command
     /**
      * @var string
      */
-    protected $signature = 'import:assortment {--no-progress : Disable progress display}';
+    protected $signature = 'import:assortment {--no-progress : Disable progress display} {--limit=0 : Only read this amount of file groups (0 = unlimited)}';
 
     /**
      * @var string
@@ -49,6 +49,11 @@ class Assortment extends Command
     protected $noProgress = false;
 
     /**
+     * @var int
+     */
+    protected $limit = 0;
+
+    /**
      * AssortmentFiles constructor.
      *
      * @param  Service  $service
@@ -71,6 +76,7 @@ class Assortment extends Command
     public function handle()
     {
         $this->noProgress = $this->option('no-progress');
+        $this->limit = (int) $this->option('limit');
 
         $this->dm->transaction(function () {
             $this->runImport();
@@ -95,6 +101,14 @@ class Assortment extends Command
         $this->output->text(
             sprintf('%d new uploads since %s', $newUploads->count(), $this->service->getLastImportDate()->format('Y-m-d H:i'))
         );
+
+        if ($this->limit > 0) {
+            $this->output->text(
+                sprintf('Limiting amount of file groups to %d', $this->limit)
+            );
+
+            $newUploads = $newUploads->take($this->limit);
+        }
 
         $count = 1;
         $newUploads->each(function (Collection $fileGroup) use (&$count) {
@@ -123,6 +137,7 @@ class Assortment extends Command
             $count++;
         });
 
+        $this->service->createSeoUrls();
         $this->service->updateImportData();
 
         $this->output->success(

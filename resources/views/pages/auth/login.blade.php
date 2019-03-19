@@ -9,8 +9,10 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-12 col-md-8 mx-auto mb-3">
-                @include('components.auth.login.form')
+            <div class="col-12 mb-3">
+                <div class="well mx-auto" style="max-width: 300px;">
+                    @include('components.auth.login.form')
+                </div>
             </div>
         </div>
     </div>

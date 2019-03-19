@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Address extends Model implements AddressContract
 {
+    const DEFAULT_ID = 0;
+
     /**
      * Related company model.
      *

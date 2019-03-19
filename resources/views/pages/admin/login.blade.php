@@ -27,7 +27,8 @@
 
                         <div class="form-group">
                             <label for="username">{{ __('Gebruikersnaam') }}</label>
-                            <input type="text" value="{{ old('username') }}" class="form-control" name="username" placeholder="{{ __('Gebruikersnaam') }}">
+                            <input type="text" value="{{ old('username') }}" class="form-control" name="username"
+                                   placeholder="{{ __('Gebruikersnaam') }}" autofocus>
                         </div>
 
                         <div class="form-group">
