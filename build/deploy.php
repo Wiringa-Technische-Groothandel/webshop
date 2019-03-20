@@ -18,20 +18,22 @@ set('writable_dirs', []);
 set('allow_anonymous_stats', false);
 
 host('staging')
-    ->hostname('artemis.wiringa.nl')
+    ->hostname(getenv('SSH_HOSTNAME'))
     ->set('deploy_path', '~/sites/staging.wiringa.nl');
 
 host('production')
-    ->stage('artemis.wiringa.nl')
+    ->stage(getenv('SSH_HOSTNAME'))
     ->set('deploy_path', '~/sites/www.wiringa.nl');
 
 // Tasks
 
 task('deploy:update_code', function () {
-    // Copying artifacts to remote
-    runLocally('scp deployment.tar.gz artemis.wiringa.nl:sites/staging.wiringa.nl');
+    $remote = getenv('SSH_HOSTNAME');
 
-    run('cd {{deploy_path}}; tar zxvfC {{release_path}} deployment.tar.gz');
+    // Copying artifacts to remote
+    runLocally('scp deployment.tar.gz ' . $remote . ':sites/staging.wiringa.nl');
+
+    run('cd {{deploy_path}}; tar -C {{release_path}} -zxvf deployment.tar.gz');
 });
 
 desc('Deploy your project');
