@@ -31,7 +31,7 @@ task('deploy:update_code', function () {
     // Copying artifacts to remote
     runLocally('scp deployment.tar.gz artemis.wiringa.nl:sites/staging.wiringa.nl');
 
-    run('cd {{deploy_path}}; tar zxvf -C {{release_path}} deployment.tar.gz');
+    run('cd {{deploy_path}}; tar zxvfC {{release_path}} deployment.tar.gz');
 });
 
 desc('Deploy your project');
