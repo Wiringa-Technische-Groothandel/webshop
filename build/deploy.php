@@ -1,7 +1,7 @@
 <?php
 namespace Deployer;
 
-require 'recipe/common.php';
+require 'recipe/laravel.php';
 
 // Shared files/dirs between deploys 
 set('shared_files', [
@@ -13,9 +13,22 @@ set('shared_dirs', [
     'storage/app/public/uploads'
 ]);
 
-// Writable dirs by web server 
-set('writable_dirs', []);
+set('writable_dirs', [
+    'bootstrap/cache',
+    'storage/framework',
+    'storage/framework/cache',
+    'storage/framework/sessions',
+    'storage/framework/views',
+    'storage/app/public/uploads',
+    'storage/logs',
+]);
+
 set('allow_anonymous_stats', false);
+
+set('http_user', 'www-data');
+set('http_group', 'www-data');
+set('writable_mode', 'chmod');
+set('writable_chmod_mode', '0777');
 
 host('staging')
     ->hostname(getenv('SSH_HOSTNAME'))
@@ -45,18 +58,19 @@ task('deploy', [
     'deploy:update_code',
     'deploy:shared',
     'deploy:writable',
-    'deploy:vendors',
-    'deploy:clear_paths',
+    'artisan:storage:link',
+    'artisan:view:clear',
+    'artisan:config:cache',
+    'deploy:public_disk',
     'deploy:symlink',
     'deploy:unlock',
     'cleanup',
-    'success'
 ]);
 
-//task('deploy:symlink:storage', function () {
-//    run('php artisan storage:link');
-//});
-//after('deploy:symlink', 'deploy:symlink:storage');
+task('cleanup:code_archive', function () {
+    run('rm {{deploy_path}}/deployment.tar.gz');
+});
+before('cleanup', 'cleanup:code_archive');
 
 // [Optional] If deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
