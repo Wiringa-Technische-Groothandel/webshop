@@ -25,7 +25,7 @@ build_job:
     # Build the assets
     - npm run prod-silent
 
-    - tar --exclude=./build --exclude=./.git --exclude=./node_modules --exclude=./.env.example --exclude=./.env.testing --exclude=./package.json --exclude=./package-lock.json --exclude=./webpack.mix.js -cvzf build/deployment.tar.gz *
+    - tar --exclude=build --exclude=./.git --exclude=node_modules --exclude=.env.example --exclude=.env.testing --exclude=package.json --exclude=package-lock.json --exclude=webpack.mix.js --exclude=storage/app/public/uploads -cvzf build/deployment.tar.gz *
 
   artifacts:
     paths:
@@ -84,8 +84,6 @@ build_job:
 
 deploy_staging_job:
   stage: deploy
-
-  when: manual
 
   only:
     - development
