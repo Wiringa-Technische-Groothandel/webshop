@@ -19,7 +19,9 @@ set('writable_dirs', [
     'storage/framework/cache',
     'storage/framework/sessions',
     'storage/framework/views',
-    'storage/app/public/uploads',
+    'storage/app/public/uploads/images/carousel',
+    'storage/app/public/uploads/images/slider',
+    'storage/app/public/uploads/images/specials',
     'storage/logs',
 ]);
 
