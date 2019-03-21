@@ -44,6 +44,6 @@
     </div>
 </div>
 
-<script src="{{ elixir('assets/js/admin/app.js') }}"></script>
+<script src="{{ mix('assets/admin/js/app.js') }}"></script>
 </body>
 </html>

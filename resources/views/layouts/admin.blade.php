@@ -22,8 +22,8 @@
     </div>
 </div>
 
-<script src="{{ elixir('assets/admin/js/vendors.js') }}"></script>
-<script src="{{ elixir('assets/admin/js/app.js') }}"></script>
+<script src="{{ mix('assets/admin/js/vendors.js') }}"></script>
+<script src="{{ mix('assets/admin/js/app.js') }}"></script>
 <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
 
 @stack('scripts')

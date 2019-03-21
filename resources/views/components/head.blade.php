@@ -9,8 +9,8 @@
 
 <title>WTG - @yield('title', $title ?? '')</title>
 
-<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.0.10/css/all.css"
-      integrity="sha384-KwxQKNj2D0XKEW5O/Y6haRH39PE/xry8SAoLbpbCMraqlX7kUP6KHOnrlrtvuJLR" crossorigin="anonymous">
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.8.0/css/all.css"
+      integrity="sha384-/pOR6TNYPdUaQQQRKQ4XHznZ4U2K/Lscb3u6jshUngC/31fLTuyX9FZb24gp4O3J" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css?family=Muli:300,400,600,800" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Oswald:500,700" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css"/>
