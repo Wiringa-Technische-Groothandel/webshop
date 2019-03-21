@@ -25,7 +25,7 @@ set('allow_anonymous_stats', false);
 
 set('http_user', 'www-data');
 set('http_group', 'www-data');
-set('writable_mode', 'chown');
+set('writable_mode', 'chmod');
 set('writable_chmod_mode', '0777');
 
 host('staging')
