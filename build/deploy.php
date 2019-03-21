@@ -19,9 +19,6 @@ set('writable_dirs', [
     'storage/framework/cache',
     'storage/framework/sessions',
     'storage/framework/views',
-    'storage/app/public/uploads/images/carousel',
-    'storage/app/public/uploads/images/slider',
-    'storage/app/public/uploads/images/carousel',
 ]);
 
 set('allow_anonymous_stats', false);
