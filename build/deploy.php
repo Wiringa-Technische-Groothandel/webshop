@@ -27,11 +27,6 @@ set('writable_dirs', [
 
 set('allow_anonymous_stats', false);
 
-set('http_user', 'www-data');
-set('http_group', 'www-data');
-set('writable_mode', 'chmod');
-set('writable_chmod_mode', '0777');
-
 host('staging')
     ->hostname(getenv('SSH_HOSTNAME'))
     ->set('deploy_path', '~/sites/staging.wiringa.nl');
@@ -46,7 +41,7 @@ task('deploy:update_code', function () {
     $remote = getenv('SSH_HOSTNAME');
 
     // Copying artifacts to remote
-    runLocally('scp deployment.tar.gz ' . $remote . ':sites/staging.wiringa.nl');
+    runLocally('scp deployment.tar.gz ' . $remote . ':{{deploy_path}}');
 
     run('cd {{deploy_path}}; tar -C {{release_path}} -zxvf deployment.tar.gz');
 });
