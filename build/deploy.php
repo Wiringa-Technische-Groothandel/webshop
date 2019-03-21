@@ -21,11 +21,15 @@ set('writable_dirs', [
     'storage/framework/views',
     'storage/app/public/uploads/images/carousel',
     'storage/app/public/uploads/images/slider',
-    'storage/app/public/uploads/images/specials',
-    'storage/logs',
+    'storage/app/public/uploads/images/carousel',
 ]);
 
 set('allow_anonymous_stats', false);
+
+set('http_user', 'www-data');
+set('http_group', 'www-data');
+set('writable_mode', 'chown');
+set('writable_chmod_mode', '0777');
 
 host('staging')
     ->hostname(getenv('SSH_HOSTNAME'))
