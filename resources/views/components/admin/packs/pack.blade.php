@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="col">
-                    <a href="{{ route('admin.packs.edit', ['id' =>  $pack->getId()]) }}"
+                    <a href="#{{-- route('admin.packs.edit', ['id' =>  $pack->getId()]) --}}"
                        class="btn btn-primary btn-block">{{ __('Aanpassen') }}</a>
                 </div>
             </div>
