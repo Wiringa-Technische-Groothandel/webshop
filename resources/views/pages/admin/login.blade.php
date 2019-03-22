@@ -28,12 +28,13 @@
                         <div class="form-group">
                             <label for="username">{{ __('Gebruikersnaam') }}</label>
                             <input type="text" value="{{ old('username') }}" class="form-control" name="username"
-                                   placeholder="{{ __('Gebruikersnaam') }}" autofocus>
+                                   placeholder="{{ __('Gebruikersnaam') }}" tabindex="1" autofocus>
                         </div>
 
                         <div class="form-group">
                             <label for="password">{{ __('Wachtwoord') }}</label>
-                            <input type="password" class="form-control" name="password" placeholder="{{ __('Wachtwoord') }}">
+                            <input type="password" class="form-control" name="password"
+                                   placeholder="{{ __('Wachtwoord') }}" tabindex="2">
                         </div>
 
                         <button type="submit" class="btn btn-raised btn-success float-right">{{ __('Login') }}</button>
@@ -44,6 +45,7 @@
     </div>
 </div>
 
+<script src="{{ mix('assets/admin/js/vendors.js') }}"></script>
 <script src="{{ mix('assets/admin/js/app.js') }}"></script>
 </body>
 </html>
