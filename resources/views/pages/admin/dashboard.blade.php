@@ -50,7 +50,19 @@
 @push('scripts')
     @if ($years->isNotEmpty())
         <script type="text/javascript">
-            var chartColors = months.map(randomColor);
+            var chartColors = months.map(function () {
+                return '#2196F3';
+            });
+
+            function makeChart (context, type, data, options) {
+                options = options ? options : {};
+
+                return new Chart(context, {
+                    type: type,
+                    data: data,
+                    options: options
+                });
+            }
 
             // Get the context of the canvas element we want to select
             var orderChart = makeChart(
