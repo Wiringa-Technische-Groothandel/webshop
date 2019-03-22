@@ -99,6 +99,8 @@ Route::group([
             Route::get('/{id}', 'DetailController@getAction')->name('edit');
 
             Route::put('/', 'DetailController@putAction')->name('create');
+
+            Route::patch('/{id}', 'DetailController@patchAction');
         });
 
         // Admin cache

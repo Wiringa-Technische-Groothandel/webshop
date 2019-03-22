@@ -11,14 +11,7 @@
 // Components
 @import "components/sidebar";
 @import "components/navigation";
-//@import "components/header";
-//@import "components/content";
-//@import "components/footer";
-//@import "components/page";
 @import "components/notification";
-//@import "components/manager";
-//@import "cards";
-//@import "packs";
 
 html,
 body {
@@ -26,15 +19,6 @@ body {
   overflow-x: hidden;
   font-weight: 400;
 }
-
-//.pagination {
-//  justify-content: center;
-//}
-//
-//.separator {
-//  height: 10vh;
-//  background-color: transparent;
-//}
 
 .monospace {
   font-family: $font-family-monospace;

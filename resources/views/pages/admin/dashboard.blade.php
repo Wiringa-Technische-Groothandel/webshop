@@ -48,7 +48,7 @@
 @endpush
 
 @push('scripts')
-    @if ($years->isNotEmpty())
+    @if ($years->isNotEmpty())x
         <script type="text/javascript">
             var chartColors = months.map(function () {
                 return '#2196F3';

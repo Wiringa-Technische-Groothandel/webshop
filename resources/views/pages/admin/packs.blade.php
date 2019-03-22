@@ -3,7 +3,7 @@
 @section('title', __('Actiepakketten'))
 
 @section('pre-content')
-    @include('components.admin.packs.addModal')
+    @include('components.admin.packs.addPackModal')
 @endsection
 
 @section('content')
@@ -44,6 +44,7 @@
     <style>
         .bmd-btn-fab {
             position: fixed;
+            z-index: 1000;
             bottom: 20px;
             right: 20px;
         }
