@@ -143,11 +143,11 @@ class Service extends AbstractService
 
             $product->price_per_string = $pricePerString;
 
-//            $stockString = sprintf('Voorraad: %s %s',
-//                $product->stock, unit_to_str($product->sales_unit, $product->stock !== 1)
-//            );
+            $stockString = sprintf('Voorraad: %s %s',
+                $product->stock, unit_to_str($product->sales_unit, $product->stock !== 1)
+            );
 
-//            $product->stock_string = $stockString;
+            $product->stock_string = $stockString;
 
             $this->response->products[] = $product;
         }
