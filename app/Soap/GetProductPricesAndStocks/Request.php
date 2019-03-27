@@ -51,7 +51,7 @@ class Request extends AbstractRequest
     /**
      * @var string
      */
-    public $warehouseGroupId = 'CENTRAAL';
+    public $warehouseGroupId = '';
 
     /**
      * Request constructor.
