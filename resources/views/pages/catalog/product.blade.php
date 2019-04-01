@@ -42,22 +42,36 @@
                         @include('components.catalog.product.price')
                     </div>
                 </div>
-
-                {{--@if (count($pack_list) >= 1)--}}
-                {{--<div class="alert alert-warning text-center">--}}
-                {{--<h3>Attentie!</h3>--}}
-                {{--<p>--}}
-                {{--Dit product is onderdeel van 1 of meer actiepakketten: <br />--}}
-                {{--@foreach($pack_list as $pack)--}}
-                {{--<a href="/product/{{ $pack->product_number }}">{{ $pack->product->name }}</a><br />--}}
-                {{--@endforeach--}}
-                {{--</p>--}}
-                {{--</div>--}}
-                {{--@endif--}}
             </div>
         </div>
 
         <div class="row">
+            @if ($product->isPack())
+                <div class="col-12 col-md-8 offset-md-4">
+                    @include('components.catalog.product.pack')
+                </div>
+            @elseif ($product->isPackProduct())
+                <div class="col-12 col-md-8 offset-md-4">
+                    <div class="card border-warning mb-3">
+                        <div class="card-header bg-warning">
+                            <i class="fas fa-fw fa-exclamation-triangle"></i> {{ __('Dit product is onderdeel van een of meer aktiepakketten.') }}
+                        </div>
+
+                        <div class="card-body">
+                            <ul>
+                                @foreach($product->getPackProducts() as $packProduct)
+                                    <li>
+                                        <a href="{{ $packProduct->getPack()->getProduct()->getUrl() }}">
+                                            {{ $packProduct->getPack()->getProduct()->getName() }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             <div class="col-12 col-md-8 offset-md-4">
                 @if ($product->hasDescription())
                     @include('components.catalog.product.description')
