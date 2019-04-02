@@ -2,6 +2,7 @@
 
 namespace WTG\Providers;
 
+use GuzzleHttp\Client;
 use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\PackProductContract;
 use WTG\Contracts\Services\CompanyServiceContract;
@@ -76,6 +77,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->when(RecaptchaService::class)
+            ->needs(Client::class)
+            ->give(function () {
+                return new Client([
+                    'base_uri' => 'https://www.google.com',
+                ]);
+            });
         $this->app->alias(RecaptchaService::class, 'captcha');
 
         // Model bindings

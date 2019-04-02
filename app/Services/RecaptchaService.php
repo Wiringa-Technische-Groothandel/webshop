@@ -38,7 +38,7 @@ class RecaptchaService
     public function check(string $response): bool
     {
         try {
-            $guzzleResponse = $this->guzzle->request('POST', 'https://www.google.com/recaptcha/api/siteverify', [
+            $guzzleResponse = $this->guzzle->request('POST', 'recaptcha/api/siteverify', [
                 RequestOptions::FORM_PARAMS => [
                     'secret' => config('wtg.recaptcha.secret-key'),
                     'response' => $response

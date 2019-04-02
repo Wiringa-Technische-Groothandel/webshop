@@ -511,7 +511,7 @@ class DatabaseSetup extends Migration
             $table->string('contact-city');
             $table->string('contact-postcode');
             $table->string('contact-phone-company');
-            $table->string('contact-phone');
+            $table->string('contact-phone')->nullable();
             $table->string('contact-email');
             $table->string('contact-website')->nullable();
 

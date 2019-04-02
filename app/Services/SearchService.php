@@ -121,7 +121,7 @@ class SearchService
 
         $items = $items->map(function (Product $product) {
             return [
-                'url' => route('catalog.product', [ 'sku' => $product->getSku() ]),
+                'url' => $product->getUrl(),
                 'name' => $product->getName()
             ];
         });

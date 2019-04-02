@@ -22,6 +22,14 @@ class RegistrationService implements RegistrationServiceContract
      */
     public function create(array $data): RegistrationContract
     {
+        $data = array_map(function ($value) {
+            if (strtolower($value) === 'on') {
+                return 1;
+            }
+
+            return $value;
+        }, $data);
+
         /** @var Registration $registration */
         $registration = app()->make(RegistrationContract::class);
         $registration->fill($data);
