@@ -19,6 +19,11 @@ class Discount extends Model
     const IMPORTANCE_CUSTOMER   = 40;
 
     /**
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * @var array
      */
     protected $guarded = ['id'];

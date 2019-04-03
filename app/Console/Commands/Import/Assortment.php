@@ -2,12 +2,10 @@
 
 namespace WTG\Console\Commands\Import;
 
-use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
 use WTG\Services\Import\Assortment as Service;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
 /**
  * Import from assortment files.

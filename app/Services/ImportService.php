@@ -23,17 +23,25 @@ class ImportService
     protected $assortmentImporter;
 
     /**
+     * @var Import\Discounts
+     */
+    protected $discountImporter;
+
+    /**
      * ImportService constructor.
      *
      * @param  DatabaseManager  $dm
      * @param  Import\Assortment  $assortmentImporter
+     * @param  Import\Discounts  $discountImporter
      */
     public function __construct(
         DatabaseManager $dm,
-        Import\Assortment $assortmentImporter
+        Import\Assortment $assortmentImporter,
+        Import\Discounts $discountImporter
     ) {
         $this->dm = $dm;
         $this->assortmentImporter = $assortmentImporter;
+        $this->discountImporter = $discountImporter;
     }
 
 
@@ -43,10 +51,23 @@ class ImportService
      * @return void
      * @throws \Throwable
      */
-    public function assortment()
+    public function assortment(): void
     {
         $this->dm->transaction(function () {
             $this->assortmentImporter->run();
+        });
+    }
+
+    /**
+     * Discount import.
+     *
+     * @return void
+     * @throws \Throwable
+     */
+    public function discounts(): void
+    {
+        $this->dm->transaction(function () {
+            $this->discountImporter->run();
         });
     }
 }

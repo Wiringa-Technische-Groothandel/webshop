@@ -52,7 +52,7 @@ class DiscountController extends Controller
         if ($receive === self::RESPONSE_TYPE_DOWNLOAD) {
             return response()->make($data, 200, [
                 'Content-type'        => 'text/plain',
-                'Content-Disposition' => 'inline; filename="icc_data.txt"',
+                'Content-Disposition' => 'attachment; filename="icc_data.txt"',
             ]);
         } elseif ($receive === self::RESPONSE_TYPE_EMAIL) {
             // Email response

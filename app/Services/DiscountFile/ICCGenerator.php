@@ -53,7 +53,7 @@ class ICCGenerator extends AbstractGenerator implements Generator
      */
     public function addGroupDiscounts()
     {
-        $discounts = Discount::where('company_id', $this->customer->getAttribute('company_id'))
+        $discounts = Discount::where('company_id', $this->customer->getCompany()->getCustomerNumber())
             ->where('importance', Discount::IMPORTANCE_GROUP)
             ->where('group_desc', '!=', 'Vervallen')
             ->get();
@@ -78,7 +78,7 @@ class ICCGenerator extends AbstractGenerator implements Generator
                 $query->select('product')
                     ->from('discounts')
                     ->where('importance', Discount::IMPORTANCE_GROUP)
-                    ->where('company_id', $this->customer->getAttribute('company_id'));
+                    ->where('company_id', $this->customer->getCompany()->getCustomerNumber());
             })
             ->get();
 
@@ -101,7 +101,7 @@ class ICCGenerator extends AbstractGenerator implements Generator
                 $query->select('product')
                     ->from('discounts')
                     ->where('importance', Discount::IMPORTANCE_CUSTOMER)
-                    ->where('company_id', $this->customer->getAttribute('company_id'));
+                    ->where('company_id', $this->customer->getCompany()->getCustomerNumber());
             })
             ->get();
 
@@ -119,7 +119,7 @@ class ICCGenerator extends AbstractGenerator implements Generator
      */
     public function addProductDiscounts()
     {
-        $discounts = Discount::where('company_id', $this->customer->getAttribute('company_id'))
+        $discounts = Discount::where('company_id', $this->customer->getCompany()->getCustomerNumber())
             ->where('importance', Discount::IMPORTANCE_CUSTOMER)
             ->get();
 
@@ -197,7 +197,7 @@ class ICCGenerator extends AbstractGenerator implements Generator
     {
         $this->text = static::GLN.
             static::SMALL_SPACING.
-            $this->customer->company->getAttribute('name').
+            $this->customer->getCompany()->getName().
             static::LARGE_SPACING.
             $this->start_date.
             sprintf("%'06d", $this->count).
