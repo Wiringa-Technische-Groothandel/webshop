@@ -47,21 +47,23 @@ class DiscountFileService
     }
 
     /**
-     * Run the generator.
+     * Generate the discount data.
      *
      * @param  string  $format
      * @return string
      * @throws InvalidFormatException
      */
-    public function run(string $format): string
+    public function generateData(string $format): string
     {
         if ($format === self::FORMAT_TYPE_ICC) {
-            return $this->generateICC();
+            $discountData = $this->generateICC();
         } elseif ($format === self::FORMAT_TYPE_CSV) {
-            return $this->generateCSV();
+            $discountData = $this->generateCSV();
         } else {
             throw new InvalidFormatException(__("Invalid file format."));
         }
+
+        return $discountData;
     }
 
     /**
