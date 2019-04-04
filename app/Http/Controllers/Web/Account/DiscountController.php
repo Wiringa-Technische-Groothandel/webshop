@@ -86,15 +86,16 @@ class DiscountController extends Controller
     {
         try {
             $receiveMethod = $request->input('receive');
-            $email = $this->authService->getCurrentCustomer()->getContact()->getContactEmail();
+            $customer = $this->authService->getCurrentCustomer();
+            $email = $customer->getContact()->getContactEmail();
 
             if (! $email && $receiveMethod === self::RECEIVE_METHOD_EMAIL) {
                 return back()->withErrors(__('U hebt geen contact e-mail adres ingesteld op uw account. De e-mail kan niet verzonden worden.'));
             }
 
-            $discountData = $this->discountFileService->generateData(
-                $request->input('format')
-            );
+            $discountData = $this->discountFileService
+                                 ->setCustomer($customer)
+                                 ->generateData($request->input('format'));
 
             if ($receiveMethod === self::RECEIVE_METHOD_DOWNLOAD) {
                 return response()->make($discountData, 200, [
