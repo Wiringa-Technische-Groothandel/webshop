@@ -28,6 +28,11 @@ class DiscountFile extends Mailable
     protected $fileName;
 
     /**
+     * @var string
+     */
+    public $subject = 'Kortingsbestand';
+
+    /**
      * DiscountFile constructor.
      *
      * @param  string  $fileData

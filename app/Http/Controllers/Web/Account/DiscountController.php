@@ -26,7 +26,7 @@ class DiscountController extends Controller
 {
     const RECEIVE_METHOD_DOWNLOAD = 'download';
     const RECEIVE_METHOD_EMAIL = 'email';
-    const DISCOUNT_FILE_NAME = 'icc_data.txt';
+    const DISCOUNT_FILE_NAME_FORMAT = 'icc_data%d.txt';
 
     /**
      * @var DiscountFileService
@@ -96,14 +96,15 @@ class DiscountController extends Controller
             $discountData = $this->discountFileService
                                  ->setCustomer($customer)
                                  ->generateData($request->input('format'));
+            $fileName = sprintf(self::DISCOUNT_FILE_NAME_FORMAT, $customer->getCompany()->getCustomerNumber());
 
             if ($receiveMethod === self::RECEIVE_METHOD_DOWNLOAD) {
                 return response()->make($discountData, 200, [
                     'Content-type'        => 'text/plain',
-                    'Content-Disposition' => 'attachment; filename="' . self::DISCOUNT_FILE_NAME . '"',
+                    'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
                 ]);
             } elseif ($receiveMethod === self::RECEIVE_METHOD_EMAIL) {
-                $this->mailer->to($email)->send(new DiscountFile($discountData));
+                $this->mailer->to($email)->send(new DiscountFile($discountData, $fileName));
 
                 $this->session->flash('status', __('Het kortingsbestand is verzonden naar :email', ['email' => $email]));
             }
