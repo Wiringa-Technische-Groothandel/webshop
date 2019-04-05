@@ -195,15 +195,17 @@ class ICCGenerator extends AbstractGenerator implements Generator
      */
     public function prependHeaderLine()
     {
-        $this->text = static::GLN.
-            static::SMALL_SPACING.
-            $this->customer->getCompany()->getCustomerNumber().
-            static::LARGE_SPACING.
-            $this->start_date.
-            sprintf("%'06d", $this->count).
-            static::FILE_VERSION.
-            $this->name.
-            "\r\n".
+        $this->text = str_pad(
+                static::GLN.
+                static::SMALL_SPACING.
+                $this->customer->getCompany()->getCustomerNumber().
+                static::LARGE_SPACING.
+                $this->start_date.
+                sprintf("%'06d", $this->count).
+                static::FILE_VERSION.
+                $this->name,
+                130
+            ) . "\r\n".
             $this->text;
     }
 }
