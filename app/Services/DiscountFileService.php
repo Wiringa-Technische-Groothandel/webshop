@@ -2,8 +2,9 @@
 
 namespace WTG\Services;
 
-use WTG\Exceptions\InvalidFormatException;
 use WTG\Models\Customer;
+use WTG\Exceptions\InvalidFormatException;
+use WTG\Contracts\Models\CustomerContract;
 use WTG\Services\DiscountFile\CSVGenerator;
 use WTG\Services\DiscountFile\ICCGenerator;
 
@@ -27,9 +28,9 @@ class DiscountFileService
     /**
      * DiscountFileService constructor.
      *
-     * @param  Customer  $customer
+     * @param  CustomerContract  $customer
      */
-    public function __construct(Customer $customer = null)
+    public function __construct(CustomerContract $customer = null)
     {
         $this->customer = $customer;
     }
@@ -37,10 +38,10 @@ class DiscountFileService
     /**
      * Set the customer.
      *
-     * @param  Customer  $customer
+     * @param  CustomerContract  $customer
      * @return $this
      */
-    public function setCustomer(Customer $customer)
+    public function setCustomer(CustomerContract $customer)
     {
         $this->customer = $customer;
         return $this;

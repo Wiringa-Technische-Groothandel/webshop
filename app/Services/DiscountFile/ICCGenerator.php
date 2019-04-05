@@ -43,7 +43,7 @@ class ICCGenerator extends AbstractGenerator implements Generator
         parent::__construct($customer);
 
         $this->start_date = date('Ymd');
-        $this->name = str_pad($customer->company->getAttribute('name'), 70, ' ', STR_PAD_RIGHT);
+        $this->name = str_pad($customer->getCompany()->getName(), 70, ' ', STR_PAD_RIGHT);
     }
 
     /**
@@ -197,7 +197,7 @@ class ICCGenerator extends AbstractGenerator implements Generator
     {
         $this->text = static::GLN.
             static::SMALL_SPACING.
-            $this->customer->getCompany()->getName().
+            $this->customer->getCompany()->getCustomerNumber().
             static::LARGE_SPACING.
             $this->start_date.
             sprintf("%'06d", $this->count).
