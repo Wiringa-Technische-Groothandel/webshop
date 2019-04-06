@@ -43,7 +43,7 @@ class ICCGenerator extends AbstractGenerator implements Generator
         parent::__construct($customer);
 
         $this->start_date = date('Ymd');
-        $this->name = str_pad($customer->getCompany()->getName(), 70, ' ', STR_PAD_RIGHT);
+        $this->name = str_pad(str_limit($customer->getCompany()->getName(), 60, ''), 60);
     }
 
     /**
@@ -138,14 +138,14 @@ class ICCGenerator extends AbstractGenerator implements Generator
      */
     public function generateGroupDiscountLine(Discount $discount)
     {
-        $groupNumber = str_pad($discount->product, 20, ' ', STR_PAD_RIGHT);
-        $productNumber = str_pad("", 20, ' ', STR_PAD_RIGHT);
+        $groupNumber = str_pad($discount->product, 20);
+        $productNumber = str_pad("", 20);
         $description = str_pad(
             preg_replace("/[\r\n]*/", '', $discount->group_desc),
-            50, ' ', STR_PAD_RIGHT
+            50
         );
         $discountAmount = ($discount->discount < 10 ? '00' : '0').preg_replace("/\./", '', $discount->discount);
-        $discountAmount = str_pad($discountAmount, 5, '0', STR_PAD_RIGHT);
+        $discountAmount = str_pad($discountAmount, 5, '0');
 
         return $groupNumber.
             $productNumber.
@@ -167,14 +167,14 @@ class ICCGenerator extends AbstractGenerator implements Generator
      */
     public function generateProductDiscountLine(Discount $discount)
     {
-        $groupNumber = str_pad("", 20, ' ', STR_PAD_RIGHT);
-        $productNumber = str_pad($discount->product, 20, ' ', STR_PAD_RIGHT);
+        $groupNumber = str_pad("", 20);
+        $productNumber = str_pad($discount->product, 20);
         $description = str_pad(
             preg_replace("/[\r\n]*/", '', $discount->product_desc),
-            50, ' ', STR_PAD_RIGHT
+            50
         );
         $discountAmount = ($discount->discount < 10 ? '00' : '0').preg_replace("/\./", '', $discount->discount);
-        $discountAmount = str_pad($discountAmount, 5, '0', STR_PAD_RIGHT);
+        $discountAmount = str_pad($discountAmount, 5, '0');
 
         return $groupNumber.
             $productNumber.
