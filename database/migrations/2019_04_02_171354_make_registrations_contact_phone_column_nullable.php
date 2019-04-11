@@ -14,9 +14,11 @@ class MakeRegistrationsContactPhoneColumnNullable extends Migration
     public function up()
     {
         Schema::table('registrations', function (Blueprint $table) {
-            \DB::statement('ALTER TABLE registrations CHANGE `contact-phone` `contact-phone` VARCHAR(255) DEFAULT NULL COLLATE utf8mb4_unicode_ci');
-            \DB::statement('ALTER TABLE registrations CHANGE `other-order-confirmation` `other-order-confirmation` TINYINT(1) DEFAULT 0 NOT NULL COLLATE utf8mb4_unicode_ci');
-            \DB::statement('ALTER TABLE registrations CHANGE `other-mail-productfile` `other-mail-productfile` TINYINT(1) DEFAULT 0 NOT NULL COLLATE utf8mb4_unicode_ci');
+            if (\DB::getDriverName() === 'mysql') {
+                \DB::statement('ALTER TABLE registrations CHANGE `contact-phone` `contact-phone` VARCHAR(255) DEFAULT NULL COLLATE utf8mb4_unicode_ci');
+                \DB::statement('ALTER TABLE registrations CHANGE `other-order-confirmation` `other-order-confirmation` TINYINT(1) DEFAULT 0 NOT NULL COLLATE utf8mb4_unicode_ci');
+                \DB::statement('ALTER TABLE registrations CHANGE `other-mail-productfile` `other-mail-productfile` TINYINT(1) DEFAULT 0 NOT NULL COLLATE utf8mb4_unicode_ci');
+            }
         });
     }
 
@@ -28,9 +30,11 @@ class MakeRegistrationsContactPhoneColumnNullable extends Migration
     public function down()
     {
         Schema::table('registrations', function (Blueprint $table) {
-            \DB::statement('ALTER TABLE registrations CHANGE `contact-phone` `contact-phone` VARCHAR(255) COLLATE utf8mb4_unicode_ci');
-            \DB::statement('ALTER TABLE registrations CHANGE `other-order-confirmation` `other-order-confirmation` TINYINT(1) COLLATE utf8mb4_unicode_ci');
-            \DB::statement('ALTER TABLE registrations CHANGE `other-mail-productfile` `other-mail-productfile` TINYINT(1) COLLATE utf8mb4_unicode_ci');
+            if (\DB::getDriverName() === 'mysql') {
+                \DB::statement('ALTER TABLE registrations CHANGE `contact-phone` `contact-phone` VARCHAR(255) COLLATE utf8mb4_unicode_ci');
+                \DB::statement('ALTER TABLE registrations CHANGE `other-order-confirmation` `other-order-confirmation` TINYINT(1) COLLATE utf8mb4_unicode_ci');
+                \DB::statement('ALTER TABLE registrations CHANGE `other-mail-productfile` `other-mail-productfile` TINYINT(1) COLLATE utf8mb4_unicode_ci');
+            }
         });
     }
 }

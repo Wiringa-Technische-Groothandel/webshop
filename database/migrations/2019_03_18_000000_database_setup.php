@@ -1,5 +1,6 @@
 <?php
 
+use Symfony\Component\Console\Output\ConsoleOutput;
 use WTG\Models\Role;
 use WTG\Models\Block;
 use WTG\Models\Address;
@@ -74,8 +75,10 @@ class DatabaseSetup extends Migration
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
 
-        if (Artisan::call('import:assortment', [], app(\Symfony\Component\Console\Output\ConsoleOutput::class)) !== 0) {
-            throw new \Exception('Import failed');
+        if (! app()->environment('testing')) {
+            if (Artisan::call('import:assortment', [], app(ConsoleOutput::class)) !== 0) {
+                throw new \Exception('Import failed');
+            }
         }
 
         \DB::transaction(function () {
@@ -142,21 +145,23 @@ class DatabaseSetup extends Migration
             $table->softDeletes();
         });
 
-        // Convert the old companies to the new table structure
-        $oldCompanies = \DB::connection('mysql-old')->table('companies')->get();
-        foreach ($oldCompanies as $company) {
-            echo "[CREATING COMPANY] {$company->login}" . PHP_EOL;
+        if (! app()->environment('testing')) {
+            // Convert the old companies to the new table structure
+            $oldCompanies = \DB::connection('mysql-old')->table('companies')->get();
+            foreach ($oldCompanies as $company) {
+                echo "[CREATING COMPANY] {$company->login}" . PHP_EOL;
 
-            \DB::table('companies')->insert([
-                'customer_number'   => $company->login,
-                'name'              => $company->company,
-                'street'            => $company->street,
-                'postcode'          => $company->postcode,
-                'city'              => $company->city,
-                'active'            => $company->active,
-                'created_at'        => $company->created_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $company->created_at,
-                'updated_at'        => $company->updated_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $company->updated_at,
-            ]);
+                \DB::table('companies')->insert([
+                    'customer_number'   => $company->login,
+                    'name'              => $company->company,
+                    'street'            => $company->street,
+                    'postcode'          => $company->postcode,
+                    'city'              => $company->city,
+                    'active'            => $company->active,
+                    'created_at'        => $company->created_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $company->created_at,
+                    'updated_at'        => $company->updated_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $company->updated_at,
+                ]);
+            }
         }
 
         Schema::create('addresses', function (Blueprint $table) {
@@ -187,27 +192,29 @@ class DatabaseSetup extends Migration
             Address::DEFAULT_ID, $address->getId()
         ]);
 
-        $oldAddresses = \DB::connection('mysql-old')->table('addresses')->get();
-        foreach ($oldAddresses as $address) {
-            $company = \DB::table('companies')->where('customer_number', $address->User_id)->first();
+        if (! app()->environment('testing')) {
+            $oldAddresses = \DB::connection('mysql-old')->table('addresses')->get();
+            foreach ($oldAddresses as $address) {
+                $company = \DB::table('companies')->where('customer_number', $address->User_id)->first();
 
-            echo "[CREATING ADDRESS] {$company->customer_number} - {$address->id}" . PHP_EOL;
+                echo "[CREATING ADDRESS] {$company->customer_number} - {$address->id}" . PHP_EOL;
 
-            if (! $company) {
-                throw new \Exception('No company found for address ' . $address->id);
+                if (!$company) {
+                    throw new \Exception('No company found for address ' . $address->id);
+                }
+
+                \DB::table('addresses')->insert([
+                    'company_id' => $company->id,
+                    'name' => $address->name,
+                    'street' => $address->street,
+                    'postcode' => $address->postcode,
+                    'city' => $address->city,
+                    'phone' => $address->telephone,
+                    'mobile' => $address->mobile,
+                    'created_at' => $address->created_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $address->created_at,
+                    'updated_at' => $address->updated_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $address->updated_at,
+                ]);
             }
-
-            \DB::table('addresses')->insert([
-                'company_id'    => $company->id,
-                'name'          => $address->name,
-                'street'        => $address->street,
-                'postcode'      => $address->postcode,
-                'city'          => $address->city,
-                'phone'         => $address->telephone,
-                'mobile'        => $address->mobile,
-                'created_at'    => $address->created_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $address->created_at,
-                'updated_at'    => $address->updated_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $address->updated_at,
-            ]);
         }
 
         Schema::create('roles', function (Blueprint $table) {
@@ -283,94 +290,96 @@ class DatabaseSetup extends Migration
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
 
-        // Convert the old customers to the new table structure
-        $oldCustomers = \DB::connection('mysql-old')->table('users')->get();
-        foreach ($oldCustomers as $customer) {
-            $company = \DB::table('companies')->where('customer_number', $customer->company_id)->first();
+        if (! app()->environment('testing')) {
+            // Convert the old customers to the new table structure
+            $oldCustomers = \DB::connection('mysql-old')->table('users')->get();
+            foreach ($oldCustomers as $customer) {
+                $company = \DB::table('companies')->where('customer_number', $customer->company_id)->first();
 
-            echo "[CREATING CUSTOMER] {$company->customer_number} - {$customer->id}" . PHP_EOL;
+                echo "[CREATING CUSTOMER] {$company->customer_number} - {$customer->id}" . PHP_EOL;
 
-            if (! $company) {
-                throw new \Exception('No company found for customer ' . $customer->id);
-            }
-
-            if ($customer->manager === "1" || $customer->company_id === $customer->username) {
-                $role = \DB::table('roles')->where('level', Role::ROLE_MANAGER)->first();
-            } else {
-                $role = \DB::table('roles')->where('level', Role::ROLE_USER)->first();
-            }
-
-            $customerId = \DB::table('customers')->insertGetId([
-                'company_id'    => $company->id,
-                'role_id'       => $role->id,
-                'username'      => $customer->username,
-                'password'      => $customer->password,
-                'active'        => true,
-                'created_at'    => $customer->created_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $customer->created_at,
-                'updated_at'    => $customer->updated_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $customer->updated_at,
-            ]);
-
-            echo "[CREATING CONTACT] {$company->customer_number} - {$customerId}" . PHP_EOL;
-
-            \DB::table('contacts')->insert([
-                'customer_id'   => $customerId,
-                'contact_email' => $customer->email,
-                'order_email'   => $customer->email,
-                'created_at'    => $customer->created_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $customer->created_at,
-                'updated_at'    => $customer->updated_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $customer->updated_at,
-            ]);
-
-            echo "[CREATING QUOTE] {$company->customer_number} - {$customerId}" . PHP_EOL;
-
-            $quoteId = \DB::table('quotes')->insertGetId([
-                'customer_id' => $customerId,
-                'created_at'    => now(),
-                'updated_at'    => now(),
-            ]);
-
-            $cartItems = unserialize($customer->cart);
-
-            if (! $cartItems) {
-                continue;
-            }
-
-            foreach ($cartItems as $cartItem) {
-                echo "[CREATING QUOTE ITEM] {$company->customer_number} - {$customerId} - {$quoteId}" . PHP_EOL;
-
-                $product = \DB::table('products')->where('sku', $cartItem['id'])->first(['id']);
-
-                if (! $product) {
-                    echo "[SKIPPING NON-EXISTENT PRODUCT FOR QUOTE ITEM] {$company->customer_number} - {$customerId} - {$quoteId} - {$cartItem['id']}" . PHP_EOL;
-
-                    continue;
+                if (!$company) {
+                    throw new \Exception('No company found for customer ' . $customer->id);
                 }
 
-                \DB::table('quote_items')->insert([
-                    'quote_id'      => $quoteId,
-                    'product_id'    => $product->id,
-                    'qty'           => $cartItem['qty'],
-                    'created_at'    => now(),
-                    'updated_at'    => now(),
+                if ($customer->manager === "1" || $customer->company_id === $customer->username) {
+                    $role = \DB::table('roles')->where('level', Role::ROLE_MANAGER)->first();
+                } else {
+                    $role = \DB::table('roles')->where('level', Role::ROLE_USER)->first();
+                }
+
+                $customerId = \DB::table('customers')->insertGetId([
+                    'company_id' => $company->id,
+                    'role_id' => $role->id,
+                    'username' => $customer->username,
+                    'password' => $customer->password,
+                    'active' => true,
+                    'created_at' => $customer->created_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $customer->created_at,
+                    'updated_at' => $customer->updated_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $customer->updated_at,
                 ]);
-            }
 
-            $favorites = unserialize($customer->favorites);
+                echo "[CREATING CONTACT] {$company->customer_number} - {$customerId}" . PHP_EOL;
 
-            foreach ($favorites as $favorite) {
-                echo "[CREATING FAVORITE] {$company->customer_number} - {$customerId} - {$favorite}" . PHP_EOL;
-
-                $product = \DB::table('products')->where('sku', $favorite)->first(['id']);
-
-                if (! $product) {
-                    echo "[SKIPPING NON-EXISTENT PRODUCT FOR FAVORITE] {$company->customer_number} - {$customerId} - {$quoteId} - {$favorite}" . PHP_EOL;
-
-                    continue;
-                }
-
-                \DB::table('favorites')->insert([
+                \DB::table('contacts')->insert([
                     'customer_id' => $customerId,
-                    'product_id' => $product->id
+                    'contact_email' => $customer->email,
+                    'order_email' => $customer->email,
+                    'created_at' => $customer->created_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $customer->created_at,
+                    'updated_at' => $customer->updated_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $customer->updated_at,
                 ]);
+
+                echo "[CREATING QUOTE] {$company->customer_number} - {$customerId}" . PHP_EOL;
+
+                $quoteId = \DB::table('quotes')->insertGetId([
+                    'customer_id' => $customerId,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                $cartItems = unserialize($customer->cart);
+
+                if (!$cartItems) {
+                    continue;
+                }
+
+                foreach ($cartItems as $cartItem) {
+                    echo "[CREATING QUOTE ITEM] {$company->customer_number} - {$customerId} - {$quoteId}" . PHP_EOL;
+
+                    $product = \DB::table('products')->where('sku', $cartItem[ 'id' ])->first(['id']);
+
+                    if (!$product) {
+                        echo "[SKIPPING NON-EXISTENT PRODUCT FOR QUOTE ITEM] {$company->customer_number} - {$customerId} - {$quoteId} - {$cartItem['id']}" . PHP_EOL;
+
+                        continue;
+                    }
+
+                    \DB::table('quote_items')->insert([
+                        'quote_id' => $quoteId,
+                        'product_id' => $product->id,
+                        'qty' => $cartItem[ 'qty' ],
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+
+                $favorites = unserialize($customer->favorites);
+
+                foreach ($favorites as $favorite) {
+                    echo "[CREATING FAVORITE] {$company->customer_number} - {$customerId} - {$favorite}" . PHP_EOL;
+
+                    $product = \DB::table('products')->where('sku', $favorite)->first(['id']);
+
+                    if (!$product) {
+                        echo "[SKIPPING NON-EXISTENT PRODUCT FOR FAVORITE] {$company->customer_number} - {$customerId} - {$quoteId} - {$favorite}" . PHP_EOL;
+
+                        continue;
+                    }
+
+                    \DB::table('favorites')->insert([
+                        'customer_id' => $customerId,
+                        'product_id' => $product->id
+                    ]);
+                }
             }
         }
 
@@ -398,56 +407,58 @@ class DatabaseSetup extends Migration
             $table->decimal('subtotal', 10, 2);
         });
 
-        $oldOrders = \DB::connection('mysql-old')->table('orders')->get();
-        foreach ($oldOrders as $order) {
-            $company = \DB::table('companies')->where('customer_number', $order->User_id)->first();
+        if (! app()->environment('testing')) {
+            $oldOrders = \DB::connection('mysql-old')->table('orders')->get();
+            foreach ($oldOrders as $order) {
+                $company = \DB::table('companies')->where('customer_number', $order->User_id)->first();
 
-            echo "[CREATING ORDER] {$company->customer_number} - {$order->id}" . PHP_EOL;
+                echo "[CREATING ORDER] {$company->customer_number} - {$order->id}" . PHP_EOL;
 
-            if ($company->customer_number == "99999") {
-                echo "[SKIPPING ORDER FOR TEST ACCOUNT]" . PHP_EOL;
+                if ($company->customer_number == "99999") {
+                    echo "[SKIPPING ORDER FOR TEST ACCOUNT]" . PHP_EOL;
 
-                continue;
-            }
+                    continue;
+                }
 
-            if (! $company) {
-                throw new \Exception('No company found for order ' . $order->id);
-            }
+                if (!$company) {
+                    throw new \Exception('No company found for order ' . $order->id);
+                }
 
-            if ($order->addressId === -1) {
-                $address = \DB::table('addresses')->where('id', 0)->first();
-            } else {
-                $address = \DB::connection('mysql-old')->table('addresses')->where('id', $order->addressId)->first();
-            }
+                if ($order->addressId === -1) {
+                    $address = \DB::table('addresses')->where('id', 0)->first();
+                } else {
+                    $address = \DB::connection('mysql-old')->table('addresses')->where('id', $order->addressId)->first();
+                }
 
-            $items = unserialize($order->products);
+                $items = unserialize($order->products);
 
-            $orderId = \DB::table('orders')->insertGetId([
-                'company_id'        => $company->id,
-                'customer_number'   => $company->customer_number,
-                'name'              => $address->name ?? '- Verwijderd adres -',
-                'street'            => $address->street ?? '',
-                'postcode'          => $address->postcode ?? '',
-                'city'              => $address->city ?? '',
-                'comment'           => $order->comment,
-                'created_at'        => $order->created_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $order->created_at,
-                'updated_at'        => $order->updated_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $order->updated_at,
-            ]);
+                $orderId = \DB::table('orders')->insertGetId([
+                    'company_id' => $company->id,
+                    'customer_number' => $company->customer_number,
+                    'name' => $address->name ?? '- Verwijderd adres -',
+                    'street' => $address->street ?? '',
+                    'postcode' => $address->postcode ?? '',
+                    'city' => $address->city ?? '',
+                    'comment' => $order->comment,
+                    'created_at' => $order->created_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $order->created_at,
+                    'updated_at' => $order->updated_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $order->updated_at,
+                ]);
 
-            foreach ($items as $item) {
-                echo "[ADDING ORDER ITEM] {$company->customer_number} - {$orderId} - {$item['id']}" . PHP_EOL;
+                foreach ($items as $item) {
+                    echo "[ADDING ORDER ITEM] {$company->customer_number} - {$orderId} - {$item['id']}" . PHP_EOL;
 
-                try {
-                    \DB::table('order_items')->insert([
-                        'order_id'  => $orderId,
-                        'name'      => $item['name'],
-                        'sku'       => $item['id'],
-                        'price'     => $item['price'] ?? 0,
-                        'qty'       => $item['qty'],
-                        'subtotal'  => $item['subtotal'] ?? 0,
-                    ]);
-                } catch (\Exception $e) {
-                    echo "[SKIPPING INCOMPLETE ORDER ITEM] {$company->customer_number} - {$orderId} - {$item['id']}" . PHP_EOL;
+                    try {
+                        \DB::table('order_items')->insert([
+                            'order_id' => $orderId,
+                            'name' => $item[ 'name' ],
+                            'sku' => $item[ 'id' ],
+                            'price' => $item[ 'price' ] ?? 0,
+                            'qty' => $item[ 'qty' ],
+                            'subtotal' => $item[ 'subtotal' ] ?? 0,
+                        ]);
+                    } catch (\Exception $e) {
+                        echo "[SKIPPING INCOMPLETE ORDER ITEM] {$company->customer_number} - {$orderId} - {$item['id']}" . PHP_EOL;
+                    }
                 }
             }
         }
@@ -488,18 +499,20 @@ class DatabaseSetup extends Migration
             $table->timestamps();
         });
 
-        $oldCarousel = \DB::connection('mysql-old')->table('carousel')->get();
-        foreach ($oldCarousel as $carouselItem) {
-            echo "[CREATING CAROUSEL ITEM] {$carouselItem->Image}" . PHP_EOL;
+        if (! app()->environment('testing')) {
+            $oldCarousel = \DB::connection('mysql-old')->table('carousel')->get();
+            foreach ($oldCarousel as $carouselItem) {
+                echo "[CREATING CAROUSEL ITEM] {$carouselItem->Image}" . PHP_EOL;
 
-            \DB::table('carousel')->insert([
-                'title'         => $carouselItem->Title,
-                'caption'       => $carouselItem->Caption,
-                'image'         => $carouselItem->Image,
-                'order'         => $carouselItem->Order,
-                'created_at'    => $carouselItem->created_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $carouselItem->created_at,
-                'updated_at'    => $carouselItem->updated_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $carouselItem->updated_at,
-            ]);
+                \DB::table('carousel')->insert([
+                    'title' => $carouselItem->Title,
+                    'caption' => $carouselItem->Caption,
+                    'image' => $carouselItem->Image,
+                    'order' => $carouselItem->Order,
+                    'created_at' => $carouselItem->created_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $carouselItem->created_at,
+                    'updated_at' => $carouselItem->updated_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $carouselItem->updated_at,
+                ]);
+            }
         }
 
         Schema::create('registrations', function (Blueprint $table) {
@@ -539,22 +552,24 @@ class DatabaseSetup extends Migration
             $table->text('value');
         });
 
-        $oldDescriptions = \DB::connection('mysql-old')->table('descriptions')->get();
-        foreach ($oldDescriptions as $description) {
-            echo "[CREATING PRODUCT DESCRIPTION] {$description->product_id}" . PHP_EOL;
+        if (! app()->environment('testing')) {
+            $oldDescriptions = \DB::connection('mysql-old')->table('descriptions')->get();
+            foreach ($oldDescriptions as $description) {
+                echo "[CREATING PRODUCT DESCRIPTION] {$description->product_id}" . PHP_EOL;
 
-            $product = \DB::table('products')->where('sku', $description->product_id)->first(['id']);
+                $product = \DB::table('products')->where('sku', $description->product_id)->first(['id']);
 
-            if (! $product) {
-                echo "[SKIPPING NON-EXISTENT PRODUCT FOR DESCRIPTION] {$description->product_id}" . PHP_EOL;
+                if (!$product) {
+                    echo "[SKIPPING NON-EXISTENT PRODUCT FOR DESCRIPTION] {$description->product_id}" . PHP_EOL;
 
-                continue;
+                    continue;
+                }
+
+                \DB::table('descriptions')->insert([
+                    'product_id' => $product->id,
+                    'value' => $description->value
+                ]);
             }
-
-            \DB::table('descriptions')->insert([
-                'product_id'    => $product->id,
-                'value'         => $description->value
-            ]);
         }
 
         Schema::create('admins', function (Blueprint $table) {
@@ -582,44 +597,46 @@ class DatabaseSetup extends Migration
             $table->timestamps();
         });
 
-        $oldPacks = \DB::connection('mysql-old')->table('packs')->get();
-        foreach ($oldPacks as $pack) {
-            echo "[CREATING PACK] {$pack->product_number}" . PHP_EOL;
+        if (! app()->environment('testing')) {
+            $oldPacks = \DB::connection('mysql-old')->table('packs')->get();
+            foreach ($oldPacks as $pack) {
+                echo "[CREATING PACK] {$pack->product_number}" . PHP_EOL;
 
-            $product = \DB::table('products')->where('sku', $pack->product_number)->first(['id']);
+                $product = \DB::table('products')->where('sku', $pack->product_number)->first(['id']);
 
-            if (! $product) {
-                echo "[SKIPPING NON-EXISTENT PRODUCT FOR PACK] {$pack->product_number}" . PHP_EOL;
-
-                continue;
-            }
-
-            $packId = \DB::table('packs')->insertGetId([
-                'product_id'    => $product->id,
-                'created_at'    => $pack->created_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $pack->created_at,
-                'updated_at'    => $pack->updated_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $pack->updated_at,
-            ]);
-
-            $oldPackProducts = \DB::connection('mysql-old')->table('pack_products')->where('pack_id', $pack->id)->get();
-
-            foreach ($oldPackProducts as $packProduct) {
-                echo "[CREATING PACK PRODUCT] {$packId} - {$pack->id} - $packProduct->product" . PHP_EOL;
-
-                $product = \DB::table('products')->where('sku', $packProduct->product)->first(['id']);
-
-                if (! $product) {
-                    echo "[SKIPPING NON-EXISTENT PRODUCT FOR PACK PRODUCT] {$pack->product_number} - {$packProduct->product}" . PHP_EOL;
+                if (!$product) {
+                    echo "[SKIPPING NON-EXISTENT PRODUCT FOR PACK] {$pack->product_number}" . PHP_EOL;
 
                     continue;
                 }
 
-                \DB::table('pack_products')->insertGetId([
-                    'product_id'    => $product->id,
-                    'pack_id'       => $packId,
-                    'amount'        => $packProduct->amount,
-                    'created_at'    => $pack->created_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $pack->created_at,
-                    'updated_at'    => $pack->updated_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $pack->updated_at,
+                $packId = \DB::table('packs')->insertGetId([
+                    'product_id' => $product->id,
+                    'created_at' => $pack->created_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $pack->created_at,
+                    'updated_at' => $pack->updated_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $pack->updated_at,
                 ]);
+
+                $oldPackProducts = \DB::connection('mysql-old')->table('pack_products')->where('pack_id', $pack->id)->get();
+
+                foreach ($oldPackProducts as $packProduct) {
+                    echo "[CREATING PACK PRODUCT] {$packId} - {$pack->id} - $packProduct->product" . PHP_EOL;
+
+                    $product = \DB::table('products')->where('sku', $packProduct->product)->first(['id']);
+
+                    if (!$product) {
+                        echo "[SKIPPING NON-EXISTENT PRODUCT FOR PACK PRODUCT] {$pack->product_number} - {$packProduct->product}" . PHP_EOL;
+
+                        continue;
+                    }
+
+                    \DB::table('pack_products')->insertGetId([
+                        'product_id' => $product->id,
+                        'pack_id' => $packId,
+                        'amount' => $packProduct->amount,
+                        'created_at' => $pack->created_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $pack->created_at,
+                        'updated_at' => $pack->updated_at === '0000-00-00 00:00:00' ? '1970-01-01 01:00:00' : $pack->updated_at,
+                    ]);
+                }
             }
         }
 
