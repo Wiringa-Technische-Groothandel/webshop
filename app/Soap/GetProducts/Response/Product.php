@@ -127,4 +127,9 @@ class Product
      * @var bool
      */
     public $webshop;
+
+    /**
+     * @var string
+     */
+    public $stock_display;
 }

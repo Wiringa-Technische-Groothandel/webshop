@@ -417,4 +417,25 @@ class Product extends Model implements ProductContract
     {
         return $this->packProducts()->get();
     }
+
+    /**
+     * Set the stock display.
+     *
+     * @param  string  $stockDisplay
+     * @return ProductContract
+     */
+    public function setStockDisplay(string $stockDisplay): ProductContract
+    {
+        return $this->setAttribute('type', $stockDisplay);
+    }
+
+    /**
+     * Get the stock display.
+     *
+     * @return string
+     */
+    public function getStockDisplay(): string
+    {
+        return $this->getAttribute('stock_display');
+    }
 }

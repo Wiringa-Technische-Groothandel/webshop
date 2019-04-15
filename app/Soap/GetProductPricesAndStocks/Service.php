@@ -3,6 +3,7 @@
 namespace WTG\Soap\GetProductPricesAndStocks;
 
 use Exception;
+use WTG\Contracts\Models\ProductContract;
 use WTG\Soap\AbstractService;
 use Illuminate\Support\Collection;
 use WTG\Services\Stock\Service as StockService;
@@ -116,6 +117,8 @@ class Service extends AbstractService
         }
 
         foreach ($soapProducts as $soapProduct) {
+            $productModel = $this->getProductModel($soapProduct->ProductId);
+
             /** @var Response\Product $product */
             $product = app()->make(Response\Product::class);
             $product->sku           = $soapProduct->ProductId;
@@ -143,9 +146,17 @@ class Service extends AbstractService
 
             $product->price_per_string = $pricePerString;
 
-            $stockString = sprintf('Voorraad: %s %s',
-                $product->stock, unit_to_str($product->sales_unit, $product->stock !== 1)
-            );
+            if ($productModel->getStockDisplay() === 'S') {
+                $stockString = sprintf('Voorraad: %s %s',
+                    $product->stock, unit_to_str($product->sales_unit, $product->stock !== 1)
+                );
+            } elseif ($productModel->getStockDisplay() === 'A') {
+                $stockString = __('Op aanvraag');
+            } elseif ($productModel->getStockDisplay() === 'V') {
+                $stockString = __('Altijd op voorraad');
+            } else {
+                $stockString = '';
+            }
 
             $product->stock_string = $stockString;
 
@@ -154,5 +165,14 @@ class Service extends AbstractService
 
         $this->response->code = 200;
         $this->response->message = 'Success';
+    }
+
+    /**
+     * @param  string  $sku
+     * @return ProductContract
+     */
+    public function getProductModel(string $sku): ProductContract
+    {
+        return app(ProductContract::class)->where('sku', $sku)->first();
     }
 }

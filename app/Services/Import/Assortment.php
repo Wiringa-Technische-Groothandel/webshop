@@ -224,6 +224,7 @@ class Assortment
             $soapProduct->length          = (float) $xmlProduct->ProductLengthCm;
             $soapProduct->weight          = (float) $xmlProduct->ProductWeightKg;
             $soapProduct->height          = (float) $xmlProduct->ProductHeightCm;
+            $soapProduct->stock_display   = (string) $xmlProduct->StockDisplay ?: 'S';
 
             $this->assignAttributes($soapProduct, $xmlProduct);
 
