@@ -147,13 +147,13 @@ class Service extends AbstractService
             $product->price_per_string = $pricePerString;
 
             if ($productModel->getStockDisplay() === 'S') {
-                $stockString = sprintf('Voorraad: %s %s',
+                $stockString = sprintf('<span class="d-none d-md-inline">Voorraad: </span>%s %s',
                     $product->stock, unit_to_str($product->sales_unit, $product->stock !== 1)
                 );
             } elseif ($productModel->getStockDisplay() === 'A') {
-                $stockString = __('Op aanvraag');
+                $stockString = __('In overleg');
             } elseif ($productModel->getStockDisplay() === 'V') {
-                $stockString = __('Altijd op voorraad');
+                $stockString = __('Binnen 24/48 uur mits voor 16.00 besteld');
             } else {
                 $stockString = '';
             }

@@ -28,9 +28,7 @@
             {{ pricePer }}
         </small>
 
-        <small class="form-text text-muted stock" v-if="stock !== false">
-            {{ stock }}
-        </small>
+        <small class="form-text text-muted stock" v-if="stock !== false" v-html="stock"></small>
     </div>
 </template>
 

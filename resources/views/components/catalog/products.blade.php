@@ -7,7 +7,7 @@
                 </div>
             </div>
 
-            <div class="col-8 col-sm-7">
+            <div class="col-12 col-sm-7">
                 <a class="product-name d-block mb-2"
                    href="{{ $product->getUrl() }}">
                     {{ $product->getName() }}
@@ -26,7 +26,7 @@
                 @endauth
             </div>
 
-            <div class="col-4 col-sm-3 text-right">
+            <div class="col-12 col-sm-3 text-right">
                 @auth
                     <price :product="{{ $product }}"
                            auth-url="{{ route('auth.login', ['toUrl' => url()->current()]) }}"
