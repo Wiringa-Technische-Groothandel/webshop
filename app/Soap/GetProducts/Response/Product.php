@@ -132,4 +132,9 @@ class Product
      * @var string
      */
     public $stock_display;
+
+    /**
+     * @var string
+     */
+    public $supplier_code;
 }

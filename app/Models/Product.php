@@ -284,7 +284,9 @@ class Product extends Model implements ProductContract
             'keywords'  => $array['keywords'],
             'brand'     => $array['brand'],
             'series'    => $array['series'],
-            'type'      => $array['type']
+            'type'      => $array['type'],
+            'ean'       => $array['ean'],
+            'supplier_code' => $array['supplier_code'],
         ];
 
         return $searchableArray;

@@ -281,6 +281,9 @@ class Assortment
             $value = (string) $attribute->AttributeValues->AttributeValue->NativeDescription;
 
             switch ($attribute->AttributeId) {
+                case 'FAB':
+                    $responseProduct->supplier_code = $value;
+                    break;
                 case 'MRK':
                     $responseProduct->brand = $value;
                     break;
