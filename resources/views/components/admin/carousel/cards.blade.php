@@ -1,7 +1,7 @@
 <div class="row mb-3">
     @foreach($slides as $slide)
         <div class="col-sm-6 col-md-4">
-            <div class="card">
+            <div class="card mb-3">
                 <img src="{{ asset('storage/uploads/images/carousel/' . $slide->getImage()) }}" alt="{{ $slide->getImage() }}" class="card-img-top">
 
                 <div class="card-body">
@@ -36,7 +36,7 @@
                         {{ csrf_field() }}
                         {{ method_field('delete') }}
 
-                        <button class="btn btn-raised btn-danger btn-block" role="button">
+                        <button class="btn btn-raised btn-danger btn-block" role="button" onclick="return confirm('{{ __('Slide "' . $slide->getTitle() . '" verwijderen?') }}')">
                             <i class="fal fa-fw fa-remove"></i> {{ __('Verwijderen') }}
                         </button>
                     </form>

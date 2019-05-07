@@ -1,8 +1,23 @@
 .carousel {
+  .carousel-indicators {
+    bottom: -40px;
+
+    li {
+      height: 5px;
+      transform: skew(-45deg);
+    }
+  }
+
   .carousel-item {
+    text-align: center;
+
+    .carousel-caption {
+      bottom: 0;
+      text-shadow: 0 0 5px rgba(0, 0, 0, 1);
+    }
+
     .carousel-image {
       height: 300px;
-      filter: brightness(75%);
     }
   }
 }

@@ -1,48 +1,5 @@
 header {
-  position: relative;
-
-  #header-bg {
-    position: absolute;
-    width: 100%;
-    height: 105%;
-    overflow: hidden;
-    //transform: skewY(-8deg);
-    transform-origin: 0;
-    // F01030
+  .navigation-wrapper {
     background: linear-gradient( 135deg, #F01030 10%, #360940 100%);
-    //background: linear-gradient(150deg, #53f 15%, #05d5ff 70%, #a6ffcb 94%);
-    //background: linear-gradient(150deg, #C04848 15%, #D91A04 70%, #480048 94%);
-    //background: linear-gradient(150deg, #F01030, #480048);
-    //background: linear-gradient(150deg, #F01030, #F2EA28);
-    //background: linear-gradient(150deg, #F01030 15%, #A31B2F 70%, #F2EA28 94%);
-
-    @include media-breakpoint-down(xs) {
-      height: 100% !important;
-    }
-  }
-
-  #header-carousel {
-    .carousel-item {
-      text-align: center;
-
-      .carousel-caption {
-        text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-
-        @include media-breakpoint-up(md) {
-          position: relative;
-          top: 100px;
-          right: 0;
-          left: 0;
-        }
-
-        @include media-breakpoint-down(sm) {
-          background: rgba(0,0,0,0.5);
-          left: 0;
-          right: 0;
-          bottom: 0;
-          top: 0;
-        }
-      }
-    }
   }
 }
