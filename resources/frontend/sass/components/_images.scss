@@ -27,10 +27,19 @@
   &.cover-image {
     height: 500px;
     background-size: cover;
+
+    @include media-breakpoint-down(sm) {
+      height: 250px;
+    }
   }
 
-  &.company-image {
-    background: url('/storage/static/images/about-header.jpg') bottom;
+  @at-root html.webp &.company-image {
+    background: url('/storage/static/images/company.webp') center;
+    background-size: cover;
+  }
+
+  @at-root html.no-webp &.company-image {
+    background: url('/storage/static/images/company.jpg') center;
     background-size: cover;
   }
 }
