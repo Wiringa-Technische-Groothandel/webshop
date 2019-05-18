@@ -60,7 +60,6 @@ task('deploy', [
     'artisan:storage:link',
     'artisan:view:clear',
     'artisan:config:cache',
-    'deploy:public_disk',
     'deploy:symlink',
     'deploy:unlock',
     'cleanup',
