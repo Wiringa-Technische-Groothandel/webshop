@@ -13,9 +13,6 @@
 
 <title>WTG - @yield('title', $title ?? '')</title>
 
-<link rel="preload" as="font" href="https://fonts.googleapis.com/css?family=Muli:300,400,600,800">
-<link rel="preload" as="font" href="https://fonts.googleapis.com/css?family=Oswald:500,700">
-
 <link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css">
 <link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick-theme.css">
 
