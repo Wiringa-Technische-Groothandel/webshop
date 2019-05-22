@@ -34,7 +34,7 @@ host('staging')
     ->set('deploy_path', '~/sites/staging.wiringa.nl');
 
 host('production')
-    ->stage(getenv('SSH_HOSTNAME'))
+    ->hostname(getenv('SSH_HOSTNAME'))
     ->set('deploy_path', '~/sites/www.wiringa.nl');
 
 // Tasks
