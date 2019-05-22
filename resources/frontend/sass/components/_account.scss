@@ -1,0 +1,44 @@
+address {
+  abbr {
+    width: 20px;
+    display: inline-block;
+  }
+}
+
+.sub-account {
+  line-height: 3;
+  border: 1px solid #efefef;
+  border-left: none;
+  border-right: none;
+  padding: 8px 0;
+
+  &.current-account {
+    &:before {
+      content: '>';
+      display: inline;
+      width: 0;
+      float: left;
+    }
+  }
+
+  &-header {
+    font-weight: bold;
+    padding: 10px 0;
+    font-style: italic;
+  }
+
+  &-actions {
+    padding: 0;
+    text-align: right;
+    width: 110px;
+  }
+
+  .fa {
+    font-size: 20px;
+  }
+
+  &-role {
+    padding-top: 5px;
+    width: 180px;
+  }
+}

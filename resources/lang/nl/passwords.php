@@ -4,7 +4,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Password Reminder Language Lines
+    | Password Reset Language Lines
     |--------------------------------------------------------------------------
     |
     | The following language lines are the default lines which match reasons
@@ -13,10 +13,10 @@ return [
     |
     */
 
-    'password' => 'Het wachtwoord moet minstens 6 tekens lang zijn en overeenkomen met de verificatie.',
-    'user'     => 'Er is geen gebruiker gevonden met het opgegeven E-mail adres.',
-    'token'    => 'Deze wachtwoord reset url is mogelijk verlopen of al gebruikt.',
-    'sent'     => 'De wachtwoord reset link is naar uw mail verstuurd!',
-    'reset'    => 'Uw wachtwoord is gereset!',
+    'password' => 'Wachtwoorden moeten minimaal 6 karakters lang zijn.',
+    'reset' => 'Uw wachtwoord is aangepast!',
+    'sent' => 'Er is een email met een reset link verstuurd!',
+    'token' => 'Deze reset link is ongeldig.',
+    'user' => "We kunnen geen gebruiker vinden met deze gegevens.",
 
 ];

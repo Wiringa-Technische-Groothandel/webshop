@@ -1,133 +1,142 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace WTG\Http\Controllers\Admin;
 
-use App\Carousel;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\Factory as ViewFactory;
+use WTG\Contracts\Services\CarouselServiceContract;
+use WTG\Http\Requests\Admin\Carousel\AddSlideRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use WTG\Http\Requests\Admin\Carousel\DeleteSlideRequest;
+use WTG\Http\Requests\Admin\Carousel\UpdateSlideRequest;
 
 /**
- * Class CarouselController.
+ * Carousel controller.
  *
- * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
+ * @package     WTG\Http
+ * @subpackage  Controllers\Admin
+ * @author      Thomas Wiringa <thomas.wiringa@gmail.com>
  */
 class CarouselController extends Controller
 {
     /**
+     * @var CarouselServiceContract
+     */
+    protected $carouselService;
+
+    /**
+     * CarouselController constructor.
+     *
+     * @param  ViewFactory  $view
+     * @param  CarouselServiceContract  $carouselService
+     */
+    public function __construct(ViewFactory $view, CarouselServiceContract $carouselService)
+    {
+        parent::__construct($view);
+
+        $this->carouselService = $carouselService;
+    }
+
+    /**
      * The carousel management page.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
-    public function view()
+    public function getAction(): View
     {
-        return view('admin.carousel.index', [
-            'carouselData' => Carousel::orderBy('Order')->get(),
+        return $this->view->make('pages.admin.carousel', [
+            'slides' => $this->carouselService->getOrderedSlides(),
         ]);
     }
 
     /**
      * Add a carousel slide.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  AddSlideRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function create(Request $request)
+    public function putAction(AddSlideRequest $request): RedirectResponse
     {
-        if ($request->has('title') && $request->has('caption') && $request->hasFile('image')) {
-            $image = $request->file('image');
-            $title = $request->input('title');
-            $caption = $request->input('caption');
-
-            $validator = \Validator::make(
-                ['image' => $image],
-                ['image' => 'required|image']
+        try {
+            $this->carouselService->createSlide(
+                $request->input('title'),
+                $request->input('caption'),
+                $request->file('image')
             );
+        } catch (\Exception $e) {
+            \Log::notice($e->getMessage(), $e->getTrace());
 
-            if ($validator->fails()) {
-                return redirect()
-                    ->back()
-                    ->withInput($request->input())
-                    ->withErrors($validator->errors());
-            } else {
-                $slide = new Carousel();
-
-                $slide->Image = $image->getClientOriginalName();
-                $slide->Title = $title;
-                $slide->Caption = $caption;
-                $slide->Order = Carousel::count();
-
-                $slide->save();
-
-                $request->file('image')->move(public_path('img/carousel'), $image->getClientOriginalName());
-
-                return redirect()
-                    ->back()
-                    ->with('status', 'De slide is toegevoegd aan de carousel');
-            }
-        } else {
             return redirect()
                 ->back()
                 ->withInput($request->input())
-                ->withErrors('Een of meer velden zijn niet ingevuld');
+                ->withErrors($e->getMessage());
         }
+
+        return redirect()
+            ->back()
+            ->with('status', __('De slide is toegevoegd aan de carousel.'));
     }
 
     /**
      * Edit the slide order number.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  UpdateSlideRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function edit(Request $request, $id)
+    public function patchAction(UpdateSlideRequest $request): RedirectResponse
     {
-        if ($request->has('order') && is_numeric($request->input('order'))) {
-            try {
-                $slide = Carousel::findOrFail($id);
-            } catch (ModelNotFoundException $e) {
-                return redirect()
-                    ->back()
-                    ->withErrors("De slide met id {$id} bestaat niet");
-            }
-
-            $slide->Order = $request->input('order');
-
-            $slide->save();
+        try {
+            $this->carouselService->updateSlide(
+                $request->input('slide'),
+                $request->input('title'),
+                $request->input('caption'),
+                $request->input('order')
+            );
+        } catch (ModelNotFoundException $e) {
+            return redirect()
+                ->back()
+                ->withErrors(__('Geen slide gevonden met id :slide', ['slide' => $request->input('slide')]));
+        } catch (\Exception $e) {
+            \Log::notice($e->getMessage(), $e->getTrace());
 
             return redirect()
                 ->back()
-                ->with('status', 'Het slide nummer is aangepast');
-        } else {
-            return redirect()
-                ->back()
-                ->withErrors('Er is een ongeldig slide nummer opgegeven');
+                ->withInput($request->input())
+                ->withErrors($e->getMessage());
         }
+
+        return redirect()
+            ->back()
+            ->with('status', __('De slide is aangepast.'));
     }
 
     /**
      * Remove a slide from the carousel.
      *
-     * @param  int  $id
+     * @param  DeleteSlideRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function delete($id)
+    public function deleteAction(DeleteSlideRequest $request): RedirectResponse
     {
-        if (isset($id) && Carousel::where('id', $id)->count() === 1) {
-            $slide = Carousel::find($id);
+        $id = $request->input('id');
 
-            if (\Storage::disk('local')->exists('/public/img/carousel/'.$slide->Image)) {
-                \Storage::disk('local')->delete('/public/img/carousel/'.$slide->Image);
-            }
-
-            Carousel::destroy($id);
+        try {
+            $this->carouselService->deleteSlide($id);
+        } catch (ModelNotFoundException $e) {
+            return redirect()
+                ->back()
+                ->withErrors(__('Geen slide gevonden met id :slide', ['slide' => $id]));
+        } catch (\Exception $e) {
+            \Log::notice($e->getMessage(), $e->getTrace());
 
             return redirect()
                 ->back()
-                ->with('status', 'De slide is verwijderd uit de carousel');
-        } else {
-            return redirect()
-                ->back()
-                ->withErrors("De slide met id {$id} bestaat niet");
+                ->withErrors($e->getMessage());
         }
+
+        return redirect()
+            ->back()
+            ->with('status', __('De slide is verwijderd.'));
     }
 }

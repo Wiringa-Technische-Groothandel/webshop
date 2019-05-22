@@ -1,0 +1,24 @@
+.sidebar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  top: 0;
+  z-index: 100;
+
+  .nav {
+    .nav-item {
+      .nav-link {
+        margin: 0.2rem 0;
+
+        &:hover {
+          background-color: rgba(0,0,0,0.1);
+        }
+
+        &.active {
+          background: rgba(0,0,0,0.2);
+          color: white;
+        }
+      }
+    }
+  }
+}

@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace WTG\Http\Controllers\Admin;
 
-use Illuminate\Routing\Controller as BaseController;
+use WTG\Http\Controllers\Controller as BaseController;
 
 /**
- * Class Controller.
+ * Abstract admin controller.
  *
- * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
+ * @package     WTG\Http
+ * @subpackage  Controllers\Admin
+ * @author      Thomas Wiringa <thomas.wiringa@gmail.com>
  */
 abstract class Controller extends BaseController
 {
-    /**
-     * @return \Illuminate\View\View
-     */
-    abstract public function view();
+    //
 }

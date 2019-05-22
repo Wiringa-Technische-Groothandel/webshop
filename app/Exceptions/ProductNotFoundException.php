@@ -1,26 +1,16 @@
 <?php
 
-namespace App\Exceptions;
+namespace WTG\Exceptions;
 
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
- * Class ProductNotFoundException.
+ * Product not found exception.
+ *
+ * @package     WTG\Exceptions
+ * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
-class ProductNotFoundException extends HttpException
+class ProductNotFoundException extends ModelNotFoundException
 {
-    /**
-     * ProductNotFoundException constructor.
-     *
-     * @param  string  $id
-     * @param  \Exception|null  $previous
-     * @param  array  $headers
-     * @param  int  $code
-     */
-    public function __construct($id, \Exception $previous = null, array $headers = [], $code = 0)
-    {
-        $message = "Geen product gevonden met nummer '{$id}'";
-
-        parent::__construct(404, $message, $previous, $headers, $code);
-    }
+    //
 }

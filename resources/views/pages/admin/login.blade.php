@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    @include('components.admin.head', ['title' => 'Login'])
+</head>
+<body>
+
+<div id="app" class="container-fluid">
+    <div class="row align-items-center" style="height: 100vh;">
+        <div class="col-12 col-md-4 mx-auto">
+            <img class="img-fluid mb-3" src="{{ asset('storage/static/images/logov2.png') }}" alt="WTG Logo">
+
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="text-center font-weight-light">{{ __('Admin login') }}</h3>
+
+                    <hr />
+
+                    @if ($errors->count() > 0)
+                        <div class="alert alert-danger">
+                            <i class="fa fa-fw fa-exclamation-triangle"></i> {{ $errors->first() }}
+                        </div>
+                    @endif
+
+                    <form method="post">
+                        {{ csrf_field() }}
+
+                        <div class="form-group">
+                            <label for="username">{{ __('Gebruikersnaam') }}</label>
+                            <input type="text" value="{{ old('username') }}" class="form-control" name="username"
+                                   placeholder="{{ __('Gebruikersnaam') }}" tabindex="1" autofocus>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">{{ __('Wachtwoord') }}</label>
+                            <input type="password" class="form-control" name="password"
+                                   placeholder="{{ __('Wachtwoord') }}" tabindex="2">
+                        </div>
+
+                        <button type="submit" class="btn btn-raised btn-success float-right">{{ __('Login') }}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ mix('assets/admin/js/vendors.js') }}"></script>
+<script src="{{ mix('assets/admin/js/app.js') }}"></script>
+</body>
+</html>

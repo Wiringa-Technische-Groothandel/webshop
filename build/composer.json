@@ -1,0 +1,13 @@
+{
+    "name": "wtg/build",
+    "authors": [
+        {
+            "name": "Thomas Wiringa",
+            "email": "thomas.wiringa@gmail.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "deployer/deployer": "^6.4"
+    }
+}

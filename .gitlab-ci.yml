@@ -1,0 +1,141 @@
+# Pre-built image with dependencies already installed
+image: lunamoonfang/wtg-php:build-7.2
+
+cache:
+  paths:
+    - vendor
+
+stages:
+  - build
+  #  - docker
+  #  - test
+  - deploy
+
+build_job:
+  stage: build
+
+  script:
+    # Install Composer and project dependencies.
+    - curl -sS https://getcomposer.org/installer | php
+    - php composer.phar install --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
+
+    # Install Node dependencies.
+    - npm ci
+
+    # Build the assets
+    - npm run prod-silent
+
+    - tar --exclude=build --exclude=./.git --exclude=node_modules --exclude=.env.example --exclude=.env.testing --exclude=package.json --exclude=package-lock.json --exclude=webpack.mix.js --exclude=storage/app/public/uploads -cvzf build/deployment.tar.gz *
+
+  artifacts:
+    paths:
+      - build/deployment.tar.gz
+
+    expire_in: 1 week
+
+#test_job:
+#  stage: test
+#
+#  only:
+#    - release
+#    - master
+#
+#  services:
+#    - mysql:5.7
+#
+#  variables:
+#    MYSQL_DATABASE: wiringa
+#    MYSQL_ROOT_PASSWORD: secret
+#
+#  script:
+#    # Copy over testing configuration.
+#    - cp .env.testing .env
+#
+#    # Generate an application key. Re-cache.
+#    - php artisan key:generate
+#    - php artisan config:cache
+#
+#    # Run laravel tests
+#    - php vendor/bin/phpunit --coverage-text --colors=never
+
+#build_docker_image_job:
+#  image: docker:stable
+#
+#  variables:
+#    DOCKER_DRIVER: overlay2
+#
+#  services:
+#    - docker:dind
+#
+#  stage: docker
+#
+#  dependencies:
+#    - build_job
+#
+#  script:
+#    - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY_HOST
+#
+#    - echo "Building $DOCKER_REGISTRY_HOST/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG"
+#
+#    # Build the docker image
+#    - docker build -t $DOCKER_REGISTRY_HOST/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG build
+#
+#    - docker push $DOCKER_REGISTRY_HOST/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG
+
+deploy_staging_job:
+  stage: deploy
+
+  only:
+    - development
+#    - release
+
+  script:
+    # Install ssh if not already installed
+    - 'which ssh || ( apt-get update -y && apt-get install openssh-client -y )'
+
+    # Create the SSH directory and give it the right permissions
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+
+    # Known host checking
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+    # Add keypair
+    - echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+
+    # Add SSH config
+    - echo "$SSH_CONFIG" > ~/.ssh/config
+
+    # Fix permissions
+    - chmod 600 ~/.ssh/id_rsa*
+    - chmod 600 ~/.ssh/config
+    - chmod 644 ~/.ssh/known_hosts
+
+    # Test ssh connection
+    - ssh $SSH_HOSTNAME "echo $0"
+
+    # Release to staging
+    - curl -sS https://getcomposer.org/installer | php
+    - cd build && php ../composer.phar install --no-progress
+    - vendor/bin/dep -vvv deploy staging
+    #    - ssh $SSH_HOSTNAME "cd ~/docker/staging.wiringa.nl
+    #      && docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY_HOST
+    #      && docker-compose pull
+    #      && docker-compose up -d
+    #      && docker-compose exec -T app artisan config:cache
+    #      && docker-compose exec -T app artisan view:clear
+    #      && docker-compose exec -T app artisan cache:clear
+    #      && docker-compose exec -T app artisan migrate"
+
+deploy_production_job:
+  stage: deploy
+
+  when: manual
+
+  only:
+    - master
+
+  script:
+    # Release to production
+    - vendor/bin/dep deploy production

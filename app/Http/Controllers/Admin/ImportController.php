@@ -1,28 +1,26 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace WTG\Http\Controllers\Admin;
 
-use Helper;
-use Validator;
-use App\Content;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
 
 /**
- * Class ImportController.
+ * Import controller.
  *
- * @author  Thomas Wiringa <thomas.wiringa@gmail.com>
+ * @package     WTG\Http
+ * @subpackage  Controllers\Admin
+ * @author      Thomas Wiringa <thomas.wiringa@gmail.com>
  */
 class ImportController extends Controller
 {
     /**
      * The import page.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
-    public function view()
+    public function view(): View
     {
-        return view('admin.import.index');
+        return $this->view->make('pages.admin.import');
     }
 
     /**
@@ -184,4 +182,5 @@ class ImportController extends Controller
                 ->withErrors('Geen bestand geselecteerd of het bestand is ongeldig');
         }
     }
+
 }
