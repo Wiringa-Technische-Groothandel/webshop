@@ -150,4 +150,19 @@ interface ProductContract
      * @return string
      */
     public function getSalesUnit(): string;
+
+    /**
+     * Set the stock display.
+     *
+     * @param  string  $stockDisplay
+     * @return ProductContract
+     */
+    public function setStockDisplay(string $stockDisplay): ProductContract;
+
+    /**
+     * Get the stock display.
+     *
+     * @return string|null
+     */
+    public function getStockDisplay(): string;
 }

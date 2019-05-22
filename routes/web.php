@@ -20,9 +20,13 @@ Route::group([
 ], function () {
     Route::get('login', 'LoginController@getAction')->name('login');
     Route::get('register', 'RegistrationController@getAction')->name('register');
+    Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
+    Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
 
     Route::post('login', 'LoginController@postAction');
     Route::post('logout', 'LogoutController@postAction')->name('logout');
+    Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+    Route::post('password/reset', 'ResetPasswordController@reset')->name('password.resetPost');
 
     Route::put('register', 'RegistrationController@putAction');
 });
@@ -87,7 +91,8 @@ Route::group([
     'namespace' => 'Account',
     'middleware' => ['auth']
 ], function () {
-    Route::get('/', 'MyAccountController@getAction')->name('my-account');
+    Route::get('/', 'ProfileController@getAction')->name('profile');
+    Route::get('edit', 'ProfileController@editAction')->name('profile.edit');
     Route::get('accounts', 'SubAccountController@getAction')->name('sub_accounts');
     Route::get('password', 'PasswordController@getAction')->name('change_password');
     Route::get('favorites', 'FavoritesController@getAction')->name('favorites');
@@ -97,8 +102,10 @@ Route::group([
     Route::get('addresses', 'AddressController@getAction')->name('addresses');
     Route::get('discount', 'DiscountController@getAction')->name('discount');
 
+    Route::post('edit', 'ProfileController@postAction');
     Route::post('password', 'PasswordController@postAction');
     Route::post('order-history', 'OrderHistoryController@postAction');
+    Route::post('update-role', 'SubAccountController@postAction')->name('update-role');
     Route::post('discount', 'DiscountController@postAction');
 
     Route::put('accounts', 'SubAccountController@putAction');

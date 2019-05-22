@@ -4,7 +4,6 @@
         Bovenstreek 1<br />
         9731 DH Groningen<br />
         <i class="fal fa-fw fa-phone"></i> <a href="tel:0505445566">050-5445566</a><br />
-        <i class="fal fa-fw fa-fax"></i> 050-5445565<br />
         <i class="fal fa-fw fa-at"></i> <a href="mailto:verkoop@wiringa.nl">verkoop@wiringa.nl</a><br />
         <hr />
         <strong>Openingstijden</strong><br />
@@ -26,11 +25,6 @@
             <td><b>Balie:</b></td>
             <td>Maandag t/m Vrijdag</td>
             <td>07:30 - 17:00</td>
-        </tr>
-        <tr>
-            <td><b>Fax:</b></td>
-            <td>050-5445565</td>
-            <td></td>
         </tr>
         <tr>
             <td><b>E-Mail:</b></td>

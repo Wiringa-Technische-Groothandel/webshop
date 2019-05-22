@@ -19,10 +19,7 @@ class RegistrationServiceTest extends TestCase
      */
     protected $service;
 
-    /**
-     * @return void
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

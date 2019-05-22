@@ -37,22 +37,32 @@ class InvoiceController extends Controller
     }
 
     /**
-     * Order history view.
+     * Invoice list.
      *
      * @param  Request  $request
      * @return \Illuminate\Contracts\View\View
      */
     public function getAction(Request $request): View
     {
+        switch ((int) $request->input('sort-order')) {
+            case InvoiceService::SORT_ORDER_ASC:
+            case InvoiceService::SORT_ORDER_DESC:
+                $sortOrder = (int) $request->input('sort-order');
+                break;
+            default:
+                $sortOrder = InvoiceService::SORT_ORDER_DESC;
+        }
+
         $invoices = $this->service->getForCustomer(
-            $request->user()->getCompany()->getCustomerNumber()
+            $request->user()->getCompany()->getCustomerNumber(),
+            $sortOrder
         );
 
         return view('pages.account.invoices', compact('invoices'));
     }
 
     /**
-     * Order history view.
+     * Invoice view.
      *
      * @param  Request  $request
      * @param  int  $file
@@ -64,8 +74,7 @@ class InvoiceController extends Controller
             $request->user()->getCompany()->getCustomerNumber()
         );
 
-        $filenames = $invoices->get('files');
-        $invoice = $filenames[$file] ?? false;
+        $invoice = $invoices->get($file);
 
         if (! $invoice) {
             return back()->withErrors(__('De opgevraagde factuur is niet gevonden'));

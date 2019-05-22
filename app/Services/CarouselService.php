@@ -5,6 +5,7 @@ namespace WTG\Services;
 use WTG\Models\Carousel;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use Intervention\Image\Facades\Image;
 use Illuminate\Foundation\Application;
 use WTG\Contracts\Models\CarouselContract;
 use Illuminate\Database\Connection as Database;
@@ -32,8 +33,8 @@ class CarouselService implements CarouselServiceContract
     /**
      * CarouselService constructor.
      *
-     * @param  Application  $app
-     * @param  Database  $db
+     * @param Application $app
+     * @param Database $db
      */
     public function __construct(Application $app, Database $db)
     {
@@ -85,7 +86,12 @@ class CarouselService implements CarouselServiceContract
 
             $slide->save();
 
-            $image->storePubliclyAs('public/uploads/images/carousel', $image->getClientOriginalName());
+            Image::make($image)
+                ->resize(null, 300, function ($constraint) {
+                    $constraint->aspectRatio();
+                })
+                ->encode('jpg')
+                ->save(sprintf(storage_path('app/public/uploads/images/carousel/%s'), $image->getClientOriginalName()));
         } catch (\Exception $e) {
             $this->db->rollBack();
 

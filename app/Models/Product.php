@@ -2,8 +2,11 @@
 
 namespace WTG\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
+use Luna\SeoUrls\SeoUrl;
 use WTG\Contracts\Models\ProductContract;
 use WTG\Contracts\Models\DescriptionContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -35,6 +38,36 @@ class Product extends Model implements ProductContract
     protected function description(): HasOne
     {
         return $this->hasOne(Description::class);
+    }
+
+    /**
+     * SeoUrl relation.
+     *
+     * @return HasOne
+     */
+    protected function seoUrl(): HasOne
+    {
+        return $this->hasOne(SeoUrl::class);
+    }
+
+    /**
+     * Pack relation.
+     *
+     * @return HasOne
+     */
+    protected function pack(): HasOne
+    {
+        return $this->hasOne(Pack::class);
+    }
+
+    /**
+     * Pack products relation.
+     *
+     * @return HasMany
+     */
+    protected function packProducts(): HasMany
+    {
+        return $this->hasMany(PackProduct::class);
     }
 
     /**
@@ -251,7 +284,9 @@ class Product extends Model implements ProductContract
             'keywords'  => $array['keywords'],
             'brand'     => $array['brand'],
             'series'    => $array['series'],
-            'type'      => $array['type']
+            'type'      => $array['type'],
+            'ean'       => $array['ean'],
+            'supplier_code' => $array['supplier_code'],
         ];
 
         return $searchableArray;
@@ -322,5 +357,87 @@ class Product extends Model implements ProductContract
             $this->getAttribute('series'),
             $this->getAttribute('type')
         );
+    }
+
+    /**
+     * Get the url for the product.
+     *
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        /** @var SeoUrl $seoUrl */
+        $seoUrl = $this->getAttribute('seo_url');
+
+        if (! $seoUrl) {
+            $seoUrl = new SeoUrl;
+            $seoUrl->target_path = 'product/' . $this->getSku();
+            $seoUrl->is_redirect = false;
+            $seoUrl->source_path = '/' . str_slug($this->getName());
+            $seoUrl->product_id = $this->getId();
+        }
+
+        return $seoUrl->source_path;
+    }
+
+    /**
+     * Is this product a pack product.
+     *
+     * @return bool
+     */
+    public function isPack(): bool
+    {
+        return null !== $this->getPack();
+    }
+
+    /**
+     * Is this product part of a pack.
+     *
+     * @return bool
+     */
+    public function isPackProduct(): bool
+    {
+        return $this->getPackProducts()->isNotEmpty();
+    }
+
+    /**
+     * Get a pack instance.
+     *
+     * @return Pack|null
+     */
+    public function getPack(): ?Pack
+    {
+        return $this->getAttribute('pack');
+    }
+
+    /**
+     * Get a pack product instance.
+     *
+     * @return Collection
+     */
+    public function getPackProducts(): Collection
+    {
+        return $this->packProducts()->get();
+    }
+
+    /**
+     * Set the stock display.
+     *
+     * @param  string  $stockDisplay
+     * @return ProductContract
+     */
+    public function setStockDisplay(string $stockDisplay): ProductContract
+    {
+        return $this->setAttribute('type', $stockDisplay);
+    }
+
+    /**
+     * Get the stock display.
+     *
+     * @return string
+     */
+    public function getStockDisplay(): string
+    {
+        return $this->getAttribute('stock_display');
     }
 }

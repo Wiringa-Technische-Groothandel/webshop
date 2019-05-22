@@ -25,8 +25,7 @@ class Service extends AbstractSoapService
      */
     public function getAllProducts(int $productsPerRequest = 20, int $startFromIndex = 1)
     {
-        /** @var GetProducts\Service $service */
-        $service = app()->make(GetProducts\Service::class);
+        $service = app(GetProducts\Service::class);
         return $service->handle($productsPerRequest, $startFromIndex);
     }
 
@@ -41,8 +40,7 @@ class Service extends AbstractSoapService
      */
     public function getProductPrice(ProductContract $product, float $quantity, string $customerId)
     {
-        /** @var GetProductPrice\Service $service */
-        $service = app()->make(GetProductPrice\Service::class);
+        $service = app(GetProductPrice\Service::class);
         return $service->handle($product, $quantity, $customerId);
     }
 
@@ -56,8 +54,7 @@ class Service extends AbstractSoapService
      */
     public function getProductPricesAndStocks(Collection $products, string $customerId)
     {
-        /** @var GetProductPricesAndStocks\Service $service */
-        $service = app()->make(GetProductPricesAndStocks\Service::class);
+        $service = app(GetProductPricesAndStocks\Service::class);
         return $service->handle($products, $customerId);
     }
 
@@ -72,8 +69,19 @@ class Service extends AbstractSoapService
      */
     public function getOrderCount(string $customerId, ?Carbon $from = null, ?Carbon $to = null)
     {
-        /** @var GetOrderCount\Service $service */
-        $service = app()->make(GetOrderCount\Service::class);
+        $service = app(GetOrderCount\Service::class);
         return $service->handle($customerId, $from, $to);
+    }
+
+    /**
+     * Calls: ExportProducts
+     *
+     * @soap
+     * @return ExportProducts\Response
+     */
+    public function exportProducts()
+    {
+        $service = app(ExportProducts\Service::class);
+        return $service->handle();
     }
 }

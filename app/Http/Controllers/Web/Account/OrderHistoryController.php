@@ -48,7 +48,7 @@ class OrderHistoryController extends Controller
         /** @var Customer $customer */
         $customer = $request->user();
         $order = $customer
-            ->getAttribute('company')
+            ->getCompany()
             ->orders()
             ->where('id', $request->input('order'))
             ->first();

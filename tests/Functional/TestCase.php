@@ -27,7 +27,7 @@ abstract class TestCase extends \Tests\TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

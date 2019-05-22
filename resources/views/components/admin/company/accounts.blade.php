@@ -18,11 +18,14 @@
             <tbody>
             @foreach($company->getCustomers() as $customer)
                 <tr>
-                    <th scope="row"><a href="{{ route('admin.company.customer.edit', ['company' => $company->getId(), 'customer' => $customer->getId()]) }}">{{ $customer->getUsername() }}</a></th>
+                    <th scope="row">
+                        {{--<a href="{{ route('admin.company.customer.edit', ['company' => $company->getId(), 'customer' => $customer->getId()]) }}">{{ $customer->getUsername() }}</a>--}}
+                        {{ $customer->getUsername() }}
+                    </th>
                     @if($customer->getContact()->getContactEmail())
                         <td class="d-sm-none d-md-table-cell"><a href="mailto:{{ $customer->getContact()->getContactEmail() }}">{{ $customer->getContact()->getContactEmail() }}</a></td>
                     @else
-                        <td class="d-sm-none d-md-table-cell">&nbsp;</td>
+                        <td class="d-sm-none d-md-table-cell">N.B.</td>
                     @endif
                     <td>{{ $customer->created_at->format('Y-m-d H:i') }}</td>
                     <td>{{ $customer->updated_at->format('Y-m-d H:i') }}</td>

@@ -26,8 +26,8 @@
                           php-success="{{ session('status') }}"></notification>
         </div>
 
-        <script src="{{ mix('assets/js/app.js') }}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.10.0/js/lightbox.min.js"></script>
+        <script src="{{ mix('assets/frontend/js/vendors.js') }}"></script>
+        <script src="{{ mix('assets/frontend/js/app.js') }}"></script>
 
         @stack('scripts')
     </body>

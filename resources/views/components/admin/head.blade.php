@@ -9,17 +9,16 @@
 
 <title>WTG Admin - @yield('title', $title ?? 'Untitled')</title>
 
-<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.0.10/css/all.css"
-      integrity="sha384-KwxQKNj2D0XKEW5O/Y6haRH39PE/xry8SAoLbpbCMraqlX7kUP6KHOnrlrtvuJLR" crossorigin="anonymous">
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.8.0/css/all.css"
+      integrity="sha384-/pOR6TNYPdUaQQQRKQ4XHznZ4U2K/Lscb3u6jshUngC/31fLTuyX9FZb24gp4O3J" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css?family=Muli:300,400,600,800" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css"/>
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick-theme.css"/>
-<link rel="stylesheet" href="{{ mix('assets/css/vendor.css') }}">
-<link rel="stylesheet" href="{{ mix('assets/css/admin/app.css') }}">
+<link rel="stylesheet" href="{{ mix('assets/admin/css/app.css') }}">
 <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
-<script src="//cdn.ckeditor.com/4.8.0/standard/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/4.11.3/standard/ckeditor.js"></script>
 <script>
     window.Laravel = {
         isLoggedIn: {{ (int) auth('admin')->check() }}

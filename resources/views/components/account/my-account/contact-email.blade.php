@@ -13,12 +13,12 @@
             <b>Let op:</b> {{ __('Zonder contact e-mail kunt u uw wachtwoord niet resetten als u deze bent vergeten.') }}
         </div>
 
-        <input class="form-control" title="Contact email" name="contact_email" oninput="toggleSaveButton()"
+        <input class="form-control" title="Contact email" name="contact_email"
                value="{{ $customer->getContact()->getContactEmail() }}" type="email"
                data-initial="{{ $customer->getContact()->getContactEmail() }}"
                data-required="false" />
 
-        <button type="submit" class="btn btn-success my-2" style="display: none;">
+        <button type="submit" class="btn btn-success my-2">
             {{ __('Opslaan') }}
         </button>
     </div>

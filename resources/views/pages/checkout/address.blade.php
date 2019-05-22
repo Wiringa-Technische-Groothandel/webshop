@@ -94,8 +94,17 @@
             axios.patch(window.location.href, {
                 addressId: $this.data('address-id')
             })
-                .catch(function (response) {
-                    alert(response);
+                .then((resp) => {
+                    window.vm.$root.$emit('send-notify', {
+                        text: resp.data.message,
+                        success: resp.data.success
+                    })
+                })
+                .catch(function (error) {
+                    window.vm.$root.$emit('send-notify', {
+                        text: error,
+                        success: false
+                    })
                 });
         });
     </script>

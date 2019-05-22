@@ -3,8 +3,10 @@
 namespace WTG\Soap\GetProductPricesAndStocks;
 
 use Exception;
+use WTG\Contracts\Models\ProductContract;
 use WTG\Soap\AbstractService;
 use Illuminate\Support\Collection;
+use WTG\Services\Stock\Service as StockService;
 
 /**
  * GetProductPricesAndStocks service.
@@ -36,12 +38,22 @@ class Service extends AbstractService
     protected $customerId;
 
     /**
-     * Service constructor.
+     * @var StockService
      */
-    public function __construct()
+    protected $stockService;
+
+    /**
+     * Service constructor.
+     *
+     * @param  Request  $request
+     * @param  Response  $response
+     * @param  StockService  $stockService
+     */
+    public function __construct(Request $request, Response $response, StockService $stockService)
     {
-        $this->request = app()->make(Request::class);
-        $this->response = app()->make(Response::class);
+        $this->request = $request;
+        $this->response = $response;
+        $this->stockService = $stockService;
     }
 
     /**
@@ -105,6 +117,8 @@ class Service extends AbstractService
         }
 
         foreach ($soapProducts as $soapProduct) {
+            $productModel = $this->getProductModel($soapProduct->ProductId);
+
             /** @var Response\Product $product */
             $product = app()->make(Response\Product::class);
             $product->sku           = $soapProduct->ProductId;
@@ -132,9 +146,17 @@ class Service extends AbstractService
 
             $product->price_per_string = $pricePerString;
 
-            $stockString = sprintf('Voorraad: %s %s',
-                $product->stock, unit_to_str($product->sales_unit, $product->stock !== 1)
-            );
+            if ($productModel->getStockDisplay() === 'S') {
+                $stockString = sprintf('<span class="d-none d-md-inline">Voorraad: </span>%s %s',
+                    $product->stock, unit_to_str($product->sales_unit, $product->stock !== 1)
+                );
+            } elseif ($productModel->getStockDisplay() === 'A') {
+                $stockString = __('In overleg');
+            } elseif ($productModel->getStockDisplay() === 'V') {
+                $stockString = __('Binnen 24/48 uur mits voor 16.00 besteld');
+            } else {
+                $stockString = '';
+            }
 
             $product->stock_string = $stockString;
 
@@ -143,5 +165,14 @@ class Service extends AbstractService
 
         $this->response->code = 200;
         $this->response->message = 'Success';
+    }
+
+    /**
+     * @param  string  $sku
+     * @return ProductContract
+     */
+    public function getProductModel(string $sku): ProductContract
+    {
+        return app(ProductContract::class)->where('sku', $sku)->first();
     }
 }

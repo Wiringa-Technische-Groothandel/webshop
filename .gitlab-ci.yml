@@ -4,12 +4,11 @@ image: lunamoonfang/wtg-php:build-7.2
 cache:
   paths:
     - vendor
-    - node_modules
 
 stages:
   - build
-  - docker
-  - test
+  #  - docker
+  #  - test
   - deploy
 
 build_job:
@@ -18,15 +17,15 @@ build_job:
   script:
     # Install Composer and project dependencies.
     - curl -sS https://getcomposer.org/installer | php
-    - php composer.phar install --no-progress
+    - php composer.phar install --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 
     # Install Node dependencies.
-    - npm install -s
+    - npm ci
 
     # Build the assets
     - npm run prod-silent
 
-    - tar --exclude=./build --exclude=./.git --exclude=./node_modules --exclude=./.env.example --exclude=./.env.testing --exclude=./package.json --exclude=./package-lock.json --exclude=./webpack.mix.js -cvzf build/deployment.tar.gz *
+    - tar --exclude=build --exclude=./.git --exclude=node_modules --exclude=.env.example --exclude=.env.testing --exclude=package.json --exclude=package-lock.json --exclude=webpack.mix.js --exclude=storage/app/public/uploads -cvzf build/deployment.tar.gz *
 
   artifacts:
     paths:
@@ -34,58 +33,61 @@ build_job:
 
     expire_in: 1 week
 
-test_job:
-  stage: test
+#test_job:
+#  stage: test
+#
+#  only:
+#    - release
+#    - master
+#
+#  services:
+#    - mysql:5.7
+#
+#  variables:
+#    MYSQL_DATABASE: wiringa
+#    MYSQL_ROOT_PASSWORD: secret
+#
+#  script:
+#    # Copy over testing configuration.
+#    - cp .env.testing .env
+#
+#    # Generate an application key. Re-cache.
+#    - php artisan key:generate
+#    - php artisan config:cache
+#
+#    # Run laravel tests
+#    - php vendor/bin/phpunit --coverage-text --colors=never
 
-  services:
-    - mysql:5.7
-
-  variables:
-    MYSQL_DATABASE: wiringa
-    MYSQL_ROOT_PASSWORD: secret
-
-  script:
-    # Copy over testing configuration.
-    - cp .env.testing .env
-
-    # Generate an application key. Re-cache.
-    - php artisan key:generate
-    - php artisan config:cache
-
-    # Run laravel tests
-    - php vendor/bin/phpunit --coverage-text --colors=never
-
-build_docker_image_job:
-  image: docker:stable
-
-  variables:
-    DOCKER_DRIVER: overlay2
-
-  services:
-    - docker:dind
-
-  stage: docker
-
-  dependencies:
-    - build_job
-
-  script:
-    - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY_HOST
-
-    - echo "Building $DOCKER_REGISTRY_HOST/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG"
-
-    # Build the docker image
-    - docker build -t $DOCKER_REGISTRY_HOST/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG build
-
-    - docker push $DOCKER_REGISTRY_HOST/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG
+#build_docker_image_job:
+#  image: docker:stable
+#
+#  variables:
+#    DOCKER_DRIVER: overlay2
+#
+#  services:
+#    - docker:dind
+#
+#  stage: docker
+#
+#  dependencies:
+#    - build_job
+#
+#  script:
+#    - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY_HOST
+#
+#    - echo "Building $DOCKER_REGISTRY_HOST/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG"
+#
+#    # Build the docker image
+#    - docker build -t $DOCKER_REGISTRY_HOST/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG build
+#
+#    - docker push $DOCKER_REGISTRY_HOST/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG
 
 deploy_staging_job:
   stage: deploy
 
-  when: manual
-
   only:
-    - release
+    - development
+#    - release
 
   script:
     # Install ssh if not already installed
@@ -110,16 +112,21 @@ deploy_staging_job:
     - chmod 600 ~/.ssh/config
     - chmod 644 ~/.ssh/known_hosts
 
+    # Test ssh connection
+    - ssh $SSH_HOSTNAME "echo $0"
+
     # Release to staging
-    - ssh $SSH_HOSTNAME "cd ~/docker/staging.wiringa.nl
-      && docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY_HOST
-      && docker-compose pull
-      && docker-compose up -d
-      && docker-compose exec -T app artisan storage:link
-      && docker-compose exec -T app artisan config:cache
-      && docker-compose exec -T app artisan view:clear
-      && docker-compose exec -T app artisan cache:clear
-      && docker-compose exec -T app artisan migrate"
+    - curl -sS https://getcomposer.org/installer | php
+    - cd build && php ../composer.phar install --no-progress
+    - vendor/bin/dep -vvv deploy staging
+    #    - ssh $SSH_HOSTNAME "cd ~/docker/staging.wiringa.nl
+    #      && docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY_HOST
+    #      && docker-compose pull
+    #      && docker-compose up -d
+    #      && docker-compose exec -T app artisan config:cache
+    #      && docker-compose exec -T app artisan view:clear
+    #      && docker-compose exec -T app artisan cache:clear
+    #      && docker-compose exec -T app artisan migrate"
 
 deploy_production_job:
   stage: deploy

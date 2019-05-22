@@ -11,11 +11,6 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Route::is('admin.import') ? 'active' : '' }}" href="{{ route('admin.import') }}">
-                    <i class="fal fa-fw fa-download"></i> Importeren
-                </a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link {{ Route::is(['admin.companies', 'admin.company.edit']) ? 'active' : '' }}" href="{{ route('admin.companies') }}">
                     <i class="fal fa-fw fa-users"></i> Klantbeheer
                 </a>
@@ -25,11 +20,11 @@
                     <i class="fal fa-fw fa-image"></i> Carousel
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link {{ Route::is('admin.export') ? 'active' : '' }}" href="{{ route('admin.export') }}">
-                    <i class="fal fa-fw fa-cogs"></i> Genereren
-                </a>
-            </li>
+            {{--<li class="nav-item">--}}
+                {{--<a class="nav-link {{ Route::is('admin.export') ? 'active' : '' }}" href="{{ route('admin.export') }}">--}}
+                    {{--<i class="fal fa-fw fa-cogs"></i> Genereren--}}
+                {{--</a>--}}
+            {{--</li>--}}
             <li class="nav-item">
                 <a class="nav-link {{ Route::is('admin.content') ? 'active' : '' }}" href="{{ route('admin.content') }}">
                     <i class="fal fa-fw fa-pencil"></i> Inhoud aanpassen

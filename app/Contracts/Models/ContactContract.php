@@ -42,10 +42,10 @@ interface ContactContract
     /**
      * Set the order email.
      *
-     * @param  string  $email
+     * @param  null|string  $email
      * @return ContactContract
      */
-    public function setOrderEmail(string $email): ContactContract;
+    public function setOrderEmail(?string $email): ContactContract;
 
     /**
      * Get the order email.

@@ -2,6 +2,7 @@
 /packages
 /public/hot
 /public/storage
+/public/mix-manifest.json
 /storage/*.key
 /vendor
 /.idea
@@ -14,3 +15,4 @@ _ide_helper.php
 .phpstorm.meta.php
 yarn-error.log
 composer.phar
+.phpunit.result.cache

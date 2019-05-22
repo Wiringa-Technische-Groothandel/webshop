@@ -1,20 +1,30 @@
-@if (auth()->guest())
+@guest
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">{{ __('Klant login') }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title mx-auto">{{ __('Klant login') }}</h5>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 20px; top: 18px;">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+
                 <div class="modal-body">
                     @include('components.auth.login.form')
                 </div>
             </div>
         </div>
     </div>
-@endif
+
+    @push('scripts')
+        <script>
+            $('#loginModal').on('shown.bs.modal', function () {
+                $('input[name="company"]').trigger('focus')
+            })
+        </script>
+    @endpush
+@endguest
 
 <nav class="navbar navbar-expand-md navbar-dark {{ Route::is('home') ? 'bg-transparent' : 'bg-gradient' }}" id="navbar-second">
     <div class="container">
@@ -42,8 +52,8 @@
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
                                 <i class="far fa-fw fa-user"></i>
                             </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ route('account.my-account') }}">
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="{{ route('account.profile') }}">
                                     <i class="far fa-fw fa-sliders-h"></i> {{ __('Mijn Account') }}
                                 </a>
                                 <a class="dropdown-item" href="{{ route('account.favorites') }}">
@@ -65,7 +75,7 @@
                         </li>
 
                         <li class="d-inline d-md-none nav-item {{ request()->is('account/*') ? 'active' : '' }}">
-                            <a class="nav-link" href="{{ route('account.my-account') }}">
+                            <a class="nav-link" href="{{ route('account.profile') }}">
                                 {{ __('Mijn account') }}
                             </a>
                         </li>

@@ -2,9 +2,11 @@
 
 namespace WTG\Http\Controllers\Web\Catalog;
 
+use Illuminate\View\Factory as ViewFactory;
 use WTG\Models\Product;
 use Illuminate\View\View;
 use WTG\Http\Controllers\Controller;
+use WTG\Repositories\ProductRepository;
 
 /**
  * Product controller.
@@ -16,6 +18,24 @@ use WTG\Http\Controllers\Controller;
 class ProductController extends Controller
 {
     /**
+     * @var ProductRepository
+     */
+    protected $productRepository;
+
+    /**
+     * ProductController constructor.
+     *
+     * @param  ViewFactory  $view
+     * @param  ProductRepository  $productRepository
+     */
+    public function __construct(ViewFactory $view, ProductRepository $productRepository)
+    {
+        parent::__construct($view);
+
+        $this->productRepository = $productRepository;
+    }
+
+    /**
      * Product detail page.
      *
      * @param  string  $sku
@@ -23,7 +43,7 @@ class ProductController extends Controller
      */
     public function getAction(string $sku): View
     {
-        $product = Product::findBySku($sku);
+        $product = $this->productRepository->findBySku($sku);
         $previousUrl = $this->getAssortmentUrl();
 
         if (! $product) {

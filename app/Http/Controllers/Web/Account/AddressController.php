@@ -2,6 +2,7 @@
 
 namespace WTG\Http\Controllers\Web\Account;
 
+use WTG\Models\Address;
 use WTG\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -51,7 +52,7 @@ class AddressController extends Controller
     {
         /** @var Customer $customer */
         $customer = $request->user();
-        $addresses = $this->addressService->getAddressesForCustomer($customer);
+        $addresses = $this->addressService->getAddressesForCustomer($customer, false);
         $defaultAddress = $this->addressService->getDefaultAddressIdForCustomer($customer);
 
         return $this->view->make('pages.account.addresses', compact('customer', 'addresses', 'defaultAddress'));

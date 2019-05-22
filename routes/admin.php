@@ -38,16 +38,16 @@ Route::group([
         });
 
         // Admin import page
-        Route::get('import', 'ImportController@view')->name('import');
-
-        Route::group(['as' => 'import.'], function () {
-            Route::post('import/product', 'ImportController@product')->name('product');
-            Route::post('import/image', 'ImportController@image')->name('image');
-            Route::post('import/discount', 'ImportController@discount')->name('discount');
-            Route::post('import/download', 'ImportController@download')->name('download');
-        });
+//        Route::get('import', 'ImportController@view')->name('import');
+//        Route::group(['as' => 'import.'], function () {
+//            Route::post('import/product', 'ImportController@product')->name('product');
+//            Route::post('import/image', 'ImportController@image')->name('image');
+//            Route::post('import/discount', 'ImportController@discount')->name('discount');
+//            Route::post('import/download', 'ImportController@download')->name('download');
+//        });
 
         Route::get('companies', 'Company\OverviewController@getAction')->name('companies');
+        Route::put('companies', 'Company\OverviewController@putAction')->name('companies.create');
 
         Route::group(['as' => 'company.', 'prefix' => 'company'], function () {
             Route::get('{company}', 'Company\DetailController@getAction')->name('edit');
@@ -95,14 +95,12 @@ Route::group([
 
         // Admin packs
         Route::get('packs', 'Packs\OverviewController@getAction')->name('packs');
-        Route::put('packs', 'Packs\OverviewController@putAction')->name('create');
+        Route::group(['as' => 'pack.', 'prefix' => 'pack', 'namespace' => 'Packs'], function () {
+            Route::get('/{id}', 'DetailController@getAction')->name('edit');
 
-        Route::group(['as' => 'packs.', 'prefix' => 'packs'], function () {
-            Route::get('edit/{id}', 'PacksController@edit')->name('edit');
+            Route::put('/', 'DetailController@putAction')->name('create');
 
-            Route::post('addProduct', 'PacksController@addProduct')->name('add');
-            Route::post('remove', 'PacksController@destroy')->name('delete');
-            Route::post('removeProduct', 'PacksController@removeProduct')->name('remove');
+            Route::patch('/{id}', 'DetailController@patchAction');
         });
 
         // Admin cache

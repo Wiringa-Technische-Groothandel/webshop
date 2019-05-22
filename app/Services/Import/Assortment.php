@@ -3,6 +3,7 @@
 namespace WTG\Services\Import;
 
 use Carbon\Carbon;
+use Luna\SeoUrls\SeoUrl;
 use WTG\Models\ImportData;
 use Illuminate\Support\Collection;
 use WTG\Models\Product as ProductModel;
@@ -39,6 +40,11 @@ class Assortment
     protected $runTime;
 
     /**
+     * @var array
+     */
+    protected $urls = [];
+
+    /**
      * Assortment constructor.
      *
      * @param  FilesystemManager  $fs
@@ -72,6 +78,8 @@ class Assortment
                 $this->importProducts($xml);
             });
         });
+
+        $this->createSeoUrls();
     }
 
     /**
@@ -216,6 +224,7 @@ class Assortment
             $soapProduct->length          = (float) $xmlProduct->ProductLengthCm;
             $soapProduct->weight          = (float) $xmlProduct->ProductWeightKg;
             $soapProduct->height          = (float) $xmlProduct->ProductHeightCm;
+            $soapProduct->stock_display   = (string) $xmlProduct->StockDisplay ?: 'S';
 
             $this->assignAttributes($soapProduct, $xmlProduct);
 
@@ -233,6 +242,11 @@ class Assortment
             );
 
             $product->save();
+
+            $this->urls[$product->getSku()] = [
+                'name' => $product->getName(),
+                'id' => $product->getId()
+            ];
 
             if ($count !== null) {
                 $count++;
@@ -267,6 +281,9 @@ class Assortment
             $value = (string) $attribute->AttributeValues->AttributeValue->NativeDescription;
 
             switch ($attribute->AttributeId) {
+                case 'FAB':
+                    $responseProduct->supplier_code = $value;
+                    break;
                 case 'MRK':
                     $responseProduct->brand = $value;
                     break;
@@ -294,13 +311,39 @@ class Assortment
      *
      * @param  string  $sku
      * @param  string  $unit
-     * @return null|Product
+     * @return null|ProductModel
      */
-    public static function findProduct(string $sku, string $unit): ?Product
+    public static function findProduct(string $sku, string $unit): ?ProductModel
     {
         return app()->make(ProductModel::class)
             ->where('sku', $sku)
             ->where('sales_unit', $unit)
             ->first();
+    }
+
+    /**
+     * Create SEO friendly urls.
+     *
+     * @return void
+     */
+    public function createSeoUrls(): void
+    {
+        foreach ($this->urls as $sku => $product) {
+            $name = $product['name'];
+            $id = $product['id'];
+
+            $seoUrl = SeoUrl::where('target_path', 'product/' . $sku)->first();
+
+            if (! $seoUrl) {
+                $seoUrl = new SeoUrl;
+            }
+
+            $seoUrl->target_path = 'product/' . $sku;
+            $seoUrl->is_redirect = false;
+            $seoUrl->source_path = '/' . str_slug($name);
+            $seoUrl->product_id = $id;
+
+            $seoUrl->save();
+        }
     }
 }

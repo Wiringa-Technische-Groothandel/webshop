@@ -26,7 +26,7 @@
 
                 <tr>
                     <td>{{ $order->getAttribute('created_at') }}</td>
-                    <td class="text-right">{{ format_price($order->items->sum('subtotal')) }}</td>
+                    <td class="text-right"><i class="fal fa-euro-sign"></i> {{ format_price($order->items->sum('subtotal')) }}</td>
                     <td class="text-right">
                         <form method="post">
                             {{ csrf_field() }}

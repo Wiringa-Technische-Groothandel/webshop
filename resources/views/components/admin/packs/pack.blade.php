@@ -1,6 +1,6 @@
-<div class="card">
+<div class="card mb-3">
     <div class="card-body">
-        <div class="actiepaket">
+        <div class="pack">
             <div class="title">
                 <h5>{{ strlen($pack->getProduct()->getName()) > 40 ? substr($pack->getProduct()->getName(), 0 , 37) . "..." : $pack->getProduct()->getName() }}</h5>
             </div>
@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="col">
-                    <a href="{{ route('admin.packs.edit', ['id' =>  $pack->getId()]) }}"
+                    <a href="{{ route('admin.pack.edit', ['id' =>  $pack->getId()]) }}"
                        class="btn btn-primary btn-block">{{ __('Aanpassen') }}</a>
                 </div>
             </div>

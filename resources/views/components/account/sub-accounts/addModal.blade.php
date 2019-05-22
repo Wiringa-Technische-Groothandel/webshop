@@ -46,7 +46,7 @@
                         <select name="role" class="form-control" autocomplete="off">
                             <option value="">{{ __("--- Selecteer een rol ---") }}</option>
 
-                            @can ('assign manager role')
+                            @can('subaccounts-assign-manager')
                                 <option value="manager" {{ old('role') === 'manager' ? 'selected' : '' }}>
                                     {{ __("Manager") }}
                                 </option>

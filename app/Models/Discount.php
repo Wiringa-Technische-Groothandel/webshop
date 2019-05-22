@@ -19,6 +19,11 @@ class Discount extends Model
     const IMPORTANCE_CUSTOMER   = 40;
 
     /**
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * @var array
      */
     protected $guarded = ['id'];
@@ -93,7 +98,7 @@ class Discount extends Model
                 $discounts->put($item->getAttribute('product'), $item->getAttribute('discount'));
             });
 
-        \Cache::put('discounts.company.'.$companyId, $discounts, 60 * 24); // Cache the discounts for a day
+        \Cache::put('discounts.company.'.$companyId, $discounts, 60 * 60 * 24); // Cache the discounts for a day
 
         return $discounts;
     }

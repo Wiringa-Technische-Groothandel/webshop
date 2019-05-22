@@ -2,6 +2,7 @@
 
 namespace WTG\Services;
 
+use Elasticsearch\Client;
 use WTG\Models\Product;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -67,28 +68,58 @@ class SearchService
      */
     public function searchProducts(array $data, int $page = 1): Collection
     {
-        $query  = $data['query'];
-        $brand  = $data['brand'] ?? false;
-        $series = $data['series'] ?? false;
-        $type   = $data['type'] ?? false;
-
-        $query = Product::search($query, function ($elastic, $query, $params) {
-            $params['body']['size'] = 10000;
-
-            return $elastic->search($params);
-        });
+        $query   = $data['query'];
+        $brand   = $data['brand'] ?? false;
+        $series  = $data['series'] ?? false;
+        $type    = $data['type'] ?? false;
+        $filters = [];
 
         if ($brand) {
-            $query->where('brand', $brand);
+            $filters[] = ['term' => ['brand.keyword' => $brand]];
 
             if ($series) {
-                $query->where('series', $series);
+                $filters[] = ['term' => ['series.keyword' => $series]];
 
                 if ($type) {
-                    $query->where('type', $type);
+                    $filters[] = ['term' => ['type.keyword' => $type]];
                 }
             }
         }
+        
+        $query = Product::search($query, function (Client $elastic, $query, $params) use ($page, $filters) {
+            $escapedQuery = $this->escapeCharacters($query);
+
+            $queryBody = [
+                'size' => 10000,
+                'query' => [
+                    'bool' => [
+                        'must' => [
+                            'multi_match' => [
+                                'query' => $escapedQuery,
+                                'fields' => ['sku^0.5', 'name^2', 'keywords^1', 'ean^0.3', 'group^0.3'],
+                                'fuzziness' => 0
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+
+            if ($filters) {
+                $queryBody['query']['bool']['filter'] = $filters;
+            }
+
+            $params['body'] = $queryBody;
+
+            $results = $elastic->search($params);
+
+            if ($results['hits']['total'] === 0) {
+                $params['body']['query']['bool']['must']['multi_match']['fuzziness'] = 'AUTO';
+
+                $results = $elastic->search($params);
+            }
+
+            return $results;
+        });
 
         $results = $query->get();
 
@@ -121,11 +152,35 @@ class SearchService
 
         $items = $items->map(function (Product $product) {
             return [
-                'url' => route('catalog.product', [ 'sku' => $product->getSku() ]),
+                'url' => $product->getUrl(),
                 'name' => $product->getName()
             ];
         });
 
         return $items;
+    }
+
+    /**
+     * Escape reserved Elasticsearch characters.
+     *
+     * @param  string  $query
+     * @return string  The escaped query
+     */
+    protected function escapeCharacters(string $query)
+    {
+        $reserved = [
+            "\\", "+", "-", "=", "&&", "||", "!", "(", ")", "{",
+            "}", "[", "]", "^", "\"", "~", "*", "?", ":", "/"
+        ];
+
+        foreach ($reserved as $char) {
+            $query = str_replace($char, "\\$char", $query);
+        }
+
+        foreach (["<", ">"] as $char) {
+            $query = str_replace($char, "", $query);
+        }
+
+        return $query;
     }
 }

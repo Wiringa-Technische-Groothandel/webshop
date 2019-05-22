@@ -81,10 +81,10 @@ class Contact extends Model implements ContactContract
     /**
      * Set the order email.
      *
-     * @param  string  $email
+     * @param  null|string  $email
      * @return ContactContract
      */
-    public function setOrderEmail(string $email): ContactContract
+    public function setOrderEmail(?string $email): ContactContract
     {
         return $this->setAttribute('order_email', $email);
     }

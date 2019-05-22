@@ -9,6 +9,14 @@
 
         <hr />
 
+        @if (session()->has('new-customer-password'))
+            <div class="alert alert-warning">
+                {{ __('Het wachtwoord voor de nieuwe gebruiker is') }}: <b>{{ session()->pull('new-customer-password') }}</b>
+                <br><br>
+                <b>{{ __('Let op') }}:</b> {{ __('Na het verversen van de pagina is het wachtwoord niet meer zichtbaar!') }}
+            </div>
+        @endif
+
         <form method="post">
             {{ csrf_field() }}
 
@@ -18,7 +26,7 @@
                     {{ $company->getName() }}
                 </dd>
 
-                <dt class="col-sm-4">{{ __('Klantnummer') }}</dt>
+                <dt class="col-sm-4">{{ __('Debiteurnummer') }}</dt>
                 <dd class="col-sm-8 input-switch" data-class="form-control" data-name="customer-number">
                     {{ $company->getCustomerNumber() }}
                 </dd>

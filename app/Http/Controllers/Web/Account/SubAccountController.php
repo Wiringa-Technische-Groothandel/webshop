@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use WTG\Http\Controllers\Controller;
 use WTG\Http\Requests\CreateAccountRequest;
+use WTG\Models\Role;
 
 /**
  * Sub account controller.
@@ -24,7 +25,7 @@ class SubAccountController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('can:view accounts');
+        $this->middleware('can:subaccounts-view');
     }
 
     /**
@@ -37,9 +38,51 @@ class SubAccountController extends Controller
     {
         /** @var Customer $customer */
         $customer = $request->user();
-        $accounts = $customer->company->getAttribute('customers');
+        $accounts = $customer->getCompany()->getAttribute('customers');
 
         return view('pages.account.sub-accounts', compact('accounts'));
+    }
+
+    public function postAction(Request $request)
+    {
+        try {
+            \DB::beginTransaction();
+
+            /** @var Customer $customer */
+            $customer = $request->user();
+            /** @var Company $company */
+            $company = $customer->getAttribute('company');
+            /** @var Customer $account */
+            $account = $company
+                ->getCustomers()
+                ->where('id', $request->input('account'))
+                ->first();
+            /** @var Role $role */
+            $role = Role::level($request->input('role'))->firstOrFail();
+
+            if (! $account) {
+                \DB::rollBack();
+
+                return response()->json([
+                    'message' => __('Dit sub-account behoort niet bij het hoofdaccount')
+                ], 403);
+            }
+
+            $account->setRole($role);
+            $account->save();
+
+            \DB::commit();
+        } catch (\Exception $e) {
+            logger()->warning($e->getMessage());
+
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 400);
+        }
+
+        return response()->json([
+            'message' => __("De rol van de gebruiker is aangepast.")
+        ]);
     }
 
     /**
@@ -50,17 +93,19 @@ class SubAccountController extends Controller
      */
     public function putAction(CreateAccountRequest $request)
     {
-        \DB::beginTransaction();
-
         try {
+            \DB::beginTransaction();
+
             /** @var Customer $customer */
             $customer = $request->user();
             /** @var Company $company */
             $company = $customer->getAttribute('company');
+            /** @var Role $role */
+            $role = Role::level($request->input('role'))->firstOrFail();
 
             $usernameExists = $customer
-                ->company
-                ->customers()
+                ->getCompany()
+                ->getCustomers()
                 ->where('username', $request->input('username'))
                 ->exists();
 
@@ -91,17 +136,15 @@ class SubAccountController extends Controller
                 return $this->createAccountFailed($request);
             }
 
-            $account->assignRole($request->input('role'));
+            $account->setRole($role);
 
             \DB::commit();
-
-            return back()
-                ->with('status', __("Het account is succesvol aangemaakt."));
         } catch (\Exception $e) {
-            dd($e);
-
             return $this->createAccountFailed($request);
         }
+
+        return back()
+            ->with('status', __("Het account is succesvol aangemaakt."));
     }
 
     /**

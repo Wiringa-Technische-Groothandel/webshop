@@ -3,6 +3,7 @@
 namespace WTG\Services\DiscountFile;
 
 use WTG\Models\Customer;
+use WTG\Models\Discount;
 
 /**
  * CSV Generator.
@@ -33,12 +34,10 @@ class CSVGenerator extends AbstractGenerator implements Generator
      */
     public function addGroupDiscounts()
     {
-        $query = \DB::table('discounts')
-            ->where('User_id', $this->customer)
-            ->where('table', static::GROUP_DISCOUNT_TABLE)
-            ->where('group_desc', '!=', 'Vervallen');
-
-        $discounts = $query->get();
+        $discounts = Discount::where('company_id', $this->customer->getCompany()->getCustomerNumber())
+            ->where('importance', Discount::IMPORTANCE_GROUP)
+            ->where('group_desc', '!=', 'Vervallen')
+            ->get();
 
         foreach ($discounts as $discount) {
             $this->text .= $this->generateGroupDiscountLine($discount);
@@ -50,17 +49,15 @@ class CSVGenerator extends AbstractGenerator implements Generator
      */
     public function addDefaultGroupDiscounts()
     {
-        $query = \DB::table('discounts')
-            ->where('table', static::DEFAULT_GROUP_DISCOUNT_TABLE)
+        $discounts = Discount::where('importance', Discount::IMPORTANCE_GENERIC)
             ->where('group_desc', '!=', 'Vervallen')
             ->whereNotIn('product', function ($query) {
                 $query->select('product')
                     ->from('discounts')
-                    ->where('table', static::GROUP_DISCOUNT_TABLE)
-                    ->where('User_Id', $this->customer);
-            });
-
-        $discounts = $query->get();
+                    ->where('importance', Discount::IMPORTANCE_GROUP)
+                    ->where('company_id', $this->customer->getCompany()->getCustomerNumber());
+            })
+            ->get();
 
         foreach ($discounts as $discount) {
             $this->text .= $this->generateGroupDiscountLine($discount);
@@ -72,16 +69,14 @@ class CSVGenerator extends AbstractGenerator implements Generator
      */
     public function addDefaultProductDiscounts()
     {
-        $query = \DB::table('discounts')
-            ->where('table', static::DEFAULT_PRODUCT_DISCOUNT_TABLE)
+        $discounts = Discount::where('importance', Discount::IMPORTANCE_PRODUCT)
             ->whereNotIn('product', function ($query) {
                 $query->select('product')
                     ->from('discounts')
-                    ->where('table', static::PRODUCT_DISCOUNT_TABLE)
-                    ->where('User_Id', $this->customer);
-            });
-
-        $discounts = $query->get();
+                    ->where('importance', Discount::IMPORTANCE_CUSTOMER)
+                    ->where('company_id', $this->customer->getCompany()->getCustomerNumber());
+            })
+            ->get();
 
         foreach ($discounts as $discount) {
             $this->text .= $this->generateProductDiscountLine($discount);
@@ -93,11 +88,9 @@ class CSVGenerator extends AbstractGenerator implements Generator
      */
     public function addProductDiscounts()
     {
-        $query = \DB::table('discounts')
-            ->where('User_id', $this->customer)
-            ->where('table', static::PRODUCT_DISCOUNT_TABLE);
-
-        $discounts = $query->get();
+        $discounts = Discount::where('company_id', $this->customer->getCompany()->getCustomerNumber())
+            ->where('importance', Discount::IMPORTANCE_CUSTOMER)
+            ->get();
 
         foreach ($discounts as $discount) {
             $this->text .= $this->generateProductDiscountLine($discount);
@@ -107,10 +100,10 @@ class CSVGenerator extends AbstractGenerator implements Generator
     /**
      * Generate the discount line for a group
      *
-     * @param  \stdClass  $discount
+     * @param  Discount  $discount
      * @return string
      */
-    public function generateGroupDiscountLine(\stdClass $discount)
+    public function generateGroupDiscountLine(Discount $discount)
     {
         $productNumber = $discount->product;
         $description = preg_replace("/[\r\n]*/", '', $discount->group_desc);
@@ -129,10 +122,10 @@ class CSVGenerator extends AbstractGenerator implements Generator
     /**
      * Generate the discount line for a product
      *
-     * @param  \stdClass  $discount
+     * @param  Discount  $discount
      * @return string
      */
-    public function generateProductDiscountLine(\stdClass $discount)
+    public function generateProductDiscountLine(Discount $discount)
     {
         $productNumber = $discount->product;
         $description = preg_replace("/[\r\n]*/", '', $discount->product_desc);

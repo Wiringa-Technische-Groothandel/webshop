@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use WTG\Contracts\Models\CartContract;
 use Illuminate\Database\Eloquent\Model;
+use WTG\Contracts\Services\Account\AddressServiceContract;
 use WTG\Exceptions\CartUpdateException;
 use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\ProductContract;
@@ -70,12 +71,13 @@ class Quote extends Model implements CartContract
      */
     public function getAddress(): ?AddressContract
     {
-        $address = $this->getAttribute('address');
+        /** @var AddressServiceContract $addressService */
+        $addressService = app()->make(AddressServiceContract::class);
+        $customer = $this->getAttribute('customer');
+        $address = $this->getAttribute('address') ?: $addressService->getDefaultAddressForCustomer($customer);
 
         if (! $address) {
-            /** @var Customer $customer */
-            $customer = $this->getAttribute('customer');
-            $address = $customer->getContact()->getDefaultAddress();
+            $address = $addressService->getDefaultAddress();
         }
 
         return $address;

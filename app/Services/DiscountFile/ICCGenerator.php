@@ -43,7 +43,7 @@ class ICCGenerator extends AbstractGenerator implements Generator
         parent::__construct($customer);
 
         $this->start_date = date('Ymd');
-        $this->name = str_pad($customer->company->getAttribute('name'), 70, ' ', STR_PAD_RIGHT);
+        $this->name = str_pad(str_limit($customer->getCompany()->getName(), 60, ''), 60);
     }
 
     /**
@@ -53,7 +53,7 @@ class ICCGenerator extends AbstractGenerator implements Generator
      */
     public function addGroupDiscounts()
     {
-        $discounts = Discount::where('company_id', $this->customer->getAttribute('company_id'))
+        $discounts = Discount::where('company_id', $this->customer->getCompany()->getCustomerNumber())
             ->where('importance', Discount::IMPORTANCE_GROUP)
             ->where('group_desc', '!=', 'Vervallen')
             ->get();
@@ -78,7 +78,7 @@ class ICCGenerator extends AbstractGenerator implements Generator
                 $query->select('product')
                     ->from('discounts')
                     ->where('importance', Discount::IMPORTANCE_GROUP)
-                    ->where('company_id', $this->customer->getAttribute('company_id'));
+                    ->where('company_id', $this->customer->getCompany()->getCustomerNumber());
             })
             ->get();
 
@@ -101,7 +101,7 @@ class ICCGenerator extends AbstractGenerator implements Generator
                 $query->select('product')
                     ->from('discounts')
                     ->where('importance', Discount::IMPORTANCE_CUSTOMER)
-                    ->where('company_id', $this->customer->getAttribute('company_id'));
+                    ->where('company_id', $this->customer->getCompany()->getCustomerNumber());
             })
             ->get();
 
@@ -119,7 +119,7 @@ class ICCGenerator extends AbstractGenerator implements Generator
      */
     public function addProductDiscounts()
     {
-        $discounts = Discount::where('company_id', $this->customer->getAttribute('company_id'))
+        $discounts = Discount::where('company_id', $this->customer->getCompany()->getCustomerNumber())
             ->where('importance', Discount::IMPORTANCE_CUSTOMER)
             ->get();
 
@@ -138,14 +138,14 @@ class ICCGenerator extends AbstractGenerator implements Generator
      */
     public function generateGroupDiscountLine(Discount $discount)
     {
-        $groupNumber = str_pad($discount->product, 20, ' ', STR_PAD_RIGHT);
-        $productNumber = str_pad("", 20, ' ', STR_PAD_RIGHT);
+        $groupNumber = str_pad($discount->product, 20);
+        $productNumber = str_pad("", 20);
         $description = str_pad(
             preg_replace("/[\r\n]*/", '', $discount->group_desc),
-            50, ' ', STR_PAD_RIGHT
+            50
         );
         $discountAmount = ($discount->discount < 10 ? '00' : '0').preg_replace("/\./", '', $discount->discount);
-        $discountAmount = str_pad($discountAmount, 5, '0', STR_PAD_RIGHT);
+        $discountAmount = str_pad($discountAmount, 5, '0');
 
         return $groupNumber.
             $productNumber.
@@ -167,14 +167,14 @@ class ICCGenerator extends AbstractGenerator implements Generator
      */
     public function generateProductDiscountLine(Discount $discount)
     {
-        $groupNumber = str_pad("", 20, ' ', STR_PAD_RIGHT);
-        $productNumber = str_pad($discount->product, 20, ' ', STR_PAD_RIGHT);
+        $groupNumber = str_pad("", 20);
+        $productNumber = str_pad($discount->product, 20);
         $description = str_pad(
             preg_replace("/[\r\n]*/", '', $discount->product_desc),
-            50, ' ', STR_PAD_RIGHT
+            50
         );
         $discountAmount = ($discount->discount < 10 ? '00' : '0').preg_replace("/\./", '', $discount->discount);
-        $discountAmount = str_pad($discountAmount, 5, '0', STR_PAD_RIGHT);
+        $discountAmount = str_pad($discountAmount, 5, '0');
 
         return $groupNumber.
             $productNumber.
@@ -195,15 +195,17 @@ class ICCGenerator extends AbstractGenerator implements Generator
      */
     public function prependHeaderLine()
     {
-        $this->text = static::GLN.
-            static::SMALL_SPACING.
-            $this->customer->company->getAttribute('name').
-            static::LARGE_SPACING.
-            $this->start_date.
-            sprintf("%'06d", $this->count).
-            static::FILE_VERSION.
-            $this->name.
-            "\r\n".
+        $this->text = str_pad(
+                static::GLN.
+                static::SMALL_SPACING.
+                $this->customer->getCompany()->getCustomerNumber().
+                static::LARGE_SPACING.
+                $this->start_date.
+                sprintf("%'06d", $this->count).
+                static::FILE_VERSION.
+                $this->name,
+                130
+            ) . "\r\n".
             $this->text;
     }
 }
