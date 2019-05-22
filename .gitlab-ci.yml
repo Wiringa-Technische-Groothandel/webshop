@@ -7,8 +7,6 @@ cache:
 
 stages:
   - build
-  #  - docker
-  #  - test
   - deploy
 
 build_job:
@@ -86,8 +84,7 @@ deploy_staging_job:
   stage: deploy
 
   only:
-    - development
-#    - release
+    - release
 
   script:
     # Install ssh if not already installed
@@ -119,14 +116,6 @@ deploy_staging_job:
     - curl -sS https://getcomposer.org/installer | php
     - cd build && php ../composer.phar install --no-progress
     - vendor/bin/dep -vvv deploy staging
-    #    - ssh $SSH_HOSTNAME "cd ~/docker/staging.wiringa.nl
-    #      && docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY_HOST
-    #      && docker-compose pull
-    #      && docker-compose up -d
-    #      && docker-compose exec -T app artisan config:cache
-    #      && docker-compose exec -T app artisan view:clear
-    #      && docker-compose exec -T app artisan cache:clear
-    #      && docker-compose exec -T app artisan migrate"
 
 deploy_production_job:
   stage: deploy
@@ -137,5 +126,33 @@ deploy_production_job:
     - master
 
   script:
+    # Install ssh if not already installed
+    - 'which ssh || ( apt-get update -y && apt-get install openssh-client -y )'
+
+    # Create the SSH directory and give it the right permissions
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+
+    # Known host checking
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+    # Add keypair
+    - echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+
+    # Add SSH config
+    - echo "$SSH_CONFIG" > ~/.ssh/config
+
+    # Fix permissions
+    - chmod 600 ~/.ssh/id_rsa*
+    - chmod 600 ~/.ssh/config
+    - chmod 644 ~/.ssh/known_hosts
+
+    # Test ssh connection
+    - ssh $SSH_HOSTNAME "echo $0"
+
     # Release to production
+    - curl -sS https://getcomposer.org/installer | php
+    - cd build && php ../composer.phar install --no-progress
     - vendor/bin/dep deploy production
+
