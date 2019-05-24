@@ -17,10 +17,10 @@
         "laravel/helpers": "^1.0",
         "laravel/tinker": "^1.0",
         "league/flysystem-sftp": "^1.0",
+        "luna/laravel-seo-urls": "^1.0",
         "predis/predis": "^1.1",
-        "sentry/sentry-laravel": "^0.8.0",
-        "tamayo/laravel-scout-elastic": "^3.0",
-        "luna/laravel-seo-urls": "^1.0"
+        "sentry/sentry-laravel": "^1.0",
+        "tamayo/laravel-scout-elastic": "^3.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.0",
@@ -73,6 +73,6 @@
         "sort-packages": true,
         "optimize-autoloader": true
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
