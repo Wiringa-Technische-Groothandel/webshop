@@ -184,14 +184,14 @@ class SearchService
         $escapedQuery = $this->escapeCharacters($query);
 
         $queryBody = [
-            'min_score' => 3.0,
+            'min_score' => 2.0,
             'size' => $size,
             'query' => [
                 'bool' => [
                     'must' => [
                         'multi_match' => [
                             'query' => $escapedQuery,
-                            'fields' => ['sku^0.2', 'name^1', 'keywords^0.6', 'ean^0.1', 'group^0.1'],
+                            'fields' => ['sku^0.2', 'name^1', 'keywords^0.6', 'ean^0.1', 'group^0.1', 'brand^1'],
                             'fuzziness' => 0
                         ]
                     ]
@@ -204,7 +204,7 @@ class SearchService
         }
 
         if ($fuzzy) {
-            $params['query']['bool']['must']['multi_match']['fuzziness'] = 'AUTO';
+            $queryBody['query']['bool']['must']['multi_match']['fuzziness'] = 'AUTO';
         }
 
         $params['body'] = $queryBody;
