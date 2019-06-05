@@ -68,60 +68,46 @@ class SearchService
      */
     public function searchProducts(array $data, int $page = 1): Collection
     {
-        $query   = $data['query'];
-        $brand   = $data['brand'] ?? false;
-        $series  = $data['series'] ?? false;
-        $type    = $data['type'] ?? false;
-        $filters = [];
+        $query = $data['query'];
 
-        if ($brand) {
-            $filters[] = ['term' => ['brand.keyword' => $brand]];
+        if (is_numeric($query)) {
+            $results = collect([
+                Product::findBySku($query)
+            ]);
+        } else {
+            $brand   = $data['brand'] ?? false;
+            $series  = $data['series'] ?? false;
+            $type    = $data['type'] ?? false;
+            $filters = [];
 
-            if ($series) {
-                $filters[] = ['term' => ['series.keyword' => $series]];
+            if ($brand) {
+                $filters[] = ['term' => ['brand.keyword' => $brand]];
 
-                if ($type) {
-                    $filters[] = ['term' => ['type.keyword' => $type]];
+                if ($series) {
+                    $filters[] = ['term' => ['series.keyword' => $series]];
+
+                    if ($type) {
+                        $filters[] = ['term' => ['type.keyword' => $type]];
+                    }
                 }
             }
+
+            $query = Product::search($query, function (Client $elastic, $query, $params) use ($page, $filters) {
+                $results = $elastic->search(
+                    $this->prepareParameters($query, 10000, $filters)
+                );
+
+                if ($results['hits']['total'] === 0) {
+                    $results = $elastic->search(
+                        $this->prepareParameters($query, 10000, $filters, true)
+                    );
+                }
+
+                return $results;
+            });
+
+            $results = $query->get();
         }
-        
-        $query = Product::search($query, function (Client $elastic, $query, $params) use ($page, $filters) {
-            $escapedQuery = $this->escapeCharacters($query);
-
-            $queryBody = [
-                'size' => 10000,
-                'query' => [
-                    'bool' => [
-                        'must' => [
-                            'multi_match' => [
-                                'query' => $escapedQuery,
-                                'fields' => ['sku^0.5', 'name^2', 'keywords^1', 'ean^0.3', 'group^0.3'],
-                                'fuzziness' => 0
-                            ]
-                        ]
-                    ]
-                ]
-            ];
-
-            if ($filters) {
-                $queryBody['query']['bool']['filter'] = $filters;
-            }
-
-            $params['body'] = $queryBody;
-
-            $results = $elastic->search($params);
-
-            if ($results['hits']['total'] === 0) {
-                $params['body']['query']['bool']['must']['multi_match']['fuzziness'] = 'AUTO';
-
-                $results = $elastic->search($params);
-            }
-
-            return $results;
-        });
-
-        $results = $query->get();
 
         $paginator = new LengthAwarePaginator($results->forPage($page, 10), $results->count(), 10, $page);
         $paginator->withPath('search');
@@ -144,10 +130,10 @@ class SearchService
     public function suggestProducts(string $query): Collection
     {
         /** @var Collection $items */
-        $items = Product::search($query, function ($elastic, $query, $params) {
-            $params['body']['size'] = 5;
-
-            return $elastic->search($params);
+        $items = Product::search($query, function (Client $elastic, $query, $params) {
+            return $elastic->search(
+                $this->prepareParameters($query, 5)
+            );
         })->get();
 
         $items = $items->map(function (Product $product) {
@@ -182,5 +168,47 @@ class SearchService
         }
 
         return $query;
+    }
+
+    /**
+     * Prepare search parameters.
+     *
+     * @param  string  $query
+     * @param  int  $size
+     * @param  array  $filters
+     * @param  bool  $fuzzy
+     * @return array
+     */
+    protected function prepareParameters(string $query, int $size, array $filters = [], bool $fuzzy = false): array
+    {
+        $escapedQuery = $this->escapeCharacters($query);
+
+        $queryBody = [
+            'min_score' => 3.0,
+            'size' => $size,
+            'query' => [
+                'bool' => [
+                    'must' => [
+                        'multi_match' => [
+                            'query' => $escapedQuery,
+                            'fields' => ['sku^0.2', 'name^1', 'keywords^0.6', 'ean^0.1', 'group^0.1'],
+                            'fuzziness' => 0
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        if ($filters) {
+            $queryBody['query']['bool']['filter'] = $filters;
+        }
+
+        if ($fuzzy) {
+            $params['query']['bool']['must']['multi_match']['fuzziness'] = 'AUTO';
+        }
+
+        $params['body'] = $queryBody;
+
+        return $params;
     }
 }
