@@ -12,6 +12,10 @@ stages:
 build_job:
   stage: build
 
+  only:
+    - release
+    - master
+
   script:
     # Install Composer and project dependencies.
     - curl -sS https://getcomposer.org/installer | php
