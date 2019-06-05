@@ -191,7 +191,7 @@ class SearchService
                     'must' => [
                         'multi_match' => [
                             'query' => $escapedQuery,
-                            'fields' => ['sku^0.2', 'name^1', 'keywords^0.6', 'ean^0.1', 'group^0.1', 'brand^1'],
+                            'fields' => ['sku^0.2', 'name^1.1', 'keywords^0.6', 'ean^0.1', 'group^0.1', 'brand^1.1'],
                             'fuzziness' => 0
                         ]
                     ]
