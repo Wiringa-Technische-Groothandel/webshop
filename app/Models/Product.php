@@ -269,27 +269,43 @@ class Product extends Model implements ProductContract
     }
 
     /**
-     * Get the indexable data array for the model.
+     * Get the searchable data array for the model.
      *
      * @return array
      */
     public function toSearchableArray()
     {
         $array = $this->toArray();
+        $searchableArray = [];
 
-        $searchableArray = [
-            'sku'       => $array['sku'],
-            'group'     => $array['group'],
-            'name'      => $array['name'],
-            'keywords'  => $array['keywords'],
-            'brand'     => $array['brand'],
-            'series'    => $array['series'],
-            'type'      => $array['type'],
-            'ean'       => $array['ean'],
-            'supplier_code' => $array['supplier_code'],
-        ];
+        foreach ($this->getSearchableFields() as $name => $field) {
+            $values = [];
+            $name = is_numeric($name) ? $field : $name;
+
+            if (is_array($field)) {
+                foreach ($field as $f) {
+                    $values[] = $array[$f];
+                }
+            } else {
+                $values = [ $array[$field] ];
+            }
+
+            $searchableArray[$name] = join(' ', $values);
+        }
 
         return $searchableArray;
+    }
+
+    /**
+     * Get the list of searchable fields.
+     *
+     * @return array
+     */
+    public function getSearchableFields(): array
+    {
+        return [
+            'sku', 'group', 'description' => [ 'name', 'keywords' ], 'brand', 'series', 'type', 'ean', 'supplier_code',
+        ];
     }
 
     /**

@@ -72,8 +72,11 @@ class SearchService
 
         if (is_numeric($query)) {
             $results = collect([
-                Product::findBySku($query)
-            ]);
+                Product::where('sku', $query)
+                    ->orWhere('ean', $query)
+                    ->orWhere('supplier_code', $query)
+                    ->first()
+            ])->filter();
         } else {
             $brand   = $data['brand'] ?? false;
             $series  = $data['series'] ?? false;
@@ -181,18 +184,21 @@ class SearchService
      */
     protected function prepareParameters(string $query, int $size, array $filters = [], bool $fuzzy = false): array
     {
-        $escapedQuery = $this->escapeCharacters($query);
+        $escapedQuery = $this->escapeCharacters(
+            $this->analyzeQuery($query)
+        );
 
         $queryBody = [
-            'min_score' => 2.0,
+            'min_score' => 1.0,
             'size' => $size,
             'query' => [
                 'bool' => [
                     'must' => [
                         'multi_match' => [
                             'query' => $escapedQuery,
-                            'fields' => ['sku^0.2', 'name^1.1', 'keywords^0.6', 'ean^0.1', 'group^0.1', 'brand^1.1'],
-                            'fuzziness' => 0
+                            'fields' => ['description^1.5', 'brand^1', 'series^1.5', 'type^1'],
+                            'fuzziness' => 0,
+                            'analyzer' => 'whitespace'
                         ]
                     ]
                 ]
@@ -210,5 +216,29 @@ class SearchService
         $params['body'] = $queryBody;
 
         return $params;
+    }
+
+    /**
+     * Analyze the query and split possible lengths.
+     *
+     * @param string $query
+     * @return string
+     */
+    protected function analyzeQuery(string $query): string
+    {
+        $terms = explode(' ', $query);
+        $processedTerms = [];
+
+        foreach ($terms as $term) {
+            if (is_numeric($term) && strlen($term) <= 4) {
+                $processedTerms[] = $term . 'mm';
+                $processedTerms[] = $term . 'cm';
+                $processedTerms[] = $term . 'm';
+            } else {
+                $processedTerms[] = $term;
+            }
+        }
+
+        return join(' ', $processedTerms);
     }
 }
