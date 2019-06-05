@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-2 d-none d-sm-block">
                 <div class="product-thumbnail">
-                    <img src="{{ $product->getImageUrl() }}" class="img-thumbnail">
+                    <img src="{{ $product->getImageUrl('small') }}" class="img-thumbnail">
                 </div>
             </div>
 

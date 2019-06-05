@@ -2,6 +2,7 @@
 
 namespace WTG\Models;
 
+use Intervention\Image\Facades\Image;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Laravel\Scout\Searchable;
@@ -24,6 +25,11 @@ class Product extends Model implements ProductContract
     use Searchable, SoftDeletes;
 
     const IMAGE_PLACEHOLDER_PATH = 'storage/static/images/product-image-placeholder.png';
+    const IMAGE_PLACEHOLDER_CACHE_KEY = 'product-image-placeholder';
+
+    const IMAGE_SIZE_LARGE = 'large';
+    const IMAGE_SIZE_MEDIUM = 'medium';
+    const IMAGE_SIZE_SMALL = 'small';
 
     /**
      * @var array
@@ -347,17 +353,49 @@ class Product extends Model implements ProductContract
     /**
      * Get the product image url.
      *
+     * @param string $size
      * @return string
+     * @throws \Exception
      */
-    public function getImageUrl()
+    public function getImageUrl(string $size = self::IMAGE_SIZE_LARGE)
     {
+        switch ($size) {
+            case self::IMAGE_SIZE_SMALL:
+                $width = 100;
+                $height = 100;
+                break;
+            case self::IMAGE_SIZE_MEDIUM:
+                $width = 200;
+                $height = 200;
+                break;
+            case self::IMAGE_SIZE_LARGE:
+                $width = 300;
+                $height = 300;
+                break;
+            default:
+                $size = self::IMAGE_SIZE_LARGE;
+                $width = 300;
+                $height = 300;
+        }
+
         $path = sprintf("storage/uploads/images/products/%s.jpg", $this->getAttribute('sku'));
+        $cacheKey = 'product-image-' . $this->getAttribute('sku') . '-' . $size;
 
         if (! file_exists(public_path($path))) {
             $path = static::IMAGE_PLACEHOLDER_PATH;
+            $cacheKey = static::IMAGE_PLACEHOLDER_CACHE_KEY . '-' . $size;
         }
 
-        return asset($path);
+        return cache()->remember($cacheKey, 60 * 60 * 24, function () use ($path, $width, $height) {
+            return Image::make($path)
+                ->trim('top-left', null, 10, 5)
+                ->resize($width, $height, function ($constraint) {
+                    $constraint->upsize();
+                    $constraint->aspectRatio();
+                })
+                ->resizeCanvas($width, $height)
+                ->encode('data-url');
+        });
     }
 
     /**
