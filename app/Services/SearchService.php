@@ -184,33 +184,56 @@ class SearchService
      */
     protected function prepareParameters(string $query, int $size, array $filters = [], bool $fuzzy = false): array
     {
-        $escapedQuery = $this->escapeCharacters(
-            $this->analyzeQuery($query)
-        );
+        $terms = $this->analyzeQuery($query);
+        $must = [];
+
+        if ($terms['required']) {
+            $must[] = [
+                'multi_match' => [
+                    'query' => $terms['required'],
+                    'fields' => ['description^1.5', 'brand^1', 'series^1.5', 'type^1'],
+                    'fuzziness' => $fuzzy ? 'AUTO' : 0,
+                    'analyzer' => 'whitespace',
+                    'minimum_should_match' => '95%',
+                    'operator' => 'and'
+                ]
+            ];
+        }
+
+        if ($terms['any']) {
+            $must[] = [
+                'multi_match' => [
+                    'query' => $terms['any'],
+                    'fields' => ['description^1.5', 'brand^1', 'series^1.5', 'type^1'],
+                    'fuzziness' => $fuzzy ? 'AUTO' : 0,
+                    'analyzer' => 'whitespace',
+                    'minimum_should_match' => '1',
+                    'operator' => 'or'
+                ]
+            ];
+        }
 
         $queryBody = [
             'min_score' => 1.0,
             'size' => $size,
             'query' => [
                 'bool' => [
-                    'must' => [
+                    'must' => $must,
+                    'should' => $terms['optional'] ? [
                         'multi_match' => [
-                            'query' => $escapedQuery,
+                            'query' => $terms['optional'],
                             'fields' => ['description^1.5', 'brand^1', 'series^1.5', 'type^1'],
-                            'fuzziness' => 0,
-                            'analyzer' => 'whitespace'
+                            'fuzziness' => $fuzzy ? 'AUTO' : 0,
+                            'analyzer' => 'whitespace',
+                            'operator' => 'or'
                         ]
-                    ]
+                    ] : []
                 ]
             ]
         ];
 
         if ($filters) {
             $queryBody['query']['bool']['filter'] = $filters;
-        }
-
-        if ($fuzzy) {
-            $queryBody['query']['bool']['must']['multi_match']['fuzziness'] = 'AUTO';
         }
 
         $params['body'] = $queryBody;
@@ -222,23 +245,30 @@ class SearchService
      * Analyze the query and split possible lengths.
      *
      * @param string $query
-     * @return string
+     * @return array
      */
-    protected function analyzeQuery(string $query): string
+    protected function analyzeQuery(string $query): array
     {
         $terms = explode(' ', $query);
-        $processedTerms = [];
+        $requiredTerms = [];
+        $anyTerms = [];
+        $optionalTerms = [];
 
         foreach ($terms as $term) {
             if (is_numeric($term) && strlen($term) <= 4) {
-                $processedTerms[] = $term . 'mm';
-                $processedTerms[] = $term . 'cm';
-                $processedTerms[] = $term . 'm';
+                $anyTerms[] = $term . 'mm';
+                $anyTerms[] = $term . 'cm';
+                $anyTerms[] = $term . 'mtr';
+                $anyTerms[] = $term;
             } else {
-                $processedTerms[] = $term;
+                $requiredTerms[] = $term;
             }
         }
 
-        return join(' ', $processedTerms);
+        return [
+            'required' => $this->escapeCharacters(join(' ', $requiredTerms)),
+            'any' => $this->escapeCharacters(join(' ', $anyTerms)),
+            'optional' => $this->escapeCharacters(join(' ', $optionalTerms))
+        ];
     }
 }
