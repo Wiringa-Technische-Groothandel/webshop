@@ -47,11 +47,12 @@ class Mysql extends Command
     {
         $pipes = [];
         $command = sprintf(
-            '%s -h%s -u%s -p%s %s',
+            '%s -h%s -u%s -p%s -P%s %s',
             ($this->option('mycli') ? 'mycli' : 'mysql'),
             config('database.connections.mysql.host'),
             config('database.connections.mysql.username'),
             config('database.connections.mysql.password'),
+            config('database.connections.mysql.port'),
             config('database.connections.mysql.database')
         );
 
