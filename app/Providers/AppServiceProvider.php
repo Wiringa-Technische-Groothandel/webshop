@@ -3,46 +3,53 @@
 namespace WTG\Providers;
 
 use GuzzleHttp\Client;
+
+use Illuminate\Support\ServiceProvider;
+
+use League\Flysystem\Filesystem;
+use League\Flysystem\Sftp\SftpAdapter;
+
 use WTG\Contracts\Models\AddressContract;
+use WTG\Contracts\Models\AdminContract;
+use WTG\Contracts\Models\BlockContract;
+use WTG\Contracts\Models\CartContract;
+use WTG\Contracts\Models\CartItemContract;
+use WTG\Contracts\Models\CompanyContract;
+use WTG\Contracts\Models\ContactContract;
+use WTG\Contracts\Models\CustomerContract;
+use WTG\Contracts\Models\DescriptionContract;
+use WTG\Contracts\Models\OrderContract;
+use WTG\Contracts\Models\OrderItemContract;
+use WTG\Contracts\Models\PackContract;
 use WTG\Contracts\Models\PackProductContract;
+use WTG\Contracts\Services\Account\AddressServiceContract;
+use WTG\Contracts\Services\CartServiceContract;
+use WTG\Contracts\Services\CheckoutServiceContract;
 use WTG\Contracts\Services\CompanyServiceContract;
+use WTG\Contracts\Services\FavoritesServiceContract;
+
 use WTG\Models\Address;
 use WTG\Models\Admin;
 use WTG\Models\Block;
-use WTG\Models\Order;
-use WTG\Models\Pack;
-use WTG\Models\PackProduct;
-use WTG\Models\Quote;
 use WTG\Models\Company;
 use WTG\Models\Contact;
 use WTG\Models\Customer;
-use WTG\Models\OrderItem;
-use WTG\Models\QuoteItem;
 use WTG\Models\Description;
+use WTG\Models\Order;
+use WTG\Models\OrderItem;
+use WTG\Models\Pack;
+use WTG\Models\PackProduct;
+use WTG\Models\Quote;
+use WTG\Models\QuoteItem;
+
+use WTG\Services\Account\AddressService;
 use WTG\Services\CartService;
-use League\Flysystem\Filesystem;
 use WTG\Services\CheckoutService;
 use WTG\Services\CompanyService;
 use WTG\Services\FavoritesService;
 use WTG\Services\RecaptchaService;
-use League\Flysystem\Sftp\SftpAdapter;
-use WTG\Contracts\Models\PackContract;
-use WTG\Contracts\Models\CartContract;
-use WTG\Contracts\Models\OrderContract;
-use Illuminate\Support\ServiceProvider;
-use WTG\Contracts\Models\AdminContract;
-use WTG\Contracts\Models\BlockContract;
-use WTG\Services\Account\AddressService;
-use WTG\Contracts\Models\CompanyContract;
-use WTG\Contracts\Models\ContactContract;
-use WTG\Contracts\Models\CustomerContract;
-use WTG\Contracts\Models\CartItemContract;
-use WTG\Contracts\Models\OrderItemContract;
-use WTG\Contracts\Models\DescriptionContract;
-use WTG\Contracts\Services\CartServiceContract;
-use WTG\Contracts\Services\CheckoutServiceContract;
-use WTG\Contracts\Services\FavoritesServiceContract;
-use WTG\Contracts\Services\Account\AddressServiceContract;
+
+use WTG\Soap\Service as SoapService;
 
 class AppServiceProvider extends ServiceProvider
 {
