@@ -2,6 +2,9 @@
 
 namespace WTG\Services;
 
+use SoapClient;
+use SoapFault;
+
 /**
  * Soap service.
  *
@@ -12,39 +15,37 @@ namespace WTG\Services;
 class AbstractSoapService
 {
     /**
-     * @var \SoapClient
+     * @var SoapClient
      */
     protected $client;
 
     /**
-     * SoapService constructor.
-     *
-     * @param  \SoapClient  $client
-     */
-    public function __construct(\SoapClient $client)
-    {
-        $this->client = $client;
-    }
-
-    /**
      * Return the soap client.
      *
-     * @return \SoapClient
+     * @return SoapClient
+     * @throws SoapFault
      */
-    public function getClient(): \SoapClient
+    public function getClient(): SoapClient
     {
+        if (! $this->client) {
+            $this->client = new SoapClient(config('soap.wsdl'), [
+                'exceptions' => false
+            ]);
+        }
+
         return $this->client;
     }
 
     /**
      * Forward function calls to the soap client.
      *
-     * @param  string  $action
-     * @param  array  $arguments
+     * @param string $action
+     * @param array $arguments
      * @return mixed
+     * @throws SoapFault
      */
     public function soapCall(string $action, array $arguments)
     {
-        return call_user_func_array([$this->client, $action], [ $action => $arguments ]);
+        return call_user_func_array([$this->getClient(), $action], [ $action => $arguments ]);
     }
 }

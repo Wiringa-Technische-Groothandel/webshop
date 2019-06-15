@@ -25,7 +25,6 @@ use WTG\Services\CheckoutService;
 use WTG\Services\CompanyService;
 use WTG\Services\FavoritesService;
 use WTG\Services\RecaptchaService;
-use WTG\Soap\Service as SoapService;
 use League\Flysystem\Sftp\SftpAdapter;
 use WTG\Contracts\Models\PackContract;
 use WTG\Contracts\Models\CartContract;
@@ -113,13 +112,5 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton('soap', SoapService::class);
-
-        $this->app->when(SoapService::class)
-            ->needs(\SoapClient::class)
-            ->give(function () {
-                return new \SoapClient(config('soap.wsdl'), [
-                    'exceptions' => false
-                ]);
-            });
     }
 }
