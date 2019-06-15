@@ -3,6 +3,7 @@
 namespace WTG\Services\Import;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Luna\SeoUrls\SeoUrl;
 use WTG\Models\ImportData;
 use Illuminate\Support\Collection;
@@ -195,6 +196,7 @@ class Assortment
                 $product = $this->findProduct($sku, $unit);
 
                 if (! $product) {
+                    Log::info(sprintf('[Product import] Failed to find a product for sku %s %s.', $sku, $unit));
                     continue;
                 }
 
@@ -202,7 +204,7 @@ class Assortment
                 $product->setAttribute('deleted_at', $this->runTime);
                 $product->save();
 
-                \Log::debug(sprintf('[Product import] Deleted %s.', $sku));
+                Log::info(sprintf('[Product import] Deleted %s.', $sku));
 
                 continue;
             }
@@ -230,7 +232,7 @@ class Assortment
 
             // Skip this product
             if (! $soapProduct->webshop) {
-                \Log::debug(sprintf('[Product import] Skipped %s. Reason: %s', $sku, 'products is not enabled for the webshop'));
+                Log::info(sprintf('[Product import] Skipped %s. Reason: %s', $sku, 'products is not enabled for the webshop'));
 
                 continue;
             }
@@ -252,7 +254,7 @@ class Assortment
                 $count++;
             }
 
-            \Log::debug(sprintf('[Product import] Imported %s.', $sku));
+            Log::info(sprintf('[Product import] Imported %s.', $sku));
         }
     }
 

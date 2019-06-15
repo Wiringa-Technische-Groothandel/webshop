@@ -23,7 +23,7 @@ class Service extends AbstractSoapService
      * @param  int  $startFromIndex
      * @return GetProducts\Response
      */
-    public function getAllProducts(int $productsPerRequest = 20, int $startFromIndex = 1)
+    public function getProducts(int $productsPerRequest = 20, int $startFromIndex = 1)
     {
         $service = app(GetProducts\Service::class);
         return $service->handle($productsPerRequest, $startFromIndex);
