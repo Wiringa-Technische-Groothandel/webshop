@@ -99,7 +99,7 @@ abstract class ProductImporter implements ImporterInterface
         $soapProduct->length            = (float) $productData['length'];
         $soapProduct->weight            = (float) $productData['weight'];
         $soapProduct->height            = (float) $productData['height'];
-        $soapProduct->stock_display     = (string) $productData['stock_display'];
+        $soapProduct->stock_display     = (string) $productData['stock_display'] ?: 'S';
         $soapProduct->supplier_code     = (string) $productData['supplier_code'];
         $soapProduct->brand             = (string) $productData['brand'];
         $soapProduct->series            = (string) $productData['series'];
