@@ -33,6 +33,7 @@ class DatabaseSetup extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('sku');
+            $table->string('supplier_code', 50)->nullable(true);
             $table->integer('group');
             $table->string('name', 75);
             $table->string('ean', 16);
@@ -51,6 +52,7 @@ class DatabaseSetup extends Migration
             $table->string('type', 50);
             $table->string('keywords', 100)->nullable();
             $table->string('related', 85)->nullable();
+            $table->string('stock_display', 5)->default('S');
             $table->timestamps();
             $table->softDeletes();
             $table->timestamp('synchronized_at')->nullable();
@@ -76,7 +78,7 @@ class DatabaseSetup extends Migration
         });
 
         if (! app()->environment('testing')) {
-            if (Artisan::call('import:assortment', [], app(ConsoleOutput::class)) !== 0) {
+            if (Artisan::call('import:soap:products', [], app(ConsoleOutput::class)) !== 0) {
                 throw new \Exception('Import failed');
             }
         }

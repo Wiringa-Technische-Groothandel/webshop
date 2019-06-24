@@ -420,8 +420,10 @@ class Product extends Model implements ProductContract
      */
     public function getUrl(): string
     {
+        return 'product/' . $this->getSku();
+
         /** @var SeoUrl $seoUrl */
-        $seoUrl = $this->getAttribute('seo_url');
+        /**$seoUrl = $this->getAttribute('seo_url');
 
         if (! $seoUrl) {
             $seoUrl = new SeoUrl;
@@ -431,7 +433,7 @@ class Product extends Model implements ProductContract
             $seoUrl->product_id = $this->getId();
         }
 
-        return $seoUrl->source_path;
+        return $seoUrl->source_path;*/
     }
 
     /**
