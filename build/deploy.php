@@ -11,6 +11,7 @@ set('shared_files', [
 set('shared_dirs', [
     'storage/logs',
     'storage/app/public/uploads',
+    'storage/app/public/downloads',
     'storage/app/import'
 ]);
 
