@@ -33,12 +33,12 @@
 @component('mail::table')
 
 | SKU                     | Omschrijving           |                     Aantal |                       Subtotaal |
-|:----------------------- |:---------------------- | --------------------------:| -------------------------------:|
+|:----------------------- |:----------------------:| --------------------------:| -------------------------------:|
 @foreach($order->getItems() as $item)
-| {{ $item->getSku() }}   | {{ $item->getName() }} | {{ $item->getQuantity() }} | &euro; {{ number_format($item->getSubtotal()) }} |
+| {{ $item->getSku() }}   | {{ $item->getName() }} | {{ $item->getQuantity() }} | &euro; {{ number_format($item->getSubtotal(), 2) }} |
 @endforeach
 |                         |                        |                            | <b>Total</b> |
-|                         |                        |                            | &euro; <b>{{ number_format($order->getGrandTotal()) }}</b> |
+|                         |                        |                            | &euro; <b>{{ number_format($order->getGrandTotal(), 2) }}</b> |
 
 @endcomponent
 
