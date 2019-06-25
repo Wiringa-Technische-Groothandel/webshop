@@ -31,11 +31,14 @@
 ## Producten
 
 @component('mail::table')
-| SKU                   | Omschrijving           |                     Aantal |                         Subtotaal |
-|:--------------------- |:---------------------- | --------------------------:| ---------------------------------:|
+
+| SKU                     | Omschrijving           |                     Aantal |                       Subtotaal |
+|:----------------------- |:---------------------- | --------------------------:| -------------------------------:|
 @foreach($order->getItems() as $item)
-| {{ $item->getSku() }} | {{ $item->getName() }} | {{ $item->getQuantity() }} | &euro; {{ $item->getSubtotal() }} |
+| {{ $item->getSku() }}   | {{ $item->getName() }} | {{ $item->getQuantity() }} | &euro; {{ number_format($item->getSubtotal()) }} |
 @endforeach
+|                         |                        |                            | <b>Total</b> |
+|                         |                        |                            | &euro; <b>{{ number_format($order->getGrandTotal()) }}</b> |
 
 @endcomponent
 

@@ -186,6 +186,7 @@ class ProductImport
      */
     protected function moveProcessedFile(string $filePath, string $filename): void
     {
-        rename($filePath.$filename, storage_path('app/import/processed/').$filename);
+        // TODO: Fix on the server
+        //rename($filePath.$filename, storage_path('app/import/processed/').$filename);
     }
 }

@@ -5,6 +5,7 @@ namespace WTG\Import\Importer;
 use Carbon\Carbon;
 
 use Psr\Log\LoggerInterface;
+
 use WTG\Models\Product as ProductModel;
 use WTG\Soap\GetProducts\Response\Product;
 

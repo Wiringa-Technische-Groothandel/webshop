@@ -131,4 +131,11 @@ interface OrderContract
      * @return null|string
      */
     public function getComment(): ?string;
+
+    /**
+     * Order total.
+     *
+     * @return float
+     */
+    public function getGrandTotal(): float;
 }

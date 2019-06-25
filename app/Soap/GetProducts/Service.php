@@ -3,7 +3,11 @@
 namespace WTG\Soap\GetProducts;
 
 use Exception;
+
+use SimpleXMLElement;
+
 use WTG\Soap\AbstractService;
+use WTG\Soap\GetProducts\Response\Product;
 
 /**
  * GetProducts service.
@@ -123,6 +127,7 @@ class Service extends AbstractService
             $responseProduct->length          = (float) $product->ProductLengthCm;
             $responseProduct->weight          = (float) $product->ProductWeightKg;
             $responseProduct->height          = (float) $product->ProductHeightCm;
+            $responseProduct->stock_display   = $product->StockDisplay ?: 'S';
 
             $this->assignAttributes($responseProduct, $product);
 
@@ -136,10 +141,11 @@ class Service extends AbstractService
     /**
      * Assign product attributes.
      *
-     * @param  Response\Product  $responseProduct
-     * @param  \stdClass  $product
+     * @param  Product  $responseProduct
+     * @param  SimpleXMLElement  $product
+     * @return void
      */
-    protected function assignAttributes(Response\Product &$responseProduct, $product)
+    public function assignAttributes(Product &$responseProduct, $product): void
     {
         $attributes = $product->Attributes->ProductAttributeV2;
 
@@ -155,6 +161,9 @@ class Service extends AbstractService
             $value = $attribute->AttrValues->ProductAttributeValueV2->NativeDescription;
 
             switch ($attribute->AttributeId) {
+                case 'FAB':
+                    $responseProduct->supplier_code = $value;
+                    break;
                 case 'MRK':
                     $responseProduct->brand = $value;
                     break;
@@ -166,6 +175,9 @@ class Service extends AbstractService
                     break;
                 case 'TBH':
                     $responseProduct->related = $value;
+                    break;
+                case 'WEB':
+                    $responseProduct->webshop = (bool) $value;
                     break;
                 case 'ATT':
                     $responseProduct->keywords = $value;

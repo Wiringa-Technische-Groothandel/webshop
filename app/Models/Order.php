@@ -204,4 +204,14 @@ class Order extends Model implements OrderContract
     {
         return $this->getAttribute('comment');
     }
+
+    /**
+     * Order total.
+     *
+     * @return float
+     */
+    public function getGrandTotal(): float
+    {
+        return (float) $this->items()->sum('subtotal');
+    }
 }

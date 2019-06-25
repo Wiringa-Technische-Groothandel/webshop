@@ -28,6 +28,8 @@ class SearchService
     public function listProducts(?string $brand = null, ?string $series = null, ?string $type = null, int $page = 1): Collection
     {
         $query = Product::query();
+        $query->where('inactive', false);
+        $query->where('blocked', false);
 
         if ($brand) {
             $query->where('brand', $brand);
@@ -72,9 +74,14 @@ class SearchService
 
         if (is_numeric($query)) {
             $results = collect([
-                Product::where('sku', $query)
-                    ->orWhere('ean', $query)
-                    ->orWhere('supplier_code', $query)
+                Product::where(function ($builder) use ($query) {
+                        return $builder
+                            ->orWhere('sku', $query)
+                            ->orWhere('ean', $query)
+                            ->orWhere('supplier_code', $query);
+                    })
+                    ->where('inactive', false)
+                    ->where('blocked', false)
                     ->first()
             ])->filter();
         } else {
@@ -95,7 +102,7 @@ class SearchService
                 }
             }
 
-            $query = Product::search($query, function (Client $elastic, $query, $params) use ($page, $filters) {
+            $results = Product::search($query, function (Client $elastic, $query, $params) use ($page, $filters) {
                 $results = $elastic->search(
                     $this->prepareParameters($query, 10000, $filters)
                 );
@@ -107,9 +114,10 @@ class SearchService
                 }
 
                 return $results;
-            });
-
-            $results = $query->get();
+            })
+                ->get()
+                ->where('inactive', 0)
+                ->where('blocked', 0);
         }
 
         $paginator = new LengthAwarePaginator($results->forPage($page, 10), $results->count(), 10, $page);
@@ -132,21 +140,20 @@ class SearchService
      */
     public function suggestProducts(string $query): Collection
     {
-        /** @var Collection $items */
-        $items = Product::search($query, function (Client $elastic, $query, $params) {
+        return Product::search($query, function (Client $elastic, $query, $params) {
             return $elastic->search(
                 $this->prepareParameters($query, 5)
             );
-        })->get();
-
-        $items = $items->map(function (Product $product) {
-            return [
-                'url' => $product->getUrl(),
-                'name' => $product->getName()
-            ];
-        });
-
-        return $items;
+        })
+            ->get()
+            ->where('inactive', 0)
+            ->where('blocked', 0)
+            ->map(function (Product $product) {
+                return [
+                    'url' => $product->getUrl(),
+                    'name' => $product->getName()
+                ];
+            });
     }
 
     /**
