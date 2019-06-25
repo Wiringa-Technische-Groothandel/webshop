@@ -37,7 +37,7 @@
 @foreach($order->getItems() as $item)
 | {{ $item->getSku() }}   | {{ $item->getName() }} | {{ $item->getQuantity() }} | &euro; {{ number_format($item->getSubtotal(), 2) }} |
 @endforeach
-|                         |                        |                            | <b>Total</b> |
+|                         |                        |                            | <b>Totaal</b> |
 |                         |                        |                            | &euro; <b>{{ number_format($order->getGrandTotal(), 2) }}</b> |
 
 @endcomponent
