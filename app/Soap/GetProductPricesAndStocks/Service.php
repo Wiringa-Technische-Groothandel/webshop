@@ -151,7 +151,7 @@ class Service extends AbstractService
                     $product->stock, unit_to_str($product->sales_unit, $product->stock !== 1)
                 );
             } elseif ($productModel->getStockDisplay() === 'A') {
-                $stockString = __('In overleg');
+                $stockString = __('Levertijd in overleg');
             } elseif ($productModel->getStockDisplay() === 'V') {
                 $stockString = __('Binnen 24/48 uur mits voor 16.00 besteld');
             } else {
