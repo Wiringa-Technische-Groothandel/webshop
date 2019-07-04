@@ -74,8 +74,7 @@ class SearchController extends Controller
             return back();
         }
 
-        /** @var SearchService $service */
-        $service = app()->make(SearchService::class);
+        $service = app(SearchService::class);
         $results = $service->suggestProducts($searchQuery);
 
         return response()->json([

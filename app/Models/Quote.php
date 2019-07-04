@@ -77,7 +77,7 @@ class Quote extends Model implements CartContract
         $address = $this->getAttribute('address') ?: $addressService->getDefaultAddressForCustomer($customer);
 
         if (! $address) {
-            $address = $addressService->getDefaultAddress();
+            $address = $addressService->getPickupAddress();
         }
 
         return $address;

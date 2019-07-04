@@ -83,9 +83,9 @@ interface AddressServiceContract
     public function getDefaultAddressIdForCustomer(CustomerContract $customer): ?string;
 
     /**
-     * Get the default shipping address.
+     * Get the pickup address.
      *
      * @return AddressContract
      */
-    public function getDefaultAddress(): AddressContract;
+    public function getPickupAddress(): AddressContract;
 }

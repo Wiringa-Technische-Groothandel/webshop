@@ -1,3 +1,4 @@
+@php /** @var \WTG\Models\Order $order */ @endphp
 @component('mail::message')
 
 # Bestelbevestiging
@@ -11,6 +12,8 @@
 |:----------------- |:------------------------------------- |
 | Bedrijf           | {{ $order->getCompany()->getName() }} |
 | Debiteurnummer    | {{ $order->getCustomerNumber() }}     |
+|                   |                                       |
+|                   | <b>{{ $order->getName() }}</b>        |
 | Adres             | {{ $order->getStreet() }}             |
 | Plaats            | {{ $order->getCity() }}               |
 | Postcode          | {{ $order->getPostcode() }}           |
@@ -25,6 +28,8 @@
 {{ $order->getComment() }}
 
 @endcomponent
+
+<br>
 
 @endif
 

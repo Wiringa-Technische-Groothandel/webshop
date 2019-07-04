@@ -3,7 +3,10 @@
 namespace WTG\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+
 use WTG\Contracts\Models\CompanyContract;
 use WTG\Contracts\Models\OrderContract;
 
@@ -19,7 +22,7 @@ class Order extends Model implements OrderContract
     /**
      * Company relation.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function company()
     {
@@ -29,7 +32,7 @@ class Order extends Model implements OrderContract
     /**
      * Order item relation.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function items()
     {
@@ -49,7 +52,7 @@ class Order extends Model implements OrderContract
     /**
      * Get the order items.
      *
-     * @return Collection
+     * @return Collection|OrderItem[]
      */
     public function getItems(): Collection
     {

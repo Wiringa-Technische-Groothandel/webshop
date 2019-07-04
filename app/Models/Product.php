@@ -31,6 +31,8 @@ class Product extends Model implements ProductContract
     const IMAGE_SIZE_MEDIUM = 'medium';
     const IMAGE_SIZE_SMALL = 'small';
 
+    const DEFAULT_STOCK_DISPLAY = 'S';
+
     /**
      * @var array
      */
@@ -420,7 +422,7 @@ class Product extends Model implements ProductContract
      */
     public function getUrl(): string
     {
-        return 'product/' . $this->getSku();
+        return '/product/' . $this->getSku();
 
         /** @var SeoUrl $seoUrl */
         /**$seoUrl = $this->getAttribute('seo_url');
@@ -494,6 +496,6 @@ class Product extends Model implements ProductContract
      */
     public function getStockDisplay(): string
     {
-        return $this->getAttribute('stock_display');
+        return $this->getAttribute('stock_display') ?: self::DEFAULT_STOCK_DISPLAY;
     }
 }

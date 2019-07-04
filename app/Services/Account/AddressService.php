@@ -32,7 +32,7 @@ class AddressService implements AddressServiceContract
         $addresses = $company->getAddresses();
 
         if ($withDefault) {
-            $addresses->prepend($this->getDefaultAddress());
+            $addresses->prepend($this->getPickupAddress());
         }
 
         return $addresses;
@@ -139,15 +139,15 @@ class AddressService implements AddressServiceContract
     {
         $defaultAddress = $this->getDefaultAddressForCustomer($customer);
 
-        return $defaultAddress ? $defaultAddress->getId() : null;
+        return $defaultAddress ? $defaultAddress->getId() : $this->getAddressesForCustomer($customer)->first();
     }
 
     /**
-     * Get the default shipping address.
+     * Get the pickup shipping address.
      *
      * @return AddressContract
      */
-    public function getDefaultAddress(): AddressContract
+    public function getPickupAddress(): AddressContract
     {
         return app(Address::class)->find(Address::DEFAULT_ID);
     }

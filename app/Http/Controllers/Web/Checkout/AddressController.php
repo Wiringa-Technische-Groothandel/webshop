@@ -59,10 +59,12 @@ class AddressController extends Controller
 
         /** @var Customer $customer */
         $customer = $request->user();
-        $addresses = $this->addressService->getAddressesForCustomer($customer);
+        $addresses = $this->addressService->getAddressesForCustomer($customer, false);
+        $defaultAddress = $this->addressService->getDefaultAddressForCustomer($customer);
+        $pickupAddress = $this->addressService->getPickupAddress();
         $quoteAddress = $this->cartService->getDeliveryAddress();
 
-        return view('pages.checkout.address', compact('customer', 'addresses', 'quoteAddress'));
+        return view('pages.checkout.address', compact('customer', 'addresses', 'quoteAddress', 'defaultAddress', 'pickupAddress'));
     }
 
     /**
@@ -78,7 +80,7 @@ class AddressController extends Controller
         $customer = $request->user();
 
         if ($addressId === Address::DEFAULT_ID) {
-            $address = $this->addressService->getDefaultAddress();
+            $address = $this->addressService->getPickupAddress();
         } else {
             /** @var Address $address */
             $address = $this->addressService->getAddressForCustomerById($customer, $addressId);

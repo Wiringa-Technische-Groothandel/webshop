@@ -48,14 +48,11 @@
                         }
 
                         let products = response.data.products;
-                        console.log(products);
 
                         this.$data.items = products;
                         this.$data.showSuggestions = products.length > 0;
                     })
                     .catch((error) => {
-                        console.log(error);
-
                         this.$root.$emit('send-notify', {
                             text: error.response.data.message,
                             success: false

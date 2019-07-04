@@ -8,27 +8,29 @@
                 </button>
             </div>
             <div class="modal-body">
+                <h4>{{ __('Standaard adres') }}</h4>
                 <div class="row">
-                    @foreach ($addresses as $address)
-                        <div class="col-xs-12 col-sm-6">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <address id="address-{{ $address->getId() }}">
-                                        <b>{{ $address->getName() }}</b><br>
-                                        {{ $address->getStreet() }} <br>
-                                        {{ $address->getPostcode() }} {{ $address->getCity() }}
-                                    </address>
-
-                                    <button class="btn btn-outline-primary btn-sm change-address-button"
-                                            data-target="#address-{{ $address->getId() }}"
-                                            data-address-id="{{ $address->getId() }}">
-                                        {{ __("Selecteer adres") }}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+                    @include('components.checkout.address.change-modal.address', [ 'address' => $defaultAddress ])
                 </div>
+
+                <hr>
+
+                <h4>{{ __('Afhalen') }}</h4>
+                <div class="row">
+                    @include('components.checkout.address.change-modal.address', [ 'address' => $pickupAddress ])
+                </div>
+
+                <hr>
+
+                @if (count($addresses) > 1)
+                    <h4>{{ __('Overige adressen') }}</h4>
+                    <div class="row">
+                        @foreach ($addresses as $address)
+                            @continue($address->getId() === $defaultAddress->getId())
+                            @include('components.checkout.address.change-modal.address', [ 'address' => $address ])
+                        @endforeach
+                    </div>
+                @endif
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __("Sluiten") }}</button>
