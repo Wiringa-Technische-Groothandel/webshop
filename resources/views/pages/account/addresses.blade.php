@@ -1,10 +1,10 @@
 @extends('layouts.account')
 
-@section('title', __('Account / Adressen'))
+@section('title', __('Account / Adresboek'))
 
 @section('account.title')
     <h2 class="text-center block-title">
-        {{ __('Adressen') }}
+        {{ __('Adresboek') }}
     </h2>
 @endsection
 

@@ -62,6 +62,9 @@
                                 <a class="dropdown-item" href="{{ route('account.order-history') }}">
                                     <i class="far fa-fw fa-history"></i> {{ __('Bestelhistorie') }}
                                 </a>
+                                <a class="dropdown-item" href="{{ route('account.addresses') }}">
+                                    <i class="far fa-fw fa-address-book"></i> {{ __('Adresboek') }}
+                                </a>
                                 <a class="dropdown-item" href="{{ route('account.discount') }}">
                                     <i class="far fa-fw fa-percent"></i> {{ __('Kortingsbestand') }}
                                 </a>

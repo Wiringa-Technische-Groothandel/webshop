@@ -126,7 +126,16 @@ class AddressService implements AddressServiceContract
      */
     public function getDefaultAddressForCustomer(CustomerContract $customer): ?AddressContract
     {
-        return $customer->getContact()->getDefaultAddress();
+        $defaultAddress = $customer->getContact()->getDefaultAddress();
+
+        if ($defaultAddress === null) {
+            $defaultAddress = $this->getAddressesForCustomer($customer, false)->first();
+
+            $customer->getContact()->setDefaultAddress($defaultAddress->getId());
+            $customer->getContact()->save();
+        }
+
+        return $defaultAddress;
     }
 
     /**
@@ -139,7 +148,7 @@ class AddressService implements AddressServiceContract
     {
         $defaultAddress = $this->getDefaultAddressForCustomer($customer);
 
-        return $defaultAddress ? $defaultAddress->getId() : $this->getAddressesForCustomer($customer)->first();
+        return $defaultAddress->getId();
     }
 
     /**

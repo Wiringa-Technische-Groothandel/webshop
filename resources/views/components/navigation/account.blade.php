@@ -33,7 +33,7 @@
 
     <a href="{{ route('account.addresses') }}"
        class="list-group-item {{ Route::is('account.addresses') ? 'active' : '' }}">
-        {{ __('Adressen') }}
+        {{ __('Adresboek') }}
     </a>
 
     <a href="{{ route('account.discount') }}"
