@@ -58,11 +58,13 @@ class Handler extends ExceptionHandler
     public function render($request, \Exception $exception)
     {
         if ($exception instanceof TokenMismatchException) {
-            return back()->withInput($request->except('password'))->withErrors(__("Uw sessie is verlopen, probeer het opnieuw."));
+            return back()->withInput($request->except('password'))
+                ->withErrors(__("Uw sessie is verlopen, probeer het opnieuw."));
         }
 
         if ($exception instanceof AuthorizationException) {
-            return back()->withInput($request->except('password'))->withErrors(__('U hebt onvoldoende rechten om deze actie uit te voeren.'));
+            return back()->withInput($request->except('password'))
+                ->withErrors(__('U hebt onvoldoende rechten om deze actie uit te voeren.'));
         }
 
         return parent::render($request, $exception);
@@ -117,7 +119,7 @@ class Handler extends ExceptionHandler
 
         view()->replaceNamespace('errors', [
             resource_path('views/pages/errors'),
-            __DIR__.'/views',
+            base_path('vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/views'),
         ]);
 
         if (view()->exists($view = "errors::{$status}")) {
