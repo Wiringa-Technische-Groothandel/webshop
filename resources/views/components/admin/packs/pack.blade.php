@@ -2,7 +2,7 @@
     <div class="card-body">
         <div class="pack">
             <div class="title">
-                <h5>{{ strlen($pack->getProduct()->getName()) > 40 ? substr($pack->getProduct()->getName(), 0 , 37) . "..." : $pack->getProduct()->getName() }}</h5>
+                <h5 title="{{ $pack->getProduct()->getName() }}">{{ strlen($pack->getProduct()->getName()) > 40 ? substr($pack->getProduct()->getName(), 0 , 37) . "..." : $pack->getProduct()->getName() }}</h5>
             </div>
             <div class="product-list">
                 <table class="table table-striped">
@@ -25,9 +25,13 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <button onclick="showConfirmationModal(this)" data-id="{{ $pack->getId() }}"
-                            data-name="{{ $pack->getProduct()->getName() }}"
-                            class="btn btn-danger btn-block">{{ __('Verwijderen') }}</button>
+                    <form method="post" class="m-0" onsubmit="return confirm('Weet u zeker dat u actiepakket \'{{ $pack->getProduct()->getName() }}\' wilt verwijderen?');">
+                        {{ csrf_field() }}
+                        {{ method_field('delete') }}
+                        <input type="hidden" name="pack_id" value="{{ $pack->getId() }}" />
+
+                        <button class="btn btn-danger btn-block">{{ __('Verwijderen') }}</button>
+                    </form>
                 </div>
 
                 <div class="col">

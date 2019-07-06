@@ -47,7 +47,7 @@ class DetailController extends Controller
         $pack->setProduct($product);
         $pack->save();
 
-        return back()->with('success', __('Het actiepakket is aangemaakt.'));
+        return back()->with('status', __('Het actiepakket is aangemaakt.'));
     }
 
     /**
@@ -82,6 +82,34 @@ class DetailController extends Controller
         $packProduct->setAmount($request->input('amount'));
         $packProduct->save();
 
-        return back()->with('success', __('Het product is :action.', ['action' => $packProduct->wasRecentlyCreated ? 'toegevoegd' : 'aangepast']));
+        return back()->with('status', __('Het product is :action.', ['action' => $packProduct->wasRecentlyCreated ? 'toegevoegd' : 'aangepast']));
+    }
+
+    /**
+     * Remove a product from a pack.
+     *
+     * @param  Request  $request
+     * @param  int  $id
+     * @return RedirectResponse
+     */
+    public function deleteAction(Request $request, int $id): RedirectResponse
+    {
+        app(PackContract::class)->findOrFail($id);
+
+        $itemId = $request->input('item_id');
+
+        /** @var PackProduct $packProduct */
+        $packProduct = app()->make(PackProductContract::class)
+            ->where('id', $itemId)
+            ->where('pack_id', $id)
+            ->first();
+
+        if ($packProduct === null) {
+            return back()->withErrors(__('Geen item gevonden met id :id.', ['id' => $itemId]));
+        }
+
+        $packProduct->delete();
+
+        return back()->with('status', __('Het product is :action.', [ 'action' => 'verwijderd' ]));
     }
 }

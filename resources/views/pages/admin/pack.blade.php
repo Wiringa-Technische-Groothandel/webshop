@@ -32,9 +32,10 @@
                                         <td>{{ $item->getProduct()->getSku() }}</td>
                                         <td>{{ $item->getAmount() }}</td>
                                         <td class="py-0 align-middle text-right" style="width: 50px;">
-                                            <form method="post" class="m-0">
+                                            <form method="post" class="m-0" onsubmit="return confirm('Weet u zeker dat u product {{ $item->getProduct()->getSku() }} wilt verwijderen?');">
                                                 {{ csrf_field() }}
                                                 {{ method_field('delete') }}
+                                                <input type="hidden" name="item_id" value="{{ $item->getId() }}" />
 
                                                 <button class="btn btn-raised btn-danger"><i class="far fa-trash"></i></button>
                                             </form>

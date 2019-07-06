@@ -95,12 +95,16 @@ Route::group([
 
         // Admin packs
         Route::get('packs', 'Packs\OverviewController@getAction')->name('packs');
+        Route::delete('packs', 'Packs\OverviewController@deleteAction');
+
         Route::group(['as' => 'pack.', 'prefix' => 'pack', 'namespace' => 'Packs'], function () {
             Route::get('/{id}', 'DetailController@getAction')->name('edit');
 
             Route::put('/', 'DetailController@putAction')->name('create');
 
             Route::patch('/{id}', 'DetailController@patchAction');
+
+            Route::delete('/{id}', 'DetailController@deleteAction');
         });
 
         // Admin cache
