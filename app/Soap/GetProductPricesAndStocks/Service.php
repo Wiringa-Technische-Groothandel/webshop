@@ -119,18 +119,22 @@ class Service extends AbstractService
         foreach ($soapProducts as $soapProduct) {
             $productModel = $this->getProductModel($soapProduct->ProductId);
 
+            $refactor = (float) $soapProduct->ConversionFactor;
+            $grossPrice = (float) $soapProduct->GrossPrice;
+            $netPrice = (float) $soapProduct->NettPrice;
+            
             /** @var Response\Product $product */
             $product = app()->make(Response\Product::class);
             $product->sku           = $soapProduct->ProductId;
             $product->sales_unit    = $soapProduct->UnitId;
             $product->quantity      = (float) $soapProduct->Quantity;
-            $product->gross_price   = (float) $soapProduct->GrossPrice;
-            $product->net_price     = (float) $soapProduct->NettPrice;
+            $product->gross_price   = (float) ($grossPrice * $refactor);
+            $product->net_price     = (float) ($netPrice * $refactor);
             $product->discount      = (float) $soapProduct->DiscountPerc;
             $product->price_per     = (float) $soapProduct->PricePer;
             $product->price_unit    = $soapProduct->PriceUnitId;
             $product->stock         = (float) $soapProduct->QtyStock;
-            $product->refactor      = (int) $soapProduct->ConversionFactor;
+            $product->refactor      = $refactor;
 
             if ($product->price_unit === 'DAG') {
                 $pricePerString = sprintf('Verhuurd per dag');
