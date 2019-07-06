@@ -8,7 +8,10 @@ use Illuminate\Support\Collection;
 use Illuminate\Contracts\View\View;
 
 use WTG\Contracts\Models\PackContract;
+use WTG\Contracts\Models\ProductContract;
 use WTG\Http\Controllers\Admin\Controller;
+use WTG\Models\Pack;
+use WTG\Models\Product;
 
 /**
  * Pack overview controller.
@@ -30,6 +33,33 @@ class OverviewController extends Controller
         $packs = app(PackContract::class)->all();
 
         return $this->view->make('pages.admin.packs', compact('packs'));
+    }
+
+    /**
+     * Delete a product pack.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function putAction(Request $request): RedirectResponse
+    {
+        $sku = $request->input('product');
+
+        /** @var Product $product */
+        $product = app(ProductContract::class)
+            ->where('sku', $sku)
+            ->first();
+
+        if (! $product) {
+            return back()->withErrors(__('Geen product gevonden met productnummer :sku', ['sku' => $sku]));
+        }
+
+        /** @var Pack $pack */
+        $pack = app(PackContract::class);
+        $pack->setProduct($product);
+        $pack->save();
+
+        return back()->with('status', __('Het actiepakket is aangemaakt.'));
     }
 
     /**
