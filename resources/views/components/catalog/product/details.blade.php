@@ -12,6 +12,12 @@
             <td><b>{{ __('Product groep') }}</b></td>
             <td>{{ $product->getGroup() }}</td>
         </tr>
+        @if ($product->getSupplierCode())
+            <tr>
+                <td><b>{{ __('Fabrieksnummer') }}</b></td>
+                <td>{{ $product->getSupplierCode() }}</td>
+            </tr>
+        @endif
         @if ($product->getEan())
             <tr>
                 <td><b>{{ __('EAN') }}</b></td>

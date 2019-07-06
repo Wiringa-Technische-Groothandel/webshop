@@ -277,6 +277,27 @@ class Product extends Model implements ProductContract
     }
 
     /**
+     * Set the supplier code.
+     *
+     * @param string $supplierCode
+     * @return ProductContract
+     */
+    public function setSupplierCode(string $supplierCode): ProductContract
+    {
+        return $this->setAttribute('supplier_code', $supplierCode);
+    }
+
+    /**
+     * Get the supplier code.
+     *
+     * @return string
+     */
+    public function getSupplierCode(): string
+    {
+        return $this->getAttribute('supplier_code');
+    }
+
+    /**
      * Get the searchable data array for the model.
      *
      * @return array
