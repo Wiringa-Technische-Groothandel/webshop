@@ -23,7 +23,7 @@ class SoapProducts extends Command
     protected $signature =  'import:soap:products ' .
                             '{--s|startFrom=1 : Start index} ' .
                             '{--c|count=200 : Amount of items to fetch at once} ' .
-                            '{--d|dry-run : Do not save the products}';
+                            '{--S|skipDownload : Skip downloading the file}';
 
     /**
      * The console command description.
@@ -58,7 +58,8 @@ class SoapProducts extends Command
     {
         $this->importer->execute(
             $this->option('count'),
-            $this->option('startFrom')
+            $this->option('startFrom'),
+            $this->option('skipDownload')
         );
     }
 }

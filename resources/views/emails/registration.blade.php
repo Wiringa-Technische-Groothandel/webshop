@@ -48,7 +48,6 @@
 |:---------------------------------------- |:--------------------------------------------------------------- |
 | Afwijkend e-mail adres voor facturen     | {{ $registration->getOtherAltEmail() ?: 'N.v.t' }}              |
 | Digitale orderbevestiging ontvangen      | {{ $registration->getOtherOrderConfirmation() ? 'Ja' : 'Nee' }} |
-| Mail ontvangen bij nieuw artikelbestand  | {{ $registration->getOtherMailProductfile() ? 'Ja' : 'Nee' }}   |
 @endcomponent
 
 @endcomponent

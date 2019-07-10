@@ -38,11 +38,17 @@ class SubAccountController extends Controller
     {
         /** @var Customer $customer */
         $customer = $request->user();
-        $accounts = $customer->getCompany()->getAttribute('customers');
+        $accounts = $customer->getCompany()->getCustomers();
 
         return view('pages.account.sub-accounts', compact('accounts'));
     }
 
+    /**
+     * Update a sub account.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function postAction(Request $request)
     {
         try {
@@ -57,8 +63,9 @@ class SubAccountController extends Controller
                 ->getCustomers()
                 ->where('id', $request->input('account'))
                 ->first();
+
             /** @var Role $role */
-            $role = Role::level($request->input('role'))->firstOrFail();
+            $role = Role::level((int) $request->input('role'))->firstOrFail();
 
             if (! $account) {
                 \DB::rollBack();
@@ -101,13 +108,13 @@ class SubAccountController extends Controller
             /** @var Company $company */
             $company = $customer->getAttribute('company');
             /** @var Role $role */
-            $role = Role::level($request->input('role'))->firstOrFail();
+            $role = Role::level((int) $request->input('role'))->firstOrFail();
 
             $usernameExists = $customer
                 ->getCompany()
                 ->getCustomers()
                 ->where('username', $request->input('username'))
-                ->exists();
+                ->isNotEmpty();
 
             if ($usernameExists) {
                 return back()
@@ -123,6 +130,8 @@ class SubAccountController extends Controller
             $account->setAttribute('username', $request->input('username'));
             $account->setAttribute('password', bcrypt($request->input('password')));
 
+            $account->setRole($role);
+
             if (! $account->save()) {
                 return $this->createAccountFailed($request);
             }
@@ -136,8 +145,6 @@ class SubAccountController extends Controller
                 return $this->createAccountFailed($request);
             }
 
-            $account->setRole($role);
-
             \DB::commit();
         } catch (\Exception $e) {
             return $this->createAccountFailed($request);
@@ -145,6 +152,47 @@ class SubAccountController extends Controller
 
         return back()
             ->with('status', __("Het account is succesvol aangemaakt."));
+    }
+
+    public function deleteAction(Request $request, string $id)
+    {
+        try {
+            \DB::beginTransaction();
+
+            /** @var Customer $customer */
+            $customer = $request->user();
+
+            /** @var Company $company */
+            $company = $customer->getCompany();
+
+            /** @var Customer $account */
+            $account = $company
+                ->getCustomers()
+                ->where('id', $id)
+                ->first();
+
+            if (! $account) {
+                \DB::rollBack();
+
+                return response()->json([
+                    'message' => __('Geen account gevonden met ID :id', ['id' => $id])
+                ], 404);
+            }
+
+            $account->delete();
+
+            \DB::commit();
+        } catch (\Exception $e) {
+            logger()->warning($e->getMessage());
+
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 400);
+        }
+
+        return response()->json([
+            'message' => __("Het account is verwijderd.")
+        ]);
     }
 
     /**
@@ -160,60 +208,6 @@ class SubAccountController extends Controller
         return back()
             ->withInput($request->except(['password', 'password_confirmation']))
             ->withErrors(__("Er is een fout opgetreden tijdens het opslaan van het account."));
-    }
-
-    // TODO: Make the stuff below work
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(Request $request)
-    {
-        $validator = \Validator::make($request->all(), [
-            'username' => 'required',
-            'password' => 'required|confirmed',
-            'email'    => 'required|email',
-        ]);
-
-        if ($validator->passes()) {
-            if (User::whereUsername($request->input('username'))->whereCompanyId(Auth::user()->company_id)->count()) {
-                return redirect()
-                    ->back()
-                    ->withInput($request->except(['password', 'password_confirmation']))
-                    ->withErrors('Er bestaat al een sub account met deze login naam.');
-            }
-
-            $user = new User();
-
-            $user->username = $request->input('username');
-            $user->company_id = Auth::user()->company_id;
-            $user->email = $request->input('email');
-            $user->isAdmin = false;
-            $user->manager = ($request->input('manager') ? true : false);
-            $user->password = bcrypt($request->input('password'));
-
-            if ($user->save()) {
-                \Log::info('Created a sub account for user '.Auth::user()->username);
-
-                return redirect('account/accounts')
-                    ->with('status', 'Het sub account is aangemaakt.');
-            } else {
-                \Log::error('An error occurred while creating a sub account');
-
-                return redirect()
-                    ->back()
-                    ->withErrors('Er is een fout opgetreden tijdens het opslaan van het sub account');
-            }
-        } else {
-            \Log::warning('Error occurred while validating input for sub account creation');
-
-            return redirect()
-                ->back()
-                ->withErrors($validator->errors());
-        }
     }
 
     /**
@@ -272,31 +266,6 @@ class SubAccountController extends Controller
                 ->back()
                 ->withInput($request->except('password'))
                 ->withErrors($validator->errors());
-        }
-    }
-
-    /**
-     * Toggle manager status for a sub account.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function update($id)
-    {
-        $user = User::findOrFail($id);
-
-        if ($user->company_id === Auth::user()->company_id) {
-            // Turn false into true and vice versa
-            $user->manager = ($user->manager ? false : true);
-            $user->save();
-
-            return Response::json([
-                'message' => 'Toggled manager status',
-            ]);
-        } else {
-            return Response::json([
-                'message' => 'The user with the given id does not belong to your account',
-            ], 403);
         }
     }
 }

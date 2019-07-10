@@ -22,21 +22,29 @@
                     <table class="table table-borderless">
                         <tbody>
                         <tr>
-                            <th>Contact Email</th>
+                            <th>{{ __('Contact Email') }}</th>
                             <td>
-                                <input placeholder="{{ __('Contact Email') }}"
-                                       class="form-control"
-                                       value="{{ old('contact-email', $customer->getContact()->getContactEmail()) }}"
-                                       name="contact-email"/>
+                                @php($contactEmail = old('contact-email', $customer->getContact()->getContactEmail()))
+                                <div class="form-group">
+                                    <input class="form-control {{ $contactEmail ? 'not-empty' : '' }}"
+                                           value="{{ $contactEmail }}"
+                                           name="contact-email"/>
+
+                                    <label class="control-label">{{ __('Contact Email') }}</label>
+                                </div>
                             </td>
                         </tr>
                         <tr>
-                            <th>Order Email</th>
+                            <th>{{ __('Order Email') }}</th>
                             <td>
-                                <input placeholder="{{ __('Order Email') }}"
-                                       class="form-control"
-                                       value="{{ old('order-email', $customer->getContact()->getOrderEmail()) }}"
-                                       name="order-email"/>
+                                @php($orderEmail = old('order-email', $customer->getContact()->getOrderEmail()))
+                                <div class="form-group">
+                                    <input class="form-control {{ $orderEmail ? 'not-empty' : '' }}"
+                                           value="{{ $orderEmail }}"
+                                           name="order-email"/>
+
+                                    <label class="control-label">{{ __('Order Email') }}</label>
+                                </div>
                             </td>
                         </tr>
                         </tbody>

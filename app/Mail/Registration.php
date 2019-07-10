@@ -23,6 +23,11 @@ class Registration extends Mailable
     public $registration;
 
     /**
+     * @var string
+     */
+    public $subject = '[WTG Webshop] - Registratie verzoek';
+
+    /**
      * Create a new message instance.
      *
      * @param  RegistrationModel  $registration
@@ -40,7 +45,6 @@ class Registration extends Mailable
      */
     public function build()
     {
-        return $this
-            ->markdown('emails.registration');
+        return $this->markdown('emails.registration');
     }
 }

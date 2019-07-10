@@ -30,7 +30,7 @@ class DiscountFile extends Mailable
     /**
      * @var string
      */
-    public $subject = 'Kortingsbestand';
+    public $subject = '[WTG Webshop] - Kortingsbestand';
 
     /**
      * DiscountFile constructor.

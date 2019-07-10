@@ -17,6 +17,11 @@ class Test extends Mailable
     use Queueable, SerializesModels;
 
     /**
+     * @var string
+     */
+    public $subject = '[WTG Webshop] - Test';
+
+    /**
      * Build the message.
      *
      * @return $this

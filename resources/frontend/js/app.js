@@ -1,5 +1,27 @@
-var doc = document.documentElement;
+const doc = document.documentElement;
 doc.setAttribute('data-useragent', navigator.userAgent);
+
+window.checkInputLabelStates = function () {
+    $('.form-control').each(function () {
+        const $formControl = $(this);
+
+        $formControl.val() && $formControl.addClass("not-empty");
+    });
+};
+
+$(document).ready(function () {
+    let $formControls = $('.form-control');
+
+    $formControls.on("change", function(event) {
+        const $target = $(event.target);
+
+        $target.val() ? $target.addClass("not-empty") : $target.removeClass("not-empty");
+    });
+
+    checkInputLabelStates();
+});
+
+checkInputLabelStates();
 
 // ChartJS Stuff
 Chart.defaults.global.defaultFontFamily = "'Titillium Web', sans-serif";

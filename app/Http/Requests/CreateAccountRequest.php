@@ -2,7 +2,9 @@
 
 namespace WTG\Http\Requests;
 
-use WTG\Models\Customer;
+use WTG\Models\Customer as CustomerModel;
+use WTG\Models\Role as RoleModel;
+
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -21,14 +23,10 @@ class CreateAccountRequest extends FormRequest
      */
     public function authorize()
     {
-        /** @var Customer $customer */
+        /** @var CustomerModel $customer */
         $customer = $this->user();
 
-        return $customer->hasAnyRole([
-            Customer::CUSTOMER_ROLE_MANAGER,
-            Customer::CUSTOMER_ROLE_ADMIN,
-            Customer::CUSTOMER_ROLE_SUPER_ADMIN
-        ]);
+        return $customer->getRole()->getLevel() === RoleModel::ROLE_MANAGER;
     }
 
     /**

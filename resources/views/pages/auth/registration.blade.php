@@ -64,6 +64,8 @@
                     $businessPostcode.removeAttr('readonly');
                     $businessPhone.removeAttr('readonly');
                 }
+
+                checkInputLabelStates();
             }
 
             let $copyContact     = $("#copy-contact");

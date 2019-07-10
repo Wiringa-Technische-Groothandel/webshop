@@ -15,26 +15,20 @@
                 {{ csrf_field() }}
 
                 <div class="form-group">
+                    <input type="password" class="form-control" name="password_old" required>
                     <label for="password_old" class="control-label">{{ __("Huidig wachtwoord") }}</label>
-
-                    <input type="password" class="form-control" name="password_old"
-                           placeholder="{{ __("Huidig wachtwoord") }}" required>
                 </div>
 
                 <div class="form-group">
+                    <input type="password" class="form-control" name="password" required>
                     <label for="password" class="control-label">{{ __("Nieuw wachtwoord") }}</label>
-
-                    <input type="password" class="form-control" name="password"
-                           placeholder="{{ __("Nieuw wachtwoord") }}" required>
                 </div>
 
                 <div class="form-group">
+                    <input type="password" class="form-control" name="password_confirmation" required>
                     <label for="password_confirmation" class="control-label">
                         {{ __("Nieuw wachtwoord (bevestiging)") }}
                     </label>
-
-                    <input type="password" class="form-control" name="password_confirmation"
-                           placeholder="{{ __("Nieuw wachtwoord (bevestiging)") }}" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary pull-right">

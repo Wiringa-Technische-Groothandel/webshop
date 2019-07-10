@@ -1,0 +1,32 @@
+.form-group {
+  position: relative;
+
+  .form-control {
+    font-size: 16px;
+    padding: 0 12px 0 18px;
+    height: 42px;
+  }
+
+  & > .form-control {
+    font-size: 16px;
+    padding: 12px 12px 0 18px;
+    height: 42px;
+
+    &.not-empty ~ .control-label,
+    &.fixed ~ .control-label,
+    &:focus ~ .control-label {
+      top: 3px;
+      font-size: 11px;
+      color: #444;
+    }
+
+    & ~ .control-label {
+      position: absolute;
+      pointer-events: none;
+      top: 9px;
+      left: 20px;
+      transition: all .25s;
+      color: #aeb2b9;
+    }
+  }
+}

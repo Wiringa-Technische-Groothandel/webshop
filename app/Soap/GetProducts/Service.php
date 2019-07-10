@@ -147,7 +147,7 @@ class Service extends AbstractService
      */
     public function assignAttributes(Product &$responseProduct, $product): void
     {
-        $attributes = $product->Attributes->ProductAttributeV2;
+        $attributes = optional($product->Attributes)->ProductAttributeV2;
 
         if (empty($attributes)) {
             return;

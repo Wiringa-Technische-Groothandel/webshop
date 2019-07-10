@@ -12,7 +12,7 @@ class RegistrationSuccess extends Mailable
     /**
      * @var string
      */
-    public $subject = 'Registratie verzoek verstuurd';
+    public $subject = '[WTG Webshop] - Registratie verzoek verstuurd';
 
     /**
      * Build the message.

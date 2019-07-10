@@ -93,9 +93,10 @@ class ProductImport
      *
      * @param int $amount
      * @param int $startFrom
+     * @param bool $skipDownload
      * @throws Throwable
      */
-    public function execute(int $amount = 200, int $startFrom = 1)
+    public function execute(int $amount = 200, int $startFrom = 1, bool $skipDownload = false)
     {
         $this->logger->info('[Product import] Starting product import');
 
@@ -103,12 +104,14 @@ class ProductImport
         $this->index = $startFrom;
 
         $filePath = storage_path('app/import/');
-        $filename = sprintf('products-%s.csv', $this->carbon->format('dmYHis'));
+        $filename = 'products-10072019165557.csv'; //sprintf('products-%s.csv', $this->carbon->format('dmYHis'));
 
         $this->logger->info('[Product import] Creating product CSV ' . $filename);
 
         try {
-            $this->createCsv($filePath . $filename);
+            if (! $skipDownload) {
+                $this->createCsv($filePath . $filename);
+            }
         } catch (Exception $e) {
             $this->logger->error('[Product import] ' . $e->getMessage());
             return;
@@ -132,7 +135,7 @@ class ProductImport
      */
     public function createCsv(string $filePath): void
     {
-        $f = fopen($filePath, 'w+');
+        $f = fopen($filePath, 'a+');
         $header = [];
 
         while ($products = $this->downloader->fetchProducts($this->amount, $this->index)) {

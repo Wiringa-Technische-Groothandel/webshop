@@ -29,6 +29,11 @@ class Order extends Mailable
     public $customer;
 
     /**
+     * @var string
+     */
+    public $subject = '[WTG Webshop] - Bestelbevestiging';
+
+    /**
      * Create a new message instance.
      *
      * @param  OrderContract  $order
@@ -55,7 +60,6 @@ class Order extends Mailable
         }
 
         return $this
-            ->subject(__('[WTG Webshop] - Bestelbevestiging'))
             ->bcc([
                 ['name' => 'Wiringa Technische Groothandel', 'email' => config('wtg.orderReceiveEmail')]
             ])

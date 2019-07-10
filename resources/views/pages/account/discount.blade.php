@@ -23,17 +23,16 @@
                                 <b>{{ __('Bestandstype') }}</b>
                             </label>
 
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" name="format"
+                            <br>
+
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-outline-primary active">
+                                    <input class="form-check-input" type="radio" name="format" id="icc_radio"
                                            value="{{ \WTG\Services\DiscountFileService::FORMAT_TYPE_ICC }}" checked>
                                     {{ __('ICC') }}
                                 </label>
-                            </div>
-
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" name="format"
+                                <label class="btn btn-outline-primary">
+                                    <input class="form-check-input" type="radio" name="format" id="csv_radio"
                                            value="{{ \WTG\Services\DiscountFileService::FORMAT_TYPE_CSV }}">
                                     {{ __('CSV') }}
                                 </label>
@@ -47,16 +46,17 @@
                                 <b>{{ __('Ontvangstwijze') }}</b>
                             </label>
 
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" name="receive" value="download" checked>
+                            <br>
+
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-outline-primary active">
+                                    <input class="form-check-input" type="radio" name="receive" id="download_radio"
+                                           value="download" checked>
                                     {{ __('Download') }}
                                 </label>
-                            </div>
-
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" name="receive" value="email" {{ !$customer->getContact()->getContactEmail() ? 'disabled' : '' }}>
+                                <label class="btn btn-outline-primary">
+                                    <input class="form-check-input" type="radio" name="receive" id="email_radio"
+                                           value="email" {{ !$customer->getContact()->getContactEmail() ? 'disabled' : '' }}>
                                     {{ __('E-Mail') }}
                                 </label>
                             </div>

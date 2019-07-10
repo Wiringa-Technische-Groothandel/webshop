@@ -30,7 +30,8 @@
             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-6">
                 <sub-account
                         update-role-url="{{ route('account.update-role', [ 'account' => $account->getId() ]) }}"
-                        :can-edit="{{ (int) ($account->getAttribute('username') === auth()->user()->getAttribute('username')) }}"
+                        delete-account-url="{{ route('account.remove', [ 'account' => $account->getId() ]) }}"
+                        :can-edit="{{ ($account->getAttribute('username') !== auth()->user()->getUsername()) ? 'true' : 'false' }}"
                         :account="{{ $account }}"
                         :current-role="{{ $account->getRole()->getLevel() }}"
                         :role-manager="{{ \WTG\Models\Role::ROLE_MANAGER }}"

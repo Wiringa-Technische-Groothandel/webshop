@@ -16,3 +16,5 @@ _ide_helper.php
 yarn-error.log
 composer.phar
 .phpunit.result.cache
+app/Base/
+app/Catalog

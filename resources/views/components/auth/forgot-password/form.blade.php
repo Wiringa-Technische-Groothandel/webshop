@@ -3,12 +3,14 @@
 
     <div class="form-group">
         <input type="text" class="form-control" autocomplete="off" required name="company"
-               value="{{ old('company') }}" placeholder="{{ __("Debiteurnummer") }}">
+               value="{{ old('company') }}">
+        <label class="control-label">{{ __("Debiteurnummer") }}</label>
     </div>
 
     <div class="form-group">
         <input type="text" class="form-control" autocomplete="off" required name="username"
-               value="{{ old('username') }}" placeholder="{{ __("Gebruikersnaam") }}">
+               value="{{ old('username') }}">
+        <label class="control-label">{{ __("Gebruikersnaam") }}</label>
     </div>
 
     <br />

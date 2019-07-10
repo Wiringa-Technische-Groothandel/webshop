@@ -14,40 +14,40 @@
 
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="col-form-label">{{ __("Naam") }}*</label>
-                        <input type="text" class="form-control" placeholder="{{ __("Naam") }}"
+                        <input type="text" class="form-control" 
                                value="{{ old('name') }}" name="name" required>
+                        <label class="control-label">{{ __("Naam") }}*</label>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-form-label">{{ __("Adres") }}*</label>
-                        <input type="text" class="form-control" placeholder="{{ __("Straat + Huisnummer") }}"
+                        <input type="text" class="form-control" 
                                value="{{ old('address') }}" name="address" required>
+                        <label class="control-label">{{ __("Adres") }}*</label>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label class="col-form-label">{{ __("Postcode") }}*</label>
-                            <input type="text" class="form-control" placeholder="{{ __("Postcode") }}" maxlength="7"
+                            <input type="text" class="form-control" maxlength="7"
                                    value="{{ old('postcode') }}" name="postcode" required>
+                            <label class="control-label">{{ __("Postcode") }}*</label>
                         </div>
                         <div class="form-group col-md-6">
-                            <label class="col-form-label">{{ __("Plaats") }}*</label>
-                            <input type="text" class="form-control" placeholder="{{ __("Plaats") }}"
+                            <input type="text" class="form-control" 
                                    value="{{ old('city') }}" name="city" required>
+                            <label class="control-label">{{ __("Plaats") }}*</label>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label class="col-form-label">{{ __("Telefoon") }}</label>
-                            <input type="tel" class="form-control" placeholder="{{ __("Telefoon") }}"
+                            <input type="tel" class="form-control" 
                                    value="{{ old('phone') }}" name="phone">
+                            <label class="control-label">{{ __("Telefoon") }}</label>
                         </div>
                         <div class="form-group col-md-6">
-                            <label class="col-form-label">{{ __("Mobiel") }}</label>
-                            <input type="tel" class="form-control" placeholder="{{ __("Mobiel") }}"
+                            <input type="tel" class="form-control" 
                                    value="{{ old('mobile') }}" name="mobile">
+                            <label class="control-label">{{ __("Mobiel") }}</label>
                         </div>
                     </div>
 

@@ -15,47 +15,47 @@
 
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="col-form-label">{{ __("Gebruikersnaam") }}*</label>
-                        <input type="text" class="form-control" placeholder="{{ __("Gebruikersnaam") }}"
+                        <input type="text" class="form-control" autocomplete="username"
                                value="{{ old('username') }}" name="username" required>
+                        <label class="control-label">{{ __("Gebruikersnaam") }}*</label>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-form-label">{{ __("E-Mail") }}*</label>
-                        <input type="email" class="form-control" placeholder="{{ __("E-Mail") }}"
+                        <input type="email" class="form-control" autocomplete="email"
                                value="{{ old('email') }}" name="email" required>
+                        <label class="control-label">{{ __("E-Mail") }}*</label>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label class="col-form-label">{{ __("Wachtwoord") }}*</label>
-                            <input type="password" class="form-control" placeholder="{{ __("Wachtwoord") }}"
+                            <input type="password" class="form-control" autocomplete="new-password"
                                    name="password" required>
+                            <label class="control-label">{{ __("Wachtwoord") }}*</label>
                         </div>
 
                         <div class="form-group col-md-6">
-                            <label class="col-form-label">{{ __("Wachtwoord (verificatie)") }}*</label>
-                            <input type="password" class="form-control" name="password_confirmation"
-                                   placeholder="{{ __("Wachtwoord (verificatie)") }}" required>
+                            <input type="password" class="form-control" autocomplete="new-password"
+                                   name="password_confirmation"required>
+                            <label class="control-label">{{ __("Wachtwoord (verificatie)") }}*</label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-form-label">{{ __("Rol") }}*</label>
-
-                        <select name="role" class="form-control" autocomplete="off">
+                        <select name="role" class="form-control fixed" autocomplete="off">
                             <option value="">{{ __("--- Selecteer een rol ---") }}</option>
 
                             @can('subaccounts-assign-manager')
-                                <option value="manager" {{ old('role') === 'manager' ? 'selected' : '' }}>
+                                <option value="{{ \WTG\Models\Role::ROLE_MANAGER }}" {{ old('role') === 'manager' ? 'selected' : '' }}>
                                     {{ __("Manager") }}
                                 </option>
                             @endcan
 
-                            <option value="user" {{  old('role') === 'user' ? 'selected' : '' }}>
+                            <option value="{{ \WTG\Models\Role::ROLE_USER }}" {{  old('role') === 'user' ? 'selected' : '' }}>
                                 {{ __("Gebruiker") }}
                             </option>
                         </select>
+
+                        <label class="control-label">{{ __("Rol") }}*</label>
                     </div>
 
                     <small class="form-text text-muted">

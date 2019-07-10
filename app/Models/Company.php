@@ -26,7 +26,7 @@ class Company extends Model implements CompanyContract
      */
     public function customers()
     {
-        return $this->hasMany(Customer::class);
+        return $this->hasMany(Customer::class)->with('contact');
     }
 
     /**
