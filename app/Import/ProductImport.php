@@ -104,7 +104,7 @@ class ProductImport
         $this->index = $startFrom;
 
         $filePath = storage_path('app/import/');
-        $filename = 'products-10072019165557.csv'; //sprintf('products-%s.csv', $this->carbon->format('dmYHis'));
+        $filename = sprintf('products-%s.csv', $this->carbon->format('dmYHis'));
 
         $this->logger->info('[Product import] Creating product CSV ' . $filename);
 
