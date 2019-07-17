@@ -53,6 +53,7 @@
     "extra": {
         "laravel": {
             "dont-discover": [
+                "tamayo/laravel-scout-elastic"
             ]
         }
     },

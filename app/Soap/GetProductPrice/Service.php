@@ -108,18 +108,23 @@ class Service extends AbstractService
         $soapProduct = $soapResponse->ProductPricesV2->ProductPriceV2;
         $soapPrice = $soapProduct->ProductPriceDetailsV2->ProductPriceDetailV2;
 
+        $refactor = (float) $soapProduct->ConversionFactor;
+        $grossPrice = (float) $soapProduct->GrossPrice;
+        $netPrice = (float) $soapProduct->NettPrice;
+        $pricePer = (float) $soapProduct->PricePer;
+
         /** @var Response\Product $product */
         $product = app()->make(Response\Product::class);
         $product->sku           = $soapProduct->ProductId;
         $product->sales_unit    = $soapProduct->UnitId;
         $product->quantity      = (float) $soapPrice->NumberRequested;
-        $product->gross_price   = (float) $soapPrice->GrossPrice;
-        $product->net_price     = (float) $soapPrice->NettPrice;
+        $product->gross_price   = (float) (($grossPrice * $refactor) / $pricePer);
+        $product->net_price     = (float) (($netPrice * $refactor) / $pricePer);
         $product->discount      = (float) $soapPrice->Discount;
         $product->discountType  = $soapPrice->DiscountOrigin;
-        $product->price_per     = (float) $soapPrice->PricePer;
+        $product->price_per     = $pricePer;
         $product->price_unit    = $soapPrice->PriceUnit;
-        $product->refactor      = (int) $soapPrice->ConversionFactor;
+        $product->refactor      = $refactor;
 
         if ($product->sales_unit === $product->price_unit) {
             $pricePerString = sprintf('Prijs per %s %s',

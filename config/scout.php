@@ -87,6 +87,42 @@ return [
         'hosts' => [
             env('ELASTICSEARCH_HOST', 'http://localhost'),
         ],
+        'config' => [
+            "settings" => [
+                "number_of_shards" => 3,
+                "number_of_replicas" => 1,
+                "analysis" => [
+                    "analyzer" => [
+                        "partial" => [
+                            "tokenizer" => "partial",
+                            "filter" => [
+                                "lowercase"
+                            ]
+                        ],
+                        "partial_search" => [
+                            "tokenizer" => "lowercase"
+                        ],
+                    ],
+                    "tokenizer" => [
+                        "partial" => [
+                            "type" => "ngram",
+                            "min_gram" => 2,
+                            "max_gram" => 15
+                        ]
+                    ]
+                ]
+            ],
+            "mappings" => [
+                "products" => [
+                    "properties" => [
+                        "description" => [
+                            "type" => "text",
+                            "analyzer" => "partial",
+                            "search_analyzer" => "partial_search",
+                        ]
+                    ]
+                ]
+            ]
+        ]
     ],
-
 ];

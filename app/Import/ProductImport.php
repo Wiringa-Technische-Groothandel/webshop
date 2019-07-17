@@ -4,10 +4,10 @@ namespace WTG\Import;
 
 use Carbon\Carbon;
 
+use Elasticsearch\Client as ElasticsearchClient;
 use Exception;
 
 use Illuminate\Database\DatabaseManager;
-use Illuminate\Filesystem\FilesystemManager;
 
 use Psr\Log\LoggerInterface;
 
@@ -60,6 +60,11 @@ class ProductImport
     protected $amount = 200;
 
     /**
+     * @var ElasticsearchClient
+     */
+    protected $elastic;
+
+    /**
      * @var Carbon
      */
     private $runTime;
@@ -72,13 +77,15 @@ class ProductImport
      * @param CsvProductImporter $importer
      * @param Carbon $carbon
      * @param DatabaseManager $databaseManager
+     * @param ElasticsearchClient $elastic
      */
     public function __construct(
         LoggerInterface $logger,
         ProductDownloader $downloader,
         CsvProductImporter $importer,
         Carbon $carbon,
-        DatabaseManager $databaseManager
+        DatabaseManager $databaseManager,
+        ElasticsearchClient $elastic
     ) {
         $this->logger = $logger;
         $this->downloader = $downloader;
@@ -86,6 +93,7 @@ class ProductImport
         $this->runTime = $carbon->now();
         $this->databaseManager = $databaseManager;
         $this->importer = $importer;
+        $this->elastic = $elastic;
     }
 
     /**
@@ -112,16 +120,17 @@ class ProductImport
             if (! $skipDownload) {
                 $this->createCsv($filePath . $filename);
             }
+
+            $this->logger->info('[Product import] Processing import file');
+            $this->updateIndex($filePath . $filename);
+
+            $this->logger->info('[Product import] Moving processed file');
+            $this->moveProcessedFile($filePath, $filename);
         } catch (Exception $e) {
-            $this->logger->error('[Product import] ' . $e->getMessage());
+            $this->logger->error($e);
+
             return;
         }
-
-        $this->logger->info('[Product import] Processing import file');
-        $this->processCsv($filePath . $filename);
-
-        $this->logger->info('[Product import] Moving processed file');
-        $this->moveProcessedFile($filePath, $filename);
 
         $this->logger->info('[Product import] Import finished');
     }
@@ -172,8 +181,9 @@ class ProductImport
 
                 $success = true;
             });
-        } catch (Throwable $e) {
-            $this->logger->error($e->getMessage());
+        } catch (Throwable | Exception $e) {
+            $this->logger->error($e);
+
             throw $e;
         }
 
@@ -191,5 +201,49 @@ class ProductImport
     {
         // TODO: Fix on the server
         //rename($filePath.$filename, storage_path('app/import/processed/').$filename);
+    }
+
+    /**
+     * Create/Update ElasticSearch index.
+     *
+     * @param string $filePath
+     * @return void
+     * @throws Throwable
+     */
+    protected function updateIndex(string $filePath)
+    {
+        $indexAlias = config('scout.elasticsearch.index');
+        $indexClient = $this->elastic->indices();
+
+        try {
+            $indices = array_keys($indexClient->get([ 'index' => $indexAlias ]));
+            $oldIndex = array_pop($indices);
+        } catch (Exception $e) {
+            $oldIndex = false;
+        }
+
+        $newIndex = $indexAlias . '-' . time();
+
+        $indexClient->create([
+            'index' => $newIndex,
+            'body' => config('scout.elasticsearch.config')
+        ]);
+
+        config([ 'scout.elasticsearch.index' => $newIndex ]);
+
+        $this->processCsv($filePath);
+
+        config([ 'scout.elasticsearch.index' => $indexAlias ]);
+
+        if ($oldIndex) {
+            $indexClient->delete([
+                'index' => $oldIndex
+            ]);
+        }
+
+        $indexClient->putAlias([
+            'index' => $newIndex,
+            'name' => $indexAlias
+        ]);
     }
 }

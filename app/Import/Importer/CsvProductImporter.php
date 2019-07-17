@@ -36,10 +36,12 @@ class CsvProductImporter extends ProductImporter
 
             $product = $this->fetchProduct($productData['sku'], $productData['sales_unit']);
 
-            if (! $product) {
-                $this->createProduct($productData);
-            } else {
-                $this->updateProduct($product, $productData);
+            if ($productData['webshop']) {
+                if (! $product) {
+                    $this->createProduct($productData);
+                } else {
+                    $this->updateProduct($product, $productData);
+                }
             }
 
             $importCount++;

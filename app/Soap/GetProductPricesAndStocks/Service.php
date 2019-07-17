@@ -122,16 +122,17 @@ class Service extends AbstractService
             $refactor = (float) $soapProduct->ConversionFactor;
             $grossPrice = (float) $soapProduct->GrossPrice;
             $netPrice = (float) $soapProduct->NettPrice;
+            $pricePer = (float) $soapProduct->PricePer;
             
             /** @var Response\Product $product */
             $product = app()->make(Response\Product::class);
             $product->sku           = $soapProduct->ProductId;
             $product->sales_unit    = $soapProduct->UnitId;
             $product->quantity      = (float) $soapProduct->Quantity;
-            $product->gross_price   = (float) ($grossPrice * $refactor);
-            $product->net_price     = (float) ($netPrice * $refactor);
+            $product->gross_price   = (float) (($grossPrice * $refactor) / $pricePer);
+            $product->net_price     = (float) (($netPrice * $refactor) / $pricePer);
             $product->discount      = (float) $soapProduct->DiscountPerc;
-            $product->price_per     = (float) $soapProduct->PricePer;
+            $product->price_per     = $pricePer;
             $product->price_unit    = $soapProduct->PriceUnitId;
             $product->stock         = (float) $soapProduct->QtyStock;
             $product->refactor      = $refactor;

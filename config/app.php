@@ -161,6 +161,7 @@ return [
         // WTG\Providers\BroadcastServiceProvider::class,
         WTG\Providers\EventServiceProvider::class,
         WTG\Providers\RouteServiceProvider::class,
+        WTG\Providers\ElasticsearchProvider::class,
 
         Luna\SeoUrls\SeoUrlServiceProvider::class
     ],
