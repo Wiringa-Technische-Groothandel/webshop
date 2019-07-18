@@ -13,7 +13,7 @@ build_job:
   stage: build
 
   only:
-    - release
+#    - release
     - master
 
   script:
@@ -84,42 +84,42 @@ build_job:
 #
 #    - docker push $DOCKER_REGISTRY_HOST/wtg/webshop:1.0-$CI_COMMIT_REF_SLUG
 
-deploy_staging_job:
-  stage: deploy
-
-  only:
-    - release
-
-  script:
-    # Install ssh if not already installed
-    - 'which ssh || ( apt-get update -y && apt-get install openssh-client -y )'
-
-    # Create the SSH directory and give it the right permissions
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-
-    # Known host checking
-    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-
-    # Add keypair
-    - echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
-    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-
-    # Add SSH config
-    - echo "$SSH_CONFIG" > ~/.ssh/config
-
-    # Fix permissions
-    - chmod 600 ~/.ssh/id_rsa*
-    - chmod 600 ~/.ssh/config
-    - chmod 644 ~/.ssh/known_hosts
-
-    # Test ssh connection
-    - ssh $SSH_HOSTNAME "echo $0"
-
-    # Release to staging
-    - curl -sS https://getcomposer.org/installer | php
-    - cd build && php ../composer.phar install --no-progress
-    - vendor/bin/dep -vvv deploy staging
+#deploy_staging_job:
+#  stage: deploy
+#
+#  only:
+#    - release
+#
+#  script:
+#    # Install ssh if not already installed
+#    - 'which ssh || ( apt-get update -y && apt-get install openssh-client -y )'
+#
+#    # Create the SSH directory and give it the right permissions
+#    - mkdir -p ~/.ssh
+#    - chmod 700 ~/.ssh
+#
+#    # Known host checking
+#    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+#
+#    # Add keypair
+#    - echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
+#    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+#
+#    # Add SSH config
+#    - echo "$SSH_CONFIG" > ~/.ssh/config
+#
+#    # Fix permissions
+#    - chmod 600 ~/.ssh/id_rsa*
+#    - chmod 600 ~/.ssh/config
+#    - chmod 644 ~/.ssh/known_hosts
+#
+#    # Test ssh connection
+#    - ssh $SSH_HOSTNAME "echo $0"
+#
+#    # Release to staging
+#    - curl -sS https://getcomposer.org/installer | php
+#    - cd build && php ../composer.phar install --no-progress
+#    - vendor/bin/dep -vvv deploy staging
 
 deploy_production_job:
   stage: deploy
