@@ -15,6 +15,8 @@ use Throwable;
 
 use WTG\Import\Downloader\ProductDownloader;
 use WTG\Import\Importer\CsvProductImporter;
+use WTG\Import\Importer\SingleProductImporter;
+use WTG\Models\Product;
 
 /**
  * Product import.
@@ -47,7 +49,12 @@ class ProductImport
     /**
      * @var CsvProductImporter
      */
-    protected $importer;
+    protected $csvProductImporter;
+
+    /**
+     * @var SingleProductImporter
+     */
+    protected $singleProductImporter;
 
     /**
      * @var int
@@ -74,7 +81,8 @@ class ProductImport
      *
      * @param LoggerInterface $logger
      * @param ProductDownloader $downloader
-     * @param CsvProductImporter $importer
+     * @param CsvProductImporter $csvProductImporter
+     * @param SingleProductImporter $singleProductImporter
      * @param Carbon $carbon
      * @param DatabaseManager $databaseManager
      * @param ElasticsearchClient $elastic
@@ -82,7 +90,8 @@ class ProductImport
     public function __construct(
         LoggerInterface $logger,
         ProductDownloader $downloader,
-        CsvProductImporter $importer,
+        CsvProductImporter $csvProductImporter,
+        SingleProductImporter $singleProductImporter,
         Carbon $carbon,
         DatabaseManager $databaseManager,
         ElasticsearchClient $elastic
@@ -92,8 +101,9 @@ class ProductImport
         $this->carbon = $carbon;
         $this->runTime = $carbon->now();
         $this->databaseManager = $databaseManager;
-        $this->importer = $importer;
+        $this->csvProductImporter = $csvProductImporter;
         $this->elastic = $elastic;
+        $this->singleProductImporter = $singleProductImporter;
     }
 
     /**
@@ -102,9 +112,10 @@ class ProductImport
      * @param int $amount
      * @param int $startFrom
      * @param bool $skipDownload
+     * @return void
      * @throws Throwable
      */
-    public function execute(int $amount = 200, int $startFrom = 1, bool $skipDownload = false)
+    public function execute(int $amount = 200, int $startFrom = 1, bool $skipDownload = false): void
     {
         $this->logger->info('[Product import] Starting product import');
 
@@ -133,6 +144,21 @@ class ProductImport
         }
 
         $this->logger->info('[Product import] Import finished');
+    }
+
+    /**
+     * Update a single product.
+     *
+     * @param string $sku
+     * @return void
+     * @throws Exception
+     */
+    public function executeSingle(string $sku): void
+    {
+        $product = Product::findBySku($sku, true);
+        $soapProduct = $this->downloader->fetchProduct($sku, $product->getSalesUnit());
+
+        $this->singleProductImporter->execute(get_object_vars($soapProduct));
     }
 
     /**
@@ -177,7 +203,7 @@ class ProductImport
 
         try {
             $this->databaseManager->transaction(function () use (&$success, $filePath) {
-                $this->importer->execute($filePath);
+                $this->csvProductImporter->execute($filePath);
 
                 $success = true;
             });

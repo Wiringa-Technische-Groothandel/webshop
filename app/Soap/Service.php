@@ -30,6 +30,20 @@ class Service extends AbstractSoapService
     }
 
     /**
+     * Calls: GetProducts
+     *
+     * @soap
+     * @param string $sku
+     * @param string $salesUnit
+     * @return GetProduct\Response
+     */
+    public function getProduct(string $sku, string $salesUnit)
+    {
+        $service = app(GetProduct\Service::class);
+        return $service->handle($sku, $salesUnit);
+    }
+
+    /**
      * Calls: GetProductPrice
      *
      * @soap

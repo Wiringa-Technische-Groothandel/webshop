@@ -2,6 +2,7 @@
 
 namespace WTG\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Intervention\Image\Facades\Image;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
@@ -365,12 +366,16 @@ class Product extends Model implements ProductContract
     /**
      * Find a product by sku.
      *
-     * @param  string  $sku
+     * @param string $sku
+     * @param bool $fail
      * @return Product|null
      */
-    public static function findBySku(string $sku): ?Product
+    public static function findBySku(string $sku, bool $fail = false): ?Product
     {
-        return static::where('sku', $sku)->first();
+        /** @var Builder $query */
+        $query = static::where('sku', $sku);
+
+        return $fail ? $query->firstOrFail() : $query->first();
     }
 
     /**

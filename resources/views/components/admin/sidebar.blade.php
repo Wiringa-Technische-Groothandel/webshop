@@ -20,6 +20,11 @@
                     <i class="fal fa-fw fa-image"></i> Carousel
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Route::is('catalog.index') ? 'active' : '' }}" href="{{ route('admin.catalog.index') }}">
+                    <i class="fal fa-fw fa-list"></i> Productbeheer
+                </a>
+            </li>
             {{--<li class="nav-item">--}}
                 {{--<a class="nav-link {{ Route::is('admin.export') ? 'active' : '' }}" href="{{ route('admin.export') }}">--}}
                     {{--<i class="fal fa-fw fa-cogs"></i> Genereren--}}

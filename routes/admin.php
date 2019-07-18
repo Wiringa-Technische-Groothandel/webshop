@@ -115,5 +115,8 @@ Route::group([
         // Admin e-mail
         Route::get('email', 'Email\IndexController@getAction')->name('email');
         Route::post('email', 'Email\IndexController@postAction')->name('email.test');
+
+        Route::get('catalog', 'Catalog\IndexController@getAction')->name('catalog.index');
+        Route::post('catalog/sync', 'Catalog\SyncController@postAction')->name('catalog.sync');
     });
 });
