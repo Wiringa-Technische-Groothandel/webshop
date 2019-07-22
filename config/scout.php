@@ -89,8 +89,8 @@ return [
         ],
         'config' => [
             "settings" => [
-                "number_of_shards" => 3,
-                "number_of_replicas" => 1,
+                "number_of_shards" => (int) env('ELASTICSEARCH_SHARDS', '3'),
+                "number_of_replicas" => (int) env('ELASTICSEARCH_REPLICAS', '0'),
                 "analysis" => [
                     "analyzer" => [
                         "partial" => [
