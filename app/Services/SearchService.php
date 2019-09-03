@@ -198,9 +198,8 @@ class SearchService
             $must[] = [
                 'multi_match' => [
                     'query' => $terms['required'],
-                    'fields' => ['description^1.5', 'brand^1', 'series^1.5', 'type^1'],
+                    'fields' => ['description^1.5', 'brand^1', 'series^1.5', 'type^1', 'supplier_code^1'],
                     'fuzziness' => $fuzzy ? 'AUTO' : 0,
-                    'analyzer' => 'whitespace',
                     'minimum_should_match' => '95%',
                     'operator' => 'and'
                 ]
@@ -211,9 +210,8 @@ class SearchService
             $must[] = [
                 'multi_match' => [
                     'query' => $terms['any'],
-                    'fields' => ['description^1.5', 'brand^1', 'series^1.5', 'type^1'],
+                    'fields' => ['description^1.5', 'brand^1', 'series^1.5', 'type^1', 'supplier_code^1'],
                     'fuzziness' => $fuzzy ? 'AUTO' : 0,
-                    'analyzer' => 'whitespace',
                     'minimum_should_match' => '1',
                     'operator' => 'or'
                 ]
@@ -229,9 +227,8 @@ class SearchService
                     'should' => $terms['optional'] ? [
                         'multi_match' => [
                             'query' => $terms['optional'],
-                            'fields' => ['description^1.5', 'brand^1', 'series^1.5', 'type^1'],
+                            'fields' => ['description^1.5', 'brand^1', 'series^1.5', 'type^1', 'supplier_code^1'],
                             'fuzziness' => $fuzzy ? 'AUTO' : 0,
-                            'analyzer' => 'whitespace',
                             'operator' => 'or'
                         ]
                     ] : []
