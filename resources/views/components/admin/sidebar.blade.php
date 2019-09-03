@@ -25,11 +25,11 @@
                     <i class="fal fa-fw fa-list"></i> Productbeheer
                 </a>
             </li>
-            {{--<li class="nav-item">--}}
-                {{--<a class="nav-link {{ Route::is('admin.export') ? 'active' : '' }}" href="{{ route('admin.export') }}">--}}
-                    {{--<i class="fal fa-fw fa-cogs"></i> Genereren--}}
-                {{--</a>--}}
-            {{--</li>--}}
+            <li class="nav-item">
+                <a class="nav-link {{ Route::is('search-terms.index') ? 'active' : '' }}" href="{{ route('admin.search-terms.index') }}">
+                    <i class="fal fa-fw fa-search"></i> Zoektermen
+                </a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link {{ Route::is('admin.content') ? 'active' : '' }}" href="{{ route('admin.content') }}">
                     <i class="fal fa-fw fa-pencil"></i> Inhoud aanpassen

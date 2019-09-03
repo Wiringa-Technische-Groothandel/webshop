@@ -83,15 +83,24 @@ return [
     */
 
     'elasticsearch' => [
-        'index' => env('ELASTICSEARCH_INDEX', 'products'),
+        'index' => env('ELASTICSEARCH_INDEX', 'wtg'),
+
         'hosts' => [
             env('ELASTICSEARCH_HOST', 'http://localhost'),
         ],
+
+        "number_of_shards" => (int) env('ELASTICSEARCH_SHARDS', '3'),
+        "number_of_replicas" => (int) env('ELASTICSEARCH_REPLICAS', '0'),
+
         'config' => [
             "settings" => [
-                "number_of_shards" => 3,
-                "number_of_replicas" => 1,
                 "analysis" => [
+                    "filter" => [
+                        "synonym" => [
+                            "type" => "synonym",
+                            "synonyms" => []
+                        ]
+                    ],
                     "analyzer" => [
                         "partial" => [
                             "tokenizer" => "partial",
@@ -100,7 +109,10 @@ return [
                             ]
                         ],
                         "partial_search" => [
-                            "tokenizer" => "lowercase"
+                            "tokenizer" => "whitespace",
+                            "filter" => [
+                                "synonym"
+                            ]
                         ],
                     ],
                     "tokenizer" => [
@@ -119,6 +131,11 @@ return [
                             "type" => "text",
                             "analyzer" => "partial",
                             "search_analyzer" => "partial_search",
+                        ],
+                        "supplier_code" => [
+                            "type" => "text",
+                            "analyzer" => "partial",
+                            "search_analyzer" => "whitespace",
                         ]
                     ]
                 ]
