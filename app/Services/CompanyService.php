@@ -1,13 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Services;
 
-use WTG\Contracts\Models\CustomerContract;
-use WTG\Exceptions\Company\IncompleteDataException;
-use WTG\Models\Company;
+use Illuminate\Contracts\Container\BindingResolutionException;
+
+use Throwable;
+
 use WTG\Contracts\Models\CompanyContract;
+use WTG\Contracts\Models\ContactContract;
+use WTG\Contracts\Models\CustomerContract;
 use WTG\Contracts\Services\CompanyServiceContract;
 use WTG\Exceptions\Company\DuplicateCustomerNumberException;
+use WTG\Exceptions\Company\IncompleteDataException;
+use WTG\Models\Company;
+use WTG\Models\Contact;
 use WTG\Models\Customer;
 
 /**
@@ -21,24 +29,29 @@ class CompanyService implements CompanyServiceContract
     /**
      * Create a new company.
      *
-     * @param  array  $data
+     * @param array $data
      * @return CompanyContract
      * @throws DuplicateCustomerNumberException
      * @throws IncompleteDataException
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function createCompany(array $data): CompanyContract
     {
         $this->validateData($data);
 
         $duplicate = app()->make(CompanyContract::class)
-            ->where('customer_number', $data['customer-number'])
-            ->exists();
+                          ->where('customer_number', $data['customer-number'])
+                          ->exists();
 
         if ($duplicate) {
-            throw new DuplicateCustomerNumberException(__('Er bestaat reeds een debiteur met nummer :number.', [
-                'number' => $data['customer-number']
-            ]));
+            throw new DuplicateCustomerNumberException(
+                __(
+                    'Er bestaat reeds een debiteur met nummer :number.',
+                    [
+                        'number' => $data['customer-number'],
+                    ]
+                )
+            );
         }
 
         /** @var Company $company */
@@ -51,7 +64,7 @@ class CompanyService implements CompanyServiceContract
         $company->setActive((bool) ($data['active'] ?? false));
         $company->saveOrFail();
 
-        $this->createDefaultCustomer($company);
+        $this->createDefaultCustomer($company, $data['email']);
 
         return $company;
     }
@@ -60,10 +73,12 @@ class CompanyService implements CompanyServiceContract
      * Create a default customer for a company.
      *
      * @param CompanyContract $company
+     * @param string $email
      * @return CustomerContract
-     * @throws \Throwable
+     * @throws BindingResolutionException
+     * @throws Throwable
      */
-    protected function createDefaultCustomer(CompanyContract $company): CustomerContract
+    protected function createDefaultCustomer(CompanyContract $company, string $email): CustomerContract
     {
         $password = str_random();
 
@@ -77,38 +92,65 @@ class CompanyService implements CompanyServiceContract
         $customer->company()->associate($company);
         $customer->saveOrFail();
 
+        $this->createCustomerContact($customer, $email);
+
         return $customer;
+    }
+
+    /**
+     * Create a contact for a customer.
+     *
+     * @param CustomerContract $customer
+     * @param string $email
+     * @return ContactContract
+     * @throws BindingResolutionException
+     * @throws Throwable
+     */
+    protected function createCustomerContact(CustomerContract $customer, string $email): ContactContract
+    {
+        /** @var Contact $contact */
+        $contact = app()->make(ContactContract::class);
+        $contact->setContactEmail($email);
+        $contact->setOrderEmail($email);
+        $contact->customer()->associate($customer);
+        $contact->saveOrFail();
+
+        return $contact;
     }
 
     /**
      * Validate the data for creating a new company.
      *
-     * @param  array  $data
-     * @throws IncompleteDataException
+     * @param array $data
      * @return void
+     * @throws IncompleteDataException
      */
     protected function validateData(array $data): void
     {
         $errors = [];
 
-        if (!isset($data['name'])) {
+        if (! isset($data['name'])) {
             $errors[] = __("Missing required field 'name'.");
         }
 
-        if (!isset($data['customer-number'])) {
+        if (! isset($data['customer-number'])) {
             $errors[] = __("Missing required field 'customer-number'.");
         }
 
-        if (!isset($data['street'])) {
+        if (! isset($data['street'])) {
             $errors[] = __("Missing required field 'street'.");
         }
 
-        if (!isset($data['city'])) {
+        if (! isset($data['city'])) {
             $errors[] = __("Missing required field 'city'.");
         }
 
-        if (!isset($data['postcode'])) {
+        if (! isset($data['postcode'])) {
             $errors[] = __("Missing required field 'postcode'.");
+        }
+
+        if (! isset($data['email'])) {
+            $errors[] = __("Missing required field 'email'.");
         }
 
         if ($errors) {

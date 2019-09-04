@@ -17,12 +17,17 @@ $(document).ready( function() {
     });
 });
 
-Vue.component('notification', require('../../global/vue/Notification'));
-Vue.component('block', require('../vue/Content/Block'));
-Vue.component('descriptions', require('../vue/Content/Descriptions'));
+import Notification from '../../global/vue/Notification'
+import Block from '../vue/Content/Block'
+import Descriptions from '../vue/Content/Descriptions'
 
 window.vm = new Vue({
     el: '#app',
+    components: {
+        'notification': Notification,
+        'block': Block,
+        'descriptions': Descriptions,
+    },
     data () {
         return {
             filter: {}
