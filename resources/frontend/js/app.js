@@ -26,21 +26,20 @@ checkInputLabelStates();
 // ChartJS Stuff
 Chart.defaults.global.defaultFontFamily = "'Titillium Web', sans-serif";
 
-Vue.component('notification', require('../../global/vue/Notification'));
-
-Vue.component('carousel', require('../vue/Carousel'));
-Vue.component('price', require('../vue/Catalog/Price'));
-Vue.component('cart', require('../vue/Checkout/Cart'));
-Vue.component('add-to-cart', require('../vue/Checkout/AddToCart'));
-Vue.component('mini-cart', require('../vue/Checkout/MiniCart'));
-Vue.component('favorites-toggle-button', require('../vue/Favorites/ToggleButton'));
-Vue.component('footer-block', require('../vue/Footer'));
-Vue.component('logs', require('../vue/Log'));
-Vue.component('contact-email', require('../vue/Account/ContactEmail'));
-Vue.component('address-list', require('../vue/Account/AddressList'));
-Vue.component('sub-account', require('../vue/Account/SubAccount'));
-Vue.component('cart-address', require('../vue/Checkout/Address/CartAddress'));
-Vue.component('quick-search', require('../vue/Search/QuickSearch'));
+import Notification from '../../global/vue/Notification'
+import Carousel from '../vue/Carousel'
+import Price from '../vue/Catalog/Price'
+import Cart from '../vue/Checkout/Cart'
+import AddToCart from '../vue/Checkout/AddToCart'
+import MiniCart from '../vue/Checkout/MiniCart'
+import FavoritesToggleButton from '../vue/Favorites/ToggleButton'
+import FooterBlock from '../vue/Footer'
+import Logs from '../vue/Log'
+import ContactEmail from '../vue/Account/ContactEmail'
+import AddressList from '../vue/Account/AddressList'
+import SubAccount from '../vue/Account/SubAccount'
+import CartAddress from '../vue/Checkout/Address/CartAddress'
+import QuickSearch from '../vue/Search/QuickSearch'
 
 window.vm = new Vue({
     el: '#app',
@@ -49,6 +48,22 @@ window.vm = new Vue({
             skus: [],
             filter: {}
         }
+    },
+    components: {
+        Notification,
+        Carousel,
+        Price,
+        Cart,
+        AddToCart,
+        MiniCart,
+        FavoritesToggleButton,
+        FooterBlock,
+        Logs,
+        ContactEmail,
+        AddressList,
+        SubAccount,
+        CartAddress,
+        QuickSearch,
     },
     methods: {
         fetchPrices () {

@@ -12,24 +12,26 @@
 
 @push('scripts')
     <script>
-        var companies = {!! $companies !!};
-        var table = $('#companies-table').DataTable({
-            data: companies,
-            columns: [
-                { title: "#", data: 'customer_number' },
-                { title: "{{ __('Naam') }}", data: 'name' },
-                { title: "{{ __('Aantal gebruikers') }}", data: 'account_count' },
-                { title: "{{ __('Aangemaakt op') }}", data: 'created_at' },
-                { title: "{{ __('Gewijzigd op') }}", data: 'updated_at' }
-            ]
+        $(document).ready(function () {
+            var companies = {!! $companies !!};
+            var table = $('#companies-table').DataTable({
+                data: companies,
+                columns: [
+                    { title: "#", data: 'customer_number' },
+                    { title: "{{ __('Naam') }}", data: 'name' },
+                    { title: "{{ __('Aantal gebruikers') }}", data: 'account_count' },
+                    { title: "{{ __('Aangemaakt op') }}", data: 'created_at' },
+                    { title: "{{ __('Gewijzigd op') }}", data: 'updated_at' }
+                ]
+            });
+
+            $('#companies-table_length').hide();
+
+            $('#companies-table tbody').on('click', 'tr', function () {
+                var data = table.row(this).data();
+
+                window.location.href = data.editUrl;
+            });
         });
-
-        $('#companies-table_length').hide();
-
-        $('#companies-table tbody').on('click', 'tr', function () {
-            var data = table.row(this).data();
-
-            window.location.href = data.editUrl;
-        } );
     </script>
 @endpush
