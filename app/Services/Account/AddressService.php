@@ -131,8 +131,10 @@ class AddressService implements AddressServiceContract
         if ($defaultAddress === null) {
             $defaultAddress = $this->getAddressesForCustomer($customer, false)->first();
 
-            $customer->getContact()->setDefaultAddress($defaultAddress->getId());
-            $customer->getContact()->save();
+            if ($defaultAddress) {
+                $customer->getContact()->setDefaultAddress($defaultAddress->getId());
+                $customer->getContact()->save();
+            }
         }
 
         return $defaultAddress;
