@@ -6,31 +6,30 @@
 
         <hr />
 
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th scope="col">{{ __('SKU') }}</th>
-                <th scope="col">{{ __('Groep') }}</th>
-                <th scope="col">{{ __('Naam') }}</th>
-                <th scope="col">{{ __('Aangemaakt op') }}</th>
-                <th scope="col">{{ __('Gewijzigd op') }}</th>
-            </tr>
-            </thead>
-            <tbody>
-                @foreach($products as $product)
-                    <tr>
-                        <th scope="row">{{ $product->getSku() }}</th>
-                        <td>{{ $product->getGroup() }}</td>
-                        <td>{{ $product->getName() }}</td>
-                        <td>{{ $product->created_at->format('Y-m-d H:i') }}</td>
-                        <td>{{ $product->updated_at->format('Y-m-d H:i') }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-
-        <hr />
-
-        {{ $products->links('pagination::bootstrap-4') }}
+        <table id="products-table" class="table table-hover" style="width: 100%"></table>
     </div>
 </div>
+
+@push('scripts')
+    <script>
+        var products = {!! $products !!};
+        var table = $('#products-table').DataTable({
+            data: products,
+            columns: [
+                { title: "{{ __('SKU') }}", data: 'sku' },
+                { title: "{{ __('Groep') }}", data: 'group' },
+                { title: "{{ __('Naam') }}", data: 'name' },
+                { title: "{{ __('Aangemaakt op') }}", data: 'created_at' },
+                { title: "{{ __('Gewijzigd op') }}", data: 'updated_at' }
+            ]
+        });
+
+        $('#products-table_length').hide();
+
+        $('#products-table tbody').on('click', 'tr', function () {
+            var data = table.row(this).data();
+
+            $('#product-sync-input').val(data.sku);
+        } );
+    </script>
+@endpush

@@ -35,4 +35,7 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'sentry' => [
+        'js-dsn' => env('SENTRY_JAVASCRIPT_DSN'),
+    ]
 ];

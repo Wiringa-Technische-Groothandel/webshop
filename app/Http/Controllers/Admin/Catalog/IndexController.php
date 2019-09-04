@@ -22,7 +22,7 @@ class IndexController extends Controller
      */
     public function getAction(): View
     {
-        $products = Product::paginate(10);
+        $products = Product::all(['sku', 'group', 'name', 'created_at', 'updated_at']);
 
         return $this->view->make('pages.admin.catalog', [
             'products' => $products

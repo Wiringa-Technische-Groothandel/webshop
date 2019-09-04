@@ -7,33 +7,6 @@
         <hr />
 
         <table id="companies-table" class="table table-hover" style="width:100%"></table>
-
-{{--        <table class="table table-hover">--}}
-{{--            <thead>--}}
-{{--            <tr>--}}
-{{--                <th scope="col">#</th>--}}
-{{--                <th scope="col"></th>--}}
-{{--                <th scope="col"></th>--}}
-{{--                <th scope="col"></th>--}}
-{{--                <th scope="col"></th>--}}
-{{--            </tr>--}}
-{{--            </thead>--}}
-{{--            <tbody>--}}
-{{--            @foreach($companies as $company)--}}
-{{--                <tr>--}}
-{{--                    <th scope="row">{{ $company->getCustomerNumber() }}</th>--}}
-{{--                    <td><a href="{{ route('admin.company.edit', ['id' => $company->getId()]) }}">{{ $company->getName() }}</a></td>--}}
-{{--                    <td>{{ $company->getCustomers()->count() }}</td>--}}
-{{--                    <td>{{ $company->created_at->format('Y-m-d H:i') }}</td>--}}
-{{--                    <td>{{ $company->updated_at->format('Y-m-d H:i') }}</td>--}}
-{{--                </tr>--}}
-{{--            @endforeach--}}
-{{--            </tbody>--}}
-{{--        </table>--}}
-
-{{--        <hr />--}}
-
-{{--        {{ $companies->links('pagination::bootstrap-4') }}--}}
     </div>
 </div>
 
