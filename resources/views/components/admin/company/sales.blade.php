@@ -14,8 +14,16 @@
 
 @push('scripts')
     <script>
-        console.log({{ $orders->keys() }});
-        console.log({{ $orders->values() }});
+        function makeChart (context, type, data, options) {
+            options = options ? options : {};
+
+            return new Chart(context, {
+                type: type,
+                data: data,
+                options: options
+            });
+        }
+
         $(document).ready(function () {
             // Get the context of the canvas element we want to select
             var orderChart = makeChart(
