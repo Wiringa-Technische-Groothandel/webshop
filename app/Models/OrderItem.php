@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use WTG\Contracts\Models\OrderContract;
 use WTG\Contracts\Models\OrderItemContract;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use WTG\Contracts\Models\ProductContract;
 
 /**
  * Order item model.
@@ -167,5 +168,13 @@ class OrderItem extends Model implements OrderItemContract
     public function getSubtotal(): ?string
     {
         return $this->getAttribute('subtotal');
+    }
+
+    /**
+     * @return ProductContract|null
+     */
+    public function getProduct(): ?ProductContract
+    {
+        return Product::findBySku($this->getSku());
     }
 }

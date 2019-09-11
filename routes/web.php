@@ -97,6 +97,7 @@ Route::group([
     Route::get('password', 'PasswordController@getAction')->name('change_password');
     Route::get('favorites', 'FavoritesController@getAction')->name('favorites');
     Route::get('order-history', 'OrderHistoryController@getAction')->name('order-history');
+    Route::get('order/{uuid}', 'OrderController@getAction')->name('order.view');
     Route::get('invoices', 'InvoiceController@getAction')->name('invoices');
     Route::get('invoices/{file}', 'InvoiceController@viewAction')->name('invoices.view');
     Route::get('addresses', 'AddressController@getAction')->name('addresses');
@@ -105,6 +106,7 @@ Route::group([
     Route::post('edit', 'ProfileController@postAction');
     Route::post('password', 'PasswordController@postAction');
     Route::post('order-history', 'OrderHistoryController@postAction');
+    Route::post('order/{uuid}', 'OrderController@postAction');
     Route::post('update-role', 'SubAccountController@postAction')->name('update-role');
     Route::post('discount', 'DiscountController@postAction');
 
