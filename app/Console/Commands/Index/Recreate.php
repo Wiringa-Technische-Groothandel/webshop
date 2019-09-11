@@ -71,7 +71,7 @@ class Recreate extends Command
         $config = config('scout.elasticsearch.config');
         $config['settings']['number_of_shards'] = config('scout.elasticsearch.number_of_shards');
         $config['settings']['number_of_replicas'] = config('scout.elasticsearch.number_of_replicas');
-        $config['mapping']
+//        $config['mapping']
 
         try {
             $indexClient->create([
