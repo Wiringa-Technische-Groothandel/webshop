@@ -217,4 +217,23 @@ class Order extends Model implements OrderContract
     {
         return (float) $this->items()->sum('subtotal');
     }
+
+    /**
+     * @return string|null
+     */
+    public function toPdf(): ?string
+    {
+        $view = view('pdf.order', [
+            'order' => $this
+        ]);
+
+        $snappy = app('snappy.pdf');
+        try {
+            return $snappy->getOutputFromHtml($view->render());
+        } catch (\Throwable $e) {
+            \Log::warning($e);
+        }
+
+        return null;
+    }
 }

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="nl">
     <head>
-        <link rel="stylesheet" href="{{ public_path('assets/css/app.css') }}">
+        <link rel="stylesheet" href="{{ public_path('assets/frontend/css/app.css') }}">
     </head>
 
-    <body>
+    <body style="width:25cm; height:29.7cm">
         <header class="mb-5">
-            <div class="row">
-                <div class="col-4">
+            <div class="row clearfix">
+                <div class="col-4 float-left">
                     @php
                         $imageSrc = cache()->rememberForever('images.email-logo', function () {
                             return Image::make(storage_path('app/public/static/images/logo.png'))->encode('data-url');
@@ -15,7 +15,8 @@
                     @endphp
                     <img src="{{ $imageSrc }}" alt="Logo" class="img-fluid" />
                 </div>
-                <div class="col-8 text-center">
+
+                <div class="col-8 float-right text-right">
                     @yield('title')
                 </div>
             </div>
