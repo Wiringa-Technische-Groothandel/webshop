@@ -7,7 +7,6 @@
 
     Redirect 301 /contact /
     Redirect 301 /about /
-    Redirect 301 /downloads /
 
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
