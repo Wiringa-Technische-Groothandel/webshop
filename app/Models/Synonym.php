@@ -59,6 +59,9 @@ class Synonym extends Model
         return $this->setAttribute('target', $target);
     }
 
+    /**
+     * @return array
+     */
     public static function createMapping(): array
     {
         $synonyms = self::all();
