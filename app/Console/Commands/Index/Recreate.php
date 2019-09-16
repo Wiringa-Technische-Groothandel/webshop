@@ -9,6 +9,7 @@ use Illuminate\Console\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use WTG\Models\Synonym;
 
 /**
  * Index import command.
@@ -71,7 +72,8 @@ class Recreate extends Command
         $config = config('scout.elasticsearch.config');
         $config['settings']['number_of_shards'] = config('scout.elasticsearch.number_of_shards');
         $config['settings']['number_of_replicas'] = config('scout.elasticsearch.number_of_replicas');
-//        $config['mapping']
+
+        $config['settings']['analysis']['filter']['synonym']['synonyms'] = Synonym::createMapping();
 
         try {
             $indexClient->create([
