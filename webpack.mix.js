@@ -17,4 +17,5 @@ mix.sass("resources/frontend/sass/app.scss", 'public/assets/frontend/css')
     .sass('resources/admin/sass/app.scss', 'public/assets/admin/css/')
     .js('resources/admin/js/vendors.js', 'public/assets/admin/js/vendors.js')
     .js('resources/admin/js/app.js', 'public/assets/admin/js/app.js')
+    .js('resources/global/js/head.js', 'public/assets/head.js')
     .version();

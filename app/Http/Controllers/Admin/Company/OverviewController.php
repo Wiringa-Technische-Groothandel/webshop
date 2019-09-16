@@ -41,14 +41,26 @@ class OverviewController extends Controller
     /**
      * Company list.
      *
-     * @return \Illuminate\Contracts\View\View
+     * @return View
      */
     public function getAction(): View
     {
-        $companies = app()->make(CompanyContract::class)
+        $companies = app(CompanyContract::class)
             ->with('customers')
             ->orderBy('customer_number')
-            ->paginate(10);
+            ->get()
+            ->map(function (CompanyContract $company) {
+                return [
+                    'editUrl' => route('admin.company.edit', [ 'company' => $company->getId() ]),
+                    'id' => $company->getId(),
+                    'customer_number' => $company->getCustomerNumber(),
+                    'name' => $company->getName(),
+                    'account_count' => $company->getCustomers()->count(),
+                    'created_at' => $company->created_at->format('Y-m-d H:i'),
+                    'updated_at' => $company->updated_at->format('Y-m-d H:i')
+                ];
+            });
+//            ->paginate(10);
 
         return $this->view->make('pages.admin.companies', compact('companies'));
     }
@@ -65,7 +77,7 @@ class OverviewController extends Controller
             \DB::beginTransaction();
 
             $company = $this->companyService->createCompany($request->all([
-                'name', 'customer-number', 'street', 'city', 'postcode', 'active'
+                'name', 'customer-number', 'street', 'city', 'postcode', 'active', 'email'
             ]));
 
             \DB::commit();

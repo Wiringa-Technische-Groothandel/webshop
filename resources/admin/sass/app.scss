@@ -8,10 +8,13 @@
 // Packages
 @import "~bootstrap-material-design/scss/bootstrap-material-design";
 
+@import "~datatables.net-bs4/css/dataTables.bootstrap4.min";
+
 // Components
 @import "components/sidebar";
 @import "components/navigation";
 @import "components/notification";
+@import "components/dataTables";
 
 html,
 body {

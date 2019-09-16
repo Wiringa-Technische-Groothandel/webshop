@@ -15,7 +15,7 @@
                          submit-url="{{ route('checkout.cart') }}"></add-to-cart>
         </div>
 
-        <div class="col-12 col-md-2">
+        <div class="col-12">
             <favorites-toggle-button sku="{{ $product->getSku() }}"
                                      check-url="{{ route('favorites.check') }}"
                                      toggle-url="{{ route('favorites.toggle') }}"></favorites-toggle-button>

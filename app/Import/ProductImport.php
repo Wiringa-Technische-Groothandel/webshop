@@ -250,9 +250,13 @@ class ProductImport
 
         $newIndex = $indexAlias . '-' . time();
 
+        $config = config('scout.elasticsearch.config');
+        $config['settings']['number_of_shards'] = config('scout.elasticsearch.number_of_shards');
+        $config['settings']['number_of_replicas'] = config('scout.elasticsearch.number_of_replicas');
+
         $indexClient->create([
             'index' => $newIndex,
-            'body' => config('scout.elasticsearch.config')
+            'body' => $config
         ]);
 
         config([ 'scout.elasticsearch.index' => $newIndex ]);

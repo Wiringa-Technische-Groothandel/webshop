@@ -9,6 +9,14 @@
 
 <title>WTG Admin - @yield('title', $title ?? 'Untitled')</title>
 
+<script src="{{ mix('assets/head.js') }}"></script>
+
+@if (config('services.sentry.js-dsn'))
+    <script type="application/javascript">
+        Sentry.init({ dsn: '{{ config('services.sentry.js-dsn') }}' });
+    </script>
+@endif
+
 <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.8.0/css/all.css"
       integrity="sha384-/pOR6TNYPdUaQQQRKQ4XHznZ4U2K/Lscb3u6jshUngC/31fLTuyX9FZb24gp4O3J" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css?family=Muli:300,400,600,800" rel="stylesheet">

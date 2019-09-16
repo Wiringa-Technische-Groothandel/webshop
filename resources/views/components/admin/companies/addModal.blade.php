@@ -6,7 +6,7 @@
                 {{ method_field('put') }}
 
                 <div class="modal-header">
-                    <h5 class="modal-title">{{ __('Slide toevoegen') }}</h5>
+                    <h5 class="modal-title">{{ __('Debiteur toevoegen') }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -40,9 +40,14 @@
                         <input value="{{ old('city') }}" class="form-control" type="text" name="city" required>
                     </div>
 
+                    <div class="form-group">
+                        <label class="bmd-label-floating">{{ __('E-Mail') }}</label>
+                        <input value="{{ old('email') }}" class="form-control" type="text" name="email" required>
+                    </div>
+
                     <div class="checkbox mt-3">
                         <label>
-                            <input type="checkbox" name="active" {{ old('active') ? 'checked' : '' }}> {{ __('Is actief') }}
+                            <input type="checkbox" name="active" {{ old('active', true) ? 'checked' : '' }}> {{ __('Is actief') }}
                         </label>
                     </div>
                 </div>
