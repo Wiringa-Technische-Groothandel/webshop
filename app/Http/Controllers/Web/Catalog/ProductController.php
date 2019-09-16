@@ -3,7 +3,6 @@
 namespace WTG\Http\Controllers\Web\Catalog;
 
 use Illuminate\View\Factory as ViewFactory;
-use WTG\Models\Product;
 use Illuminate\View\View;
 use WTG\Http\Controllers\Controller;
 use WTG\Repositories\ProductRepository;

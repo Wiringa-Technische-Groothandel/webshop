@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace WTG\Http\Controllers\Admin\Catalog;
+namespace WTG\Http\Controllers\Admin\SearchTerms;
 
 use Illuminate\Contracts\View\View;
 
 use WTG\Http\Controllers\Admin\Controller;
-use WTG\Models\Product;
+use WTG\Models\Synonym;
 
 /**
- * Product catalog overview.
+ * Admin search terms overview controller.
  *
  * @package     WTG\Http
  * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
@@ -16,16 +16,14 @@ use WTG\Models\Product;
 class IndexController extends Controller
 {
     /**
-     * Product overview.
-     *
      * @return View
      */
     public function getAction(): View
     {
-        $products = Product::all(['sku', 'group', 'name', 'created_at', 'updated_at']);
+        $synonyms = Synonym::all();
 
-        return $this->view->make('pages.admin.catalog', [
-            'products' => $products
+        return $this->view->make('pages.admin.search-terms', [
+            'synonyms' => $synonyms
         ]);
     }
 }

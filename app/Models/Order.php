@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
+use Illuminate\Support\Str;
 use WTG\Contracts\Models\CompanyContract;
 use WTG\Contracts\Models\OrderContract;
 
@@ -19,6 +20,20 @@ use WTG\Contracts\Models\OrderContract;
  */
 class Order extends Model implements OrderContract
 {
+    /**
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saving(function (self $model) {
+            if (! $model->getUuid()) {
+                $model->setUuid(Str::uuid());
+            }
+        });
+    }
+
     /**
      * Company relation.
      *
@@ -216,5 +231,41 @@ class Order extends Model implements OrderContract
     public function getGrandTotal(): float
     {
         return (float) $this->items()->sum('subtotal');
+    }
+
+    /**
+     * @param string $uuid
+     * @return OrderContract
+     */
+    public function setUuid(string $uuid): OrderContract
+    {
+        return $this->setAttribute('uuid', $uuid);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUuid(): ?string
+    {
+        return $this->getAttribute('uuid');
+    }
+
+    /**
+     * @return string|null
+     */
+    public function toPdf(): ?string
+    {
+        $view = view('pdf.order', [
+            'order' => $this
+        ]);
+
+        $snappy = app('snappy.pdf');
+        try {
+            return $snappy->getOutputFromHtml($view->render());
+        } catch (\Throwable $e) {
+            \Log::warning($e);
+        }
+
+        return null;
     }
 }

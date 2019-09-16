@@ -1,12 +1,12 @@
-@extends('layouts.email')
+@extends('layouts.pdf')
 
 @section('title')
-    <h2 class="py-3">{{ __("Webshop order") }}</h2>
+    <h2 class="py-3 d-inline-block">{{ __("Webshop order") }}</h2>
 @endsection
 
 @section('pre-content')
-    <div class="row mb-3">
-        <div class="col-6">
+    <div class="row mb-3 clearfix">
+        <div class="col-6 float-left">
             @if ($order->getAttribute('comment'))
                 <div class="card">
                     <div class="card-header">
@@ -18,7 +18,7 @@
                 </div>
             @endif
         </div>
-        <div class="col-6">
+        <div class="col-6 float-right">
             <div class="card">
                 <div class="card-header">
                     {{ __("Afleveradres") }}

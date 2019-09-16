@@ -10,8 +10,8 @@
             {{ csrf_field() }}
 
             <div class="form-group">
-                <label for="sku" class="control-label">{{ __('Productnummer') }}</label>
-                <input id="sku" name="sku" class="form-control" type="number" />
+                <label for="product-sync-input" class="control-label">{{ __('Productnummer') }}</label>
+                <input id="product-sync-input" name="sku" class="form-control" type="number"  />
             </div>
 
             <button class="btn btn-raised btn-success">

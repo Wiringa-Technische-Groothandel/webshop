@@ -1,0 +1,31 @@
+@import "../variables";
+
+table.dataTable {
+  tr {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  thead {
+    .sorting,
+    .sorting_asc,
+    .sorting_desc,
+    .sorting_asc_disabled,
+    .sorting_desc_disabled {
+      &:before,
+      &:after {
+        font-family: $font-family-fa;
+        font-weight: bold;
+      }
+
+      &:before {
+        content: '\f176';
+      }
+
+      &:after {
+        content: '\f175';
+      }
+    }
+  }
+}

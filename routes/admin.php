@@ -118,5 +118,9 @@ Route::group([
 
         Route::get('catalog', 'Catalog\IndexController@getAction')->name('catalog.index');
         Route::post('catalog/sync', 'Catalog\SyncController@postAction')->name('catalog.sync');
+
+        Route::get('search-terms', 'SearchTerms\IndexController@getAction')->name('search-terms.index');
+        Route::post('search-terms', 'SearchTerms\SaveController@postAction')->name('search-terms.save');
+        Route::delete('search-terms/{id}', 'SearchTerms\DeleteController@deleteAction')->name('search-terms.delete');
     });
 });

@@ -6,6 +6,7 @@ use WTG\Models\Customer;
 use Illuminate\Http\Request;
 use WTG\Http\Controllers\Controller;
 use WTG\Http\Requests\DownloadOrderRequest;
+use WTG\Models\Order;
 
 /**
  * Order history controller.
@@ -47,6 +48,7 @@ class OrderHistoryController extends Controller
     {
         /** @var Customer $customer */
         $customer = $request->user();
+        /** @var Order $order */
         $order = $customer
             ->getCompany()
             ->orders()
@@ -57,10 +59,14 @@ class OrderHistoryController extends Controller
             return back()->withErrors(__("Er was geen order gevonden met het opgegeven id."));
         }
 
-        $snappy = app()->make('snappy.pdf');
+        $pdfData = $order->toPdf();
+
+        if (! $pdfData) {
+            return back()->withErrors(__("Er is een fout opgetreden tijdens het genereren van de PDF."));
+        }
 
         return response(
-            $snappy->getOutputFromHtml(view('pdf.order', compact('order'))->render()),
+            $pdfData,
             200,
             [
                 'Content-Type'          => 'application/pdf',
