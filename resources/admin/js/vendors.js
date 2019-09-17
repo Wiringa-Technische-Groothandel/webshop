@@ -5,4 +5,4 @@ require('../../global/js/polyfills');
 require('../../global/js/base-components');
 
 // Bootstrap 4 with material stuff
-require('bootstrap-material-design');
+require('../../../node_modules/bootstrap-material-design/js/bootstrapMaterialDesign');
