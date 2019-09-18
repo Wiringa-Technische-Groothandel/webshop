@@ -15,7 +15,7 @@ use WTG\Http\Controllers\Admin\Controller;
 use WTG\Import\ProductImport;
 
 /**
- * Product catalog overview.
+ * Product catalog sync controller.
  *
  * @package     WTG\Http
  * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
@@ -27,6 +27,12 @@ class SyncController extends Controller
      */
     protected $productImporter;
 
+    /**
+     * SyncController constructor.
+     *
+     * @param ViewFactory $view
+     * @param ProductImport $productImporter
+     */
     public function __construct(ViewFactory $view, ProductImport $productImporter)
     {
         parent::__construct($view);

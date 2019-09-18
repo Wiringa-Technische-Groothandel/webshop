@@ -11,6 +11,8 @@
 
             <div class="col-sm-3">
                 @include('components.admin.catalog.sync')
+
+                @include('components.admin.catalog.index')
             </div>
         </div>
     </div>

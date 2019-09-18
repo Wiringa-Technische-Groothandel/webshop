@@ -11,7 +11,7 @@
 </div>
 
 @push('scripts')
-    <script>
+    <script async defer>
         var products = {!! $products !!};
         var table = $('#products-table').DataTable({
             data: products,
