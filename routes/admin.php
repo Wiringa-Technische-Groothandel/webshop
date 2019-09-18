@@ -118,6 +118,7 @@ Route::group([
 
         Route::get('catalog', 'Catalog\IndexController@getAction')->name('catalog.index');
         Route::post('catalog/sync', 'Catalog\SyncController@postAction')->name('catalog.sync');
+        Route::post('catalog/reindex', 'Catalog\ReindexController@postAction')->name('catalog.reindex');
 
         Route::get('search-terms', 'SearchTerms\IndexController@getAction')->name('search-terms.index');
         Route::post('search-terms', 'SearchTerms\SaveController@postAction')->name('search-terms.save');

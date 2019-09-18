@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card mb-3">
     <div class="card-body">
         <h3>
             <i class="fal fa-fw fa-sync"></i> {{ __('Update product') }}

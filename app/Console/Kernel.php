@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        \Laravel\Scout\Console\ImportCommand::class, // Added here so it's available from the Artisan facade
     ];
 
     /**
