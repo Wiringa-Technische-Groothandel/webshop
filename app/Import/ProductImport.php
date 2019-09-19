@@ -17,6 +17,7 @@ use WTG\Import\Downloader\ProductDownloader;
 use WTG\Import\Importer\CsvProductImporter;
 use WTG\Import\Importer\SingleProductImporter;
 use WTG\Models\Product;
+use WTG\Models\Synonym;
 
 /**
  * Product import.
@@ -123,7 +124,7 @@ class ProductImport
         $this->index = $startFrom;
 
         $filePath = storage_path('app/import/');
-        $filename = sprintf('products-%s.csv', $this->carbon->format('dmYHis'));
+        $filename = sprintf('products-%s.csv', $this->carbon->format('YmdHis'));
 
         $this->logger->info('[Product import] Creating product CSV ' . $filename);
 
@@ -139,6 +140,10 @@ class ProductImport
             $this->moveProcessedFile($filePath, $filename);
         } catch (Exception $e) {
             $this->logger->error($e);
+
+            \Sentry::captureException($e);
+
+            $this->logger->warning('[Product import] Import failed');
 
             return;
         }
@@ -253,6 +258,8 @@ class ProductImport
         $config = config('scout.elasticsearch.config');
         $config['settings']['number_of_shards'] = config('scout.elasticsearch.number_of_shards');
         $config['settings']['number_of_replicas'] = config('scout.elasticsearch.number_of_replicas');
+
+        $config['settings']['analysis']['filter']['synonym']['synonyms'] = Synonym::createMapping();
 
         $indexClient->create([
             'index' => $newIndex,
