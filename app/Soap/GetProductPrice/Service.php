@@ -125,6 +125,7 @@ class Service extends AbstractService
         $product->price_per     = $pricePer;
         $product->price_unit    = $soapPrice->PriceUnit;
         $product->refactor      = $refactor;
+        $product->action        = $product->net_price === $product->gross_price;
 
         if ($product->sales_unit === $product->price_unit) {
             $pricePerString = sprintf('Prijs per %s %s',

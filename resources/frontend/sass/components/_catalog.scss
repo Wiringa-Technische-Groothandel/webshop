@@ -30,7 +30,8 @@
 
 .prices {
   .gross-price,
-  .net-price {
+  .net-price,
+  .action-price {
     font-family: $font-family-sans-serif-oswald;
     font-weight: 700;
     font-size: 20px;
@@ -39,6 +40,11 @@
     span {
       white-space: nowrap;
     }
+  }
+
+  .action-price {
+    font-size: 22px;
+    color: #C2BE13;
   }
 
   @include media-breakpoint-down(sm) {

@@ -10,14 +10,21 @@
                data-target="#loginModal">Log in</a> om uw persoonlijke prijs te bekijken.
         </div>
 
-        <div class="gross-price" v-if="grossPrice !== false">
+        <div class="action-price" v-if="action">
+            Actieprijs:
+            <span class="d-block d-sm-inline">
+                <i class="fas fa-euro-sign"></i> <span>{{ grossPrice }}</span>
+            </span>
+        </div>
+
+        <div class="gross-price" v-if="grossPrice !== false && !action">
             Bruto:
             <span class="d-block d-sm-inline">
                 <i class="fas fa-euro-sign"></i> <span>{{ grossPrice }}</span>
             </span>
         </div>
 
-        <div class="net-price" v-if="netPrice !== false">
+        <div class="net-price" v-if="netPrice !== false && !action">
             Netto:
             <span class="d-block d-sm-inline">
                 <i class="fas fa-euro-sign"></i> <span>{{ netPrice }}</span>
@@ -54,7 +61,8 @@
                 netPrice: false,
                 grossPrice: false,
                 pricePer: false,
-                stock: false
+                stock: false,
+                action: false
             }
         },
         created () {
@@ -67,6 +75,7 @@
                     this.$data.grossPrice = data.grossPrice.toFixed(2);
                     this.$data.pricePer = data.pricePer;
                     this.$data.stock = data.stock;
+                    this.$data.action = data.action;
                 });
             } else {
                 this.$data.fetching = false;

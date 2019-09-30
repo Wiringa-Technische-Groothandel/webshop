@@ -77,6 +77,7 @@ window.vm = new Vue({
                             grossPrice: item.gross_price,
                             pricePer: item.price_per_string,
                             stock: item.stock_string,
+                            action: item.action
                         });
                     });
                 })

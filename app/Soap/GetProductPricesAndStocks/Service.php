@@ -136,6 +136,7 @@ class Service extends AbstractService
             $product->price_unit    = $soapProduct->PriceUnitId;
             $product->stock         = (float) $soapProduct->QtyStock;
             $product->refactor      = $refactor;
+            $product->action        = $product->net_price === $product->gross_price;
 
             if ($product->price_unit === 'DAG') {
                 $pricePerString = sprintf('Verhuurd per dag');
