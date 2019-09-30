@@ -70,4 +70,9 @@ class Product
      * @var string
      */
     public $stock_string;
+
+    /**
+     * @var bool
+     */
+    public $action = false;
 }

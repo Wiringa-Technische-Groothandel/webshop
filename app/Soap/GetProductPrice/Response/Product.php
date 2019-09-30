@@ -65,4 +65,9 @@ class Product
      * @var int
      */
     public $refactor;
+
+    /**
+     * @var bool
+     */
+    public $action = false;
 }

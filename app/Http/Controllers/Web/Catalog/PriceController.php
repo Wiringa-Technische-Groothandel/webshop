@@ -61,6 +61,7 @@ class PriceController extends Controller
             'pricePer' => $product->price_per_string,
             'grossPrice' => $product->gross_price * $product->refactor,
             'netPrice' => $product->net_price * $product->refactor,
+            'action' => $product->action,
             'message' => $response->message,
             'code' => $response->code
         ], $response->code);
