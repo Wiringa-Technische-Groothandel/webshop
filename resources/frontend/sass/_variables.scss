@@ -4,6 +4,7 @@ $footer-default-bg: #125175;
 
 $navbar-brand-padding-y: 0;
 $navbar-dark-color: white;
+$navbar-light-color: white;
 $navbar-dark-hover-color: white;
 $navbar-dark-active-color: white;
 
@@ -16,3 +17,8 @@ $font-family-sans-serif-oswald: 'Oswald', sans-serif;
 $font-family-sans-serif-exo: 'Exo 2', sans-serif;
 $font-family-sans-serif: "Muli", sans-serif;
 
+$new-navbar-dark-color: str-replace(str-replace(#{$navbar-dark-color}, "(", "%28"), ")", "%29");
+$new-navbar-light-color: str-replace(str-replace(#{$navbar-light-color}, "(", "%28"), ")", "%29");
+
+$navbar-dark-toggler-icon-bg: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#{$new-navbar-dark-color}' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+$navbar-light-toggler-icon-bg: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#{$new-navbar-light-color}' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");

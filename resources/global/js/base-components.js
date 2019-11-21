@@ -1,5 +1,7 @@
 // lodash
-window._ = require('lodash');
+// window._ = require('lodash');
+
+window.getVue = () => import('vue');
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -8,19 +10,15 @@ window.$ = window.jQuery = require('jquery');
 window.dt = require('datatables.net-bs4');
 
 // Popper for Bootstrap 4
-import Popper from 'popper.js';
-window.Popper = Popper;
+window.Popper = require('popper.js');
 
 // Sweetalert
-import swal from 'sweetalert';
-window.swal = swal;
+window.swal = require('sweetalert');
 
-// ChartJS
-window.Chart = require('chart.js');
+// WebFont loader
+window.WebFont = require('webfontloader');
 
-// VueJS
-window.Vue = require('vue');
-
+// CSS Animations
 require('animate.css');
 
 // Axios

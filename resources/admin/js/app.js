@@ -1,10 +1,21 @@
+// Bootstrap 4 with material stuff
+require('./bootstrap-material-design.min');
+
 // ChartJS
-window.Chart.defaults.global.maintainAspectRatio = false;
+window.getChartJs = () => import('chart.js');
+
+// ChartJS
+getChartJs().then(({default: Chart}) => {
+    Chart.defaults.global.maintainAspectRatio = false;
+
+    window.Chart = Chart;
+}).catch('Failed to init ChartJS');
 
 // Names of the months
-window.months = ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December'];
+window.months = ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni',
+    'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December'];
 
-$(document).ready( function() {
+$(document).ready(function () {
     var $page = $('#page-wrapper');
     var $navToggle = $('#toggle-navigation');
 
@@ -17,20 +28,10 @@ $(document).ready( function() {
     });
 });
 
-import Notification from '../../global/vue/Notification'
-import Block from '../vue/Content/Block'
-import Descriptions from '../vue/Content/Descriptions'
+getVue().then(({default: Vue}) => {
+    window.Vue = Vue;
 
-window.vm = new Vue({
-    el: '#app',
-    components: {
-        'notification': Notification,
-        'block': Block,
-        'descriptions': Descriptions,
-    },
-    data () {
-        return {
-            filter: {}
-        }
-    }
+    import(/* webpackChunkName: 'admin-vue' */ './vue');
+}).catch(() => {
+    console.error('Failed to init Vue');
 });
