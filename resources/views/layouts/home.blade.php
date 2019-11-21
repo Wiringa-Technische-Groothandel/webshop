@@ -26,9 +26,6 @@
                           php-success="{{ session('status') }}"></notification>
         </div>
 
-        <script src="{{ mix('assets/frontend/js/vendors.js') }}"></script>
-        <script src="{{ mix('assets/frontend/js/app.js') }}"></script>
-
         @stack('scripts')
     </body>
 </html>

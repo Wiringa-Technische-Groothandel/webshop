@@ -1,21 +1,21 @@
 const mix = require('laravel-mix');
 
-/*
- |--------------------------------------------------------------------------
- | Mix Asset Management
- |--------------------------------------------------------------------------
- |
- | Mix provides a clean, fluent API for defining some Webpack build steps
- | for your Laravel application. By default, we are compiling the Sass
- | file for the application as well as bundling up all the JS files.
- |
- */
+mix.webpackConfig({
+    output: {
+        publicPath: '/',
+        chunkFilename: 'assets/chunks/[name].js',
+    }
+});
 
-mix.sass("resources/frontend/sass/app.scss", 'public/assets/frontend/css')
-    .js('resources/frontend/js/vendors.js', 'public/assets/frontend/js/vendors.js')
-    .js('resources/frontend/js/app.js', 'public/assets/frontend/js/app.js')
-    .sass('resources/admin/sass/app.scss', 'public/assets/admin/css/')
-    .js('resources/admin/js/vendors.js', 'public/assets/admin/js/vendors.js')
-    .js('resources/admin/js/app.js', 'public/assets/admin/js/app.js')
-    .js('resources/global/js/head.js', 'public/assets/head.js')
+mix.options({
+    postCss: [
+        require('autoprefixer'),
+    ],
+});
+
+mix
+    .js('resources/frontend/main.js', 'public/assets/frontend/main.js')
+    .js('resources/admin/main.js', 'public/assets/admin/main.js')
+    .js('resources/global/js/base-components.js', 'public/assets/base-components.js')
+    .js('resources/global/js/polyfills.js', 'public/assets/polyfills.js')
     .version();

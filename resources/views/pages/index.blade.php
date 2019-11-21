@@ -27,7 +27,9 @@
         </div>
     </div>
 
-    <div class="img-png cover-image company-image"></div>
+    <intersect @enter="$root.$emit('intersect-enter', '#company-image')" root-margin="50px">
+        <div class="img-png cover-image defer-load" id="company-image" data-action="add-class" data-class="company-image"></div>
+    </intersect>
 
     <h2 class="text-center block-title" id="about">{{ __('Over ons') }}</h2>
 
@@ -45,8 +47,13 @@
 
     <h2 class="text-center block-title">{{ __('Vestiging') }}</h2>
 
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31457.780959554224!2d6.559396656217749!3d53.224621828872294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c9d29bd38e3ecb%3A0x866182a966956b99!2sWiringa+Technische+Groothandel!5e0!3m2!1sen!2sdk!4v1534939333360"
-            height="500" frameborder="0" style="border: 0; width: 100%; margin-bottom: -6px;" allowfullscreen></iframe>
+    <intersect @enter="$root.$data.showMaps = true">
+        <div>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31457.780959554224!2d6.559396656217749!3d53.224621828872294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c9d29bd38e3ecb%3A0x866182a966956b99!2sWiringa+Technische+Groothandel!5e0!3m2!1sen!2sdk!4v1534939333360"
+                    height="500" frameborder="0" style="border: 0; width: 100%; margin-bottom: -6px;" v-if="$root.$data.showMaps" allowfullscreen></iframe>
+        </div>
+    </intersect>
+
 @endsection
 
 @push('links')

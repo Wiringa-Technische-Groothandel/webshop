@@ -9,16 +9,14 @@
 
 <title>WTG Admin - @yield('title', $title ?? 'Untitled')</title>
 
-<script src="{{ mix('assets/head.js') }}"></script>
-
 @if (config('services.sentry.js-dsn'))
     <script type="application/javascript">
         Sentry.init({ dsn: '{{ config('services.sentry.js-dsn') }}' });
     </script>
 @endif
 
-<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.8.0/css/all.css"
-      integrity="sha384-/pOR6TNYPdUaQQQRKQ4XHznZ4U2K/Lscb3u6jshUngC/31fLTuyX9FZb24gp4O3J" crossorigin="anonymous">
+<script src="https://kit.fontawesome.com/4af601a43c.js" crossorigin="anonymous" async defer></script>
+
 <link href="https://fonts.googleapis.com/css?family=Muli:300,400,600,800" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css"/>
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick-theme.css"/>
@@ -27,6 +25,7 @@
 <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
 <script src="https://cdn.ckeditor.com/4.11.3/standard/ckeditor.js"></script>
+
 <script>
     window.Laravel = {
         isLoggedIn: {{ (int) auth('admin')->check() }}
