@@ -21,11 +21,14 @@
     </script>
 @endif
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://kit-pro.fontawesome.com">
+<link rel="preconnect dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="preconnect dns-prefetch" href="https://kit-pro.fontawesome.com">
+<link rel="preconnect dns-prefetch" href="https://kit.fontawesome.com">
+<link rel="preconnect dns-prefetch" href="https://cdn.jsdelivr.net">
 
-<link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css">
-<link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick-theme.css">
+<link rel="preload prefetch" as="script" href="{{ mix('assets/base-components.js') }}">
+<link rel="preload prefetch" as="style" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css">
+<link rel="preload prefetch" as="style" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick-theme.css">
 
 <script src="https://kit.fontawesome.com/4af601a43c.js" crossorigin="anonymous" async defer></script>
 

@@ -17,6 +17,7 @@
     "autoprefixer": "^9.7.2",
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
+    "bootstrap-input-spinner": "^1.12.7",
     "bootstrap-material-design": "github:FezVrasta/bootstrap-material-design#master",
     "chart.js": "^2.9.3",
     "cross-env": "^5.2.1",

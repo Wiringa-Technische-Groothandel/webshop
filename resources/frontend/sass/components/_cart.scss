@@ -35,37 +35,8 @@
     padding: 10px 0;
   }
 
-  .cart-item-price,
-  .cart-item-subtotal,
   .cart-grand-total {
     white-space: nowrap;
-  }
-
-  .cart-item {
-    font-size: 15px;
-    line-height: 2.6;
-    border: 1px solid #efefef;
-    border-left: none;
-    border-right: none;
-    padding: 8px 0;
-
-    .cart-item-name {
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-
-      a {
-        font-weight: bold;
-        color: #333;
-      }
-    }
-
-    .cart-item-delete {
-      .fa {
-        font-size: 1.2rem;
-        color: #bf5329;
-      }
-    }
   }
 
   .cart-footer {
