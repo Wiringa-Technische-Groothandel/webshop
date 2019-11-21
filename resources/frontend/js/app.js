@@ -3,6 +3,13 @@ require('../../global/js/head');
 // Bootstrap 4
 require('bootstrap');
 
+// Input spinners
+require('bootstrap-input-spinner');
+
+$(document).ready(function () {
+    $("input[type='number']").inputSpinner();
+});
+
 document.documentElement.setAttribute('data-useragent', navigator.userAgent);
 
 WebFont.load({
@@ -30,7 +37,6 @@ $(document).ready(function () {
 
     checkInputLabelStates();
 });
-
 checkInputLabelStates();
 
 getVue().then(({ default: Vue }) => {

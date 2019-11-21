@@ -44,9 +44,6 @@
             destroyCart () {
                 this.$root.$emit('cart-destroy');
             }
-        },
-        mounted ()  {
-            console.log('Cart header component mounted');
         }
     }
 </script>

@@ -40,6 +40,19 @@ class Product extends Model implements ProductContract
     protected $guarded = ['id', 'webshop'];
 
     /**
+     * @var string[]
+     */
+    protected $appends = ['sales_unit_long'];
+
+    /**
+     * @return string
+     */
+    protected function getSalesUnitLongAttribute(): string
+    {
+        return unit_to_str($this->getSalesUnit(), false);
+    }
+
+    /**
      * Description relation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
