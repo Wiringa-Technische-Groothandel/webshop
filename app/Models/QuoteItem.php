@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Models;
 
 use WTG\Contracts\Models\CartContract;
@@ -80,7 +82,7 @@ class QuoteItem extends Model implements CartItemContract
      */
     public function getQuantity(): ?float
     {
-        return $this->getAttribute('qty');
+        return (float) $this->getAttribute('qty');
     }
 
     /**
@@ -124,7 +126,7 @@ class QuoteItem extends Model implements CartItemContract
      */
     public function getPrice(): ?float
     {
-        return $this->getAttribute('price');
+        return (float) $this->getAttribute('price');
     }
 
     /**

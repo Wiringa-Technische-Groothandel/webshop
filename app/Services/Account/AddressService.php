@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Services\Account;
 
 use WTG\Models\Address;
@@ -26,7 +28,7 @@ class AddressService implements AddressServiceContract
      * @param  bool  $withDefault
      * @return Collection
      */
-    public function getAddressesForCustomer(CustomerContract $customer, $withDefault = true): Collection
+    public function getAddressesForCustomer(CustomerContract $customer, bool $withDefault = true): Collection
     {
         $company = $customer->getCompany();
         $addresses = $company->getAddresses();
@@ -42,10 +44,10 @@ class AddressService implements AddressServiceContract
      * Get an address for a customer by id.
      *
      * @param  CustomerContract  $customer
-     * @param  string  $addressId
+     * @param  int  $addressId
      * @return null|AddressContract
      */
-    public function getAddressForCustomerById(CustomerContract $customer, string $addressId): ?AddressContract
+    public function getAddressForCustomerById(CustomerContract $customer, int $addressId): ?AddressContract
     {
         $addresses = $this->getAddressesForCustomer($customer);
         /** @var AddressContract $address */
@@ -106,10 +108,10 @@ class AddressService implements AddressServiceContract
      * Set the default address for a customer.
      *
      * @param  CustomerContract  $customer
-     * @param  string  $addressId
+     * @param  int  $addressId
      * @return bool
      */
-    public function setDefaultForCustomer(CustomerContract $customer, string $addressId): bool
+    public function setDefaultForCustomer(CustomerContract $customer, int $addressId): bool
     {
         /** @var Contact $contact */
         $contact = $customer->getContact();
@@ -144,9 +146,9 @@ class AddressService implements AddressServiceContract
      * Get the default address id for a customer.
      *
      * @param  CustomerContract  $customer
-     * @return null|string
+     * @return null|int
      */
-    public function getDefaultAddressIdForCustomer(CustomerContract $customer): ?string
+    public function getDefaultAddressIdForCustomer(CustomerContract $customer): ?int
     {
         $defaultAddress = $this->getDefaultAddressForCustomer($customer);
 

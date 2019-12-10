@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Contracts\Models;
 
 /**
@@ -25,11 +27,11 @@ interface ProductContract
     public function getDescription(): ?DescriptionContract;
 
     /**
-     * Get or set the product identifier.
+     * Get the product sku.
      *
-     * @return string
+     * @return int|null
      */
-    public function getId(): string;
+    public function getId(): ?int;
 
     /**
      * Set the product sku.

@@ -7,7 +7,7 @@
         {{ __('Registratie aanvragen') }}
     </h2>
 
-    <hr />
+    <hr/>
 
     <div class="container">
         @include('components.auth.registration.form')
@@ -16,13 +16,14 @@
 
 @push('scripts')
     <script src='https://www.google.com/recaptcha/api.js'></script>
-    <script>
-        (function () {
+    <script async defer>
+        // Dirty workaround
+        setTimeout(function () {
             'use strict';
 
-            window.addEventListener('load', function() {
+            window.addEventListener('load', function () {
                 var form = document.getElementById('needs-validation');
-                form.addEventListener('submit', function(event) {
+                form.addEventListener('submit', function (event) {
                     if (form.checkValidity() === false) {
                         event.preventDefault();
                         event.stopPropagation();
@@ -36,13 +37,15 @@
              *
              * @return void
              */
-            function copyFields () {
+            function copyFields() {
                 if ($copyContact.is(":checked")) {
-                    $businessAddress.val( $contactAddress.val() );
-                    $businessCity.val( $contactCity.val() );
-                    $businessPostcode.val( $contactPostcode.val() );
-                    $businessPhone.val( $contactPhone.val() );
+                    $businessAddress.val($contactAddress.val());
+                    $businessCity.val($contactCity.val());
+                    $businessPostcode.val($contactPostcode.val());
+                    $businessPhone.val($contactPhone.val());
                 }
+
+                checkInputLabelStates();
             }
 
             /**
@@ -50,7 +53,7 @@
              *
              * @return void
              */
-            function toggleReadOnly () {
+            function toggleReadOnly() {
                 if ($copyContact.is(":checked")) {
                     copyFields();
 
@@ -68,15 +71,15 @@
                 checkInputLabelStates();
             }
 
-            let $copyContact     = $("#copy-contact");
-            let $businessAddress      = $('[name="business-address"]');
-            let $businessCity         = $('[name="business-city"]');
-            let $businessPostcode     = $('[name="business-postcode"]');
-            let $businessPhone   = $('[name="business-phone"]');
-            let $contactAddress  = $('[name="contact-address"]');
-            let $contactCity     = $('[name="contact-city"]');
+            let $copyContact = $("#copy-contact");
+            let $businessAddress = $('[name="business-address"]');
+            let $businessCity = $('[name="business-city"]');
+            let $businessPostcode = $('[name="business-postcode"]');
+            let $businessPhone = $('[name="business-phone"]');
+            let $contactAddress = $('[name="contact-address"]');
+            let $contactCity = $('[name="contact-city"]');
             let $contactPostcode = $('[name="contact-postcode"]');
-            let $contactPhone    = $('[name="contact-phone-company"]');
+            let $contactPhone = $('[name="contact-phone-company"]');
 
             $copyContact.on('change', toggleReadOnly);
             $contactAddress.on('input', copyFields);
@@ -85,6 +88,6 @@
             $contactPhone.on('input', copyFields);
 
             toggleReadOnly();
-        })();
+        }, 250);
     </script>
 @endpush

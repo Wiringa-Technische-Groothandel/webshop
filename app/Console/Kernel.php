@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Console;
 
 use WTG\Services\Import\Invoices;
@@ -25,6 +27,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('sys:cleanup:companies');
+
         $schedule->command('import:assortment')->everyFifteenMinutes()->between('5:00', '23:00');
 
         // Re-cache the invoice files

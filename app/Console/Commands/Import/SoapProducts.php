@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Console\Commands\Import;
 
 use Illuminate\Console\Command;

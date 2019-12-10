@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Controllers\Web\Checkout;
 
 use Illuminate\Http\Request;
@@ -63,7 +65,7 @@ class CartController extends Controller
     {
         $cartItem = $this->cartService->addProductBySku(
             $request->input('product'),
-            $request->input('quantity')
+            (float) $request->input('quantity')
         );
 
         if (! $cartItem) {

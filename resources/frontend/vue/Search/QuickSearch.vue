@@ -1,5 +1,5 @@
 <template>
-    <form class="form-inline my-2 my-lg-0" id="quick-search" :action="searchUrl">
+    <form class="form-inline my-2 my-lg-0" id="quick-search" ref="form" :action="searchUrl">
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Zoeken" name="query"
                    v-model="inputQuery" @input="search" />
@@ -11,15 +11,20 @@
             </span>
         </div>
 
-        <div class="card" v-if="showSuggestions">
+        <div class="card" v-if="totalItems > 0">
             <div class="card-header">
                 Suggesties
-                <i class="float-right far fa-fw fa-times" v-on:click="showSuggestions = false"></i>
+                <i class="float-right far fa-fw fa-times" v-on:click="reset"></i>
             </div>
 
             <div class="list-group">
                 <a class="list-group-item list-group-item-action" v-for="item in items" :href="item.url">
                     {{ item.name }}
+                </a>
+
+                <a class="list-group-item list-group-item-action text-center" v-if="totalItems > 4"
+                   href="#" @click="$refs.form.submit()">
+                    <span class="show-all">Alle resultaten bekijken</span>
                 </a>
             </div>
         </div>
@@ -28,8 +33,31 @@
 
 <script>
     export default {
-        props: ['query', 'searchUrl'],
+        props: {
+            searchUrl: {
+                required: true,
+                type: String
+            },
+            query: {
+                required: false,
+                type: String,
+                default () {
+                    return '';
+                }
+            }
+        },
+        data () {
+            return {
+                inputQuery: this.query,
+                totalItems: 0,
+                items: []
+            }
+        },
         methods: {
+            reset() {
+                this.items = [];
+                this.totalItems = 0;
+            },
             search () {
                 let query = this.inputQuery;
 
@@ -47,10 +75,9 @@
                             return;
                         }
 
-                        let products = response.data.products;
-
-                        this.$data.items = products;
-                        this.$data.showSuggestions = products.length > 0;
+                        this.items = response.data.products;
+                        this.totalItems = this.items.length;
+                        this.$data.showSuggestions = response.data.totalItems > 0;
                     })
                     .catch((error) => {
                         this.$root.$emit('send-notify', {
@@ -58,13 +85,6 @@
                             success: false
                         });
                     });
-            }
-        },
-        data () {
-            return {
-                inputQuery: this.query,
-                showSuggestions: false,
-                items: []
             }
         }
     }

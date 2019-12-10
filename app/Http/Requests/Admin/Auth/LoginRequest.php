@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Requests\Admin\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;

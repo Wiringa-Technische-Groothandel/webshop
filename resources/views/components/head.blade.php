@@ -33,8 +33,8 @@
 <script src="https://kit.fontawesome.com/4af601a43c.js" crossorigin="anonymous" async defer></script>
 
 <script src="{{ mix('assets/base-components.js') }}"></script>
-<script src="{{ mix('assets/polyfills.js') }}" async defer></script>
-<script src="{{ mix('assets/frontend/main.js') }}" async></script>
+<script src="{{ mix('assets/polyfills.js') }}"></script>
+<script src="{{ mix('assets/frontend/main.js') }}"></script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick-theme.css"/>

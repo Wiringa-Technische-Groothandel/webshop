@@ -1,3 +1,3 @@
-import(/* webpackChunkName: 'admin-css' */ './sass/admin.scss');
+require('./sass/admin.scss');
 
 import('./js/app');

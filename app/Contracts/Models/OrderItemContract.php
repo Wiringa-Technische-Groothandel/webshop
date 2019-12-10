@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Contracts\Models;
 
 /**
@@ -21,7 +23,7 @@ interface OrderItemContract
     /**
      * Set the order.
      *
-     * @param  OrderContract  $order
+     * @param OrderContract $order
      * @return OrderItemContract
      */
     public function setOrder(OrderContract $order): OrderItemContract;
@@ -36,7 +38,7 @@ interface OrderItemContract
     /**
      * Set the name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return OrderItemContract
      */
     public function setName(string $name): OrderItemContract;
@@ -51,7 +53,7 @@ interface OrderItemContract
     /**
      * Set the product sku.
      *
-     * @param  string  $sku
+     * @param string $sku
      * @return OrderItemContract
      */
     public function setSku(string $sku): OrderItemContract;
@@ -66,7 +68,7 @@ interface OrderItemContract
     /**
      * Set the item quantity.
      *
-     * @param  float  $quantity
+     * @param float $quantity
      * @return OrderItemContract
      */
     public function setQuantity(float $quantity): OrderItemContract;
@@ -81,25 +83,25 @@ interface OrderItemContract
     /**
      * Set the price.
      *
-     * @param  string|null  $price
+     * @param float|null $price
      * @return OrderItemContract
      */
-    public function setPrice(string $price): OrderItemContract;
+    public function setPrice(float $price): OrderItemContract;
 
     /**
      * Get the price.
      *
-     * @return null|string
+     * @return null|float
      */
-    public function getPrice(): ?string;
+    public function getPrice(): ?float;
 
     /**
      * Set the subtotal.
      *
-     * @param  string|null  $subtotal
+     * @param float|null $subtotal
      * @return OrderItemContract
      */
-    public function setSubtotal(string $subtotal): OrderItemContract;
+    public function setSubtotal(float $subtotal): OrderItemContract;
 
     /**
      * Get the subtotal.

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Contracts\Models;
 
 /**
@@ -14,9 +16,9 @@ interface RoleContract
     /**
      * Get the block id.
      *
-     * @return null|string
+     * @return null|int
      */
-    public function getId(): ?string;
+    public function getId(): ?int;
 
     /**
      * Set the role name.

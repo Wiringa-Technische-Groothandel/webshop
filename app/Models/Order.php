@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -8,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 use Illuminate\Support\Str;
+use Knp\Snappy\GeneratorInterface;
 use WTG\Contracts\Models\CompanyContract;
 use WTG\Contracts\Models\OrderContract;
 
@@ -29,7 +32,7 @@ class Order extends Model implements OrderContract
 
         static::saving(function (self $model) {
             if (! $model->getUuid()) {
-                $model->setUuid(Str::uuid());
+                $model->setUuid(Str::uuid()->toString());
             }
         });
     }
@@ -259,6 +262,7 @@ class Order extends Model implements OrderContract
             'order' => $this
         ]);
 
+        /** @var GeneratorInterface $snappy */
         $snappy = app('snappy.pdf');
         try {
             return $snappy->getOutputFromHtml($view->render());

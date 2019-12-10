@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Requests\Account\Profile;
 
 use Illuminate\Foundation\Http\FormRequest;

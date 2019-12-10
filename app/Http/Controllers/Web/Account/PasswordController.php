@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Controllers\Web\Account;
 
 use WTG\Models\Customer;
