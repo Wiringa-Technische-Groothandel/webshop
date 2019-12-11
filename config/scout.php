@@ -86,7 +86,7 @@ return [
         'index' => env('ELASTICSEARCH_INDEX', 'wtg'),
 
         'hosts' => [
-            env('ELASTICSEARCH_HOST', 'http://localhost'),
+            env('ELASTICSEARCH_HOST', 'elastic:9200'),
         ],
 
         "number_of_shards" => (int) env('ELASTICSEARCH_SHARDS', '3'),

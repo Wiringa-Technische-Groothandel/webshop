@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace WTG\Soap\GetProductPricesAndStocks;
 
 use Exception;
+
+use Illuminate\Support\Collection;
+
 use WTG\Contracts\Models\ProductContract;
 use WTG\Soap\AbstractService;
-use Illuminate\Support\Collection;
-use WTG\Services\Stock\Service as StockService;
 
 /**
  * GetProductPricesAndStocks service.
@@ -40,29 +41,22 @@ class Service extends AbstractService
     protected $customerId;
 
     /**
-     * @var StockService
-     */
-    protected $stockService;
-
-    /**
      * Service constructor.
      *
-     * @param  Request  $request
-     * @param  Response  $response
-     * @param  StockService  $stockService
+     * @param Request $request
+     * @param Response $response
      */
-    public function __construct(Request $request, Response $response, StockService $stockService)
+    public function __construct(Request $request, Response $response)
     {
         $this->request = $request;
         $this->response = $response;
-        $this->stockService = $stockService;
     }
 
     /**
      * Run the service.
      *
-     * @param  Collection  $products
-     * @param  string  $customerId
+     * @param Collection $products
+     * @param string $customerId
      * @return Response
      */
     public function handle(Collection $products, string $customerId)
@@ -106,7 +100,7 @@ class Service extends AbstractService
     /**
      * Build the response.
      *
-     * @param  object  $soapResponse
+     * @param object $soapResponse
      * @return void
      * @throws Exception
      */
@@ -125,30 +119,34 @@ class Service extends AbstractService
             $grossPrice = (float) $soapProduct->GrossPrice;
             $netPrice = (float) $soapProduct->NettPrice;
             $pricePer = (float) $soapProduct->PricePer;
-            
+
             /** @var Response\Product $product */
             $product = app()->make(Response\Product::class);
-            $product->sku           = $soapProduct->ProductId;
-            $product->sales_unit    = $soapProduct->UnitId;
-            $product->quantity      = (float) $soapProduct->Quantity;
-            $product->gross_price   = (float) (($grossPrice * $refactor) / $pricePer);
-            $product->net_price     = (float) (($netPrice * $refactor) / $pricePer);
-            $product->discount      = (float) $soapProduct->DiscountPerc;
-            $product->price_per     = $pricePer;
-            $product->price_unit    = $soapProduct->PriceUnitId;
-            $product->stock         = (float) $soapProduct->QtyStock;
-            $product->refactor      = $refactor;
-            $product->action        = $product->net_price === $product->gross_price;
+            $product->sku = $soapProduct->ProductId;
+            $product->sales_unit = $soapProduct->UnitId;
+            $product->quantity = (float) $soapProduct->Quantity;
+            $product->gross_price = (float) (($grossPrice * $refactor) / $pricePer);
+            $product->net_price = (float) (($netPrice * $refactor) / $pricePer);
+            $product->discount = (float) $soapProduct->DiscountPerc;
+            $product->price_per = $pricePer;
+            $product->price_unit = $soapProduct->PriceUnitId;
+            $product->stock = (float) $soapProduct->QtyStock;
+            $product->refactor = $refactor;
+            $product->action = $product->net_price === $product->gross_price;
 
             if ($product->price_unit === 'DAG') {
                 $pricePerString = sprintf('Verhuurd per dag');
             } elseif ($product->sales_unit === $product->price_unit) {
-                $pricePerString = sprintf('Prijs per %s',
-                    unit_to_str($product->price_unit, false));
+                $pricePerString = sprintf(
+                    'Prijs per %s',
+                    unit_to_str($product->price_unit, false)
+                );
             } else {
-                $pricePerString = sprintf('Prijs per %s van %s %s',
+                $pricePerString = sprintf(
+                    'Prijs per %s van %s %s',
                     unit_to_str($product->sales_unit, false),
-                    $product->refactor, unit_to_str($product->price_unit, $product->refactor > 1)
+                    $product->refactor,
+                    unit_to_str($product->price_unit, $product->refactor > 1)
                 );
             }
 
@@ -156,8 +154,10 @@ class Service extends AbstractService
 
             if ($productModel->getStockDisplay() === 'S') {
                 if ($product->stock > 0) {
-                    $stockString = sprintf('<span class="d-none d-md-inline">Voorraad: </span>%s %s',
-                        $product->stock, unit_to_str($product->sales_unit, $product->stock !== 1)
+                    $stockString = sprintf(
+                        '<span class="d-none d-md-inline">Voorraad: </span>%s %s',
+                        $product->stock,
+                        unit_to_str($product->sales_unit, $product->stock !== 1)
                     );
                 } else {
                     $stockString = __('In bestelling, bel voor meer info');
@@ -180,7 +180,7 @@ class Service extends AbstractService
     }
 
     /**
-     * @param  string  $sku
+     * @param string $sku
      * @return ProductContract
      */
     public function getProductModel(string $sku): ProductContract

@@ -2,13 +2,21 @@ kind: pipeline
 type: docker
 name: default
 
+services:
+  - name: redis
+    image: redis
+  - name: mysql
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: testing
+      MYSQL_ROOT_PASSWORD: testing
+
 steps:
   - name: build
     image: lunamoonfang/wtg-webshop:build-7.4
     commands:
       # Install Composer and project dependencies.
-      - curl -sS https://getcomposer.org/installer | php
-      - php composer.phar install --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
+      - composer install --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 
       # Install Node dependencies.
       - npm ci
@@ -16,7 +24,26 @@ steps:
       # Build the assets
       - npm run prod-silent
 
+      # Compress the build files
       - tar --exclude=build --exclude=./.git --exclude=node_modules --exclude=.env.example --exclude=.env.testing --exclude=composer.json --exclude=composer.lock --exclude=package.json --exclude=package-lock.json --exclude=webpack.mix.js --exclude=storage/app/public/uploads -cvzf build/deployment.tar.gz *
+
+  - name: test
+    image: lunamoonfang/wtg-webshop:build-7.4
+    environment:
+      MAIL_USERNAME:
+        from_secret: mail-username
+      MAIL_PASSWORD:
+        from_secret: mail-password
+    commands:
+      # Install Composer and project dependencies (including dev).
+      - composer install --verbose --prefer-dist --no-progress --no-interaction --dev --optimize-autoloader
+
+      # Set up testing env variables
+      - php artisan key:generate
+      - php artisan jwt:secret
+
+      # Run tests
+      - vendor/bin/phpunit
 
   - name: deploy
     image: lunamoonfang/wtg-webshop:build-7.4
@@ -50,6 +77,5 @@ steps:
       - ssh $SSH_HOSTNAME "echo $0"
 
       # Release to production
-      - curl -sS https://getcomposer.org/installer | php
-      - cd build && php ../composer.phar install --no-progress
+      - cd build && composer install --no-progress --verbose --prefer-dist --no-interaction
       - vendor/bin/dep deploy production

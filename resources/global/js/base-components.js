@@ -18,9 +18,6 @@ require('bootstrap');
 // Data tables
 window.dt = require('datatables.net-bs4');
 
-// Sweetalert
-window.swal = require('sweetalert');
-
 // WebFont loader
 window.WebFont = require('webfontloader');
 
