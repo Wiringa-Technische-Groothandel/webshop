@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -31,9 +33,9 @@ class Address extends Model implements AddressContract
     /**
      * Get the identifier.
      *
-     * @return null|string
+     * @return null|int
      */
-    public function getId(): ?string
+    public function getId(): ?int
     {
         return $this->getAttribute('id');
     }

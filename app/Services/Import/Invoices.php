@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Services\Import;
 
 use Carbon\Carbon;
@@ -51,12 +53,12 @@ class Invoices
     /**
      * Get the invoice collection for a customer.
      *
-     * @param  int  $customerNumber
+     * @param  string  $customerNumber
      * @param  bool  $sort
      * @param  int  $sortOrder
      * @return \Illuminate\Support\Collection
      */
-    public function getForCustomer(int $customerNumber, bool $sort = true, int $sortOrder = self::SORT_ORDER_DESC): Collection
+    public function getForCustomer(string $customerNumber, bool $sort = true, int $sortOrder = self::SORT_ORDER_DESC): Collection
     {
         /** @var Collection $files */
         $files = $this->getFileList()->get($customerNumber, collect());

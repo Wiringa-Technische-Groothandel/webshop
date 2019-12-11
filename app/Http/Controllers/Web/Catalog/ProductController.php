@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Controllers\Web\Catalog;
 
 use Illuminate\View\Factory as ViewFactory;

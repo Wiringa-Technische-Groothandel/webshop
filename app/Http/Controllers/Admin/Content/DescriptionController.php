@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Controllers\Admin\Content;
 
 use WTG\Models\Description;
@@ -12,6 +14,7 @@ use WTG\Contracts\Models\DescriptionContract;
 /**
  * Description controller.
  *
+ * @deprecated
  * @package     WTG\Http
  * @subpackage  Controllers\Admin\Content
  * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>

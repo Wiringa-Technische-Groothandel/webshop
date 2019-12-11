@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Controllers\Web\Account;
 
 use Illuminate\Http\Request;
@@ -55,6 +57,7 @@ class InvoiceController extends Controller
 
         $invoices = $this->service->getForCustomer(
             $request->user()->getCompany()->getCustomerNumber(),
+            true,
             $sortOrder
         );
 

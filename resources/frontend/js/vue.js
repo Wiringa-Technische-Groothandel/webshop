@@ -1,5 +1,8 @@
-const Intersect = () => import(/* webpackChunkName: 'vue-components' */ 'vue-intersect');
-const Notification = () => import(/* webpackChunkName: 'vue-components' */ '../../global/vue/Notification');
+import Vue from 'vue'
+import Intersect from 'vue-intersect'
+
+const Notification = () => import(/* webpackChunkName: 'vue-global-components' */ '../../global/vue/Notification');
+
 const Carousel = () => import(/* webpackChunkName: 'vue-components' */ '../vue/Carousel');
 const Price = () => import(/* webpackChunkName: 'vue-components' */ '../vue/Catalog/Price');
 const Cart = () => import(/* webpackChunkName: 'vue-components' */ '../vue/Checkout/Cart');
@@ -90,6 +93,26 @@ window.vm = new Vue({
                 case 'add-class':
                     target.classList.add(target.dataset.class);
             }
-        })
+        });
+    },
+    mounted () {
+        document.body.style.opacity = "1";
+
+        $(document).ready(function () {
+
+            let $formControls = $('.form-control');
+
+            $formControls.on("change", function(event) {
+                const $target = $(event.target);
+
+                $target.val() ? $target.addClass("not-empty") : $target.removeClass("not-empty");
+            });
+
+            checkInputLabelStates();
+        });
+
+        checkInputLabelStates();
+
+        this.$emit('vue-loaded');
     }
 });

@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Models;
 
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use WTG\Contracts\Models\AdminContract;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -11,8 +14,32 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @package     WTG\Models
  * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
-class Admin extends Authenticatable implements AdminContract
+class Admin extends Authenticatable implements AdminContract, JWTSubject
 {
+    /**
+     * @var array
+     */
+    protected $hidden = [
+        'password',
+        'remember_token'
+    ];
+
+    /**
+     * @inheritDoc
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getId();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
     /**
      * Get the id.
      *

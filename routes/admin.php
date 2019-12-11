@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Admin Routes
@@ -10,118 +12,87 @@ Route::group([
     'prefix' => 'admin',
     'as' => 'admin.'
 ], function () {
-    // Admin guest routes
+    // Admin dashboard
+    Route::view('/', 'layouts.admin')->middleware('web')->name('home');
+
+    // Admin API routes
     Route::group([
-        'middleware' => 'guest:admin',
+        'middleware' => 'api',
+        'namespace' => 'Api',
+        'prefix' => 'api',
+        'as' => 'api.'
     ], function () {
-        Route::group(['as' => 'auth.', 'namespace' => 'Auth'], function () {
-            Route::get('login', 'LoginController@getAction')->name('login');
-
-            Route::post('login', 'LoginController@postAction');
-        });
-    });
-
-    // Admin authed routes
-    Route::group([
-        'middleware' => 'auth:admin',
-    ], function () {
-        // Admin dashboard
-        Route::get('/', 'DashboardController@getAction')->name('dashboard');
-
-        // Logout route
-        Route::post('logout', 'Auth\LogoutController@postAction')->name('auth.logout');
-
-        // Admin API Routes
-        Route::group(['as' => 'dashboard.', 'prefix' => 'api'], function () {
-            Route::get('stats', 'DashboardController@stats')->name('stats');
-            Route::get('chart/{type}', 'DashboardController@chart')->name('chart');
+        Route::group([
+            'namespace' => 'Auth'
+        ], function () {
+            Route::post('login', 'LoginController')->name('login');
+            Route::post('refresh-token', 'RefreshTokenController')->name('refresh-token');
         });
 
-        // Admin import page
-//        Route::get('import', 'ImportController@view')->name('import');
-//        Route::group(['as' => 'import.'], function () {
-//            Route::post('import/product', 'ImportController@product')->name('product');
-//            Route::post('import/image', 'ImportController@image')->name('image');
-//            Route::post('import/discount', 'ImportController@discount')->name('discount');
-//            Route::post('import/download', 'ImportController@download')->name('download');
-//        });
+        Route::group([
+            'middleware' => 'auth:admin'
+        ], function () {
+            Route::post('logout', 'Auth\\LogoutController')->name('logout');
 
-        Route::get('companies', 'Company\OverviewController@getAction')->name('companies');
-        Route::put('companies', 'Company\OverviewController@putAction')->name('companies.create');
+            Route::group(['prefix' => 'companies', 'namespace' => 'Companies'], function () {
+                Route::get('/', 'IndexController')->name('companies');
+                Route::get('show', 'ShowController')->name('fetch-company');
 
-        Route::group(['as' => 'company.', 'prefix' => 'company'], function () {
-            Route::get('{company}', 'Company\DetailController@getAction')->name('edit');
-            Route::get('{company}/customer/{customer}', 'Company\DetailController@getAction')->name('customer.edit');
+                Route::post('create', 'CreateController')->name('create-company');
+                Route::post('update', 'UpdateController')->name('update-company');
+                Route::post('cancel-delete', 'CancelDeleteController')->name('cancel-company-deletion');
 
-            Route::post('{company}', 'Company\DetailController@postAction');
+                Route::delete('delete', 'DeleteController')->name('delete-company');
+            });
+
+            Route::group(['prefix' => 'chart', 'namespace' => 'Chart'], function () {
+                Route::get('order', 'OrderController')->name('order-chart');
+                Route::get('company-order', 'CompanyOrderController')->name('company-order-chart');
+            });
+
+            Route::group(['prefix' => 'dashboard', 'namespace' => 'Dashboard'], function () {
+                Route::get('stats', 'StatsController')->name('dashboard-stats');
+            });
+
+            Route::group(['prefix' => 'carousel', 'namespace' => 'Carousel'], function () {
+                Route::get('/', 'IndexController')->name('carousel-slides');
+
+                Route::post('create', 'CreateController')->name('create-slide');
+                Route::post('update', 'UpdateController')->name('update-slides');
+
+                Route::delete('delete', 'DeleteController')->name('delete-slide');
+            });
+
+            Route::group(['prefix' => 'products', 'namespace' => 'Catalog'], function () {
+                Route::get('/', 'IndexController')->name('products');
+
+                Route::post('sync', 'SyncController')->name('sync-product');
+                Route::post('reindex', 'ReindexController')->name('reindex-products');
+            });
+
+            Route::group(['prefix' => 'search-terms', 'namespace' => 'SearchTerms'], function () {
+                Route::get('/', 'IndexController')->name('search-terms');
+
+                Route::post('save', 'SaveController')->name('save-search-terms');
+
+                Route::delete('delete', 'DeleteController')->name('delete-search-term');
+            });
+
+            Route::group(['prefix' => 'cms', 'namespace' => 'CMS'], function () {
+                Route::get('blocks', 'BlocksController')->name('cms-get-blocks');
+
+                Route::post('blocks/save', 'BlocksSaveController')->name('cms-save-block');
+            });
+
+            Route::group(['prefix' => 'packs', 'namespace' => 'Packs'], function () {
+                Route::get('/', 'IndexController')->name('packs');
+
+                Route::post('create', 'CreateController')->name('create-pack');
+                Route::post('item/create', 'CreateItemController')->name('create-pack-item');
+
+                Route::delete('delete', 'DeleteController')->name('delete-pack');
+                Route::delete('item/delete', 'DeleteItemController')->name('delete-pack-item');
+            });
         });
-
-        // Admin user manager
-//        Route::group(['as' => 'user.', 'prefix' => 'user'], function () {
-//            Route::get('manager', 'UserController@view')->name('manager');
-//            Route::get('get', 'UserController@get')->name('get');
-//            Route::get('added', 'UserController@added')->name('added');
-//
-//            Route::post('update', 'UserController@update')->name('update');
-//        });
-
-        // Admin carousel manager
-        Route::get('carousel', 'CarouselController@getAction')->name('carousel');
-
-        Route::group(['as' => 'carousel.', 'prefix' => 'carousel'], function () {
-            Route::delete('/', 'CarouselController@deleteAction')->name('delete');
-            Route::patch('/', 'CarouselController@patchAction')->name('edit');
-            Route::put('/', 'CarouselController@putAction')->name('create');
-        });
-
-        // Admin export
-        Route::get('export', 'ExportController@view')->name('export');
-
-        Route::group(['as' => 'export.', 'prefix' => 'export'], function () {
-            Route::post('catalog', 'ExportController@catalog')->name('catalog');
-            Route::post('pricelist', 'ExportController@pricelist')->name('pricelist');
-        });
-
-        // Admin content
-        Route::get('content', 'ContentController@getAction')->name('content');
-
-        Route::group(['as' => 'content.', 'prefix' => 'content', 'namespace' => 'Content'], function () {
-            Route::get('description/{sku?}', 'DescriptionController@getAction')->name('description');
-            Route::get('block/{id?}', 'BlockController@getAction')->name('block');
-
-            Route::put('description', 'DescriptionController@putAction');
-            Route::put('block', 'BlockController@putAction');
-        });
-
-        // Admin packs
-        Route::get('packs', 'Packs\OverviewController@getAction')->name('packs');
-        Route::put('packs', 'Packs\OverviewController@putAction');
-        Route::delete('packs', 'Packs\OverviewController@deleteAction');
-
-        Route::group(['as' => 'pack.', 'prefix' => 'pack', 'namespace' => 'Packs'], function () {
-            Route::get('/{id}', 'DetailController@getAction')->name('edit');
-
-            Route::put('/', 'DetailController@putAction')->name('create');
-
-            Route::patch('/{id}', 'DetailController@patchAction');
-
-            Route::delete('/{id}', 'DetailController@deleteAction');
-        });
-
-        // Admin cache
-        Route::get('cache', 'Cache\IndexController@getAction')->name('cache');
-        Route::delete('cache', 'Cache\IndexController@deleteAction')->name('cache.reset');
-
-        // Admin e-mail
-        Route::get('email', 'Email\IndexController@getAction')->name('email');
-        Route::post('email', 'Email\IndexController@postAction')->name('email.test');
-
-        Route::get('catalog', 'Catalog\IndexController@getAction')->name('catalog.index');
-        Route::post('catalog/sync', 'Catalog\SyncController@postAction')->name('catalog.sync');
-        Route::post('catalog/reindex', 'Catalog\ReindexController@postAction')->name('catalog.reindex');
-
-        Route::get('search-terms', 'SearchTerms\IndexController@getAction')->name('search-terms.index');
-        Route::post('search-terms', 'SearchTerms\SaveController@postAction')->name('search-terms.save');
-        Route::delete('search-terms/{id}', 'SearchTerms\DeleteController@deleteAction')->name('search-terms.delete');
     });
 });

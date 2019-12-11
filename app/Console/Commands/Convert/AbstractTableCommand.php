@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Console\Commands\Convert;
 
 use Illuminate\Console\Command;

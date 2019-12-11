@@ -60,7 +60,7 @@
                 <td style="white-space: nowrap">
                     <i class="far fa-fw fa-euro-sign"></i>{{ format_price($item->getAttribute('price')) }}
                 </td>
-                <td style="white-space: nowrap">{{ $item->getAttribute('qty') }}</td>
+                <td style="white-space: nowrap">{{ round($item->getAttribute('qty')) }}</td>
                 <td style="white-space: nowrap">
                     <i class="far fa-fw fa-euro-sign"></i>
                     {{ format_price($item->getAttribute('price') * $item->getAttribute('qty')) }}

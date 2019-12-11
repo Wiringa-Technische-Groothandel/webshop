@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Soap\GetOrderCount;
 
 use WTG\Soap\AbstractRequest;

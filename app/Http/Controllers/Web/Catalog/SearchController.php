@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Controllers\Web\Catalog;
 
+use Illuminate\Http\JsonResponse;
 use WTG\Models\Product;
 use Illuminate\Http\Request;
 use WTG\Services\SearchService;
@@ -64,21 +67,23 @@ class SearchController extends Controller
      * Search page.
      *
      * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function postAction(Request $request)
+    public function postAction(Request $request): JsonResponse
     {
         $searchQuery = $request->input('query');
 
         if (! $searchQuery) {
-            return back();
+            return response()->json([
+                'products' => []
+            ]);
         }
 
+        /** @var SearchService $service */
         $service = app(SearchService::class);
-        $results = $service->suggestProducts($searchQuery);
 
         return response()->json([
-            'products' => $results
+            'products' => $service->suggestProducts($searchQuery)
         ]);
     }
 }

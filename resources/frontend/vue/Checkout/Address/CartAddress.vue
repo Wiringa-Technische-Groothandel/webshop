@@ -16,7 +16,7 @@
 <script>
     export default {
         props: ['address'],
-        created () {
+        mounted () {
             this.$root.$on('cart-address-changed', (address) => {
                 this.address = address;
             });

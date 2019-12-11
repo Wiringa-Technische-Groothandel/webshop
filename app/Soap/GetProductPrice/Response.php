@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Soap\GetProductPrice;
 
 use WTG\Soap\AbstractResponse;

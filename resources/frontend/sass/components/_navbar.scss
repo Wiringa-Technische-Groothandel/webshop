@@ -21,9 +21,13 @@
         }
       }
 
+      .show-all {
+        color: var(--primary);
+      }
+
       position: absolute;
       top: 38px;
-      z-index: 1;
+      z-index: 9999;
       width: 200%;
       margin-left: -100%;
     }

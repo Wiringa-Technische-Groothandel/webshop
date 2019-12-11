@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Models;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -115,9 +117,9 @@ class Product extends Model implements ProductContract
     /**
      * Product identifier.
      *
-     * @return string
+     * @return int|null
      */
-    public function getId(): string
+    public function getId(): ?int
     {
         return $this->getAttribute('id');
     }
@@ -140,7 +142,7 @@ class Product extends Model implements ProductContract
      */
     public function getSku(): string
     {
-        return $this->getAttribute('sku');
+        return (string) $this->getAttribute('sku');
     }
 
     /**
@@ -161,7 +163,7 @@ class Product extends Model implements ProductContract
      */
     public function getGroup(): string
     {
-        return $this->getAttribute('group');
+        return (string) $this->getAttribute('group');
     }
 
     /**
@@ -287,7 +289,7 @@ class Product extends Model implements ProductContract
      */
     public function getSalesUnit(): string
     {
-        return $this->getAttribute('sales_unit');
+        return $this->getAttribute('sales_unit') ?: '';
     }
 
     /**

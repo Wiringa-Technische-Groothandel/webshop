@@ -1,9 +1,11 @@
 <template>
     <div class="prices" :class="{ 'price-loading': fetching, 'price-loaded': !fetching }">
-        <div class="loading-animation text-center" v-if="fetching">
-            Uw prijs wordt opgehaald <br />
-            <i class="fal fa-sync fa-spin"></i>
-        </div>
+        <template v-if="fetching">
+            <div class="loading-animation text-center">
+                Uw prijs wordt opgehaald <br />
+                <i class="fal fa-sync fa-spin"></i>
+            </div>
+        </template>
 
         <div v-if="! loggedIn">
             <a :href="authUrl" onclick="event.preventDefault()" data-toggle="modal"

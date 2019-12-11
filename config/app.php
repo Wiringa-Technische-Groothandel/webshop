@@ -157,13 +157,11 @@ return [
         WTG\Providers\AuthServiceProvider::class,
         WTG\Providers\BladeServiceProvider::class,
         WTG\Providers\CatalogServiceProvider::class,
-        WTG\Providers\CarouselServiceProvider::class,
-        // WTG\Providers\BroadcastServiceProvider::class,
         WTG\Providers\EventServiceProvider::class,
         WTG\Providers\RouteServiceProvider::class,
         WTG\Providers\ElasticsearchProvider::class,
 
-        Luna\SeoUrls\SeoUrlServiceProvider::class
+//        Luna\SeoUrls\SeoUrlServiceProvider::class
     ],
 
     /*

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Contracts\Services\Account;
 
 use Illuminate\Support\Collection;
@@ -22,16 +24,16 @@ interface AddressServiceContract
      * @param  bool  $withDefault
      * @return Collection
      */
-    public function getAddressesForCustomer(CustomerContract $customer, $withDefault = true): Collection;
+    public function getAddressesForCustomer(CustomerContract $customer, bool $withDefault = true): Collection;
 
     /**
      * Get an address for a customer by id.
      *
      * @param  CustomerContract  $customer
-     * @param  string  $addressId
+     * @param  int  $addressId
      * @return null|AddressContract
      */
-    public function getAddressForCustomerById(CustomerContract $customer, string $addressId): ?AddressContract;
+    public function getAddressForCustomerById(CustomerContract $customer, int $addressId): ?AddressContract;
 
     /**
      * Create a new address.
@@ -61,10 +63,10 @@ interface AddressServiceContract
      * Set the default address for a customer.
      *
      * @param  CustomerContract  $customer
-     * @param  string  $addressId
+     * @param  int  $addressId
      * @return bool
      */
-    public function setDefaultForCustomer(CustomerContract $customer, string $addressId): bool;
+    public function setDefaultForCustomer(CustomerContract $customer, int $addressId): bool;
 
     /**
      * Get the default address for a customer.
@@ -78,9 +80,9 @@ interface AddressServiceContract
      * Get the default address id for a customer.
      *
      * @param  CustomerContract  $customer
-     * @return null|string
+     * @return null|int
      */
-    public function getDefaultAddressIdForCustomer(CustomerContract $customer): ?string;
+    public function getDefaultAddressIdForCustomer(CustomerContract $customer): ?int;
 
     /**
      * Get the pickup address.

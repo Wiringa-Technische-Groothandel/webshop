@@ -10,7 +10,13 @@
                 <dt>E-Mail</dt>
                 <dd>{{ account.contact.contact_email }}</dd>
 
-                <dt>Rol  <i class="fa fa-spinner fa-spin" v-if="showSpinner"></i></dt>
+                <dt>
+                    Rol
+
+                    <template v-if="showSpinner">
+                        <span><i class="fa fa-spinner fa-spin"></i></span>
+                    </template>
+                </dt>
                 <dd>
                     <select class="form-control" v-model="role" :readonly="showSpinner"
                             :disabled="!canEdit" @change="updateRole">

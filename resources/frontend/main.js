@@ -1,3 +1,3 @@
-import(/* webpackChunkName: 'frontend-css' */ './sass/app.scss');
+require('./sass/app.scss');
 
 import('./js/app');

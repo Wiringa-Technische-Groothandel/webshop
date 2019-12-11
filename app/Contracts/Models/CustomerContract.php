@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Contracts\Models;
 
 use Illuminate\Support\Collection;
@@ -17,7 +19,7 @@ interface CustomerContract
      *
      * @return null|string
      */
-    public function getId(): ?string;
+    public function getId(): ?int;
 
     /**
      * Set the username.

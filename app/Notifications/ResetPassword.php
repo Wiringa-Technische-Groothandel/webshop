@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Notifications;
 
 use Illuminate\Notifications\Messages\MailMessage;

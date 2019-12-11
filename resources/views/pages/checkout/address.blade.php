@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <hr />
+        <hr/>
 
         <form method="post" action="{{ route('checkout.finish') }}">
             {{ csrf_field() }}
@@ -39,7 +39,8 @@
                             <div class="card-body">
                                 <cart-address :address="{{ $quoteAddress ?: 0 }}"></cart-address>
 
-                                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#change-address-modal">
+                                <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                                        data-target="#change-address-modal">
                                     {{ __('Adres wijzigen') }}
                                 </button>
                             </div>
@@ -53,7 +54,8 @@
                             </div>
                             <div class="card-body">
                                 <textarea title="{{ __('Opmerking') }}" name="comment" style="min-height: 126px;"
-                                          class="form-control" placeholder="{{ __('Optioneel') }}">{{ old('comment') }}</textarea>
+                                          class="form-control"
+                                          placeholder="{{ __('Optioneel') }}">{{ old('comment') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -80,32 +82,36 @@
 @endsection
 
 @push('scripts')
-    <script>
-        const $deliveryAddress = $("#delivery-address");
-        const $changeAddressModal = $('#change-address-modal');
+    <script async defer>
+        setTimeout(function () {
+            const $deliveryAddress = $("#delivery-address");
+            const $changeAddressModal = $('#change-address-modal');
 
-        $('.change-address-button').on('click', function () {
-            const $this = $(this);
-            const $selectedAddress = $($this.data('target'));
+            $('.change-address-button').on('click', function () {
+                const $this = $(this);
+                const $selectedAddress = $($this.data('target'));
 
-            $deliveryAddress.html($selectedAddress.html());
-            $changeAddressModal.modal('hide');
+                $deliveryAddress.html($selectedAddress.html());
+                $changeAddressModal.modal('hide');
 
-            axios.patch(window.location.href, {
-                addressId: $this.data('address-id')
-            })
-                .then((resp) => {
-                    window.vm.$root.$emit('send-notify', {
-                        text: resp.data.message,
-                        success: resp.data.success
-                    })
+                axios.patch(window.location.href, {
+                    addressId: $this.data('address-id')
                 })
-                .catch(function (error) {
-                    window.vm.$root.$emit('send-notify', {
-                        text: error,
-                        success: false
+                    .then((resp) => {
+                        window.vm.$root.$emit('send-notify', {
+                            text: resp.data.message,
+                            success: resp.data.success
+                        });
+
+                        window.vm.$root.$emit('cart-address-changed');
                     })
-                });
-        });
+                    .catch(function (error) {
+                        window.vm.$root.$emit('send-notify', {
+                            text: error,
+                            success: false
+                        });
+                    });
+            });
+        }, 200);
     </script>
 @endpush

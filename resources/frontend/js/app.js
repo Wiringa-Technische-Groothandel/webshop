@@ -1,7 +1,7 @@
-require('../../global/js/head');
+import axios from '../../global/js/axios'
+window.axios = axios;
 
-// Bootstrap 4
-require('bootstrap');
+require('../../global/js/head');
 
 // Input spinners
 require('bootstrap-input-spinner');
@@ -14,35 +14,11 @@ document.documentElement.setAttribute('data-useragent', navigator.userAgent);
 
 WebFont.load({
     google: {
-        families: ['Muli:300,400,600,800', 'Oswald:500,700']
+        families: [
+            'Muli:300,400,600,800',
+            'Oswald:500,700'
+        ]
     }
 });
 
-window.checkInputLabelStates = function () {
-    $('.form-control').each(function () {
-        const $formControl = $(this);
-
-        $formControl.val() && $formControl.addClass("not-empty");
-    });
-};
-
-$(document).ready(function () {
-    let $formControls = $('.form-control');
-
-    $formControls.on("change", function(event) {
-        const $target = $(event.target);
-
-        $target.val() ? $target.addClass("not-empty") : $target.removeClass("not-empty");
-    });
-
-    checkInputLabelStates();
-});
-checkInputLabelStates();
-
-getVue().then(({ default: Vue }) => {
-    window.Vue = Vue;
-
-    import(/* webpackChunkName: 'frontend-vue' */ './vue');
-}).catch(() => {
-    console.error('Failed to init Vue');
-});
+require('./vue');

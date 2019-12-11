@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Models;
 
 use WTG\Contracts\Models\RoleContract;
@@ -38,9 +40,9 @@ class Role extends Model implements RoleContract
     /**
      * Get the block id.
      *
-     * @return null|string
+     * @return null|int
      */
-    public function getId(): ?string
+    public function getId(): ?int
     {
         return $this->getAttribute('id');
     }

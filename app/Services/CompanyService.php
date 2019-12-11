@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WTG\Services;
 
+use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 use Throwable;
@@ -40,7 +41,7 @@ class CompanyService implements CompanyServiceContract
         $this->validateData($data);
 
         $duplicate = app()->make(CompanyContract::class)
-                          ->where('customer_number', $data['customer-number'])
+                          ->where('customer_number', $data['customer_number'])
                           ->exists();
 
         if ($duplicate) {
@@ -48,7 +49,7 @@ class CompanyService implements CompanyServiceContract
                 __(
                     'Er bestaat reeds een debiteur met nummer :number.',
                     [
-                        'number' => $data['customer-number'],
+                        'number' => $data['customer_number'],
                     ]
                 )
             );
@@ -56,17 +57,64 @@ class CompanyService implements CompanyServiceContract
 
         /** @var Company $company */
         $company = app()->make(CompanyContract::class);
+
+        $this->setCompanyData($data, $company);
+        $this->createDefaultCustomer($company, $data['email']);
+
+        return $company;
+    }
+
+    /**
+     * Update a company.
+     *
+     * @param array $data
+     * @return CompanyContract
+     * @throws BindingResolutionException
+     * @throws IncompleteDataException
+     * @throws Throwable
+     */
+    public function updateCompany(array $data): CompanyContract
+    {
+        $this->validateData($data, true);
+
+        /** @var Company $company */
+        $company = app()->make(CompanyContract::class)
+            ->where('customer_number', $data['customer_number'])
+            ->first();
+
+        if (! $company) {
+            throw new Exception(
+                __(
+                    'Er is geen debiteur gevonden met nummer :number.',
+                    [
+                        'number' => $data['customer_number'],
+                    ]
+                )
+            );
+        }
+
+        $this->setCompanyData($data, $company);
+
+        return $company;
+    }
+
+    /**
+     * Save the data on the company
+     *
+     * @param array $data
+     * @param Company $company
+     * @return void
+     * @throws Throwable
+     */
+    protected function setCompanyData(array $data, Company $company): void
+    {
         $company->setName($data['name']);
-        $company->setCustomerNumber($data['customer-number']);
+        $company->setCustomerNumber($data['customer_number']);
         $company->setStreet($data['street']);
         $company->setCity($data['city']);
         $company->setPostcode($data['postcode']);
         $company->setActive((bool) ($data['active'] ?? false));
         $company->saveOrFail();
-
-        $this->createDefaultCustomer($company, $data['email']);
-
-        return $company;
     }
 
     /**
@@ -83,6 +131,7 @@ class CompanyService implements CompanyServiceContract
         $password = str_random();
 
         session()->flash('new-customer-password', $password);
+        session()->flash('new-customer-password-id', $company->getId());
 
         /** @var Customer $customer */
         $customer = app()->make(CustomerContract::class);
@@ -122,35 +171,36 @@ class CompanyService implements CompanyServiceContract
      * Validate the data for creating a new company.
      *
      * @param array $data
+     * @param bool $update
      * @return void
      * @throws IncompleteDataException
      */
-    protected function validateData(array $data): void
+    protected function validateData(array $data, bool $update = false): void
     {
         $errors = [];
 
         if (! isset($data['name'])) {
-            $errors[] = __("Missing required field 'name'.");
+            $errors[] = __("Veld 'Naam' is vereist.");
         }
 
-        if (! isset($data['customer-number'])) {
-            $errors[] = __("Missing required field 'customer-number'.");
+        if (! isset($data['customer_number'])) {
+            $errors[] = __("Veld 'Debiteurnummer' is vereist.");
         }
 
         if (! isset($data['street'])) {
-            $errors[] = __("Missing required field 'street'.");
+            $errors[] = __("Veld 'Street' is vereist.");
         }
 
         if (! isset($data['city'])) {
-            $errors[] = __("Missing required field 'city'.");
+            $errors[] = __("Veld 'Plaats' is vereist.");
         }
 
         if (! isset($data['postcode'])) {
-            $errors[] = __("Missing required field 'postcode'.");
+            $errors[] = __("Veld 'Postcode' is vereist.");
         }
 
-        if (! isset($data['email'])) {
-            $errors[] = __("Missing required field 'email'.");
+        if (! isset($data['email']) && !$update) {
+            $errors[] = __("Veld 'E-Mail' is vereist.");
         }
 
         if ($errors) {

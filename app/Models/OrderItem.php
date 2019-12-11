@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -125,16 +127,16 @@ class OrderItem extends Model implements OrderItemContract
      */
     public function getQuantity(): ?float
     {
-        return $this->getAttribute('qty');
+        return (float) $this->getAttribute('qty');
     }
 
     /**
      * Set the price.
      *
-     * @param  string  $price
+     * @param  float  $price
      * @return OrderItemContract
      */
-    public function setPrice(string $price): OrderItemContract
+    public function setPrice(float $price): OrderItemContract
     {
         return $this->setAttribute('price', $price);
     }
@@ -142,20 +144,20 @@ class OrderItem extends Model implements OrderItemContract
     /**
      * Get the price.
      *
-     * @return null|string
+     * @return null|float
      */
-    public function getPrice(): ?string
+    public function getPrice(): ?float
     {
-        return $this->getAttribute('price');
+        return (float) $this->getAttribute('price');
     }
 
     /**
      * Set the subtotal.
      *
-     * @param  string  $subtotal
+     * @param  float  $subtotal
      * @return OrderItemContract
      */
-    public function setSubtotal(string $subtotal): OrderItemContract
+    public function setSubtotal(float $subtotal): OrderItemContract
     {
         return $this->setAttribute('subtotal', $subtotal);
     }

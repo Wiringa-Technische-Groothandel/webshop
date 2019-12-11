@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Controllers;
 
 use Illuminate\View\Factory as ViewFactory;
@@ -17,12 +19,14 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
  */
 abstract class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use AuthorizesRequests;
+    use DispatchesJobs;
+    use ValidatesRequests;
 
     /**
      * @var ViewFactory
      */
-    protected $view;
+    protected ViewFactory $view;
 
     /**
      * Controller constructor.

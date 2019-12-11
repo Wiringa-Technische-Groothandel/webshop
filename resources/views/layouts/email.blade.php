@@ -4,7 +4,7 @@
         <link rel="stylesheet" href="{{ public_path('assets/css/app.css') }}">
     </head>
 
-    <body>
+    <body  style="opacity: 0;">
         <header class="mb-5">
             <div class="row">
                 <div class="col-4">

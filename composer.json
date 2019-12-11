@@ -5,8 +5,8 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=7.2.0",
-        "ext-soap": "^7.2",
+        "php": ">=7.4.0",
+        "ext-soap": "*",
         "barryvdh/laravel-snappy": "^0.4",
         "doctrine/dbal": "^2.6",
         "fideloper/proxy": "~4.0",
@@ -20,7 +20,9 @@
         "luna/laravel-seo-urls": "^1.0",
         "predis/predis": "^1.1",
         "sentry/sentry-laravel": "^1.0",
-        "tamayo/laravel-scout-elastic": "^3.0"
+        "tamayo/laravel-scout-elastic": "^3.0",
+        "tightenco/ziggy": "^0.8.1",
+        "tymon/jwt-auth": "dev-develop"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.0",
