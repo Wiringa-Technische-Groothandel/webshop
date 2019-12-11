@@ -1,0 +1,55 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+  - name: build
+    image: lunamoonfang/wtg-webshop:build-7.4
+    commands:
+      # Install Composer and project dependencies.
+      - curl -sS https://getcomposer.org/installer | php
+      - php composer.phar install --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
+
+      # Install Node dependencies.
+      - npm ci
+
+      # Build the assets
+      - npm run prod-silent
+
+      - tar --exclude=build --exclude=./.git --exclude=node_modules --exclude=.env.example --exclude=.env.testing --exclude=composer.json --exclude=composer.lock --exclude=package.json --exclude=package-lock.json --exclude=webpack.mix.js --exclude=storage/app/public/uploads -cvzf build/deployment.tar.gz *
+
+  - name: deploy
+    image: lunamoonfang/wtg-webshop:build-7.4
+    when:
+      branch:
+        - master
+    commands:
+      # Install ssh if not already installed
+      - 'which ssh || ( apt-get update -y && apt-get install openssh-client -y )'
+
+      # Create the SSH directory and give it the right permissions
+      - mkdir -p ~/.ssh
+      - chmod 700 ~/.ssh
+
+      # Known host checking
+      - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      # Add keypair
+      - echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
+      - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+
+      # Add SSH config
+      - echo "$SSH_CONFIG" > ~/.ssh/config
+
+      # Fix permissions
+      - chmod 600 ~/.ssh/id_rsa*
+      - chmod 600 ~/.ssh/config
+      - chmod 644 ~/.ssh/known_hosts
+
+      # Test ssh connection
+      - ssh $SSH_HOSTNAME "echo $0"
+
+      # Release to production
+      - curl -sS https://getcomposer.org/installer | php
+      - cd build && php ../composer.phar install --no-progress
+      - vendor/bin/dep deploy production
