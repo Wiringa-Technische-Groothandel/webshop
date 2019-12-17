@@ -23,7 +23,7 @@ interface BlockContract
     /**
      * Set the block name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return BlockContract
      */
     public function setName(string $name): BlockContract;
@@ -38,7 +38,7 @@ interface BlockContract
     /**
      * Set the block title.
      *
-     * @param  string  $title
+     * @param string $title
      * @return BlockContract
      */
     public function setTitle(string $title): BlockContract;
@@ -53,7 +53,7 @@ interface BlockContract
     /**
      * Set the block content.
      *
-     * @param  string  $content
+     * @param string $content
      * @return BlockContract
      */
     public function setContent(string $content): BlockContract;

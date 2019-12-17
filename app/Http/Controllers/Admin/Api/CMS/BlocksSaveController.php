@@ -7,11 +7,8 @@ namespace WTG\Http\Controllers\Admin\Api\CMS;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Http\Request;
 use Illuminate\Log\LogManager;
-
 use Symfony\Component\HttpFoundation\Response;
-
 use Throwable;
-
 use WTG\Http\Controllers\Admin\Controller;
 use WTG\Models\Block;
 
@@ -73,15 +70,19 @@ class BlocksSaveController extends Controller
 
             $this->logManager->error($throwable);
 
-            return response()->json([
-                'message' => $throwable->getMessage(),
-                'success' => false
-            ]);
+            return response()->json(
+                [
+                    'message' => $throwable->getMessage(),
+                    'success' => false,
+                ]
+            );
         }
 
-        return response()->json([
-            'message' => __('Het blok is aangepast.'),
-            'success' => true
-        ]);
+        return response()->json(
+            [
+                'message' => __('Het blok is aangepast.'),
+                'success' => true,
+            ]
+        );
     }
 }

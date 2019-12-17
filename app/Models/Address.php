@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace WTG\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\CompanyContract;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Address model.
@@ -18,17 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Address extends Model implements AddressContract
 {
-    const DEFAULT_ID = 0;
-
-    /**
-     * Related company model.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function company(): BelongsTo
-    {
-        return $this->belongsTo(Company::class);
-    }
+    public const DEFAULT_ID = 0;
 
     /**
      * Get the identifier.
@@ -43,7 +33,7 @@ class Address extends Model implements AddressContract
     /**
      * Set the company.
      *
-     * @param  CompanyContract  $company
+     * @param CompanyContract $company
      * @return AddressContract
      */
     public function setCompany(CompanyContract $company): AddressContract
@@ -51,6 +41,16 @@ class Address extends Model implements AddressContract
         $this->company()->associate($company);
 
         return $this;
+    }
+
+    /**
+     * Related company model.
+     *
+     * @return BelongsTo
+     */
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
     }
 
     /**
@@ -66,7 +66,7 @@ class Address extends Model implements AddressContract
     /**
      * Set the name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return AddressContract
      */
     public function setName(string $name): AddressContract
@@ -87,7 +87,7 @@ class Address extends Model implements AddressContract
     /**
      * Set the street.
      *
-     * @param  string  $street
+     * @param string $street
      * @return AddressContract
      */
     public function setStreet(string $street): AddressContract
@@ -108,7 +108,7 @@ class Address extends Model implements AddressContract
     /**
      * Set the postcode.
      *
-     * @param  null|string  $postcode
+     * @param null|string $postcode
      * @return AddressContract
      */
     public function setPostcode(string $postcode): AddressContract
@@ -129,7 +129,7 @@ class Address extends Model implements AddressContract
     /**
      * Set the city.
      *
-     * @param  null|string  $city
+     * @param null|string $city
      * @return AddressContract
      */
     public function setCity(string $city): AddressContract
@@ -150,7 +150,7 @@ class Address extends Model implements AddressContract
     /**
      * Set the phone.
      *
-     * @param  null|string  $phone
+     * @param null|string $phone
      * @return AddressContract
      */
     public function setPhone(?string $phone = null): AddressContract
@@ -171,7 +171,7 @@ class Address extends Model implements AddressContract
     /**
      * Set the mobile.
      *
-     * @param  null|string  $mobile
+     * @param null|string $mobile
      * @return AddressContract
      */
     public function setMobile(?string $mobile = null): AddressContract

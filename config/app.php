@@ -161,6 +161,8 @@ return [
         WTG\Providers\RouteServiceProvider::class,
         WTG\Providers\ElasticsearchProvider::class,
 
+        WTG\RestClient\ServiceProvider::class,
+
 //        Luna\SeoUrls\SeoUrlServiceProvider::class
     ],
 

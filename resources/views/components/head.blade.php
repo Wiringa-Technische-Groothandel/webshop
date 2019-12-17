@@ -1,5 +1,6 @@
 @stack('head_start')
 
+<!--suppress VueDuplicateTag -->
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -26,15 +27,11 @@
 <link rel="preconnect dns-prefetch" href="https://kit.fontawesome.com">
 <link rel="preconnect dns-prefetch" href="https://cdn.jsdelivr.net">
 
-<link rel="preload prefetch" as="script" href="{{ mix('assets/base-components.js') }}">
+<link rel="preload prefetch" as="script" href="{{ mix('assets/frontend/main.js') }}">
 <link rel="preload prefetch" as="style" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css">
 <link rel="preload prefetch" as="style" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick-theme.css">
 
 <script src="https://kit.fontawesome.com/4af601a43c.js" crossorigin="anonymous" async defer></script>
-
-<script src="{{ mix('assets/base-components.js') }}"></script>
-<script src="{{ mix('assets/polyfills.js') }}"></script>
-<script src="{{ mix('assets/frontend/main.js') }}"></script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick-theme.css"/>
@@ -59,3 +56,7 @@
 </script>
 
 @stack('head_end')
+
+@push('scripts')
+    <script src="{{ mix('assets/frontend/main.js') }}"></script>
+@endpush

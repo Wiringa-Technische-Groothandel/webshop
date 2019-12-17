@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\Seeder;
 use WTG\Models\QuoteItem;
 
 /**
@@ -7,7 +8,7 @@ use WTG\Models\QuoteItem;
  *
  * @author  Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
-class QuoteItemsTableSeeder extends \Illuminate\Database\Seeder
+class QuoteItemsTableSeeder extends Seeder
 {
     /**
      * Run the seeder.

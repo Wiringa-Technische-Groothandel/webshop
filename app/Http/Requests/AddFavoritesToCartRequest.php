@@ -33,7 +33,7 @@ class AddFavoritesToCartRequest extends FormRequest
     public function rules()
     {
         return [
-            'products' => ['required', 'array']
+            'products' => ['required', 'array'],
         ];
     }
 }

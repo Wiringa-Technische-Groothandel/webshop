@@ -33,7 +33,6 @@ class DatabaseSetup extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('sku');
-            $table->string('supplier_code', 50)->nullable(true);
             $table->integer('group');
             $table->string('name', 75);
             $table->string('ean', 16);
@@ -52,7 +51,6 @@ class DatabaseSetup extends Migration
             $table->string('type', 50);
             $table->string('keywords', 100)->nullable();
             $table->string('related', 85)->nullable();
-            $table->string('stock_display', 5)->default('S');
             $table->timestamps();
             $table->softDeletes();
             $table->timestamp('synchronized_at')->nullable();
@@ -72,10 +70,13 @@ class DatabaseSetup extends Migration
             ]);
         });
 
-        Schema::table('seo_urls', function (Blueprint $table) {
-            $table->integer('product_id', false, true)->nullable();
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-        });
+        // This table does not exist for now
+        if (false) {
+            Schema::table('seo_urls', function (Blueprint $table) {
+                $table->integer('product_id', false, true)->nullable();
+                $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            });
+        }
 
         if (! app()->environment('testing')) {
             if (Artisan::call('import:soap:products', [], app(ConsoleOutput::class)) !== 0) {

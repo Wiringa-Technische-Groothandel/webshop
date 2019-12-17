@@ -17,19 +17,19 @@ class RedirectIfAuthenticated
     /**
      * Handle an incoming request.
      *
-     * @param Request     $request
-     * @param Closure     $next
+     * @param Request $request
+     * @param Closure $next
      * @param string|null $guard
      *
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if ( auth()->guard($guard)->check() ) {
-            if ( $guard === 'admin' ) {
+        if (auth()->guard($guard)->check()) {
+            if ($guard === 'admin') {
                 return response()->json(
                     [
-                        'user' => auth()->guard($guard)->user(),
+                        'user'    => auth()->guard($guard)->user(),
                         'message' => 'Already authenticated',
                         'success' => false,
                     ],

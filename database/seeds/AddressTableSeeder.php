@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\Seeder;
 use WTG\Models\Address;
 
 /**
@@ -7,7 +8,7 @@ use WTG\Models\Address;
  *
  * @author  Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
-class AddressTableSeeder extends \Illuminate\Database\Seeder
+class AddressTableSeeder extends Seeder
 {
     /**
      * Run the seeder.

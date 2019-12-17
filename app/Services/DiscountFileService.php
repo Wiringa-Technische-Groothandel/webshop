@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace WTG\Services;
 
-use WTG\Models\Customer;
-use WTG\Exceptions\InvalidFormatException;
 use WTG\Contracts\Models\CustomerContract;
+use WTG\Exceptions\InvalidFormatException;
+use WTG\Models\Customer;
 use WTG\Services\DiscountFile\CSVGenerator;
 use WTG\Services\DiscountFile\ICCGenerator;
 
@@ -19,8 +19,8 @@ use WTG\Services\DiscountFile\ICCGenerator;
  */
 class DiscountFileService
 {
-    const FORMAT_TYPE_ICC = 'icc';
-    const FORMAT_TYPE_CSV = 'csv';
+    public const FORMAT_TYPE_ICC = 'icc';
+    public const FORMAT_TYPE_CSV = 'csv';
 
     /**
      * @var Customer
@@ -30,7 +30,7 @@ class DiscountFileService
     /**
      * DiscountFileService constructor.
      *
-     * @param  CustomerContract  $customer
+     * @param CustomerContract $customer
      */
     public function __construct(CustomerContract $customer = null)
     {
@@ -40,7 +40,7 @@ class DiscountFileService
     /**
      * Set the customer.
      *
-     * @param  CustomerContract  $customer
+     * @param CustomerContract $customer
      * @return $this
      */
     public function setCustomer(CustomerContract $customer)
@@ -52,7 +52,7 @@ class DiscountFileService
     /**
      * Generate the discount data.
      *
-     * @param  string  $format
+     * @param string $format
      * @return string
      * @throws InvalidFormatException
      */

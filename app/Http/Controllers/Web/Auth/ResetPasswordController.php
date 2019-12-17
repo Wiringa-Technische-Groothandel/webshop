@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace WTG\Http\Controllers\Web\Auth;
 
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use Illuminate\View\Factory as ViewFactory;
 use WTG\Contracts\Models\CompanyContract;
 use WTG\Http\Controllers\Controller;
-use Illuminate\View\Factory as ViewFactory;
-use Illuminate\Foundation\Auth\ResetsPasswords;
 use WTG\Models\Company;
 
 class ResetPasswordController extends Controller
@@ -24,7 +27,6 @@ class ResetPasswordController extends Controller
     | explore this trait and override any methods you wish to tweak.
     |
     */
-
     use ResetsPasswords;
 
     /**
@@ -37,7 +39,7 @@ class ResetPasswordController extends Controller
     /**
      * ResetPasswordController constructor.
      *
-     * @param  ViewFactory  $view
+     * @param ViewFactory $view
      */
     public function __construct(ViewFactory $view)
     {
@@ -49,9 +51,9 @@ class ResetPasswordController extends Controller
     /**
      * Show the reset form.
      *
-     * @param  Request  $request
-     * @param  null|string  $token
-     * @return \Illuminate\Contracts\View\View
+     * @param Request $request
+     * @param null|string $token
+     * @return View
      */
     public function showResetForm(Request $request, $token = null)
     {
@@ -62,7 +64,7 @@ class ResetPasswordController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     * @return JsonResponse|RedirectResponse
      */
     public function reset(Request $request)
     {
@@ -78,11 +80,14 @@ class ResetPasswordController extends Controller
         // Here we will attempt to reset the user's password. If it is successful we
         // will update the password on an actual user model and persist it to the
         // database. Otherwise we will parse the error and return the response.
-        $response = $this->broker()->reset($credentials + [
-            'company_id' => $company->getId(),
-        ], function ($user, $password) {
-            $this->resetPassword($user, $password);
-        });
+        $response = $this->broker()->reset(
+            $credentials + [
+                'company_id' => $company->getId(),
+            ],
+            function ($user, $password) {
+                $this->resetPassword($user, $password);
+            }
+        );
 
         // If the password was successfully reset, we will redirect the user back to
         // the application's home authenticated view. If there is an error we can
@@ -100,10 +105,10 @@ class ResetPasswordController extends Controller
     protected function rules()
     {
         return [
-            'token'     => 'required',
-            'username'  => 'required',
-            'company'   => 'required',
-            'password'  => 'required|confirmed|min:6',
+            'token'    => 'required',
+            'username' => 'required',
+            'company'  => 'required',
+            'password' => 'required|confirmed|min:6',
         ];
     }
 }

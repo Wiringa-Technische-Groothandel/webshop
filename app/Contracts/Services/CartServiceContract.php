@@ -6,8 +6,8 @@ namespace WTG\Contracts\Services;
 
 use Illuminate\Support\Collection;
 use WTG\Contracts\Models\AddressContract;
-use WTG\Contracts\Models\ProductContract;
 use WTG\Contracts\Models\CartItemContract;
+use WTG\Contracts\Models\ProductContract;
 
 /**
  * Interface CartServiceContract
@@ -19,8 +19,8 @@ interface CartServiceContract
     /**
      * Add a product by sku.
      *
-     * @param  string  $sku
-     * @param  float  $quantity
+     * @param string $sku
+     * @param float $quantity
      * @return null|CartItemContract
      */
     public function addProductBySku(string $sku, float $quantity = 1.0): ?CartItemContract;
@@ -28,8 +28,8 @@ interface CartServiceContract
     /**
      * Add a product.
      *
-     * @param  ProductContract  $product
-     * @param  float  $quantity
+     * @param ProductContract $product
+     * @param float $quantity
      * @return null|CartItemContract
      */
     public function addProduct(ProductContract $product, float $quantity = 1.0): ?CartItemContract;
@@ -37,8 +37,8 @@ interface CartServiceContract
     /**
      * Update a product by sku.
      *
-     * @param  string  $sku
-     * @param  float  $quantity
+     * @param string $sku
+     * @param float $quantity
      * @return null|CartItemContract
      */
     public function updateProductBySku(string $sku, float $quantity): ?CartItemContract;
@@ -46,7 +46,7 @@ interface CartServiceContract
     /**
      * Delete a product by sku.
      *
-     * @param  string  $sku
+     * @param string $sku
      * @return bool
      */
     public function deleteProductBySku(string $sku): bool;
@@ -68,7 +68,7 @@ interface CartServiceContract
     /**
      * Get the cart items.
      *
-     * @param  bool  $withPrices
+     * @param bool $withPrices
      * @return Collection
      */
     public function getItems(bool $withPrices = false): Collection;
@@ -90,7 +90,7 @@ interface CartServiceContract
     /**
      * Set the delivery address for the cart.
      *
-     * @param  AddressContract  $address
+     * @param AddressContract $address
      * @return bool
      */
     public function setDeliveryAddress(AddressContract $address): bool;

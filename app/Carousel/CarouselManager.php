@@ -9,11 +9,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
-
 use Intervention\Image\Facades\Image;
-
 use Throwable;
-
 use WTG\Carousel\Model\Slide;
 
 /**
@@ -56,16 +53,6 @@ class CarouselManager
     public function getOrderedSlides(): Collection
     {
         return Slide::query()->orderBy('order')->get();
-    }
-
-    /**
-     * Get the current slide count.
-     *
-     * @return int
-     */
-    public function getSlideCount(): int
-    {
-        return Slide::query()->count();
     }
 
     /**
@@ -174,6 +161,16 @@ class CarouselManager
     }
 
     /**
+     * Get the current slide count.
+     *
+     * @return int
+     */
+    public function getSlideCount(): int
+    {
+        return Slide::query()->count();
+    }
+
+    /**
      * Delete a slide.
      *
      * @param Slide $slide
@@ -218,7 +215,7 @@ class CarouselManager
             $slide->saveOrFail();
 
             $this->databaseManager->commit();
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             $this->databaseManager->rollBack();
 
             throw $throwable;

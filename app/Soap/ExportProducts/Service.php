@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace WTG\Soap\ExportProducts;
 
-use Carbon\Carbon;
+use Exception;
+use Log;
 use WTG\Soap\AbstractService;
 
 /**
@@ -48,8 +49,8 @@ class Service extends AbstractService
                 $this->request
             );
             $this->buildResponse($soapResponse);
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
         }
 
         return $this->response;
@@ -58,7 +59,7 @@ class Service extends AbstractService
     /**
      * Build the response.
      *
-     * @param  object  $soapResponse
+     * @param object $soapResponse
      * @return void
      * @throws Exception
      */

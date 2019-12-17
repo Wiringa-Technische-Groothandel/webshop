@@ -1,6 +1,8 @@
 import axios from '../../global/js/axios'
 window.axios = axios;
 
+require('lightbox2');
+
 require('../../global/js/head');
 
 // Input spinners

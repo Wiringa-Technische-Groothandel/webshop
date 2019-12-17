@@ -19,7 +19,7 @@ interface AuthServiceContract
     /**
      * Authenticate a user by request.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return null|CustomerContract
      */
     public function authenticateByRequest(Request $request): ?CustomerContract;

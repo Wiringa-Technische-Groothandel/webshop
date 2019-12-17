@@ -25,7 +25,7 @@ interface CartContract
     /**
      * Find or create a cart for a customer.
      *
-     * @param  CustomerContract  $customer
+     * @param CustomerContract $customer
      * @return CartContract
      */
     public function loadForCustomer(CustomerContract $customer): CartContract;
@@ -33,8 +33,8 @@ interface CartContract
     /**
      * Add a new item to the cart.
      *
-     * @param  ProductContract $product
-     * @param  float $quantity
+     * @param ProductContract $product
+     * @param float $quantity
      * @return CartItemContract
      */
     public function addProduct(ProductContract $product, float $quantity): CartItemContract;
@@ -42,8 +42,8 @@ interface CartContract
     /**
      * Update the item quantity.
      *
-     * @param  ProductContract  $product
-     * @param  float  $quantity
+     * @param ProductContract $product
+     * @param float $quantity
      * @return CartItemContract
      */
     public function updateProduct(ProductContract $product, float $quantity): CartItemContract;
@@ -51,7 +51,7 @@ interface CartContract
     /**
      * Remove an item from the cart.
      *
-     * @param  ProductContract  $product
+     * @param ProductContract $product
      * @return bool
      */
     public function removeProduct(ProductContract $product): bool;
@@ -59,7 +59,7 @@ interface CartContract
     /**
      * Find a cart item by product.
      *
-     * @param  ProductContract  $product
+     * @param ProductContract $product
      * @return null|CartItemContract
      */
     public function findProduct(ProductContract $product): ?CartItemContract;
@@ -67,7 +67,7 @@ interface CartContract
     /**
      * Check if the cart contains the product.
      *
-     * @param  ProductContract  $product
+     * @param ProductContract $product
      * @return bool
      */
     public function hasProduct(ProductContract $product): bool;
@@ -82,7 +82,7 @@ interface CartContract
     /**
      * Set the delivery address.
      *
-     * @param  AddressContract  $address
+     * @param AddressContract $address
      * @return CartContract
      */
     public function setAddress(AddressContract $address): CartContract;
@@ -90,7 +90,7 @@ interface CartContract
     /**
      * Set the finished at timestamp.
      *
-     * @param  Carbon  $carbon
+     * @param Carbon $carbon
      * @return CartContract
      */
     public function setFinishedAt(Carbon $carbon): CartContract;

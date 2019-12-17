@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WTG\Converters;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -17,7 +18,7 @@ interface TableConverter
     /**
      * Run the converter.
      *
-     * @param  string  $filePath
+     * @param string $filePath
      * @return bool
      */
     public function run(string $filePath): bool;
@@ -33,7 +34,7 @@ interface TableConverter
      * Read file contents.
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function readFileContents();
 
@@ -47,7 +48,7 @@ interface TableConverter
     /**
      * Create a new model.
      *
-     * @param  array  $data
+     * @param array $data
      * @return Model|null
      */
     public function createModel(array $data): ?Model;

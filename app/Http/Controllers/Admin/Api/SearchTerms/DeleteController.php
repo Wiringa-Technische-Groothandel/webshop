@@ -6,6 +6,7 @@ namespace WTG\Http\Controllers\Admin\Api\SearchTerms;
 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 use WTG\Http\Controllers\Admin\Controller;
 use WTG\Search\SearchTermsManager;
 
@@ -46,11 +47,11 @@ class DeleteController extends Controller
     {
         try {
             $term = $this->searchTermsManager->findTerm(
-                (int) $this->request->input('id')
+                (int)$this->request->input('id')
             );
 
             $this->searchTermsManager->deleteTerm($term);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return response()->json(
                 [
                     'message' => $e->getMessage(),
@@ -62,8 +63,8 @@ class DeleteController extends Controller
         return response()->json(
             [
                 'searchTerms' => $this->searchTermsManager->getTerms(),
-                'message' => __('De zoekterm is verwijderd.'),
-                'success' => true,
+                'message'     => __('De zoekterm is verwijderd.'),
+                'success'     => true,
             ]
         );
     }

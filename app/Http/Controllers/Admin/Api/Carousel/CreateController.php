@@ -7,11 +7,8 @@ namespace WTG\Http\Controllers\Admin\Api\Carousel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Log\LogManager;
-
 use Symfony\Component\HttpFoundation\Response;
-
 use Throwable;
-
 use WTG\Carousel\CarouselManager;
 use WTG\Http\Controllers\Admin\Controller;
 

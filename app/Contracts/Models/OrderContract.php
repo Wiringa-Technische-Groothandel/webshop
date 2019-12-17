@@ -32,7 +32,7 @@ interface OrderContract
     /**
      * Set the customer number.
      *
-     * @param  string  $customerNumber
+     * @param string $customerNumber
      * @return OrderContract
      */
     public function setCustomerNumber(string $customerNumber): OrderContract;
@@ -47,7 +47,7 @@ interface OrderContract
     /**
      * Set the company.
      *
-     * @param  CompanyContract  $company
+     * @param CompanyContract $company
      * @return OrderContract
      */
     public function setCompany(CompanyContract $company): OrderContract;
@@ -62,7 +62,7 @@ interface OrderContract
     /**
      * Set the name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return OrderContract
      */
     public function setName(string $name): OrderContract;
@@ -77,7 +77,7 @@ interface OrderContract
     /**
      * Set the street.
      *
-     * @param  string  $street
+     * @param string $street
      * @return OrderContract
      */
     public function setStreet(string $street): OrderContract;
@@ -92,7 +92,7 @@ interface OrderContract
     /**
      * Set the postcode.
      *
-     * @param  null|string  $postcode
+     * @param null|string $postcode
      * @return OrderContract
      */
     public function setPostcode(string $postcode): OrderContract;
@@ -107,7 +107,7 @@ interface OrderContract
     /**
      * Set the city.
      *
-     * @param  null|string  $city
+     * @param null|string $city
      * @return OrderContract
      */
     public function setCity(string $city): OrderContract;
@@ -122,7 +122,7 @@ interface OrderContract
     /**
      * Set the comment.
      *
-     * @param  null|string  $comment
+     * @param null|string $comment
      * @return OrderContract
      */
     public function setComment(?string $comment): OrderContract;

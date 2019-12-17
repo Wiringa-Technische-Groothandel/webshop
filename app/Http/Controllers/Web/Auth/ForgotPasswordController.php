@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace WTG\Http\Controllers\Web\Auth;
 
-use WTG\Mail\Test;
-use WTG\Models\Company;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Password;
+use Illuminate\View\View;
 use WTG\Contracts\Models\CompanyContract;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use WTG\Models\Company;
 
 class ForgotPasswordController extends Controller
 {
@@ -25,8 +28,8 @@ class ForgotPasswordController extends Controller
     | your application to your users. Feel free to explore this trait.
     |
     */
-
-    use SendsPasswordResetEmails, ValidatesRequests;
+    use SendsPasswordResetEmails;
+    use ValidatesRequests;
 
     /**
      * Create a new controller instance.
@@ -41,7 +44,7 @@ class ForgotPasswordController extends Controller
     /**
      * Show the password reset request form.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function showLinkRequestForm()
     {
@@ -51,8 +54,8 @@ class ForgotPasswordController extends Controller
     /**
      * Send a reset link to the given user.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return RedirectResponse|JsonResponse
      */
     public function sendResetLinkEmail(Request $request)
     {
@@ -63,10 +66,12 @@ class ForgotPasswordController extends Controller
             ->where('customer_number', $request->input('company'))
             ->first();
 
-        $response = $this->broker()->sendResetLink([
-            'company_id' => $company->getId(),
-            'username'   => $request->input('username')
-        ]);
+        $response = $this->broker()->sendResetLink(
+            [
+                'company_id' => $company->getId(),
+                'username'   => $request->input('username'),
+            ]
+        );
 
         return $response == Password::RESET_LINK_SENT
             ? $this->sendResetLinkResponse($request, $response)
@@ -76,14 +81,17 @@ class ForgotPasswordController extends Controller
     /**
      * Validate the email for the given request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return void
      */
     protected function validateEmail(Request $request)
     {
-        $this->validate($request, [
-            'company'  => 'required',
-            'username' => 'required',
-        ]);
+        $this->validate(
+            $request,
+            [
+                'company'  => 'required',
+                'username' => 'required',
+            ]
+        );
     }
 }

@@ -8,7 +8,6 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-
 use Symfony\Component\HttpFoundation\Response;
 use WTG\Http\Controllers\Admin\Controller;
 use WTG\Models\Order;
@@ -49,7 +48,7 @@ class CompanyOrderController extends Controller
      */
     public function execute(): Response
     {
-        $companyId = (int) $this->request->input('id');
+        $companyId = (int)$this->request->input('id');
 
         return response()->json(
             [

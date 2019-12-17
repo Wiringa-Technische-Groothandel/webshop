@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace WTG\Import\Downloader;
 
 use Exception;
-
-use Psr\Log\LoggerInterface;
-
-use WTG\Soap\GetProducts\Response\Product;
-use WTG\Soap\Service as SoapService;
+use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Log\LogManager;
+use WTG\Import\Api\DownloaderInterface;
+use WTG\RestClient\Api\Model\ResponseInterface;
+use WTG\RestClient\Model\Rest\GetProduct\Request as GetProductRequest;
+use WTG\RestClient\Model\Rest\GetProduct\Response as GetProductResponse;
+use WTG\RestClient\RestManager;
 
 /**
  * Product downloader.
@@ -21,64 +24,57 @@ use WTG\Soap\Service as SoapService;
 class ProductDownloader implements DownloaderInterface
 {
     /**
-     * @var SoapService
+     * @var RestManager
      */
-    protected $soapService;
+    protected RestManager $restManager;
 
     /**
-     * @var LoggerInterface
+     * @var LogManager
      */
-    protected $logger;
+    protected LogManager $logManager;
+
+    /**
+     * @var string
+     */
+    protected string $id;
 
     /**
      * Soap constructor.
      *
-     * @param SoapService $soapService
-     * @param LoggerInterface $logger
+     * @param RestManager $restManager
+     * @param LogManager $logManager
      */
-    public function __construct(
-        SoapService $soapService,
-        LoggerInterface $logger
-    ) {
-        $this->soapService = $soapService;
-        $this->logger = $logger;
+    public function __construct(RestManager $restManager, LogManager $logManager)
+    {
+        $this->restManager = $restManager;
+        $this->logManager = $logManager;
     }
 
     /**
-     * Fetch products via a SOAP call.
+     * Download product data.
      *
-     * @param int $amount
-     * @param int $index
-     * @return Product[]|null
+     * @return GetProductResponse
      * @throws Exception
      */
-    public function fetchProducts(int $amount, int $index): ?array
+    public function download(): ResponseInterface
     {
-        $response = $this->soapService->getProducts($amount, $index);
-
-        if ($response->code === 500) {
-            throw new Exception('Product download failed: ' . $response->message);
+        try {
+            /** @var GetProductResponse $response */
+            $response = $this->restManager->handle(
+                new GetProductRequest($this->id)
+            );
+        } catch (GuzzleException | BindingResolutionException $e) {
+            throw new Exception('Product download failed', 1576253618, $e);
         }
 
-        return $response->products;
+        return $response;
     }
 
     /**
-     * Fetch a single product via SOAP.
-     *
-     * @param string $sku
-     * @param string $salesUnit
-     * @return \WTG\Soap\GetProduct\Response\Product
-     * @throws Exception
+     * @param string $id
      */
-    public function fetchProduct(string $sku, string $salesUnit)
+    public function setId(string $id): void
     {
-        $response = $this->soapService->getProduct($sku, $salesUnit);
-
-        if ($response->code === 500) {
-            throw new Exception('Product download failed: ' . $response->message);
-        }
-
-        return $response->product;
+        $this->id = $id;
     }
 }

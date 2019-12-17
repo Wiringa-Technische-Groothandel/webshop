@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\View\View;
+use WTG\Models\Block;
 const ENV_LOCAL = 'local';
 const ENV_TESTING = 'testing';
 const ENV_STAGING = 'staging';
@@ -9,12 +11,12 @@ if (! function_exists('block')) {
     /**
      * Find a block by name.
      *
-     * @param  string  $blockName
-     * @return string|\Illuminate\View\View
+     * @param string $blockName
+     * @return string|View
      */
     function block(string $blockName)
     {
-        $block = \WTG\Models\Block::where('name', $blockName)->first();
+        $block = Block::where('name', $blockName)->first();
 
         if ($block === null) {
             return "Block '$blockName' not found";
@@ -28,7 +30,7 @@ if (! function_exists('format_price')) {
     /**
      * Format a float into a price.
      *
-     * @param  float  $price
+     * @param float $price
      * @return string
      */
     function format_price(float $price): string
@@ -43,8 +45,8 @@ if (! function_exists('unit_to_str')) {
      *
      * Example: STK to stuks/stuk
      *
-     * @param  string  $unit
-     * @param  bool  $plural
+     * @param string $unit
+     * @param bool $plural
      * @return string
      */
     function unit_to_str(string $unit, bool $plural = true): string

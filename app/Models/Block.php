@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace WTG\Models;
 
-use Illuminate\Support\HtmlString;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use WTG\Contracts\Models\BlockContract;
-use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Block model.
@@ -21,8 +20,8 @@ class Block extends Model implements BlockContract
     /**
      * Name scope.
      *
-     * @param  Builder  $query
-     * @param  string  $name
+     * @param Builder $query
+     * @param string $name
      * @return Builder
      */
     public function scopeName(Builder $query, $name): Builder
@@ -43,7 +42,7 @@ class Block extends Model implements BlockContract
     /**
      * Set the block name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return BlockContract
      */
     public function setName(string $name): BlockContract
@@ -64,7 +63,7 @@ class Block extends Model implements BlockContract
     /**
      * Set the block title.
      *
-     * @param  string  $title
+     * @param string $title
      * @return BlockContract
      */
     public function setTitle(string $title): BlockContract
@@ -85,7 +84,7 @@ class Block extends Model implements BlockContract
     /**
      * Set the block content.
      *
-     * @param  string  $content
+     * @param string $content
      * @return BlockContract
      */
     public function setContent(string $content): BlockContract

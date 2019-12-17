@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace WTG\Http\Controllers\Web\Account;
 
-use WTG\Models\Customer;
 use Illuminate\Http\Request;
 use WTG\Http\Controllers\Controller;
 use WTG\Http\Requests\DownloadOrderRequest;
+use WTG\Models\Customer;
 use WTG\Models\Order;
 
 /**
@@ -22,7 +22,7 @@ class OrderHistoryController extends Controller
     /**
      * Order history view.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return \Illuminate\View\View
      */
     public function getAction(Request $request)
@@ -42,7 +42,7 @@ class OrderHistoryController extends Controller
     /**
      * Download an order as PDF file.
      *
-     * @param  DownloadOrderRequest  $request
+     * @param DownloadOrderRequest $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
      * @throws \Throwable
      */
@@ -71,8 +71,10 @@ class OrderHistoryController extends Controller
             $pdfData,
             200,
             [
-                'Content-Type'          => 'application/pdf',
-                'Content-Disposition'   => 'inline; filename="order_' . $order->getAttribute('created_at')->format('YmdHi') . '.pdf"'
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="order_' . $order->getAttribute('created_at')->format(
+                    'YmdHi'
+                ) . '.pdf"',
             ]
         );
     }

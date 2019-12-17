@@ -43,37 +43,6 @@ class SearchTermsManager
     }
 
     /**
-     * Find a search term by id.
-     *
-     * @param int $id
-     * @return Synonym
-     */
-    public function findTerm(int $id): Synonym
-    {
-        /** @var Synonym $term */
-        $term = Synonym::query()->findOrFail($id);
-
-        return $term;
-    }
-
-    /**
-     * Create a new search term.
-     *
-     * @param string $source
-     * @param string $target
-     * @return Synonym
-     */
-    public function createTerm(string $source, string $target): Synonym
-    {
-        $synonym = new Synonym();
-        $synonym->setSource($source);
-        $synonym->setTarget($target);
-        $synonym->save();
-
-        return $synonym;
-    }
-
-    /**
      * @param array $terms
      * @throws Throwable
      */
@@ -120,6 +89,37 @@ class SearchTermsManager
 
             throw $throwable;
         }
+    }
+
+    /**
+     * Create a new search term.
+     *
+     * @param string $source
+     * @param string $target
+     * @return Synonym
+     */
+    public function createTerm(string $source, string $target): Synonym
+    {
+        $synonym = new Synonym();
+        $synonym->setSource($source);
+        $synonym->setTarget($target);
+        $synonym->save();
+
+        return $synonym;
+    }
+
+    /**
+     * Find a search term by id.
+     *
+     * @param int $id
+     * @return Synonym
+     */
+    public function findTerm(int $id): Synonym
+    {
+        /** @var Synonym $term */
+        $term = Synonym::query()->findOrFail($id);
+
+        return $term;
     }
 
     /**

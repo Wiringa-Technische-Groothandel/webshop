@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace WTG\Http\Controllers\Web\Catalog;
 
-use WTG\Models\Product;
-use Illuminate\Http\Request;
+use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\Factory as ViewFactory;
+use WTG\Catalog\PriceManager;
+use WTG\Contracts\Models\CustomerContract;
 use WTG\Http\Controllers\Controller;
 use WTG\Http\Requests\FetchPriceRequest;
-use WTG\Contracts\Models\CustomerContract;
-use Illuminate\Database\Eloquent\Collection;
-use WTG\Soap\GetProductPricesAndStocks\Response;
+use WTG\Models\Product;
 
 /**
  * Assortment controller.
@@ -23,79 +25,121 @@ use WTG\Soap\GetProductPricesAndStocks\Response;
 class PriceController extends Controller
 {
     /**
+     * @var PriceManager
+     */
+    protected PriceManager $priceManager;
+
+    /**
+     * PriceController constructor.
+     *
+     * @param ViewFactory $view
+     * @param PriceManager $priceManager
+     */
+    public function __construct(ViewFactory $view, PriceManager $priceManager)
+    {
+        parent::__construct($view);
+
+        $this->priceManager = $priceManager;
+    }
+
+    /**
      * Get the price for a single product.
      *
-     * @param  Request  $request
-     * @param  string  $sku
+     * @param Request $request
+     * @param string $sku
      * @return JsonResponse
      */
     public function getAction(Request $request, string $sku): JsonResponse
     {
-        /** @var Collection $products */
-        $products = Product::where('sku', $sku)->get();
+        $product = Product::findBySku($sku);
 
-        if ($products->isEmpty()) {
-            return response()->json([
-                'message' => __('Geen product gevonden voor het opgegeven productnummer.'),
-                'success' => false,
-                'code' => '404'
-            ], 404);
+        if (! $product) {
+            return response()->json(
+                [
+                    'message' => __('Geen product gevonden voor het opgegeven productnummer.'),
+                    'success' => false,
+                    'code'    => '404',
+                ],
+                404
+            );
         }
 
         /** @var CustomerContract $customer */
         $customer = $request->user();
         $customerNumber = $customer->getCompany()->getCustomerNumber();
-        /** @var Response $response */
-        $response = app('soap')->getProductPricesAndStocks($products, $customerNumber);
 
-        if (empty($response->products)) {
-            return response()->json([
-                'message' => __('Geen prijs gevonden voor het opgegeven product.'),
-                'success' => false,
-                'code' => '404'
-            ], 404);
+        try {
+            $price = $this->priceManager->fetchPrice($customerNumber, $sku, 1.0);
+        } catch (GuzzleException | BindingResolutionException $e) {
+            return response()->json(
+                [
+                    'message' => __('Geen prijs gevonden voor het opgegeven product.'),
+                    'success' => false,
+                    'code'    => '404',
+                ],
+                404
+            );
         }
 
-        /** @var Response\Product $product */
-        $product = $response->products[0];
+        if (! $price) {
+            return response()->json(
+                [
+                    'message' => __('Geen prijs gevonden voor het opgegeven product.'),
+                    'success' => false,
+                    'code'    => '404',
+                ],
+                404
+            );
+        }
 
-        return response()->json([
-            'pricePer' => $product->price_per_string,
-            'grossPrice' => $product->gross_price * $product->refactor,
-            'netPrice' => $product->net_price * $product->refactor,
-            'action' => $product->action,
-            'message' => $response->message,
-            'code' => $response->code
-        ], $response->code);
+        return response()->json(
+            [
+                'pricePer'   => __(''),
+                'grossPrice' => $price->grossPrice * $product->getPriceFactor()->getPriceFactor(),
+                'netPrice'   => $price->netPrice * $product->getPriceFactor()->getPriceFactor(),
+                'action'     => $price->actionPrice,
+                'message'    => '',
+                'code'       => 200,
+            ],
+            200
+        );
     }
 
     /**
      * Fetch the price for a customer.
      *
-     * @param  FetchPriceRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param FetchPriceRequest $request
+     * @return JsonResponse
+     * @throws BindingResolutionException
+     * @throws GuzzleException
      */
-    public function postAction(FetchPriceRequest $request)
+    public function postAction(FetchPriceRequest $request): JsonResponse
     {
-        /** @var Collection $products */
-        $products = Product::whereIn('sku', $request->input('skus'))->get();
+        $products = $request->input('skus', []);
 
-        if ($products->isEmpty()) {
-            return response()->json([
-                'message' => 'No products found for the given skus',
-                'code' => '400'
-            ], 400);
+        if (! is_array($products) || empty($products)) {
+            return response()->json(
+                [
+                    'message' => 'Invalid value for parameter "skus"',
+                    'code'    => '400',
+                ],
+                400
+            );
         }
 
         /** @var CustomerContract $customer */
         $customer = $request->user();
         $customerNumber = $customer->getCompany()->getCustomerNumber();
-        $response = app('soap')->getProductPricesAndStocks($products, $customerNumber);
 
-        return response()->json([
-            'payload' => $response->products,
-            'message' => $response->message,
-            'code' => $response->code
-        ], $response->code);
+        $prices = $this->priceManager->fetchPrices($customerNumber, $products);
+
+        return response()->json(
+            [
+                'payload' => $prices,
+                'message' => '',
+                'code'    => 200,
+            ],
+            200
+        );
     }
 }

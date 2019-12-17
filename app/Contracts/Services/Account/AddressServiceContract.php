@@ -20,8 +20,8 @@ interface AddressServiceContract
     /**
      * Get all available addresses for a customer.
      *
-     * @param  CustomerContract $customer
-     * @param  bool  $withDefault
+     * @param CustomerContract $customer
+     * @param bool $withDefault
      * @return Collection
      */
     public function getAddressesForCustomer(CustomerContract $customer, bool $withDefault = true): Collection;
@@ -29,8 +29,8 @@ interface AddressServiceContract
     /**
      * Get an address for a customer by id.
      *
-     * @param  CustomerContract  $customer
-     * @param  int  $addressId
+     * @param CustomerContract $customer
+     * @param int $addressId
      * @return null|AddressContract
      */
     public function getAddressForCustomerById(CustomerContract $customer, int $addressId): ?AddressContract;
@@ -38,23 +38,30 @@ interface AddressServiceContract
     /**
      * Create a new address.
      *
-     * @param  CustomerContract  $customer
-     * @param  string  $name
-     * @param  string  $street
-     * @param  string  $postcode
-     * @param  string  $city
-     * @param  null|string  $phone
-     * @param  null|string  $mobile
+     * @param CustomerContract $customer
+     * @param string $name
+     * @param string $street
+     * @param string $postcode
+     * @param string $city
+     * @param null|string $phone
+     * @param null|string $mobile
      * @return bool
      */
-    public function createForCustomer(CustomerContract $customer, string $name, string $street, string $postcode,
-                                      string $city, ?string $phone = null, ?string $mobile = null): bool;
+    public function createForCustomer(
+        CustomerContract $customer,
+        string $name,
+        string $street,
+        string $postcode,
+        string $city,
+        ?string $phone = null,
+        ?string $mobile = null
+    ): bool;
 
     /**
      * Delete an address for a customer.
      *
-     * @param  CustomerContract  $customer
-     * @param  string  $addressId
+     * @param CustomerContract $customer
+     * @param string $addressId
      * @return bool
      */
     public function deleteForCustomer(CustomerContract $customer, string $addressId): bool;
@@ -62,8 +69,8 @@ interface AddressServiceContract
     /**
      * Set the default address for a customer.
      *
-     * @param  CustomerContract  $customer
-     * @param  int  $addressId
+     * @param CustomerContract $customer
+     * @param int $addressId
      * @return bool
      */
     public function setDefaultForCustomer(CustomerContract $customer, int $addressId): bool;
@@ -71,7 +78,7 @@ interface AddressServiceContract
     /**
      * Get the default address for a customer.
      *
-     * @param  CustomerContract  $customer
+     * @param CustomerContract $customer
      * @return null|AddressContract
      */
     public function getDefaultAddressForCustomer(CustomerContract $customer): ?AddressContract;
@@ -79,7 +86,7 @@ interface AddressServiceContract
     /**
      * Get the default address id for a customer.
      *
-     * @param  CustomerContract  $customer
+     * @param CustomerContract $customer
      * @return null|int
      */
     public function getDefaultAddressIdForCustomer(CustomerContract $customer): ?int;

@@ -6,8 +6,8 @@ namespace WTG\Soap;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use WTG\Services\AbstractSoapService;
 use WTG\Contracts\Models\ProductContract;
+use WTG\Services\AbstractSoapService;
 
 /**
  * Soap service.
@@ -21,8 +21,8 @@ class Service extends AbstractSoapService
      * Calls: GetProducts
      *
      * @soap
-     * @param  int  $productsPerRequest
-     * @param  int  $startFromIndex
+     * @param int $productsPerRequest
+     * @param int $startFromIndex
      * @return GetProducts\Response
      */
     public function getProducts(int $productsPerRequest = 20, int $startFromIndex = 1)
@@ -49,9 +49,9 @@ class Service extends AbstractSoapService
      * Calls: GetProductPrice
      *
      * @soap
-     * @param  ProductContract  $product
-     * @param  float  $quantity
-     * @param  string  $customerId
+     * @param ProductContract $product
+     * @param float $quantity
+     * @param string $customerId
      * @return GetProductPrice\Response
      */
     public function getProductPrice(ProductContract $product, float $quantity, string $customerId)
@@ -64,8 +64,8 @@ class Service extends AbstractSoapService
      * Calls: GetProductPricesAndStocks
      *
      * @soap
-     * @param  Collection  $products
-     * @param  string  $customerId
+     * @param Collection $products
+     * @param string $customerId
      * @return GetProductPricesAndStocks\Response
      */
     public function getProductPricesAndStocks(Collection $products, string $customerId)
@@ -78,9 +78,9 @@ class Service extends AbstractSoapService
      * Calls: GetSalesOrderHeaderCount
      *
      * @soap
-     * @param  string  $customerId
-     * @param  Carbon|null  $from
-     * @param  Carbon|null  $to
+     * @param string $customerId
+     * @param Carbon|null $from
+     * @param Carbon|null $to
      * @return GetOrderCount\Response
      */
     public function getOrderCount(string $customerId, ?Carbon $from = null, ?Carbon $to = null)

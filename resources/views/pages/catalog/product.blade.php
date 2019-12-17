@@ -82,11 +82,3 @@
         </div>
     </div>
 @endsection
-
-@push('links')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.10.0/css/lightbox.min.css" type="text/css" />
-@endpush
-
-@push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.10.0/js/lightbox.min.js"></script>
-@endpush

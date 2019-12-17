@@ -18,7 +18,7 @@ interface CompanyServiceContract
     /**
      * Create a new company.
      *
-     * @param  array  $data
+     * @param array $data
      * @return CompanyContract
      */
     public function createCompany(array $data): CompanyContract;

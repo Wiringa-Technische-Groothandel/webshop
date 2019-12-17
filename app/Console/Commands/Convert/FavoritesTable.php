@@ -32,7 +32,7 @@ class FavoritesTable extends AbstractTableCommand
     /**
      * FavoritesTable constructor.
      *
-     * @param  TableConverter  $converter
+     * @param TableConverter $converter
      */
     public function __construct(TableConverter $converter)
     {

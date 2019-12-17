@@ -17,7 +17,8 @@ use WTG\Models\Registration as RegistrationModel;
  */
 class Registration extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * @var RegistrationModel
@@ -32,7 +33,7 @@ class Registration extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param  RegistrationModel  $registration
+     * @param RegistrationModel $registration
      * @return void
      */
     public function __construct(RegistrationModel $registration)

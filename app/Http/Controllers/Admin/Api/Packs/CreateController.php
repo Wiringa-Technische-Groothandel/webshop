@@ -6,11 +6,8 @@ namespace WTG\Http\Controllers\Admin\Api\Packs;
 
 use Illuminate\Http\Request;
 use Illuminate\Log\LogManager;
-
 use Symfony\Component\HttpFoundation\Response;
-
 use Throwable;
-
 use WTG\Catalog\PackManager;
 use WTG\Http\Controllers\Admin\Controller;
 
@@ -62,16 +59,20 @@ class CreateController extends Controller
         } catch (Throwable $throwable) {
             $this->logManager->error($throwable);
 
-            return response()->json([
-                'message' => $throwable->getMessage(),
-                'success' => false
-            ]);
+            return response()->json(
+                [
+                    'message' => $throwable->getMessage(),
+                    'success' => false,
+                ]
+            );
         }
 
-        return response()->json([
-            'packs' => $this->packManager->getPacks(),
-            'message' => __('Het actiepaket is aangemaakt.'),
-            'success' => true
-        ]);
+        return response()->json(
+            [
+                'packs'   => $this->packManager->getPacks(),
+                'message' => __('Het actiepaket is aangemaakt.'),
+                'success' => true,
+            ]
+        );
     }
 }

@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace WTG\Converters;
 
-use WTG\Models\Quote;
-use WTG\Models\Contact;
-use WTG\Models\Product;
-use WTG\Models\Customer;
-use WTG\Models\QuoteItem;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Log;
 use WTG\Contracts\Models\CompanyContract;
+use WTG\Models\Contact;
+use WTG\Models\Customer;
+use WTG\Models\Product;
+use WTG\Models\Quote;
+use WTG\Models\QuoteItem;
 use WTG\Models\Role;
 
 /**
@@ -36,13 +38,13 @@ class CustomerTableConverter extends AbstractTableConverter
         'cart',
         'remember_token',
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
     /**
      * Create a new entity.
      *
-     * @param  array  $data
+     * @param array $data
      * @return Model|null
      */
     public function createModel(array $data): ?Model
@@ -50,12 +52,14 @@ class CustomerTableConverter extends AbstractTableConverter
         $company = app()->make(CompanyContract::class)->where('customer_number', $data['company_id'])->first();
 
         if ($company === null) {
-            \Log::warning('[Customer table conversion] No company was found for customer number '.$data['company_id']);
+            Log::warning(
+                '[Customer table conversion] No company was found for customer number ' . $data['company_id']
+            );
 
             return null;
         }
 
-        $customer = new Customer;
+        $customer = new Customer();
 
         $customer->setAttribute('company_id', $company->getId());
         $customer->setAttribute('username', $data['username']);
@@ -74,15 +78,30 @@ class CustomerTableConverter extends AbstractTableConverter
     }
 
     /**
+     * Determine the role of the customer.
+     *
+     * @param array $data
+     * @return Role
+     */
+    private function determineRole(array $data): Role
+    {
+        if ($data['manager'] === "1" || $data['company_id'] === $data['username']) {
+            return Role::level(Role::ROLE_MANAGER)->first();
+        }
+
+        return Role::level(Role::ROLE_USER)->first();
+    }
+
+    /**
      * Create a new contact for a customer.
      *
-     * @param  Customer  $customer
-     * @param  array  $data
+     * @param Customer $customer
+     * @param array $data
      * @return Contact
      */
     protected function createContact(Customer $customer, array $data): Contact
     {
-        $contact = new Contact;
+        $contact = new Contact();
 
         $contact->setAttribute('customer_id', $customer->getAttribute('id'));
         $contact->setAttribute('contact_email', $data['email']);
@@ -95,27 +114,29 @@ class CustomerTableConverter extends AbstractTableConverter
     /**
      * Create a quote.
      *
-     * @param  Customer  $customer
-     * @param  string  $cartData
+     * @param Customer $customer
+     * @param string $cartData
      * @return null|Quote
      */
     protected function createQuote(Customer $customer, string $cartData): ?Quote
     {
         try {
             $cart = unserialize($cartData);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e, $cartData);
 
             return null;
         }
 
         if ($cart === false) {
-            \Log::warning(sprintf("[Customer table conversion] Customer %s had an invalid cart.", $customer->getAttribute('id')));
+            Log::warning(
+                sprintf("[Customer table conversion] Customer %s had an invalid cart.", $customer->getAttribute('id'))
+            );
 
             return null;
         }
 
-        $quote = new Quote;
+        $quote = new Quote();
 
         $quote->setAttribute('customer_id', $customer->getAttribute('id'));
 
@@ -131,8 +152,8 @@ class CustomerTableConverter extends AbstractTableConverter
     /**
      * Create a quote item.
      *
-     * @param  Quote  $quote
-     * @param  array  $item
+     * @param Quote $quote
+     * @param array $item
      * @return QuoteItem|null
      */
     protected function addItemToQuote(Quote $quote, array $item): ?QuoteItem
@@ -140,13 +161,19 @@ class CustomerTableConverter extends AbstractTableConverter
         /** @var Product|null $product */
         $product = Product::where('sku', $item['id'])->first();
 
-        if (!$product) {
-            \Log::warning(sprintf("[Customer table conversion] Customer %s had a non-existent product (%s) in their cart", $quote->getAttribute('customer_id'), $item['id']));
+        if (! $product) {
+            Log::warning(
+                sprintf(
+                    "[Customer table conversion] Customer %s had a non-existent product (%s) in their cart",
+                    $quote->getAttribute('customer_id'),
+                    $item['id']
+                )
+            );
 
             return null;
         }
 
-        $quoteItem = new QuoteItem;
+        $quoteItem = new QuoteItem();
 
         $quoteItem->setAttribute('quote_id', $quote->getAttribute('id'));
         $quoteItem->setAttribute('product_id', $product->getAttribute('id'));
@@ -155,20 +182,5 @@ class CustomerTableConverter extends AbstractTableConverter
         $quoteItem->save();
 
         return $quoteItem;
-    }
-
-    /**
-     * Determine the role of the customer.
-     *
-     * @param  array  $data
-     * @return Role
-     */
-    private function determineRole(array $data): Role
-    {
-        if ($data['manager'] === "1" || $data['company_id'] === $data['username']) {
-            return Role::level(Role::ROLE_MANAGER)->first();
-        }
-
-        return Role::level(Role::ROLE_USER)->first();
     }
 }

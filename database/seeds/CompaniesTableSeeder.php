@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\Seeder;
 use WTG\Models\Company;
 
 /**
@@ -7,7 +8,7 @@ use WTG\Models\Company;
  *
  * @author  Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
-class CompaniesTableSeeder extends \Illuminate\Database\Seeder
+class CompaniesTableSeeder extends Seeder
 {
     /**
      * Run the seeder.

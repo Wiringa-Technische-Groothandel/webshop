@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace WTG\Models;
 
-use WTG\Contracts\Models\RoleContract;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use WTG\Contracts\Models\RoleContract;
 
 /**
  * Rule model.
@@ -17,8 +17,8 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class Role extends Model implements RoleContract
 {
-    const ROLE_MANAGER = 200;
-    const ROLE_USER = 100;
+    public const ROLE_MANAGER = 200;
+    public const ROLE_USER = 100;
 
     /**
      * @var array
@@ -28,8 +28,8 @@ class Role extends Model implements RoleContract
     /**
      * Query scope for level field.
      *
-     * @param  Builder  $query
-     * @param  int  $level
+     * @param Builder $query
+     * @param int $level
      * @return Builder
      */
     public function scopeLevel(Builder $query, int $level): Builder
@@ -50,7 +50,7 @@ class Role extends Model implements RoleContract
     /**
      * Set the role name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return RoleContract
      */
     public function setName(string $name): RoleContract
@@ -71,7 +71,7 @@ class Role extends Model implements RoleContract
     /**
      * Set the role level.
      *
-     * @param  int  $level
+     * @param int $level
      * @return RoleContract
      */
     public function setLevel(int $level): RoleContract

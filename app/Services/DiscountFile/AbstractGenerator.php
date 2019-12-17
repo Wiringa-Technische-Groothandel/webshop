@@ -15,10 +15,10 @@ use WTG\Models\Customer;
  */
 abstract class AbstractGenerator implements Generator
 {
-    const GROUP_DISCOUNT_TABLE = 'VA-220';
-    const PRODUCT_DISCOUNT_TABLE = 'VA-260';
-    const DEFAULT_GROUP_DISCOUNT_TABLE = 'VA-221';
-    const DEFAULT_PRODUCT_DISCOUNT_TABLE = 'VA-261';
+    public const GROUP_DISCOUNT_TABLE = 'VA-220';
+    public const PRODUCT_DISCOUNT_TABLE = 'VA-260';
+    public const DEFAULT_GROUP_DISCOUNT_TABLE = 'VA-221';
+    public const DEFAULT_PRODUCT_DISCOUNT_TABLE = 'VA-261';
 
     /**
      * @var string
@@ -38,7 +38,7 @@ abstract class AbstractGenerator implements Generator
     /**
      * CSVFileGenerator constructor.
      *
-     * @param  Customer  $customer
+     * @param Customer $customer
      */
     public function __construct(Customer $customer)
     {

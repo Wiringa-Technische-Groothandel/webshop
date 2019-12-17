@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace WTG\Http\Controllers\Admin\Content;
 
-use WTG\Models\Description;
-use Illuminate\Http\Request;
+use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use WTG\Contracts\Models\DescriptionContract;
 use WTG\Contracts\Models\ProductContract;
 use WTG\Http\Controllers\Admin\Controller;
-use WTG\Contracts\Models\DescriptionContract;
+use WTG\Models\Description;
 
 /**
  * Description controller.
@@ -24,7 +25,7 @@ class DescriptionController extends Controller
     /**
      * Get the description for a product if available.
      *
-     * @param  string  $sku
+     * @param string $sku
      * @return JsonResponse
      */
     public function getAction(string $sku): JsonResponse
@@ -32,19 +33,21 @@ class DescriptionController extends Controller
         /** @var ProductContract $product */
         $product = app()->make(ProductContract::class)->where('sku', $sku)->firstOrFail();
 
-        return response()->json([
-            'success' => true,
-            'payload' => $product->getDescription(),
-            'code' => 200
-        ]);
+        return response()->json(
+            [
+                'success' => true,
+                'payload' => $product->getDescription(),
+                'code'    => 200,
+            ]
+        );
     }
 
     /**
      * Update a product description.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return JsonResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function putAction(Request $request): JsonResponse
     {
@@ -54,11 +57,14 @@ class DescriptionController extends Controller
         $product = app()->make(ProductContract::class)->where('sku', $sku)->first();
 
         if (! $product) {
-            return response()->json([
-                'message' => __('Geen product gevonden met nummer :sku', ['sku' => $sku]),
-                'success' => false,
-                'code' => 404
-            ], 404);
+            return response()->json(
+                [
+                    'message' => __('Geen product gevonden met nummer :sku', ['sku' => $sku]),
+                    'success' => false,
+                    'code'    => 404,
+                ],
+                404
+            );
         }
 
         if (! $value) {
@@ -75,10 +81,12 @@ class DescriptionController extends Controller
             $description->save();
         }
 
-        return response()->json([
-            'message' => __('De omschrijving is opgeslagen.'),
-            'success' => true,
-            'code' => 200
-        ]);
+        return response()->json(
+            [
+                'message' => __('De omschrijving is opgeslagen.'),
+                'success' => true,
+                'code'    => 200,
+            ]
+        );
     }
 }

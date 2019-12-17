@@ -33,8 +33,8 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'sku' => ['required'],
-            'quantity' => ['required']
+            'sku'      => ['required'],
+            'quantity' => ['required'],
         ];
     }
 }

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace WTG\Http\Controllers;
 
-use Illuminate\View\Factory as ViewFactory;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\View\Factory as ViewFactory;
 
 /**
  * Abstract controller.
@@ -31,7 +31,7 @@ abstract class Controller extends BaseController
     /**
      * Controller constructor.
      *
-     * @param  ViewFactory  $view
+     * @param ViewFactory $view
      */
     public function __construct(ViewFactory $view)
     {

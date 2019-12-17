@@ -18,14 +18,14 @@ interface PackContract
     /**
      * Get the identifier.
      *
-     * @return null|string
+     * @return null|int
      */
-    public function getId(): ?string;
+    public function getId(): ?int;
 
     /**
      * Set the product.
      *
-     * @param  ProductContract  $product
+     * @param ProductContract $product
      * @return PackContract
      */
     public function setProduct(ProductContract $product): PackContract;

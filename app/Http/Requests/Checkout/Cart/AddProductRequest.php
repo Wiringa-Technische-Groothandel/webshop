@@ -33,8 +33,8 @@ class AddProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'product' => ['required'],
-            'quantity' => ['required', 'numeric', 'min:1']
+            'product'  => ['required'],
+            'quantity' => ['required', 'numeric', 'min:1'],
         ];
     }
 }

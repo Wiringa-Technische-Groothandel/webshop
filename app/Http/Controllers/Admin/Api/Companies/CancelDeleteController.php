@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace WTG\Http\Controllers\Admin\Api\Companies;
 
 use Exception;
-
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Log\LogManager;
-
 use Symfony\Component\HttpFoundation\Response;
-
+use Throwable;
 use WTG\Http\Controllers\Admin\Controller;
 use WTG\Models\Company;
 
@@ -69,7 +67,7 @@ class CancelDeleteController extends Controller
             $company->restore();
 
             $this->databaseManager->commit();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->databaseManager->rollBack();
             $this->logManager->error($e);
 

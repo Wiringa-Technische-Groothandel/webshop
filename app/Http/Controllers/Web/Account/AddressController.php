@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace WTG\Http\Controllers\Web\Account;
 
-use WTG\Models\Address;
-use WTG\Models\Customer;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
+use Exception;
 use Illuminate\Contracts\View\View;
-use WTG\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\Factory as ViewFactory;
+use WTG\Contracts\Services\Account\AddressServiceContract;
+use WTG\Http\Controllers\Controller;
 use WTG\Http\Requests\Account\Address\CreateRequest;
 use WTG\Http\Requests\Account\Address\DeleteRequest;
-use WTG\Contracts\Services\Account\AddressServiceContract;
 use WTG\Http\Requests\Account\Address\UpdateDefaultRequest;
+use WTG\Models\Customer;
 
 /**
  * Address controller.
@@ -34,8 +34,8 @@ class AddressController extends Controller
     /**
      * AddressController constructor.
      *
-     * @param  ViewFactory  $view
-     * @param  AddressServiceContract  $addressService
+     * @param ViewFactory $view
+     * @param AddressServiceContract $addressService
      */
     public function __construct(ViewFactory $view, AddressServiceContract $addressService)
     {
@@ -47,7 +47,7 @@ class AddressController extends Controller
     /**
      * The address list.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return \Illuminate\View\View
      */
     public function getAction(Request $request): View
@@ -63,8 +63,8 @@ class AddressController extends Controller
     /**
      * Create a new address.
      *
-     * @param  CreateRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param CreateRequest $request
+     * @return RedirectResponse
      */
     public function putAction(CreateRequest $request): RedirectResponse
     {
@@ -90,29 +90,31 @@ class AddressController extends Controller
     /**
      * Change the default address.
      *
-     * @param  UpdateDefaultRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param UpdateDefaultRequest $request
+     * @return JsonResponse
      */
     public function patchAction(UpdateDefaultRequest $request): JsonResponse
     {
         $isSuccess = $this->addressService->setDefaultForCustomer($request->user(), $request->input('address'));
 
-        return response()->json([
-            'success' => $isSuccess,
-            'message' => $isSuccess ?
-                __('Het standaard adres is aangepast.') :
-                __('Er is een fout opgetreden tijdens het aanpassen van het adres.'),
-            'code' => 200
-        ]);
+        return response()->json(
+            [
+                'success' => $isSuccess,
+                'message' => $isSuccess ?
+                    __('Het standaard adres is aangepast.') :
+                    __('Er is een fout opgetreden tijdens het aanpassen van het adres.'),
+                'code'    => 200,
+            ]
+        );
     }
 
     /**
      * Remove an address.
      *
-     * @param  DeleteRequest  $request
-     * @param  string  $addressId
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
+     * @param DeleteRequest $request
+     * @param string $addressId
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function delete(DeleteRequest $request, string $addressId): RedirectResponse
     {

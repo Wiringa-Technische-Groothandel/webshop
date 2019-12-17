@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace WTG\Http\Controllers\Web\Account;
 
-use WTG\Models\Product;
-use WTG\Models\Customer;
-use Illuminate\Http\Request;
-use WTG\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\Factory as ViewFactory;
+use Illuminate\View\View;
 use WTG\Contracts\Services\CartServiceContract;
-use WTG\Http\Requests\AddFavoritesToCartRequest;
 use WTG\Contracts\Services\FavoritesServiceContract;
+use WTG\Http\Controllers\Controller;
+use WTG\Http\Requests\AddFavoritesToCartRequest;
+use WTG\Models\Product;
 
 /**
  * Favorites controller.
@@ -35,9 +35,9 @@ class FavoritesController extends Controller
     /**
      * FavoritesController constructor.
      *
-     * @param  ViewFactory  $view
-     * @param  CartServiceContract  $cartService
-     * @param  FavoritesServiceContract  $favoritesService
+     * @param ViewFactory $view
+     * @param CartServiceContract $cartService
+     * @param FavoritesServiceContract $favoritesService
      */
     public function __construct(
         ViewFactory $view,
@@ -53,7 +53,7 @@ class FavoritesController extends Controller
     /**
      * List of favorites
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function getAction()
     {
@@ -66,7 +66,7 @@ class FavoritesController extends Controller
      * Put favorites in the cart.
      *
      * @param AddFavoritesToCartRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function putAction(AddFavoritesToCartRequest $request)
     {
@@ -84,10 +84,12 @@ class FavoritesController extends Controller
             $this->cartService->addProduct($product);
         }
 
-        return response()->json([
-            'message' => __("De producten zijn toegevoegd aan uw winkelwagen."),
-            'errors'  => $errors,
-            'cartQty' => $this->cartService->getItemCount()
-        ]);
+        return response()->json(
+            [
+                'message' => __("De producten zijn toegevoegd aan uw winkelwagen."),
+                'errors'  => $errors,
+                'cartQty' => $this->cartService->getItemCount(),
+            ]
+        );
     }
 }

@@ -52,11 +52,10 @@ window.vm = new Vue({
                 .then((response) => {
                     response.data.payload.forEach((item) => {
                         this.$root.$emit('price-fetched-' + item.sku, {
-                            netPrice: item.net_price,
-                            grossPrice: item.gross_price,
-                            pricePer: item.price_per_string,
+                            netPrice: item.netPrice,
+                            grossPrice: item.grossPrice,
                             stock: item.stock_string,
-                            action: item.action
+                            action: item.actionPrice
                         });
                     });
                 })

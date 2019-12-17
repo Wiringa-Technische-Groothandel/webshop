@@ -7,11 +7,8 @@ namespace WTG\Http\Controllers\Admin\Api\Carousel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Log\LogManager;
-
 use Symfony\Component\HttpFoundation\Response;
-
 use Throwable;
-
 use WTG\Carousel\CarouselManager;
 use WTG\Http\Controllers\Admin\Controller;
 
@@ -56,7 +53,7 @@ class DeleteController extends Controller
      */
     public function execute(): Response
     {
-        $slideId = (int) $this->request->input('id');
+        $slideId = (int)$this->request->input('id');
 
         try {
             $slide = $this->carouselManager->findSlide($slideId);

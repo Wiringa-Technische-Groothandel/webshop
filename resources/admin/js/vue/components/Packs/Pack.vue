@@ -1,7 +1,7 @@
 <template>
     <div id="pack-component">
-        <h3 :title="pack.product.name">
-            <i class="fal fa-fw fa-box"></i> {{ pack.product.name }}
+        <h3 :title="pack.product.name" class="title">
+            <i class="fal fa-fw fa-box"></i> {{ pack.product.sku }} - {{ pack.product.name }}
         </h3>
 
         <hr/>
@@ -57,11 +57,15 @@
     </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
     .title {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    tr:hover {
+        cursor: pointer;
     }
 </style>
 

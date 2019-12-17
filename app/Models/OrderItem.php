@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace WTG\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use WTG\Contracts\Models\OrderContract;
 use WTG\Contracts\Models\OrderItemContract;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use WTG\Contracts\Models\ProductContract;
 
 /**
@@ -25,19 +25,9 @@ class OrderItem extends Model implements OrderItemContract
     public $timestamps = false;
 
     /**
-     * Order relation.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function order(): BelongsTo
-    {
-        return $this->belongsTo(Order::class);
-    }
-
-    /**
      * Set the order.
      *
-     * @param  OrderContract  $order
+     * @param OrderContract $order
      * @return OrderItemContract
      */
     public function setOrder(OrderContract $order): OrderItemContract
@@ -45,6 +35,16 @@ class OrderItem extends Model implements OrderItemContract
         $this->order()->associate($order);
 
         return $this;
+    }
+
+    /**
+     * Order relation.
+     *
+     * @return BelongsTo
+     */
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class);
     }
 
     /**
@@ -70,7 +70,7 @@ class OrderItem extends Model implements OrderItemContract
     /**
      * Set the name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return OrderItemContract
      */
     public function setName(string $name): OrderItemContract
@@ -91,7 +91,7 @@ class OrderItem extends Model implements OrderItemContract
     /**
      * Set the sku.
      *
-     * @param  string  $sku
+     * @param string $sku
      * @return OrderItemContract
      */
     public function setSku(string $sku): OrderItemContract
@@ -100,19 +100,9 @@ class OrderItem extends Model implements OrderItemContract
     }
 
     /**
-     * Get the sku.
-     *
-     * @return string
-     */
-    public function getSku(): string
-    {
-        return $this->getAttribute('sku');
-    }
-
-    /**
      * Set the item quantity.
      *
-     * @param  float|null  $quantity
+     * @param float|null $quantity
      * @return OrderItemContract
      */
     public function setQuantity(float $quantity): OrderItemContract
@@ -127,13 +117,13 @@ class OrderItem extends Model implements OrderItemContract
      */
     public function getQuantity(): ?float
     {
-        return (float) $this->getAttribute('qty');
+        return (float)$this->getAttribute('qty');
     }
 
     /**
      * Set the price.
      *
-     * @param  float  $price
+     * @param float $price
      * @return OrderItemContract
      */
     public function setPrice(float $price): OrderItemContract
@@ -148,13 +138,13 @@ class OrderItem extends Model implements OrderItemContract
      */
     public function getPrice(): ?float
     {
-        return (float) $this->getAttribute('price');
+        return (float)$this->getAttribute('price');
     }
 
     /**
      * Set the subtotal.
      *
-     * @param  float  $subtotal
+     * @param float $subtotal
      * @return OrderItemContract
      */
     public function setSubtotal(float $subtotal): OrderItemContract
@@ -165,11 +155,11 @@ class OrderItem extends Model implements OrderItemContract
     /**
      * Get the subtotal.
      *
-     * @return string
+     * @return float
      */
-    public function getSubtotal(): ?string
+    public function getSubtotal(): ?float
     {
-        return $this->getAttribute('subtotal');
+        return (float)$this->getAttribute('subtotal');
     }
 
     /**
@@ -178,5 +168,15 @@ class OrderItem extends Model implements OrderItemContract
     public function getProduct(): ?ProductContract
     {
         return Product::findBySku($this->getSku());
+    }
+
+    /**
+     * Get the sku.
+     *
+     * @return string
+     */
+    public function getSku(): string
+    {
+        return $this->getAttribute('sku');
     }
 }

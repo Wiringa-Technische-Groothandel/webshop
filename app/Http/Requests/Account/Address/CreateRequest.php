@@ -33,12 +33,12 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'      => ['required'],
-            'address'   => ['required'],
-            'postcode'  => ['required'],
-            'city'      => ['required'],
-            'phone'     => [],
-            'mobile'    => []
+            'name'     => ['required'],
+            'address'  => ['required'],
+            'postcode' => ['required'],
+            'city'     => ['required'],
+            'phone'    => [],
+            'mobile'   => [],
         ];
     }
 }

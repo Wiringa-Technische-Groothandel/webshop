@@ -26,7 +26,7 @@ class FetchPriceRequest extends FormRequest
     public function rules()
     {
         return [
-            'skus' => 'required'
+            'skus' => 'required',
         ];
     }
 }

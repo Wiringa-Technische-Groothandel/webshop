@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace WTG\Http\Controllers\Web\Auth;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use WTG\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
 
 /**
  * Logout controller.
@@ -27,7 +27,7 @@ class LogoutController extends Controller
     /**
      * Attempt to logout.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return RedirectResponse
      */
     public function postAction(Request $request)

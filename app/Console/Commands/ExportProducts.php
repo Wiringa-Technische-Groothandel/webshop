@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WTG\Console\Commands;
 
 use Illuminate\Console\Command;
+use Throwable;
 
 /**
  * Trigger full product export.
@@ -43,7 +44,7 @@ class ExportProducts extends Command
      * Execute the console command.
      *
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function handle(): void
     {

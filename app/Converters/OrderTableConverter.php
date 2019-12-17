@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace WTG\Converters;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Log;
 use WTG\Checkout\Models\Order;
 use WTG\Checkout\Models\OrderItem;
-use Illuminate\Database\Eloquent\Model;
 use WTG\Customer\Models\Company;
 
 /**
@@ -27,13 +28,13 @@ class OrderTableConverter extends AbstractTableConverter implements TableConvert
         'created_at',
         'updated_at',
         'comment',
-        'addressId'
+        'addressId',
     ];
 
     /**
      * Create the order with the order_items.
      *
-     * @param  array  $data
+     * @param array $data
      * @return Order|null
      */
     public function createModel(array $data): ?Model
@@ -41,12 +42,12 @@ class OrderTableConverter extends AbstractTableConverter implements TableConvert
         $company = Company::customerNumber($data['User_id'])->first();
 
         if ($company === null) {
-            \Log::warning('[Order table conversion] No company was found for customer number '.$data['User_id']);
+            Log::warning('[Order table conversion] No company was found for customer number ' . $data['User_id']);
 
             return null;
         }
 
-        $order = new Order;
+        $order = new Order();
 
         $order->setAttribute('company_id', $company->getAttribute('id'));
         $order->setAttribute('comment', $data['comment']);
@@ -57,7 +58,7 @@ class OrderTableConverter extends AbstractTableConverter implements TableConvert
         $items = unserialize($data['products']);
 
         foreach ($items as $item) {
-            $orderItem = new OrderItem;
+            $orderItem = new OrderItem();
 
             $orderItem->setAttribute('order_id', $order->getAttribute('id'));
             $orderItem->setAttribute('price', $item['price'] ?? 0.00);

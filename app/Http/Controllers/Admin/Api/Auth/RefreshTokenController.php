@@ -8,13 +8,9 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Log\LogManager;
-
 use Symfony\Component\HttpFoundation\Response;
-
 use Throwable;
-
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
-
 use WTG\Http\Controllers\Admin\Controller;
 use WTG\Services\Admin\AuthService;
 

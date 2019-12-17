@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace WTG\Converters;
 
-use WTG\Models\Company;
 use Illuminate\Database\Eloquent\Model;
+use WTG\Models\Company;
 
 /**
  * Company table converter.
@@ -28,13 +28,13 @@ class CompanyTableConverter extends AbstractTableConverter
         'email',
         'active',
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
     /**
      * Create a new entity.
      *
-     * @param  array  $data
+     * @param array $data
      * @return Model
      */
     public function createModel(array $data): ?Model
@@ -43,7 +43,7 @@ class CompanyTableConverter extends AbstractTableConverter
             return null;
         }
 
-        $company = new Company;
+        $company = new Company();
 
         $company->setAttribute('customer_number', $data['login']);
         $company->setAttribute('name', $data['company']);

@@ -24,7 +24,7 @@ interface CustomerContract
     /**
      * Set the username.
      *
-     * @param  string  $username
+     * @param string $username
      * @return CustomerContract
      */
     public function setUsername(string $username): CustomerContract;
@@ -39,7 +39,7 @@ interface CustomerContract
     /**
      * Set the password.
      *
-     * @param  string  $password
+     * @param string $password
      * @return CustomerContract
      */
     public function setPassword(string $password): CustomerContract;
@@ -54,7 +54,7 @@ interface CustomerContract
     /**
      * Set the active.
      *
-     * @param  bool  $active
+     * @param bool $active
      * @return CustomerContract
      */
     public function setActive(bool $active): CustomerContract;
@@ -90,7 +90,7 @@ interface CustomerContract
     /**
      * Check if the customer has set the product as favorite.
      *
-     * @param  ProductContract  $product
+     * @param ProductContract $product
      * @return bool
      */
     public function hasFavorite(ProductContract $product): bool;
@@ -98,7 +98,7 @@ interface CustomerContract
     /**
      * Add a product as favorite.
      *
-     * @param  ProductContract  $product
+     * @param ProductContract $product
      * @return void
      */
     public function addFavorite(ProductContract $product): void;
@@ -106,7 +106,7 @@ interface CustomerContract
     /**
      * Add a product as favorite.
      *
-     * @param  ProductContract  $product
+     * @param ProductContract $product
      * @return void
      */
     public function removeFavorite(ProductContract $product): void;

@@ -16,7 +16,8 @@ use Illuminate\Queue\SerializesModels;
  */
 class Test extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * @var string

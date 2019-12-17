@@ -17,7 +17,12 @@ class DiscountFile extends Mailable
 {
     use Queueable;
 
-    const FILE_NAME = 'icc_data.txt';
+    public const FILE_NAME = 'icc_data.txt';
+
+    /**
+     * @var string
+     */
+    public $subject = '[WTG Webshop] - Kortingsbestand';
 
     /**
      * @var string
@@ -30,15 +35,10 @@ class DiscountFile extends Mailable
     protected $fileName;
 
     /**
-     * @var string
-     */
-    public $subject = '[WTG Webshop] - Kortingsbestand';
-
-    /**
      * DiscountFile constructor.
      *
-     * @param  string  $fileData
-     * @param  string  $fileName
+     * @param string $fileData
+     * @param string $fileName
      */
     public function __construct(string $fileData, string $fileName = self::FILE_NAME)
     {
@@ -54,9 +54,13 @@ class DiscountFile extends Mailable
     public function build(): self
     {
         return $this
-            ->attachData($this->fileData, $this->fileName, [
-                'mime' => 'text/plain'
-            ])
+            ->attachData(
+                $this->fileData,
+                $this->fileName,
+                [
+                    'mime' => 'text/plain',
+                ]
+            )
             ->markdown('emails.discount-file');
     }
 }

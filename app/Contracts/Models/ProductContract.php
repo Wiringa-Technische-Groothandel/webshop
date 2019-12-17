@@ -36,7 +36,7 @@ interface ProductContract
     /**
      * Set the product sku.
      *
-     * @param  string  $sku
+     * @param string $sku
      * @return ProductContract
      */
     public function setSku(string $sku): ProductContract;
@@ -51,7 +51,7 @@ interface ProductContract
     /**
      * Set the product group.
      *
-     * @param  string  $group
+     * @param string $group
      * @return ProductContract
      */
     public function setGroup(string $group): ProductContract;
@@ -66,7 +66,7 @@ interface ProductContract
     /**
      * Get or set the product name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return ProductContract
      */
     public function setName(string $name): ProductContract;
@@ -81,7 +81,7 @@ interface ProductContract
     /**
      * Set the product ean.
      *
-     * @param  string  $ean
+     * @param string $ean
      * @return ProductContract
      */
     public function setEan(string $ean): ProductContract;
@@ -96,7 +96,7 @@ interface ProductContract
     /**
      * Set the product brand.
      *
-     * @param  string  $brand
+     * @param string $brand
      * @return ProductContract
      */
     public function setBrand(string $brand): ProductContract;
@@ -111,7 +111,7 @@ interface ProductContract
     /**
      * Set the product series.
      *
-     * @param  string  $series
+     * @param string $series
      * @return ProductContract
      */
     public function setSeries(string $series): ProductContract;
@@ -126,7 +126,7 @@ interface ProductContract
     /**
      * Set the product type.
      *
-     * @param  string  $type
+     * @param string $type
      * @return ProductContract
      */
     public function setType(string $type): ProductContract;
@@ -141,7 +141,7 @@ interface ProductContract
     /**
      * Set the product sales unit.
      *
-     * @param  string  $salesUnit
+     * @param string $salesUnit
      * @return ProductContract
      */
     public function setSalesUnit(string $salesUnit): ProductContract;
@@ -156,7 +156,7 @@ interface ProductContract
     /**
      * Set the stock display.
      *
-     * @param  string  $stockDisplay
+     * @param string $stockDisplay
      * @return ProductContract
      */
     public function setStockDisplay(string $stockDisplay): ProductContract;

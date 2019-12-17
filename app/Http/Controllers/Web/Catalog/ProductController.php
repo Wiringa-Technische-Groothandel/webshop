@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WTG\Http\Controllers\Web\Catalog;
 
 use Illuminate\View\View;
-
 use WTG\Http\Controllers\Controller;
 use WTG\Models\Product;
 
@@ -30,7 +29,7 @@ class ProductController extends Controller
         $previousUrl = $this->getAssortmentUrl();
 
         if (! $product) {
-            abort(404, __("Er is geen product gevonden met productnummer :sku", [ 'sku' => $sku ]));
+            abort(404, __("Er is geen product gevonden met productnummer :sku", ['sku' => $sku]));
         }
 
         return view('pages.catalog.product', compact('product', 'previousUrl'));

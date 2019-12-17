@@ -5,13 +5,9 @@ declare(strict_types=1);
 namespace WTG\Http\Controllers\Admin\Api\Catalog;
 
 use Exception;
-
 use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
-
 use Symfony\Component\HttpFoundation\Response;
-
 use Throwable;
-
 use WTG\Http\Controllers\Admin\Controller;
 use WTG\Models\Product;
 

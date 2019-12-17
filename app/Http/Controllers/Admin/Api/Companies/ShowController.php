@@ -6,9 +6,7 @@ namespace WTG\Http\Controllers\Admin\Api\Companies;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-
 use Symfony\Component\HttpFoundation\Response;
-
 use WTG\Http\Controllers\Admin\Controller;
 use WTG\Models\Company;
 
@@ -39,7 +37,7 @@ class ShowController extends Controller
      */
     public function execute(): Response
     {
-        $company = Company::with(['customers' => fn ($query) => $query->withTrashed() ])
+        $company = Company::with(['customers' => fn($query) => $query->withTrashed()])
             ->withTrashed()
             ->where('id', $this->request->input('id'))
             ->first();

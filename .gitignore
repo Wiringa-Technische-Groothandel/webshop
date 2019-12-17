@@ -17,4 +17,3 @@ yarn-error.log
 composer.phar
 .phpunit.result.cache
 app/Base/
-app/Catalog
