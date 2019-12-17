@@ -6,7 +6,6 @@
     "type": "project",
     "require": {
         "php": ">=7.4.0",
-        "ext-soap": "*",
         "ext-json": "*",
         "barryvdh/laravel-snappy": "^0.4",
         "doctrine/dbal": "^2.6",

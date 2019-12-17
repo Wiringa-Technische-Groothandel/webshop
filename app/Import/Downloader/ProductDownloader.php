@@ -39,7 +39,7 @@ class ProductDownloader implements DownloaderInterface
     protected string $id;
 
     /**
-     * Soap constructor.
+     * ProductDownloader constructor.
      *
      * @param RestManager $restManager
      * @param LogManager $logManager

@@ -35,7 +35,7 @@ class ProductsDownloader implements BulkDownloaderInterface
     protected LogManager $logManager;
 
     /**
-     * Soap constructor.
+     * ProductsDownloader constructor.
      *
      * @param RestManager $restManager
      * @param LogManager $logManager
