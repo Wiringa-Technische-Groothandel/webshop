@@ -35,7 +35,7 @@ class PriceFactorDownloader implements BulkDownloaderInterface
     protected LogManager $logManager;
 
     /**
-     * Soap constructor.
+     * PriceFactorDownloader constructor.
      *
      * @param RestManager $restManager
      * @param LogManager $logManager

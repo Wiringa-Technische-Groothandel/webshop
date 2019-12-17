@@ -79,7 +79,7 @@ class DatabaseSetup extends Migration
         }
 
         if (! app()->environment('testing')) {
-            if (Artisan::call('import:soap:products', [], app(ConsoleOutput::class)) !== 0) {
+            if (Artisan::call('import:products', [], app(ConsoleOutput::class)) !== 0) {
                 throw new \Exception('Import failed');
             }
         }

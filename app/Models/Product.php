@@ -54,33 +54,6 @@ class Product extends Model implements ProductContract
     protected $with = ['priceFactor'];
 
     /**
-     * Create a product model from a GetProducts soap product.
-     *
-     * @param \WTG\Soap\GetProducts\Response\Product $product
-     * @return Product
-     */
-    public static function createFromSoapProduct(\WTG\Soap\GetProducts\Response\Product $product): Product
-    {
-        /** @var static $model */
-        $model = static::withTrashed()->firstOrNew(
-            [
-                'sku'        => $product->sku,
-                'sales_unit' => $product->sales_unit,
-            ]
-        );
-
-        foreach (get_object_vars($product) as $key => $value) {
-            if (in_array($key, $model->guarded)) {
-                continue;
-            }
-
-            $model->setAttribute($key, $value);
-        }
-
-        return $model;
-    }
-
-    /**
      * Find a product by sku.
      *
      * @param string $sku

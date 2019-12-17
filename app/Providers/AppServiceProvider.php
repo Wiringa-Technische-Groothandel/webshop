@@ -46,7 +46,6 @@ use WTG\Services\CheckoutService;
 use WTG\Services\CompanyService;
 use WTG\Services\FavoritesService;
 use WTG\Services\RecaptchaService;
-use WTG\Soap\Service as SoapService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -127,7 +126,5 @@ class AppServiceProvider extends ServiceProvider
                 return new Quote();
             }
         );
-
-        $this->app->singleton('soap', SoapService::class);
     }
 }
