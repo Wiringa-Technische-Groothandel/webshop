@@ -1,10 +1,8 @@
 <p align="center"><img src="https://wiringa.nl/storage/static/images/logov2.png" width="400"></p>
 
 <p align="center">
-
-[![Build Status](https://ci.tjwiringa.nl/api/badges/WTG/webshop/status.svg?ref=refs/heads/development)](https://ci.tjwiringa.nl/WTG/webshop)
-![License](https://poser.pugx.org/laravel/framework/license.svg)
-
+<a href="https://ci.tjwiringa.nl/WTG/webshop"><img src="https://ci.tjwiringa.nl/api/badges/WTG/webshop/status.svg?ref=refs/heads/development" alt="Build Status"></a>
+<a href="https://git.tjwiringa.nl/WTG/webshop"><img src="https://poser.pugx.org/laravel/framework/license.svg?format=flat" alt="License"></a>
 </p>
 
 ## Security Vulnerabilities
