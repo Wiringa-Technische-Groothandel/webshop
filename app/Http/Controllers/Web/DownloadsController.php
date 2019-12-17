@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace WTG\Http\Controllers\Web;
 
-use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use WTG\Http\Controllers\Controller;
 
 /**
@@ -20,7 +20,7 @@ class DownloadsController extends Controller
     /**
      * Contact page.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return View
      */
     public function getAction(Request $request)

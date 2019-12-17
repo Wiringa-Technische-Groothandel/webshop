@@ -6,7 +6,6 @@ namespace WTG\Http\Controllers\Web;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Factory as ViewFactory;
-
 use WTG\Carousel\CarouselManager;
 use WTG\Http\Controllers\Controller;
 

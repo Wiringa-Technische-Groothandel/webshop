@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace WTG\Providers;
 
 use GuzzleHttp\Client;
-
 use Illuminate\Support\ServiceProvider;
-
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
-
+use Storage;
 use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\AdminContract;
 use WTG\Contracts\Models\BlockContract;
@@ -29,7 +27,6 @@ use WTG\Contracts\Services\CartServiceContract;
 use WTG\Contracts\Services\CheckoutServiceContract;
 use WTG\Contracts\Services\CompanyServiceContract;
 use WTG\Contracts\Services\FavoritesServiceContract;
-
 use WTG\Models\Address;
 use WTG\Models\Admin;
 use WTG\Models\Block;
@@ -43,14 +40,12 @@ use WTG\Models\Pack;
 use WTG\Models\PackProduct;
 use WTG\Models\Quote;
 use WTG\Models\QuoteItem;
-
 use WTG\Services\Account\AddressService;
 use WTG\Services\CartService;
 use WTG\Services\CheckoutService;
 use WTG\Services\CompanyService;
 use WTG\Services\FavoritesService;
 use WTG\Services\RecaptchaService;
-
 use WTG\Soap\Service as SoapService;
 
 class AppServiceProvider extends ServiceProvider
@@ -62,20 +57,26 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        \Storage::extend('sftp', function ($app, $config) {
-            $adapter = new SftpAdapter($config);
+        Storage::extend(
+            'sftp',
+            function ($app, $config) {
+                $adapter = new SftpAdapter($config);
 
-            return new Filesystem($adapter);
-        });
-
-        view()->composer('*', function ($view) {
-            if (auth('web')->check()) {
-                /** @var CustomerContract $customer */
-                $customer = auth('web')->user();
-
-                $view->with('cart', app()->make(CartContract::class)->loadForCustomer($customer));
+                return new Filesystem($adapter);
             }
-        });
+        );
+
+        view()->composer(
+            '*',
+            function ($view) {
+                if (auth('web')->check()) {
+                    /** @var CustomerContract $customer */
+                    $customer = auth('web')->user();
+
+                    $view->with('cart', app()->make(CartContract::class)->loadForCustomer($customer));
+                }
+            }
+        );
     }
 
     /**
@@ -87,11 +88,15 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->when(RecaptchaService::class)
             ->needs(Client::class)
-            ->give(function () {
-                return new Client([
-                    'base_uri' => 'https://www.google.com',
-                ]);
-            });
+            ->give(
+                function () {
+                    return new Client(
+                        [
+                            'base_uri' => 'https://www.google.com',
+                        ]
+                    );
+                }
+            );
         $this->app->alias(RecaptchaService::class, 'captcha');
 
         // Model bindings
@@ -116,9 +121,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CheckoutServiceContract::class, CheckoutService::class);
         $this->app->bind(FavoritesServiceContract::class, FavoritesService::class);
 
-        $this->app->singleton(CartContract::class, function () {
-            return new Quote();
-        });
+        $this->app->singleton(
+            CartContract::class,
+            function () {
+                return new Quote();
+            }
+        );
 
         $this->app->singleton('soap', SoapService::class);
     }

@@ -103,7 +103,7 @@
                             success: resp.data.success
                         });
 
-                        window.vm.$root.$emit('cart-address-changed');
+                        window.vm.$root.$emit('cart-address-changed', resp.data.address);
                     })
                     .catch(function (error) {
                         window.vm.$root.$emit('send-notify', {

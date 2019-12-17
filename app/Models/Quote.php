@@ -5,18 +5,20 @@ declare(strict_types=1);
 namespace WTG\Models;
 
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
-use WTG\Contracts\Models\CartContract;
+use Exception;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Model;
-use WTG\Contracts\Services\Account\AddressServiceContract;
-use WTG\Exceptions\CartUpdateException;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 use WTG\Contracts\Models\AddressContract;
-use WTG\Contracts\Models\ProductContract;
+use WTG\Contracts\Models\CartContract;
 use WTG\Contracts\Models\CartItemContract;
 use WTG\Contracts\Models\CustomerContract;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use WTG\Contracts\Models\ProductContract;
+use WTG\Contracts\Services\Account\AddressServiceContract;
+use WTG\Exceptions\CartUpdateException;
 
 /**
  * Quote model.
@@ -39,31 +41,11 @@ class Quote extends Model implements CartContract
     /**
      * Customer relation.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
-    }
-
-    /**
-     * Quote item relation.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function items(): HasMany
-    {
-        return $this->hasMany(QuoteItem::class);
-    }
-
-    /**
-     * Address relation.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function address(): BelongsTo
-    {
-        return $this->belongsTo(Address::class);
     }
 
     /**
@@ -88,7 +70,7 @@ class Quote extends Model implements CartContract
     /**
      * Set the delivery address.
      *
-     * @param  AddressContract  $address
+     * @param AddressContract $address
      * @return CartContract
      */
     public function setAddress(AddressContract $address): CartContract
@@ -99,9 +81,19 @@ class Quote extends Model implements CartContract
     }
 
     /**
+     * Address relation.
+     *
+     * @return BelongsTo
+     */
+    public function address(): BelongsTo
+    {
+        return $this->belongsTo(Address::class);
+    }
+
+    /**
      * Set the finished at timestamp.
      *
-     * @param  Carbon  $carbon
+     * @param Carbon $carbon
      * @return CartContract
      */
     public function setFinishedAt(Carbon $carbon): CartContract
@@ -122,16 +114,18 @@ class Quote extends Model implements CartContract
     /**
      * Find or create a cart for a customer.
      *
-     * @param  CustomerContract  $customer
+     * @param CustomerContract $customer
      * @return CartContract
      */
     public function loadForCustomer(CustomerContract $customer): CartContract
     {
         $this->forceFill(
-            $this->firstOrCreate([
-                'customer_id' => $customer->getId(),
-                'finished_at' => null
-            ])->toArray()
+            $this->firstOrCreate(
+                [
+                    'customer_id' => $customer->getId(),
+                    'finished_at' => null,
+                ]
+            )->toArray()
         );
 
         $this->exists = true;
@@ -152,10 +146,11 @@ class Quote extends Model implements CartContract
     /**
      * Add a product to the cart.
      *
-     * @param  ProductContract  $product
-     * @param  float  $quantity
+     * @param ProductContract $product
+     * @param float $quantity
      * @return CartItemContract
      * @throws CartUpdateException
+     * @throws BindingResolutionException
      */
     public function addProduct(ProductContract $product, float $quantity = 1.0): CartItemContract
     {
@@ -182,10 +177,42 @@ class Quote extends Model implements CartContract
     }
 
     /**
+     * Find a cart item by product.
+     *
+     * @param ProductContract $product
+     * @return null|CartItemContract
+     */
+    public function findProduct(ProductContract $product): ?CartItemContract
+    {
+        return $this->items()->where('product_id', $product->getId())->first();
+    }
+
+    /**
+     * Quote item relation.
+     *
+     * @return HasMany
+     */
+    public function items(): HasMany
+    {
+        return $this->hasMany(QuoteItem::class);
+    }
+
+    /**
+     * Throw a cart update exception.
+     *
+     * @return void
+     * @throws CartUpdateException
+     */
+    protected function throwFailedCartException(): void
+    {
+        throw new CartUpdateException('An error occurred while saving a cart.');
+    }
+
+    /**
      * Update a cart item.
      *
-     * @param  ProductContract  $product
-     * @param  float  $quantity
+     * @param ProductContract $product
+     * @param float $quantity
      * @return CartItemContract
      * @throws CartUpdateException
      */
@@ -208,9 +235,9 @@ class Quote extends Model implements CartContract
     /**
      * Remove a product from the cart.
      *
-     * @param  ProductContract  $product
+     * @param ProductContract $product
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function removeProduct(ProductContract $product): bool
     {
@@ -225,25 +252,14 @@ class Quote extends Model implements CartContract
     }
 
     /**
-     * Find a cart item by product.
-     *
-     * @param  ProductContract  $product
-     * @return null|CartItemContract
-     */
-    public function findProduct(ProductContract $product): ?CartItemContract
-    {
-        return $this->items()->where('product_id', $product->getId())->first();
-    }
-
-    /**
      * Check if the product is in the cart.
      *
-     * @param  ProductContract  $product
+     * @param ProductContract $product
      * @return bool
      */
     public function hasProduct(ProductContract $product): bool
     {
-        return (bool) $this->findProduct($product);
+        return (bool)$this->findProduct($product);
     }
 
     /**
@@ -264,16 +280,5 @@ class Quote extends Model implements CartContract
     public function getCount(): int
     {
         return $this->items()->count();
-    }
-
-    /**
-     * Throw a cart update exception.
-     *
-     * @throws CartUpdateException
-     * @return void
-     */
-    protected function throwFailedCartException(): void
-    {
-        throw new CartUpdateException('An error occurred while saving a cart.');
     }
 }

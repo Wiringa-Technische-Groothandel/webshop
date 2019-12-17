@@ -1,12 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace WTG\Console\Commands\Index;
 
 use Elasticsearch\Client as ElasticClient;
 use Exception;
-
 use Illuminate\Console\Command;
-
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use WTG\Models\Synonym;
@@ -61,7 +61,7 @@ class Recreate extends Command
         $indexClient = $this->elastic->indices();
 
         try {
-            $indices = array_keys($indexClient->get([ 'index' => $indexAlias ]));
+            $indices = array_keys($indexClient->get(['index' => $indexAlias]));
             $oldIndex = array_pop($indices);
         } catch (Exception $e) {
             $oldIndex = false;
@@ -76,21 +76,27 @@ class Recreate extends Command
         $config['settings']['analysis']['filter']['synonym']['synonyms'] = Synonym::createMapping();
 
         try {
-            $indexClient->create([
-                'index' => $newIndex,
-                'body' => $config
-            ]);
+            $indexClient->create(
+                [
+                    'index' => $newIndex,
+                    'body'  => $config,
+                ]
+            );
 
             if ($oldIndex) {
-                $indexClient->delete([
-                    'index' => $oldIndex
-                ]);
+                $indexClient->delete(
+                    [
+                        'index' => $oldIndex,
+                    ]
+                );
             }
 
-            $indexClient->putAlias([
-                'index' => $newIndex,
-                'name' => $indexAlias
-            ]);
+            $indexClient->putAlias(
+                [
+                    'index' => $newIndex,
+                    'name'  => $indexAlias,
+                ]
+            );
         } catch (Exception $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
 

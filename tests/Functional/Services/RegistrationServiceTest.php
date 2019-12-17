@@ -2,6 +2,7 @@
 
 namespace Tests\Functional\Services;
 
+use Illuminate\Support\Str;
 use Tests\Functional\TestCase;
 use WTG\Contracts\Services\RegistrationServiceContract;
 
@@ -43,22 +44,29 @@ class RegistrationServiceTest extends TestCase
             'contact-email'         => 'foo@bar.com',
             'contact-website'       => 'https://foobar.com',
 
-            'business-address'      => 'Street 1234',
-            'business-city'         => 'City',
-            'business-postcode'     => '9876XX',
-            'business-phone'        => '1234568790',
+            'business-address'  => 'Street 1234',
+            'business-city'     => 'City',
+            'business-postcode' => '9876XX',
+            'business-phone'    => '1234568790',
 
-            'payment-iban'          => '12341234',
-            'payment-kvk'           => '98769876',
-            'payment-vat'           => '12345687',
+            'payment-iban' => '12341234',
+            'payment-kvk'  => '98769876',
+            'payment-vat'  => '12345687',
 
-            'other-alt-email'           => 'bar@foo.com',
-            'other-order-confirmation'  => true,
-            'other-mail-productfile'    => false
+            'other-alt-email'          => 'bar@foo.com',
+            'other-order-confirmation' => 'on',
+            'other-mail-productfile'   => null,
         ];
 
-        $registration = $this->service->create($data);
+        $registration = $this->service->create($data)->toArray();
 
-        $this->assertArraySubset($data, $registration->toArray());
+        foreach ($data as $key => $value) {
+            if ($value === 'on') {
+                $value = 1;
+            }
+
+            $this->assertArrayHasKey($key, $registration);
+            $this->assertEquals($value, $registration[$key]);
+        }
     }
 }

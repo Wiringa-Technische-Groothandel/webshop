@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace WTG\Exceptions;
 
 use Exception;
-
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Session\TokenMismatchException;
-
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-
 use WTG\Contracts\Models\CustomerContract;
 
 /**
@@ -92,7 +89,7 @@ class Handler extends ExceptionHandler
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         return $request->expectsJson() || in_array('admin', $exception->guards())
-            ? response()->json([ 'message' => 'Unauthenticated.' ], 401)
+            ? response()->json(['message' => 'Unauthenticated.'], 401)
             : redirect()->guest(route('auth.login'));
     }
 
@@ -114,10 +111,10 @@ class Handler extends ExceptionHandler
             $customer = auth()->user();
 
             return [
-                'userId' => auth()->id(),
-                'email' => $customer ? $customer->getContact()->contactEmail() : null,
+                'userId'          => auth()->id(),
+                'email'           => $customer ? $customer->getContact()->contactEmail() : null,
                 'customer_number' => $customer ? $customer->getCompany()->customerNumber() : null,
-                'referenceId' => $this->referenceId,
+                'referenceId'     => $this->referenceId,
             ];
         } catch (Exception $e) {
             return [
@@ -129,7 +126,7 @@ class Handler extends ExceptionHandler
     /**
      * Render the given HttpException.
      *
-     * @param \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface $e
+     * @param HttpExceptionInterface $e
      * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function renderHttpException(HttpExceptionInterface $e)
@@ -147,7 +144,7 @@ class Handler extends ExceptionHandler
         if (view()->exists($view = "errors::{$status}")) {
             return response()->view(
                 $view,
-                [ 'exception' => $e, 'title' => "Error {$status}", 'referenceId' => $this->referenceId ],
+                ['exception' => $e, 'title' => "Error {$status}", 'referenceId' => $this->referenceId],
                 $status,
                 $e->getHeaders()
             );

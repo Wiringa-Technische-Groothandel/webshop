@@ -24,9 +24,9 @@ class IncompleteDataException extends Exception implements Throwable
     /**
      * IncompleteDataException constructor.
      *
-     * @param  array  $errors
-     * @param  int  $code
-     * @param  Throwable|null  $previous
+     * @param array $errors
+     * @param int $code
+     * @param Throwable|null $previous
      */
     public function __construct(array $errors = [], int $code = 0, ?Throwable $previous = null)
     {

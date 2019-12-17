@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace WTG\Console\Commands\Admin\User;
 
-use WTG\Models\Admin;
 use Illuminate\Console\Command;
+use Throwable;
 use WTG\Contracts\Models\AdminContract;
+use WTG\Models\Admin;
 
 /**
  * Admin user create command.
@@ -17,8 +18,8 @@ use WTG\Contracts\Models\AdminContract;
  */
 class Create extends Command
 {
-    const MIN_USERNAME_LENGTH = 3;
-    const MIN_PASSWORD_LENGTH = 5;
+    public const MIN_USERNAME_LENGTH = 3;
+    public const MIN_PASSWORD_LENGTH = 5;
 
     /**
      * The name and signature of the console command.
@@ -48,7 +49,7 @@ class Create extends Command
      * Execute the console command.
      *
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function handle(): void
     {
@@ -56,13 +57,17 @@ class Create extends Command
         $password = $this->secret('Password (input will be hidden)');
 
         if (! $username || strlen($username) < self::MIN_USERNAME_LENGTH) {
-            $this->error(__('The username must be at least :length characters long.', ['length' => self::MIN_USERNAME_LENGTH]));
+            $this->error(
+                __('The username must be at least :length characters long.', ['length' => self::MIN_USERNAME_LENGTH])
+            );
 
             return;
         }
 
         if (! $password || strlen($password) < self::MIN_PASSWORD_LENGTH) {
-            $this->error(__('The password must be at least :length characters long.', ['length' => self::MIN_PASSWORD_LENGTH]));
+            $this->error(
+                __('The password must be at least :length characters long.', ['length' => self::MIN_PASSWORD_LENGTH])
+            );
 
             return;
         }

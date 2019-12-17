@@ -5,15 +5,19 @@ declare(strict_types=1);
 namespace WTG\Services;
 
 use Carbon\Carbon;
-use WTG\Models\Quote;
+use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Collection;
-use WTG\Contracts\Models\CartContract;
+use Log;
+use Throwable;
+use WTG\Catalog\PriceManager;
 use WTG\Contracts\Models\AddressContract;
-use WTG\Contracts\Models\ProductContract;
+use WTG\Contracts\Models\CartContract;
 use WTG\Contracts\Models\CartItemContract;
+use WTG\Contracts\Models\ProductContract;
 use WTG\Contracts\Services\AuthServiceContract;
 use WTG\Contracts\Services\CartServiceContract;
-use WTG\Soap\GetProductPricesAndStocks\Response;
+use WTG\RestClient\Model\Rest\GetProductPrices\Response\Price;
 
 /**
  * Cart service.
@@ -24,32 +28,39 @@ use WTG\Soap\GetProductPricesAndStocks\Response;
 class CartService implements CartServiceContract
 {
     /**
-     * @var Quote
+     * @var CartContract
      */
-    protected $cart;
+    protected CartContract $cart;
 
     /**
      * @var AuthServiceContract
      */
-    protected $authService;
+    protected AuthServiceContract $authService;
+
+    /**
+     * @var PriceManager
+     */
+    protected PriceManager $priceManager;
 
     /**
      * CartService constructor.
      *
-     * @param  CartContract  $cart
-     * @param  AuthServiceContract  $authService
+     * @param CartContract $cart
+     * @param AuthServiceContract $authService
+     * @param PriceManager $priceManager
      */
-    public function __construct(CartContract $cart, AuthServiceContract $authService)
+    public function __construct(CartContract $cart, AuthServiceContract $authService, PriceManager $priceManager)
     {
         $this->cart = $cart;
         $this->authService = $authService;
+        $this->priceManager = $priceManager;
     }
 
     /**
      * Add a product by sku.
      *
-     * @param  string  $sku
-     * @param  float  $quantity
+     * @param string $sku
+     * @param float $quantity
      * @return null|CartItemContract
      */
     public function addProductBySku(string $sku, float $quantity = 1.0): ?CartItemContract
@@ -64,10 +75,21 @@ class CartService implements CartServiceContract
     }
 
     /**
+     * Find a product.
+     *
+     * @param string $sku
+     * @return null|ProductContract
+     */
+    protected function findProduct(string $sku): ?ProductContract
+    {
+        return app()->make(ProductContract::class)->findBySku($sku);
+    }
+
+    /**
      * Add a product.
      *
-     * @param  ProductContract  $product
-     * @param  float  $quantity
+     * @param ProductContract $product
+     * @param float $quantity
      * @return null|CartItemContract
      */
     public function addProduct(ProductContract $product, float $quantity = 1.0): ?CartItemContract
@@ -77,12 +99,11 @@ class CartService implements CartServiceContract
         return $this->cart->addProduct($product, $quantity);
     }
 
-
     /**
      * Update a product by sku.
      *
-     * @param  string  $sku
-     * @param  float  $quantity
+     * @param string $sku
+     * @param float $quantity
      * @return null|CartItemContract
      */
     public function updateProductBySku(string $sku, float $quantity): ?CartItemContract
@@ -101,7 +122,7 @@ class CartService implements CartServiceContract
     /**
      * Delete a product by sku.
      *
-     * @param  string  $sku
+     * @param string $sku
      * @return bool
      */
     public function deleteProductBySku(string $sku): bool
@@ -121,7 +142,7 @@ class CartService implements CartServiceContract
      * Destroy the cart.
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy(): bool
     {
@@ -145,9 +166,8 @@ class CartService implements CartServiceContract
     /**
      * Get the cart items.
      *
-     * @param  bool  $withPrices
+     * @param bool $withPrices
      * @return Collection
-     * @throws \Exception
      */
     public function getItems(bool $withPrices = false): Collection
     {
@@ -158,38 +178,39 @@ class CartService implements CartServiceContract
             return $items;
         }
 
-        $products = $items->pluck('product');
-
-        /** @var Response $response */
-        $response = app('soap')->getProductPricesAndStocks(
-            $products,
-            $this->authService->getCurrentCustomer()->getCompany()->getCustomerNumber()
-        );
-
-        if ($response->code !== 200) {
-            \Log::error('Failed to load prices for quote items: ' . $items->implode('id', ', '));
+        try {
+            $prices = $this->priceManager->fetchPrices(
+                $this->authService->getCurrentCustomer()->getCompany()->getCustomerNumber(),
+                $items->pluck('product')->pluck('sku')->all()
+            );
+        } catch (GuzzleException | Throwable $e) {
+            Log::error($e);
+            Log::error('Failed to load prices for quote items: ' . $items->implode('id', ', '));
 
             // Return the items if the prices failed to load.
             return $items;
         }
 
-        $products = collect($response->products);
+        $items->map(
+            function (CartItemContract $item) use ($prices) {
+                /** @var Price $price */
+                $price = $prices->first(
+                    function (Price $price) use ($item) {
+                        return $price->sku === $item->getProduct()->getSku();
+                    }
+                );
 
-        $items->map(function (CartItemContract $item) use ($products) {
-            $product = $products->first(function ($product) use ($item) {
-                return $product->sku === $item->getProduct()->getSku();
-            });
+                if (! $price) {
+                    return $item;
+                }
 
-            if (! $product) {
+                $item->setPrice((float)$price->netPrice);
+                $item->setSubtotal($price->netPrice * $item->getQuantity());
+                $item->save();
+
                 return $item;
             }
-
-            $item->setPrice((float) $product->net_price);
-            $item->setSubtotal($product->net_price * $item->getQuantity());
-            $item->save();
-
-            return $item;
-        });
+        );
 
         return $items;
     }
@@ -199,9 +220,11 @@ class CartService implements CartServiceContract
      */
     public function getGrandTotal(): float
     {
-        return $this->cart->getItems()->sum(function (CartItemContract $item) {
-            return $item->getPrice() * $item->getQuantity();
-        });
+        return $this->cart->getItems()->sum(
+            function (CartItemContract $item) {
+                return $item->getPrice() * $item->getQuantity();
+            }
+        );
     }
 
     /**
@@ -219,7 +242,7 @@ class CartService implements CartServiceContract
     /**
      * Set the delivery address for the cart.
      *
-     * @param  AddressContract  $address
+     * @param AddressContract $address
      * @return bool
      */
     public function setDeliveryAddress(AddressContract $address): bool
@@ -241,16 +264,5 @@ class CartService implements CartServiceContract
         $this->cart->setFinishedAt(Carbon::now());
 
         return $this->cart->save();
-    }
-
-    /**
-     * Find a product.
-     *
-     * @param  string  $sku
-     * @return null|ProductContract
-     */
-    protected function findProduct(string $sku): ?ProductContract
-    {
-        return app()->make(ProductContract::class)->findBySku($sku);
     }
 }

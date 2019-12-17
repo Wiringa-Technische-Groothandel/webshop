@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
-
 use WTG\Contracts\Models\CompanyContract;
 use WTG\Contracts\Models\ContactContract;
 use WTG\Contracts\Models\CustomerContract;
@@ -68,6 +67,36 @@ class Customer extends Authenticatable implements CustomerContract
     }
 
     /**
+     * Get the contact.
+     *
+     * @return ContactContract
+     * @throws BindingResolutionException
+     */
+    public function getContact(): ContactContract
+    {
+        $contact = $this->getAttribute('contact');
+
+        if (! $contact) {
+            /** @var Contact $contact */
+            $contact = app()->make(ContactContract::class);
+            $contact->setAttribute('customer_id', $this->getId());
+            $contact->save();
+        }
+
+        return $contact;
+    }
+
+    /**
+     * Get the identifier.
+     *
+     * @return null|string
+     */
+    public function getId(): ?int
+    {
+        return $this->getAttribute('id');
+    }
+
+    /**
      * Send the password reset notification.
      *
      * @param string $token
@@ -109,16 +138,6 @@ class Customer extends Authenticatable implements CustomerContract
     }
 
     /**
-     * Favorites relation.
-     *
-     * @return BelongsToMany
-     */
-    public function favorites(): BelongsToMany
-    {
-        return $this->belongsToMany(Product::class, 'favorites');
-    }
-
-    /**
      * Quote relation.
      *
      * @return HasOne
@@ -136,36 +155,6 @@ class Customer extends Authenticatable implements CustomerContract
     public function quoteItems(): HasManyThrough
     {
         return $this->hasManyThrough(QuoteItem::class, Quote::class);
-    }
-
-    /**
-     * Get the identifier.
-     *
-     * @return null|string
-     */
-    public function getId(): ?int
-    {
-        return $this->getAttribute('id');
-    }
-
-    /**
-     * Get the contact.
-     *
-     * @return ContactContract
-     * @throws BindingResolutionException
-     */
-    public function getContact(): ContactContract
-    {
-        $contact = $this->getAttribute('contact');
-
-        if (! $contact) {
-            /** @var Contact $contact */
-            $contact = app()->make(ContactContract::class);
-            $contact->setAttribute('customer_id', $this->getId());
-            $contact->save();
-        }
-
-        return $contact;
     }
 
     /**
@@ -228,7 +217,7 @@ class Customer extends Authenticatable implements CustomerContract
      */
     public function getActive(): bool
     {
-        return (bool) $this->getAttribute('active');
+        return (bool)$this->getAttribute('active');
     }
 
     /**
@@ -260,6 +249,16 @@ class Customer extends Authenticatable implements CustomerContract
     public function hasFavorite(ProductContract $product): bool
     {
         return $this->favorites()->where('product_id', $product->getId())->exists();
+    }
+
+    /**
+     * Favorites relation.
+     *
+     * @return BelongsToMany
+     */
+    public function favorites(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'favorites');
     }
 
     /**

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace WTG\Soap;
 
+use Log;
+
 /**
  * Abstract service.
  *
@@ -16,8 +18,8 @@ abstract class AbstractService
     /**
      * Send the request.
      *
-     * @param  string  $action
-     * @param  AbstractRequest  $request
+     * @param string $action
+     * @param AbstractRequest $request
      * @return AbstractResponse
      */
     protected function sendRequest(string $action, AbstractRequest $request)
@@ -25,17 +27,23 @@ abstract class AbstractService
         $properties = $this->createPropertyMap($request);
 
         if (config('soap.logging')) {
-            \Log::debug(sprintf('Send SOAP request for %s', $action), [
-                'request' => $properties
-            ]);
+            Log::debug(
+                sprintf('Send SOAP request for %s', $action),
+                [
+                    'request' => $properties,
+                ]
+            );
         }
 
         $response = app('soap')->soapCall($action, $properties);
 
         if (config('soap.logging')) {
-            \Log::debug(sprintf('Received SOAP response for %s', $action), [
-                'response' => $response
-            ]);
+            Log::debug(
+                sprintf('Received SOAP response for %s', $action),
+                [
+                    'response' => $response,
+                ]
+            );
         }
 
         return $response;
@@ -44,7 +52,7 @@ abstract class AbstractService
     /**
      * Create a property map from an object.
      *
-     * @param  object  $object
+     * @param object $object
      * @return array
      */
     protected function createPropertyMap($object)

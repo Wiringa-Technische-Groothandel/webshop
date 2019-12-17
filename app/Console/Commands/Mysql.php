@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WTG\Console\Commands;
 
 use Illuminate\Console\Command;
+use Throwable;
 
 /**
  * Open a mysql console.
@@ -43,7 +44,7 @@ class Mysql extends Command
      * Execute the console command.
      *
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function handle(): void
     {
@@ -58,11 +59,15 @@ class Mysql extends Command
             config('database.connections.mysql.database')
         );
 
-        $process = proc_open($command, [
-            STDIN,
-            STDOUT,
-            STDERR,
-        ], $pipes);
+        $process = proc_open(
+            $command,
+            [
+                STDIN,
+                STDOUT,
+                STDERR,
+            ],
+            $pipes
+        );
 
         if (is_resource($process)) {
             proc_close($process);

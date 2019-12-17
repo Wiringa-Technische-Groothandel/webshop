@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WTG\Http\Controllers\Admin\Api\Catalog;
 
 use Symfony\Component\HttpFoundation\Response;
-
 use WTG\Http\Controllers\Admin\Controller;
 use WTG\Models\Product;
 
@@ -22,7 +21,7 @@ class IndexController extends Controller
      */
     public function execute(): Response
     {
-        $products = Product::all([ 'sku', 'group', 'name', 'created_at', 'updated_at' ]);
+        $products = Product::all(['sku', 'group', 'name', 'created_at', 'updated_at']);
 
         return response()->json(
             [

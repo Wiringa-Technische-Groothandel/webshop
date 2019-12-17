@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
-
 use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\CompanyContract;
 
@@ -31,13 +30,17 @@ class Company extends Model implements CompanyContract
     {
         parent::boot();
 
-        static::deleted(function (self $company) {
-            $company->customers()->delete();
-        });
+        static::deleted(
+            function (self $company) {
+                $company->customers()->delete();
+            }
+        );
 
-        static::restoring(function (self $company) {
-            $company->customers()->withTrashed()->where('deleted_at', '>=', $company->deleted_at)->restore();
-        });
+        static::restoring(
+            function (self $company) {
+                $company->customers()->withTrashed()->where('deleted_at', '>=', $company->deleted_at)->restore();
+            }
+        );
     }
 
     /**

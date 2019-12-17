@@ -8,7 +8,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\Factory as ViewFactory;
 use Illuminate\View\View;
-
 use WTG\Contracts\Models\CustomerContract;
 use WTG\Contracts\Models\OrderContract;
 use WTG\Contracts\Services\CartServiceContract;
@@ -59,37 +58,12 @@ class OrderController extends Controller
             return back()->withErrors(__('Geen order gevonden met het opgegeven ID'));
         }
 
-        return $this->view->make('pages.account.order-details', [
-            'order' => $order
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     * @param string $uuid
-     * @return RedirectResponse
-     */
-    public function postAction(Request $request, string $uuid): RedirectResponse
-    {
-        /** @var Customer $customer */
-        $customer = $request->user();
-        $order = $this->findOrder($customer, $uuid);
-
-        if (! $order) {
-            return back()->withErrors(__('Geen order gevonden met het opgegeven ID'));
-        }
-
-        $order->getItems()->each(function (OrderItem $item) {
-            $product = $item->getProduct();
-
-            if (! $product) {
-                return;
-            }
-
-            $this->cartService->addProduct($product, $item->getQuantity());
-        });
-
-        return back()->with('status', __('De producten zijn toegevoegd aan de winkelwagen'));
+        return $this->view->make(
+            'pages.account.order-details',
+            [
+                'order' => $order,
+            ]
+        );
     }
 
     /**
@@ -107,5 +81,35 @@ class OrderController extends Controller
             ->first();
 
         return $order;
+    }
+
+    /**
+     * @param Request $request
+     * @param string $uuid
+     * @return RedirectResponse
+     */
+    public function postAction(Request $request, string $uuid): RedirectResponse
+    {
+        /** @var Customer $customer */
+        $customer = $request->user();
+        $order = $this->findOrder($customer, $uuid);
+
+        if (! $order) {
+            return back()->withErrors(__('Geen order gevonden met het opgegeven ID'));
+        }
+
+        $order->getItems()->each(
+            function (OrderItem $item) {
+                $product = $item->getProduct();
+
+                if (! $product) {
+                    return;
+                }
+
+                $this->cartService->addProduct($product, $item->getQuantity());
+            }
+        );
+
+        return back()->with('status', __('De producten zijn toegevoegd aan de winkelwagen'));
     }
 }

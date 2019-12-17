@@ -32,7 +32,7 @@ class AddressesTable extends AbstractTableCommand
     /**
      * OrdersTable constructor.
      *
-     * @param  TableConverter  $converter
+     * @param TableConverter $converter
      */
     public function __construct(TableConverter $converter)
     {

@@ -23,7 +23,7 @@ interface RoleContract
     /**
      * Set the role name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return RoleContract
      */
     public function setName(string $name): RoleContract;
@@ -38,7 +38,7 @@ interface RoleContract
     /**
      * Set the role level.
      *
-     * @param  int  $level
+     * @param int $level
      * @return RoleContract
      */
     public function setLevel(int $level): RoleContract;

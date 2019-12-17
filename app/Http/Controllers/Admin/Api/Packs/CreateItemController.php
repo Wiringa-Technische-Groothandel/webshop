@@ -6,11 +6,8 @@ namespace WTG\Http\Controllers\Admin\Api\Packs;
 
 use Illuminate\Http\Request;
 use Illuminate\Log\LogManager;
-
 use Symfony\Component\HttpFoundation\Response;
-
 use Throwable;
-
 use WTG\Catalog\PackManager;
 use WTG\Http\Controllers\Admin\Controller;
 
@@ -57,25 +54,29 @@ class CreateItemController extends Controller
     {
         try {
             $pack = $this->packManager->findPack(
-                (int) $this->request->input('id')
+                (int)$this->request->input('id')
             );
 
             $this->packManager->addProductToPack(
                 $pack,
                 $this->request->input('sku'),
-                (int) $this->request->input('amount'),
+                (int)$this->request->input('amount'),
             );
         } catch (Throwable $throwable) {
-            return response()->json([
-                'message' => $throwable->getMessage(),
-                'success' => false
-            ]);
+            return response()->json(
+                [
+                    'message' => $throwable->getMessage(),
+                    'success' => false,
+                ]
+            );
         }
 
-        return response()->json([
-            'packs' => $this->packManager->getPacks(),
-            'message' => __('Het product is toegevoegd aan het actiepaket.'),
-            'success' => true
-        ]);
+        return response()->json(
+            [
+                'packs'   => $this->packManager->getPacks(),
+                'message' => __('Het product is toegevoegd aan het actiepaket.'),
+                'success' => true,
+            ]
+        );
     }
 }

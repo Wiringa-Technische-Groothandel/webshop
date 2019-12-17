@@ -1,6 +1,6 @@
 <template>
     <div class="prices" :class="{ 'price-loading': fetching, 'price-loaded': !fetching }">
-        <template v-if="fetching">
+        <template v-if="fetching && loggedIn">
             <div class="loading-animation text-center">
                 Uw prijs wordt opgehaald <br />
                 <i class="fal fa-sync fa-spin"></i>
@@ -12,47 +12,53 @@
                data-target="#loginModal">Log in</a> om uw persoonlijke prijs te bekijken.
         </div>
 
-        <div class="action-price" v-if="action">
-            Actieprijs:
-            <span class="d-block d-sm-inline">
-                <i class="fas fa-euro-sign"></i> <span>{{ grossPrice }}</span>
-            </span>
+        <div class="error" v-if="! fetching && error">
+            Prijs onbekend
         </div>
 
-        <div class="gross-price" v-if="grossPrice !== false && !action">
-            Bruto:
-            <span class="d-block d-sm-inline">
+        <template v-if="! error">
+            <div class="action-price" v-if="action">
+                Actieprijs:
+                <span class="d-block d-sm-inline">
                 <i class="fas fa-euro-sign"></i> <span>{{ grossPrice }}</span>
             </span>
-        </div>
+            </div>
 
-        <div class="net-price" v-if="netPrice !== false && !action">
-            Netto:
-            <span class="d-block d-sm-inline">
+            <div class="gross-price" v-if="grossPrice !== false && !action">
+                Bruto:
+                <span class="d-block d-sm-inline">
+                <i class="fas fa-euro-sign"></i> <span>{{ grossPrice }}</span>
+            </span>
+            </div>
+
+            <div class="net-price" v-if="netPrice !== false && !action">
+                Netto:
+                <span class="d-block d-sm-inline">
                 <i class="fas fa-euro-sign"></i> <span>{{ netPrice }}</span>
             </span>
-        </div>
+            </div>
+        </template>
 
-        <small class="form-text text-muted price-per" v-if="pricePer !== false">
-            {{ pricePer }}
+        <small class="form-text text-muted price-per" v-if="! fetching && loggedIn">
+            {{ product.price_per_str }}
         </small>
 
-        <small class="form-text text-muted stock" v-if="stock !== false" v-html="stock"></small>
+        <small class="form-text text-muted stock" v-if="! fetching && loggedIn" v-html="product.stock_status"></small>
     </div>
 </template>
 
 <script>
     export default {
         props: {
-            'product': {
+            product: {
                 type: Object,
                 required: true
             },
-            'logged-in': {
+            loggedIn: {
                 type: Boolean,
                 required: true
             },
-            'auth-url': {
+            authUrl: {
                 type: String,
                 required: true
             }
@@ -60,10 +66,9 @@
         data () {
             return {
                 fetching: true,
+                error: false,
                 netPrice: false,
                 grossPrice: false,
-                pricePer: false,
-                stock: false,
                 action: false
             }
         },
@@ -71,16 +76,21 @@
             if (this.loggedIn) {
                 this.$root.$emit('fetch-price', this.product.sku);
 
-                this.$root.$on('price-fetched-' + this.product.sku, (data) => {
-                    this.$data.fetching = false;
-                    this.$data.netPrice = data.netPrice.toFixed(2);
-                    this.$data.grossPrice = data.grossPrice.toFixed(2);
-                    this.$data.pricePer = data.pricePer;
-                    this.$data.stock = data.stock;
-                    this.$data.action = data.action;
+                const timeout = setTimeout(() => {
+                    this.fetching = false;
+                    this.error = true;
+                }, 5000);
+
+                this.$root.$on('price-fetched-' + this.product.sku, data => {
+                    clearTimeout(timeout);
+
+                    this.fetching = false;
+                    this.netPrice = data.netPrice.toFixed(2);
+                    this.grossPrice = data.grossPrice.toFixed(2);
+                    this.action = data.action;
                 });
             } else {
-                this.$data.fetching = false;
+                this.fetching = false;
             }
         }
     }

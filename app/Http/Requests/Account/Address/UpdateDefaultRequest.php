@@ -33,7 +33,7 @@ class UpdateDefaultRequest extends FormRequest
     public function rules()
     {
         return [
-            'address' => ['required', 'exists:addresses,id']
+            'address' => ['required', 'exists:addresses,id'],
         ];
     }
 }

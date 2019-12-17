@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Database\Seeder;
+use WTG\Models\Contact;
 use WTG\Models\Customer;
 
 /**
@@ -7,7 +9,7 @@ use WTG\Models\Customer;
  *
  * @author  Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
-class CustomersTableSeeder extends \Illuminate\Database\Seeder
+class CustomersTableSeeder extends Seeder
 {
     /**
      * Run the seeder.
@@ -16,12 +18,21 @@ class CustomersTableSeeder extends \Illuminate\Database\Seeder
      */
     public function run()
     {
-        Customer::create([
+        $customer = Customer::create([
             'id' => 1,
             'company_id' => 1,
             'username'   => 'foobar',
             'password'   => bcrypt('test'),
             'active'     => true
         ]);
+
+        Contact::create(
+            [
+                'id' => 1,
+                'customer_id' => $customer->getId(),
+                'contact_email' => 'contact@email.com',
+                'order_email' => 'order@email.com'
+            ]
+        );
     }
 }

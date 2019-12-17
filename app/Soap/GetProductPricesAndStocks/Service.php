@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace WTG\Soap\GetProductPricesAndStocks;
 
 use Exception;
-
 use Illuminate\Support\Collection;
-
+use Log;
 use WTG\Contracts\Models\ProductContract;
 use WTG\Soap\AbstractService;
 
@@ -71,8 +70,8 @@ class Service extends AbstractService
                 $this->request
             );
             $this->buildResponse($soapResponse);
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
         }
 
         return $this->response;
@@ -85,13 +84,13 @@ class Service extends AbstractService
      */
     protected function buildRequest()
     {
-        $this->request->debtorId = (string) $this->customerId;
+        $this->request->debtorId = (string)$this->customerId;
 
         foreach ($this->products as $product) {
             /** @var Request\Product $requestProduct */
             $requestProduct = app()->make(Request\Product::class);
-            $requestProduct->productId = (string) $product->getAttribute('sku');
-            $requestProduct->unitId = (string) $product->getAttribute('sales_unit');
+            $requestProduct->productId = (string)$product->getAttribute('sku');
+            $requestProduct->unitId = (string)$product->getAttribute('sales_unit');
 
             $this->request->products[] = $requestProduct;
         }
@@ -109,28 +108,28 @@ class Service extends AbstractService
         $soapProducts = $soapResponse->ProductPricesAndStocks->ProductPriceAndStockV2 ?? [];
 
         if (! is_array($soapProducts)) {
-            $soapProducts = [ $soapProducts ];
+            $soapProducts = [$soapProducts];
         }
 
         foreach ($soapProducts as $soapProduct) {
             $productModel = $this->getProductModel($soapProduct->ProductId);
 
-            $refactor = (float) $soapProduct->ConversionFactor;
-            $grossPrice = (float) $soapProduct->GrossPrice;
-            $netPrice = (float) $soapProduct->NettPrice;
-            $pricePer = (float) $soapProduct->PricePer;
+            $refactor = (float)$soapProduct->ConversionFactor;
+            $grossPrice = (float)$soapProduct->GrossPrice;
+            $netPrice = (float)$soapProduct->NettPrice;
+            $pricePer = (float)$soapProduct->PricePer;
 
             /** @var Response\Product $product */
             $product = app()->make(Response\Product::class);
             $product->sku = $soapProduct->ProductId;
             $product->sales_unit = $soapProduct->UnitId;
-            $product->quantity = (float) $soapProduct->Quantity;
-            $product->gross_price = (float) (($grossPrice * $refactor) / $pricePer);
-            $product->net_price = (float) (($netPrice * $refactor) / $pricePer);
-            $product->discount = (float) $soapProduct->DiscountPerc;
+            $product->quantity = (float)$soapProduct->Quantity;
+            $product->gross_price = (float)(($grossPrice * $refactor) / $pricePer);
+            $product->net_price = (float)(($netPrice * $refactor) / $pricePer);
+            $product->discount = (float)$soapProduct->DiscountPerc;
             $product->price_per = $pricePer;
             $product->price_unit = $soapProduct->PriceUnitId;
-            $product->stock = (float) $soapProduct->QtyStock;
+            $product->stock = (float)$soapProduct->QtyStock;
             $product->refactor = $refactor;
             $product->action = $product->net_price === $product->gross_price;
 

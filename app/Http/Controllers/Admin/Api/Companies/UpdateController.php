@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace WTG\Http\Controllers\Admin\Api\Companies;
 
 use Exception;
-
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Log\LogManager;
-
 use Symfony\Component\HttpFoundation\Response;
-
+use Throwable;
 use WTG\Contracts\Services\CompanyServiceContract;
 use WTG\Exceptions\Company\IncompleteDataException;
 use WTG\Http\Controllers\Admin\Controller;
@@ -88,7 +86,7 @@ class UpdateController extends Controller
                         'postcode',
                         'active',
                         'email',
-                        'active'
+                        'active',
                     ]
                 )
             );
@@ -101,7 +99,7 @@ class UpdateController extends Controller
             $this->dbManager->rollBack();
 
             $message = $e->getErrors();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->dbManager->rollBack();
 
             $message = $e->getMessage();
@@ -111,8 +109,8 @@ class UpdateController extends Controller
 
         return response()->json(
             [
-                'message'   => $message,
-                'success'   => $success,
+                'message' => $message,
+                'success' => $success,
             ]
         );
     }

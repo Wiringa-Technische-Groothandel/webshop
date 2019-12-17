@@ -31,9 +31,9 @@ class SecurityContext
     /**
      * SecurityContext constructor.
      *
-     * @param  string  $user
-     * @param  string  $password
-     * @param  string  $sessionToken
+     * @param string $user
+     * @param string $password
+     * @param string $sessionToken
      */
     public function __construct(string $user, string $password, string $sessionToken = "")
     {

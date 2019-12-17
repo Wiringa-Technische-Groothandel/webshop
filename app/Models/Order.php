@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
-
 use Illuminate\Support\Str;
 use Knp\Snappy\GeneratorInterface;
+use Throwable;
 use WTG\Contracts\Models\CompanyContract;
 use WTG\Contracts\Models\OrderContract;
 
@@ -30,31 +30,30 @@ class Order extends Model implements OrderContract
     {
         parent::boot();
 
-        static::saving(function (self $model) {
-            if (! $model->getUuid()) {
-                $model->setUuid(Str::uuid()->toString());
+        static::saving(
+            function (self $model) {
+                if (! $model->getUuid()) {
+                    $model->setUuid(Str::uuid()->toString());
+                }
             }
-        });
+        );
     }
 
     /**
-     * Company relation.
-     *
-     * @return BelongsTo
+     * @return string|null
      */
-    public function company()
+    public function getUuid(): ?string
     {
-        return $this->belongsTo(Company::class);
+        return $this->getAttribute('uuid');
     }
 
     /**
-     * Order item relation.
-     *
-     * @return HasMany
+     * @param string $uuid
+     * @return OrderContract
      */
-    public function items()
+    public function setUuid(string $uuid): OrderContract
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->setAttribute('uuid', $uuid);
     }
 
     /**
@@ -78,9 +77,19 @@ class Order extends Model implements OrderContract
     }
 
     /**
+     * Order item relation.
+     *
+     * @return HasMany
+     */
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    /**
      * Set the customer number.
      *
-     * @param  string  $customerNumber
+     * @param string $customerNumber
      * @return OrderContract
      */
     public function setCustomerNumber(string $customerNumber): OrderContract
@@ -101,7 +110,7 @@ class Order extends Model implements OrderContract
     /**
      * Set the company.
      *
-     * @param  CompanyContract  $company
+     * @param CompanyContract $company
      * @return OrderContract
      */
     public function setCompany(CompanyContract $company): OrderContract
@@ -109,6 +118,16 @@ class Order extends Model implements OrderContract
         $this->company()->associate($company);
 
         return $this;
+    }
+
+    /**
+     * Company relation.
+     *
+     * @return BelongsTo
+     */
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 
     /**
@@ -124,7 +143,7 @@ class Order extends Model implements OrderContract
     /**
      * Set the name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return OrderContract
      */
     public function setName(string $name): OrderContract
@@ -145,7 +164,7 @@ class Order extends Model implements OrderContract
     /**
      * Set the street.
      *
-     * @param  string  $street
+     * @param string $street
      * @return OrderContract
      */
     public function setStreet(string $street): OrderContract
@@ -166,7 +185,7 @@ class Order extends Model implements OrderContract
     /**
      * Set the postcode.
      *
-     * @param  null|string  $postcode
+     * @param null|string $postcode
      * @return OrderContract
      */
     public function setPostcode(string $postcode): OrderContract
@@ -187,7 +206,7 @@ class Order extends Model implements OrderContract
     /**
      * Set the city.
      *
-     * @param  null|string  $city
+     * @param null|string $city
      * @return OrderContract
      */
     public function setCity(string $city): OrderContract
@@ -208,7 +227,7 @@ class Order extends Model implements OrderContract
     /**
      * Set the comment.
      *
-     * @param  null|string  $comment
+     * @param null|string $comment
      * @return OrderContract
      */
     public function setComment(?string $comment): OrderContract
@@ -233,24 +252,7 @@ class Order extends Model implements OrderContract
      */
     public function getGrandTotal(): float
     {
-        return (float) $this->items()->sum('subtotal');
-    }
-
-    /**
-     * @param string $uuid
-     * @return OrderContract
-     */
-    public function setUuid(string $uuid): OrderContract
-    {
-        return $this->setAttribute('uuid', $uuid);
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getUuid(): ?string
-    {
-        return $this->getAttribute('uuid');
+        return (float)$this->items()->sum('subtotal');
     }
 
     /**
@@ -258,15 +260,18 @@ class Order extends Model implements OrderContract
      */
     public function toPdf(): ?string
     {
-        $view = view('pdf.order', [
-            'order' => $this
-        ]);
+        $view = view(
+            'pdf.order',
+            [
+                'order' => $this,
+            ]
+        );
 
         /** @var GeneratorInterface $snappy */
         $snappy = app('snappy.pdf');
         try {
             return $snappy->getOutputFromHtml($view->render());
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             \Log::warning($e);
         }
 

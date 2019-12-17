@@ -33,7 +33,7 @@ class UpdateQuoteAddressRequest extends FormRequest
     public function rules()
     {
         return [
-            'addressId' => ['required']
+            'addressId' => ['required'],
         ];
     }
 }

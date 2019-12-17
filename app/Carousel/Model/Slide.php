@@ -32,7 +32,7 @@ class Slide extends Model
     /**
      * Set the title.
      *
-     * @param  string  $title
+     * @param string $title
      * @return Slide
      */
     public function setTitle(string $title): Slide
@@ -53,7 +53,7 @@ class Slide extends Model
     /**
      * Set the caption.
      *
-     * @param  string  $caption
+     * @param string $caption
      * @return Slide
      */
     public function setCaption(string $caption): Slide
@@ -74,7 +74,7 @@ class Slide extends Model
     /**
      * Set the order.
      *
-     * @param  int  $order
+     * @param int $order
      * @return Slide
      */
     public function setOrder(int $order): Slide
@@ -95,7 +95,7 @@ class Slide extends Model
     /**
      * Set the order.
      *
-     * @param  string  $image
+     * @param string $image
      * @return Slide
      */
     public function setImage(string $image): Slide

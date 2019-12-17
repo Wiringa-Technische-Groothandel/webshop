@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="nl">
     <head>
-        <link rel="stylesheet" href="{{ public_path('assets/frontend/pdf/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ base_path('node_modules/bootstrap/dist/css/bootstrap.min.css') }}">
     </head>
 
     <body style="width:25cm; height:29.7cm">

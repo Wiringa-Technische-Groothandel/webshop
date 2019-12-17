@@ -6,7 +6,6 @@ namespace WTG\Services\Admin;
 
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
-
 use WTG\Models\Admin;
 
 /**
@@ -53,7 +52,7 @@ class AuthService
         $token = $this->auth->guard(self::GUARD_NAME)->attempt($credentials);
 
         if (! $token) {
-            throw new AuthenticationException(__('Gebruikersnaam en/of wachtwoord onjuist.'), [ self::GUARD_NAME ]);
+            throw new AuthenticationException(__('Gebruikersnaam en/of wachtwoord onjuist.'), [self::GUARD_NAME]);
         }
 
         return $token;

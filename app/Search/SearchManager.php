@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace WTG\Search;
 
 use Elasticsearch\Client;
-
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-
 use WTG\Models\Product;
 
 /**
@@ -105,13 +103,13 @@ class SearchManager
             $filters = [];
 
             if ($brand) {
-                $filters[] = [ 'term' => [ 'brand.keyword' => $brand ] ];
+                $filters[] = ['term' => ['brand.keyword' => $brand]];
 
                 if ($series) {
-                    $filters[] = [ 'term' => [ 'series.keyword' => $series ] ];
+                    $filters[] = ['term' => ['series.keyword' => $series]];
 
                     if ($type) {
-                        $filters[] = [ 'term' => [ 'type.keyword' => $type ] ];
+                        $filters[] = ['term' => ['type.keyword' => $type]];
                     }
                 }
             }
@@ -149,77 +147,6 @@ class SearchManager
                 'types'    => $results->pluck('type')->unique()->sort(),
             ]
         );
-    }
-
-    /**
-     * Quicksearch items.
-     *
-     * @param string $query
-     * @return Collection
-     */
-    public function suggestProducts(string $query): Collection
-    {
-        return Product::search(
-            $query,
-            function (Client $elastic, $query, $params) {
-                return $elastic->search(
-                    $this->prepareParameters($query, 5)
-                );
-            }
-        )
-            ->get()
-            ->where('inactive', 0)
-            ->where('blocked', 0)
-            ->map(
-                function (Product $product) {
-                    return [
-                        'url'  => $product->getUrl(),
-                        'name' => $product->getName(),
-                    ];
-                }
-            );
-    }
-
-    /**
-     * Escape reserved Elasticsearch characters.
-     *
-     * @param string $query
-     * @return string  The escaped query
-     */
-    protected function escapeCharacters(string $query)
-    {
-        $reserved = [
-            "\\",
-            "+",
-            "-",
-            "=",
-            "&&",
-            "||",
-            "!",
-            "(",
-            ")",
-            "{",
-            "}",
-            "[",
-            "]",
-            "^",
-            "\"",
-            "~",
-            "*",
-            "?",
-            ":",
-            "/",
-        ];
-
-        foreach ($reserved as $char) {
-            $query = str_replace($char, "\\$char", $query);
-        }
-
-        foreach ([ "<", ">" ] as $char) {
-            $query = str_replace($char, "", $query);
-        }
-
-        return $query;
     }
 
     /**
@@ -281,7 +208,7 @@ class SearchManager
                     'should' => $terms['optional'] ? [
                         'multi_match' => [
                             'query'     => $terms['optional'],
-                            'fields'    => [ 'description^1.5', 'brand^1', 'series^1.5', 'type^1', 'supplier_code^1' ],
+                            'fields'    => ['description^1.5', 'brand^1', 'series^1.5', 'type^1', 'supplier_code^1'],
                             'fuzziness' => $fuzzy ? 'AUTO' : 0,
                             'operator'  => 'or',
                         ],
@@ -328,5 +255,76 @@ class SearchManager
             'any'      => $this->escapeCharacters(join(' ', $anyTerms)),
             'optional' => $this->escapeCharacters(join(' ', $optionalTerms)),
         ];
+    }
+
+    /**
+     * Escape reserved Elasticsearch characters.
+     *
+     * @param string $query
+     * @return string  The escaped query
+     */
+    protected function escapeCharacters(string $query)
+    {
+        $reserved = [
+            "\\",
+            "+",
+            "-",
+            "=",
+            "&&",
+            "||",
+            "!",
+            "(",
+            ")",
+            "{",
+            "}",
+            "[",
+            "]",
+            "^",
+            "\"",
+            "~",
+            "*",
+            "?",
+            ":",
+            "/",
+        ];
+
+        foreach ($reserved as $char) {
+            $query = str_replace($char, "\\$char", $query);
+        }
+
+        foreach (["<", ">"] as $char) {
+            $query = str_replace($char, "", $query);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Quicksearch items.
+     *
+     * @param string $query
+     * @return Collection
+     */
+    public function suggestProducts(string $query): Collection
+    {
+        return Product::search(
+            $query,
+            function (Client $elastic, $query, $params) {
+                return $elastic->search(
+                    $this->prepareParameters($query, 5)
+                );
+            }
+        )
+            ->get()
+            ->where('inactive', 0)
+            ->where('blocked', 0)
+            ->map(
+                function (Product $product) {
+                    return [
+                        'url'  => $product->getUrl(),
+                        'name' => $product->getName(),
+                    ];
+                }
+            );
     }
 }

@@ -15,7 +15,7 @@ interface CartItemContract
     /**
      * Set the product.
      *
-     * @param  ProductContract|null  $product
+     * @param ProductContract|null $product
      * @return ProductContract|null
      */
     public function setProduct(ProductContract $product): ?ProductContract;
@@ -30,7 +30,7 @@ interface CartItemContract
     /**
      * Set the cart.
      *
-     * @param  CartContract  $cart
+     * @param CartContract $cart
      * @return CartItemContract
      */
     public function setCart(CartContract $cart): CartItemContract;
@@ -45,7 +45,7 @@ interface CartItemContract
     /**
      * Set the item quantity.
      *
-     * @param  float  $quantity
+     * @param float $quantity
      * @return CartItemContract
      */
     public function setQuantity(float $quantity): CartItemContract;
@@ -60,7 +60,7 @@ interface CartItemContract
     /**
      * Set the price.
      *
-     * @param  float  $price
+     * @param float $price
      * @return CartItemContract
      */
     public function setPrice(float $price): CartItemContract;
@@ -75,7 +75,7 @@ interface CartItemContract
     /**
      * Set the subtotal.
      *
-     * @param  float  $subtotal
+     * @param float $subtotal
      * @return CartItemContract
      */
     public function setSubtotal(float $subtotal): CartItemContract;

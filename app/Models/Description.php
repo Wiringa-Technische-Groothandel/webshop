@@ -7,8 +7,8 @@ namespace WTG\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\HtmlString;
-use WTG\Contracts\Models\ProductContract;
 use WTG\Contracts\Models\DescriptionContract;
+use WTG\Contracts\Models\ProductContract;
 
 /**
  * Description model.
@@ -25,16 +25,6 @@ class Description extends Model implements DescriptionContract
     public $timestamps = false;
 
     /**
-     * Product relation.
-     *
-     * @return BelongsTo
-     */
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
-    }
-
-    /**
      * Get the related product.
      *
      * @return ProductContract
@@ -47,7 +37,7 @@ class Description extends Model implements DescriptionContract
     /**
      * Set the related product.
      *
-     * @param  ProductContract  $product
+     * @param ProductContract $product
      * @return DescriptionContract
      */
     public function setProduct(ProductContract $product): DescriptionContract
@@ -55,6 +45,16 @@ class Description extends Model implements DescriptionContract
         $this->product()->associate($product);
 
         return $this;
+    }
+
+    /**
+     * Product relation.
+     *
+     * @return BelongsTo
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
     }
 
     /**
@@ -70,7 +70,7 @@ class Description extends Model implements DescriptionContract
     /**
      * Set the description value.
      *
-     * @param  string  $value
+     * @param string $value
      * @return DescriptionContract
      */
     public function setValue(string $value): DescriptionContract

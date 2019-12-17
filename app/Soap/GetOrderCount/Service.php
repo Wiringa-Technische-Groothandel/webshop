@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace WTG\Soap\GetOrderCount;
 
 use Carbon\Carbon;
+use Exception;
+use Log;
 use WTG\Soap\AbstractService;
 
 /**
@@ -53,9 +55,9 @@ class Service extends AbstractService
     /**
      * Run the service.
      *
-     * @param  string  $customerId
-     * @param  Carbon|null  $from
-     * @param  Carbon|null  $to
+     * @param string $customerId
+     * @param Carbon|null $from
+     * @param Carbon|null $to
      * @return mixed|Response
      */
     public function handle(string $customerId, ?Carbon $from = null, ?Carbon $to = null)
@@ -71,8 +73,8 @@ class Service extends AbstractService
                 $this->request
             );
             $this->buildResponse($soapResponse);
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
         }
 
         return $this->response;
@@ -93,13 +95,13 @@ class Service extends AbstractService
     /**
      * Build the response.
      *
-     * @param  object  $soapResponse
+     * @param object $soapResponse
      * @return void
      * @throws Exception
      */
     protected function buildResponse($soapResponse)
     {
-        $count = (int) $soapResponse->OrderCount;
+        $count = (int)$soapResponse->OrderCount;
 
         $this->response->count = $count ?? 0;
         $this->response->code = 200;

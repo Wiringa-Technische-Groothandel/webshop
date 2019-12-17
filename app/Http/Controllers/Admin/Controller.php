@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace WTG\Http\Controllers\Admin;
 
-use Symfony\Component\HttpFoundation\Response;
-
 use Illuminate\Routing\Controller as BaseController;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Abstract admin controller.

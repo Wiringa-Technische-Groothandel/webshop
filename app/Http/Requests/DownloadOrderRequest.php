@@ -26,7 +26,7 @@ class DownloadOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'order' => ['required']
+            'order' => ['required'],
         ];
     }
 }

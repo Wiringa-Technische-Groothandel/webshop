@@ -6,7 +6,6 @@ namespace WTG\Http\Controllers\Admin\Api\SearchTerms;
 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 use Throwable;
 use WTG\Http\Controllers\Admin\Controller;
 use WTG\Search\SearchTermsManager;
@@ -62,8 +61,8 @@ class SaveController extends Controller
         return response()->json(
             [
                 'searchTerms' => $this->searchTermsManager->getTerms(),
-                'message' => __('De zoektermen zijn opgeslagen.'),
-                'success' => true,
+                'message'     => __('De zoektermen zijn opgeslagen.'),
+                'success'     => true,
             ]
         );
     }

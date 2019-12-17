@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace WTG\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Import data model.
@@ -16,13 +16,8 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class ImportData extends Model
 {
-    const KEY_LAST_ASSORTMENT_FILE = 'last_assortment_file';
-    const KEY_LAST_ASSORTMENT_RUN_TIME = 'last_assortment_run_time';
-
-    /**
-     * @var string
-     */
-    protected $table = 'import_data';
+    public const KEY_LAST_ASSORTMENT_FILE = 'last_assortment_file';
+    public const KEY_LAST_ASSORTMENT_RUN_TIME = 'last_assortment_run_time';
 
     /**
      * @var bool
@@ -30,10 +25,15 @@ class ImportData extends Model
     public $timestamps = false;
 
     /**
+     * @var string
+     */
+    protected $table = 'import_data';
+
+    /**
      * Key scope.
      *
-     * @param  Builder  $builder
-     * @param  string  $key
+     * @param Builder $builder
+     * @param string $key
      * @return Builder
      */
     public function scopeKey(Builder $builder, string $key)

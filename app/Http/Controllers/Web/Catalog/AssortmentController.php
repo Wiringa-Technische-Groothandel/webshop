@@ -6,7 +6,7 @@ namespace WTG\Http\Controllers\Web\Catalog;
 
 use Illuminate\Http\Request;
 use Illuminate\View\Factory as ViewFactory;
-use WTG\Models\Product;
+use Illuminate\View\View;
 use WTG\Http\Controllers\Controller;
 use WTG\Services\SearchService;
 
@@ -27,8 +27,8 @@ class AssortmentController extends Controller
     /**
      * AssortmentController constructor.
      *
-     * @param  ViewFactory  $view
-     * @param  SearchService  $searchService
+     * @param ViewFactory $view
+     * @param SearchService $searchService
      */
     public function __construct(ViewFactory $view, SearchService $searchService)
     {
@@ -40,12 +40,12 @@ class AssortmentController extends Controller
     /**
      * Assortment page.
      *
-     * @param  Request  $request
-     * @return \Illuminate\View\View
+     * @param Request $request
+     * @return View
      */
     public function getAction(Request $request)
     {
-        $page = (int) $request->input('page', 1);
+        $page = (int)$request->input('page', 1);
 
         $results = $this->searchService->listProducts(
             $request->input('brand'),

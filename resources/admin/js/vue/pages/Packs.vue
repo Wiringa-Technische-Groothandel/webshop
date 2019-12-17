@@ -11,35 +11,7 @@
         <div class="row mb-3">
             <template v-if="packs.length > 0">
                 <div class="col-md-7">
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h3>
-                                <i class="fal fa-fw fa-list"></i> Actiepaketten
-                            </h3>
-
-                            <hr/>
-
-                            <table class="table table-striped table-hover">
-                                <thead>
-                                <tr>
-                                    <th>Naam</th>
-                                    <th>Aantal producten</th>
-                                    <th>Aanmaakdatum</th>
-                                    <th>Wijzigingsdatum</th>
-                                </tr>
-                                </thead>
-
-                                <tbody>
-                                <tr v-for="(pack, index) in packs" @click="showPack(pack, index)">
-                                    <td>{{ pack.product.name }}</td>
-                                    <td>{{ pack.items.length }}</td>
-                                    <td>{{ pack.created_at }}</td>
-                                    <td>{{ pack.updated_at }}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <pack-list :packs="packs" @click="showPack"></pack-list>
                 </div>
 
                 <div class="col-md-5" v-if="pack">
@@ -73,11 +45,13 @@
 <script>
     import CreatePackModal from '../components/Packs/CreateModal'
     import Pack from '../components/Packs/Pack'
+    import PackList from '../components/Packs/List'
 
     export default {
         components: {
             CreatePackModal,
-            Pack
+            Pack,
+            PackList
         },
         data() {
             return {

@@ -11,6 +11,10 @@
 |
 */
 
+if (! defined('LARAVEL_START')) {
+    define('LARAVEL_START', microtime(true));
+}
+
 $app = new Illuminate\Foundation\Application(
     realpath(__DIR__.'/../')
 );

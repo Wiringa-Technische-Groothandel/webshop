@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace WTG\Models;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use WTG\Contracts\Models\PackContract;
-use Illuminate\Database\Eloquent\Model;
 use WTG\Contracts\Models\ProductContract;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Pack model.
@@ -19,16 +19,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Pack extends Model implements PackContract
 {
-    /**
-     * Product relation.
-     *
-     * @return BelongsTo
-     */
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
-    }
-
     /**
      * PackProduct relation.
      *
@@ -42,9 +32,9 @@ class Pack extends Model implements PackContract
     /**
      * Pack identifier.
      *
-     * @return null|string
+     * @return null|int
      */
-    public function getId(): ?string
+    public function getId(): ?int
     {
         return $this->getAttribute('id');
     }
@@ -52,7 +42,7 @@ class Pack extends Model implements PackContract
     /**
      * Set the product.
      *
-     * @param  ProductContract  $product
+     * @param ProductContract $product
      * @return PackContract
      */
     public function setProduct(ProductContract $product): PackContract
@@ -60,6 +50,16 @@ class Pack extends Model implements PackContract
         $this->product()->associate($product);
 
         return $this;
+    }
+
+    /**
+     * Product relation.
+     *
+     * @return BelongsTo
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
     }
 
     /**

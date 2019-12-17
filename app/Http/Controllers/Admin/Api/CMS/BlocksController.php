@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WTG\Http\Controllers\Admin\Api\CMS;
 
 use Symfony\Component\HttpFoundation\Response;
-
 use WTG\Http\Controllers\Admin\Controller;
 use WTG\Models\Block;
 
@@ -21,8 +20,10 @@ class BlocksController extends Controller
      */
     public function execute(): Response
     {
-        return response()->json([
-            'blocks' => Block::all()
-        ]);
+        return response()->json(
+            [
+                'blocks' => Block::all(),
+            ]
+        );
     }
 }

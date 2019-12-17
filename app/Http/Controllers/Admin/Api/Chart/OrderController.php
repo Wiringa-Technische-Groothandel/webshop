@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace WTG\Http\Controllers\Admin\Api\Chart;
 
 use Carbon\Carbon;
-
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-
 use Symfony\Component\HttpFoundation\Response;
 use WTG\Http\Controllers\Admin\Controller;
 use WTG\Models\Order;
@@ -51,11 +49,11 @@ class OrderController extends Controller
      */
     public function execute(): Response
     {
-        $year = (int) $this->request->input('year');
+        $year = (int)$this->request->input('year');
 
         return response()->json(
             [
-                'years'     => $this->getYears(),
+                'years' => $this->getYears(),
                 'chartData' => $this->getChartData(
                     $year ?: null
                 ),
@@ -84,7 +82,9 @@ class OrderController extends Controller
             $year = Carbon::now()->year;
         }
 
-        return Order::select($this->dbManager->raw("COUNT(id) as 'count', YEAR(created_at) as 'year', MONTH(created_at) as 'month'"))
+        return Order::select(
+            $this->dbManager->raw("COUNT(id) as 'count', YEAR(created_at) as 'year', MONTH(created_at) as 'month'")
+        )
             ->where($this->dbManager->raw('YEAR(created_at)'), $year)
             ->groupBy($this->dbManager->raw('YEAR(created_at), MONTH(created_at)'))
             ->get();

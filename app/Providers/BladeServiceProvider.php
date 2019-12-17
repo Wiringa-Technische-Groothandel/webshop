@@ -23,9 +23,12 @@ class BladeServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Blade::directive('block', function (string $blockName) {
-            return "<?php echo block($blockName); ?>";
-        });
+        Blade::directive(
+            'block',
+            function (string $blockName) {
+                return "<?php echo block($blockName); ?>";
+            }
+        );
     }
 
     /**

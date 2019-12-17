@@ -4,16 +4,11 @@ declare(strict_types=1);
 
 namespace WTG\Http\Controllers\Admin\Api\Carousel;
 
-use Exception;
-
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Log\LogManager;
-
 use Symfony\Component\HttpFoundation\Response;
-
 use Throwable;
-
 use WTG\Carousel\CarouselManager;
 use WTG\Http\Controllers\Admin\Controller;
 
@@ -62,9 +57,9 @@ class UpdateController extends Controller
 
         try {
             foreach ($slides as $slide) {
-                $slideModel = $this->carouselManager->findSlide((int) $slide['id']);
+                $slideModel = $this->carouselManager->findSlide((int)$slide['id']);
 
-                $this->carouselManager->setSlideOrder($slideModel, (int) $slide['order']);
+                $this->carouselManager->setSlideOrder($slideModel, (int)$slide['order']);
                 $this->carouselManager->saveSlide($slideModel);
             }
         } catch (Throwable $throwable) {

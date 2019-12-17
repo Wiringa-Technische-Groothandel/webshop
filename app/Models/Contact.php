@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WTG\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\ContactContract;
 use WTG\Contracts\Models\CustomerContract;
@@ -21,22 +22,11 @@ class Contact extends Model implements ContactContract
     /**
      * Company relation.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function customer()
     {
         return $this->belongsTo(Customer::class);
-    }
-
-    /**
-     * Address relation.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function address()
-    {
-        return $this->belongsTo(Address::class)
-            ->where('company_id', $this->getCustomer()->getCompany()->getId());
     }
 
     /**
@@ -50,19 +40,9 @@ class Contact extends Model implements ContactContract
     }
 
     /**
-     * Get the customer.
-     *
-     * @return CustomerContract
-     */
-    public function getCustomer(): CustomerContract
-    {
-        return $this->getAttribute('customer');
-    }
-
-    /**
      * Set the contact email.
      *
-     * @param  string  $email
+     * @param string $email
      * @return ContactContract
      */
     public function setContactEmail(string $email): ContactContract
@@ -83,7 +63,7 @@ class Contact extends Model implements ContactContract
     /**
      * Set the order email.
      *
-     * @param  null|string  $email
+     * @param null|string $email
      * @return ContactContract
      */
     public function setOrderEmail(?string $email): ContactContract
@@ -104,13 +84,34 @@ class Contact extends Model implements ContactContract
     /**
      * Set the default address.
      *
-     * @param  int  $addressId
+     * @param int $addressId
      * @return ContactContract
      */
     public function setDefaultAddress(int $addressId): ContactContract
     {
         $this->address()->associate($addressId);
         return $this;
+    }
+
+    /**
+     * Address relation.
+     *
+     * @return BelongsTo
+     */
+    public function address()
+    {
+        return $this->belongsTo(Address::class)
+            ->where('company_id', $this->getCustomer()->getCompany()->getId());
+    }
+
+    /**
+     * Get the customer.
+     *
+     * @return CustomerContract
+     */
+    public function getCustomer(): CustomerContract
+    {
+        return $this->getAttribute('customer');
     }
 
     /**

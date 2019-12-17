@@ -18,6 +18,12 @@
     </nav>
 </template>
 
+<style scoped>
+    .nav-item:hover {
+        cursor: pointer;
+    }
+</style>
+
 <script>
     export default {
         computed: {

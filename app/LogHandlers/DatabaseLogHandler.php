@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace WTG\LogHandlers;
 
+use DB;
+use Exception;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\HandlerInterface;
 
@@ -22,8 +24,8 @@ class DatabaseLogHandler extends AbstractHandler implements HandlerInterface
     protected $failed = false;
 
     /**
-     * @param  array  $record
-     * @return boolean
+     * @param array $record
+     * @return bool
      */
     public function handle(array $record): bool
     {
@@ -34,20 +36,22 @@ class DatabaseLogHandler extends AbstractHandler implements HandlerInterface
         $this->failed = true;
 
         try {
-            $isRecordInserted = \DB::table('logs')
-                ->insert([
-                    'message'   => $record['message'] ?? "No message provided",
-                    'context'   => json_encode($record['context']),
-                    'level'     => $record['level'],
-                    'level_name'=> $record['level_name'],
-                    'logged_at' => $record['datetime'] ?? now(),
-                    'extra'     => json_encode($record['extra'])
-                ]);
+            $isRecordInserted = DB::table('logs')
+                ->insert(
+                    [
+                        'message'    => $record['message'] ?? "No message provided",
+                        'context'    => json_encode($record['context']),
+                        'level'      => $record['level'],
+                        'level_name' => $record['level_name'],
+                        'logged_at'  => $record['datetime'] ?? now(),
+                        'extra'      => json_encode($record['extra']),
+                    ]
+                );
 
             if (! $isRecordInserted) {
                 return false;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
 

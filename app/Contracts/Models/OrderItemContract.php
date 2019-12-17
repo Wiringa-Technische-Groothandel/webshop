@@ -106,7 +106,7 @@ interface OrderItemContract
     /**
      * Get the subtotal.
      *
-     * @return string
+     * @return float
      */
-    public function getSubtotal(): ?string;
+    public function getSubtotal(): ?float;
 }

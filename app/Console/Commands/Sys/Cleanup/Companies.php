@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WTG\Console\Commands\Sys\Cleanup;
 
 use Illuminate\Console\Command;
-
+use Throwable;
 use WTG\Models\Company;
 
 /**
@@ -30,20 +30,22 @@ class Companies extends Command
      * Execute the console command.
      *
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function handle(): void
     {
         $time = now()->subHours(
-            (int) $this->option('hours')
+            (int)$this->option('hours')
         );
 
         Company::onlyTrashed()
             ->where('deleted_at', '<=', $time)
-            ->each(function (Company $company) {
-                $this->output->writeln(sprintf('Deleting company "%s"', $company->getName()));
+            ->each(
+                function (Company $company) {
+                    $this->output->writeln(sprintf('Deleting company "%s"', $company->getName()));
 
-                $company->forceDelete();
-            });
+                    $company->forceDelete();
+                }
+            );
     }
 }

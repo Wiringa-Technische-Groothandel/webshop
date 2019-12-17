@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace WTG\Services\Account;
 
-use WTG\Models\Address;
-use WTG\Models\Contact;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\CustomerContract;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use WTG\Contracts\Services\Account\AddressServiceContract;
+use WTG\Models\Address;
+use WTG\Models\Contact;
 
 /**
  * Address service.
@@ -22,10 +23,26 @@ use WTG\Contracts\Services\Account\AddressServiceContract;
 class AddressService implements AddressServiceContract
 {
     /**
+     * Get an address for a customer by id.
+     *
+     * @param CustomerContract $customer
+     * @param int $addressId
+     * @return null|AddressContract
+     */
+    public function getAddressForCustomerById(CustomerContract $customer, int $addressId): ?AddressContract
+    {
+        $addresses = $this->getAddressesForCustomer($customer);
+        /** @var AddressContract $address */
+        $address = $addresses->firstWhere('id', $addressId);
+
+        return $address;
+    }
+
+    /**
      * Get all available addresses for a customer;
      *
-     * @param  CustomerContract  $customer
-     * @param  bool  $withDefault
+     * @param CustomerContract $customer
+     * @param bool $withDefault
      * @return Collection
      */
     public function getAddressesForCustomer(CustomerContract $customer, bool $withDefault = true): Collection
@@ -41,36 +58,36 @@ class AddressService implements AddressServiceContract
     }
 
     /**
-     * Get an address for a customer by id.
+     * Get the pickup shipping address.
      *
-     * @param  CustomerContract  $customer
-     * @param  int  $addressId
-     * @return null|AddressContract
+     * @return AddressContract
      */
-    public function getAddressForCustomerById(CustomerContract $customer, int $addressId): ?AddressContract
+    public function getPickupAddress(): AddressContract
     {
-        $addresses = $this->getAddressesForCustomer($customer);
-        /** @var AddressContract $address */
-        $address = $addresses->firstWhere('id', $addressId);
-
-        return $address;
+        return app(Address::class)->find(Address::DEFAULT_ID);
     }
 
     /**
      * Create a new address.
      *
-     * @param  CustomerContract  $customer
-     * @param  string  $name
-     * @param  string  $street
-     * @param  string  $postcode
-     * @param  string  $city
-     * @param  null|string  $phone
-     * @param  null|string  $mobile
+     * @param CustomerContract $customer
+     * @param string $name
+     * @param string $street
+     * @param string $postcode
+     * @param string $city
+     * @param null|string $phone
+     * @param null|string $mobile
      * @return bool
      */
-    public function createForCustomer(CustomerContract $customer, string $name, string $street, string $postcode,
-                                      string $city, ?string $phone = null, ?string $mobile = null): bool
-    {
+    public function createForCustomer(
+        CustomerContract $customer,
+        string $name,
+        string $street,
+        string $postcode,
+        string $city,
+        ?string $phone = null,
+        ?string $mobile = null
+    ): bool {
         /** @var AddressContract $address */
         $address = app()->make(AddressContract::class);
         $address->setCompany($customer->getCompany());
@@ -87,11 +104,11 @@ class AddressService implements AddressServiceContract
     /**
      * Delete an address for a customer.
      *
-     * @param  CustomerContract  $customer
-     * @param  string  $addressId
+     * @param CustomerContract $customer
+     * @param string $addressId
      * @return bool
      * @throws ModelNotFoundException
-     * @throws \Exception
+     * @throws Exception
      */
     public function deleteForCustomer(CustomerContract $customer, string $addressId): bool
     {
@@ -107,8 +124,8 @@ class AddressService implements AddressServiceContract
     /**
      * Set the default address for a customer.
      *
-     * @param  CustomerContract  $customer
-     * @param  int  $addressId
+     * @param CustomerContract $customer
+     * @param int $addressId
      * @return bool
      */
     public function setDefaultForCustomer(CustomerContract $customer, int $addressId): bool
@@ -121,9 +138,22 @@ class AddressService implements AddressServiceContract
     }
 
     /**
+     * Get the default address id for a customer.
+     *
+     * @param CustomerContract $customer
+     * @return null|int
+     */
+    public function getDefaultAddressIdForCustomer(CustomerContract $customer): ?int
+    {
+        $defaultAddress = $this->getDefaultAddressForCustomer($customer);
+
+        return $defaultAddress->getId();
+    }
+
+    /**
      * Get the default address for a customer.
      *
-     * @param  CustomerContract  $customer
+     * @param CustomerContract $customer
      * @return null|AddressContract
      */
     public function getDefaultAddressForCustomer(CustomerContract $customer): ?AddressContract
@@ -140,28 +170,5 @@ class AddressService implements AddressServiceContract
         }
 
         return $defaultAddress;
-    }
-
-    /**
-     * Get the default address id for a customer.
-     *
-     * @param  CustomerContract  $customer
-     * @return null|int
-     */
-    public function getDefaultAddressIdForCustomer(CustomerContract $customer): ?int
-    {
-        $defaultAddress = $this->getDefaultAddressForCustomer($customer);
-
-        return $defaultAddress->getId();
-    }
-
-    /**
-     * Get the pickup shipping address.
-     *
-     * @return AddressContract
-     */
-    public function getPickupAddress(): AddressContract
-    {
-        return app(Address::class)->find(Address::DEFAULT_ID);
     }
 }

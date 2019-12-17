@@ -39,8 +39,8 @@ steps:
       - composer install --verbose --prefer-dist --no-progress --no-interaction --dev --optimize-autoloader
 
       # Set up testing env variables
-      - php artisan key:generate
-      - php artisan jwt:secret
+      - php artisan key:generate --env=testing
+      - php artisan jwt:secret --env=testing
 
       # Run tests
       - vendor/bin/phpunit

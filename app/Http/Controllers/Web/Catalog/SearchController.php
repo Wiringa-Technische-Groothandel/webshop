@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace WTG\Http\Controllers\Web\Catalog;
 
 use Illuminate\Http\JsonResponse;
-use WTG\Models\Product;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use WTG\Services\SearchService;
-use WTG\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 use Illuminate\View\Factory as ViewFactory;
+use WTG\Http\Controllers\Controller;
+use WTG\Services\SearchService;
 
 /**
  * Search controller.
@@ -28,8 +29,8 @@ class SearchController extends Controller
     /**
      * SearchController constructor.
      *
-     * @param  ViewFactory  $view
-     * @param  SearchService  $searchService
+     * @param ViewFactory $view
+     * @param SearchService $searchService
      */
     public function __construct(ViewFactory $view, SearchService $searchService)
     {
@@ -41,24 +42,27 @@ class SearchController extends Controller
     /**
      * Search page.
      *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse|Response
      */
     public function getAction(Request $request)
     {
-        $page = (int) $request->input('page', 1);
+        $page = (int)$request->input('page', 1);
         $searchQuery = $request->input('query');
 
         if (! $searchQuery) {
             return back();
         }
 
-        $results = $this->searchService->searchProducts([
-            'query'     => $searchQuery,
-            'brand'     => $request->input('brand'),
-            'series'     => $request->input('series'),
-            'type'     => $request->input('type'),
-        ], ($page > 0 ? $page : 1));
+        $results = $this->searchService->searchProducts(
+            [
+                'query'  => $searchQuery,
+                'brand'  => $request->input('brand'),
+                'series' => $request->input('series'),
+                'type'   => $request->input('type'),
+            ],
+            ($page > 0 ? $page : 1)
+        );
 
         return view('pages.catalog.search', compact('results'));
     }
@@ -66,7 +70,7 @@ class SearchController extends Controller
     /**
      * Search page.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return JsonResponse
      */
     public function postAction(Request $request): JsonResponse
@@ -74,16 +78,20 @@ class SearchController extends Controller
         $searchQuery = $request->input('query');
 
         if (! $searchQuery) {
-            return response()->json([
-                'products' => []
-            ]);
+            return response()->json(
+                [
+                    'products' => [],
+                ]
+            );
         }
 
         /** @var SearchService $service */
         $service = app(SearchService::class);
 
-        return response()->json([
-            'products' => $service->suggestProducts($searchQuery)
-        ]);
+        return response()->json(
+            [
+                'products' => $service->suggestProducts($searchQuery),
+            ]
+        );
     }
 }

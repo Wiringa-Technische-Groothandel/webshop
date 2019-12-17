@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace WTG\Converters;
 
+use Illuminate\Database\Eloquent\Model;
+use Log;
 use WTG\Models\Address;
 use WTG\Models\Company;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * Address table converter.
@@ -30,13 +31,13 @@ class AddressTableConverter extends AbstractTableConverter
         'mobile',
         'User_id',
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
     /**
      * Create a new entity.
      *
-     * @param  array  $data
+     * @param array $data
      * @return Model|null
      */
     public function createModel(array $data): ?Model
@@ -44,12 +45,12 @@ class AddressTableConverter extends AbstractTableConverter
         $company = Company::with('addresses')->customerNumber($data['User_id'])->first();
 
         if ($company === null) {
-            \Log::warning('[Address table conversion] No company was found for customer number '.$data['User_id']);
+            Log::warning('[Address table conversion] No company was found for customer number ' . $data['User_id']);
 
             return null;
         }
 
-        $address = new Address;
+        $address = new Address();
 
         $address->setAttribute('company_id', $company->getAttribute('id'));
         $address->setAttribute('name', $data['name']);

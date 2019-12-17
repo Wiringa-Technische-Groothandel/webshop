@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace WTG\Console\Commands\Convert;
 
 use Illuminate\Console\Command;
-use WTG\Converters\TableConverter;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Console\Input\InputOption;
+use WTG\Converters\TableConverter;
 
 /**
  * Abstract table command.
@@ -26,7 +26,7 @@ abstract class AbstractTableCommand extends Command
     /**
      * Create a new command instance.
      *
-     * @param  TableConverter  $converter
+     * @param TableConverter $converter
      */
     public function __construct(TableConverter $converter)
     {
@@ -46,7 +46,7 @@ abstract class AbstractTableCommand extends Command
     {
         $file = $this->option('file');
 
-        if (!$file) {
+        if (! $file) {
             $this->output->error("No file name given.");
 
             return 1;

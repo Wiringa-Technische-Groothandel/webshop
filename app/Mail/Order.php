@@ -18,7 +18,8 @@ use WTG\Contracts\Models\OrderContract;
  */
 class Order extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * @var OrderContract
@@ -38,8 +39,8 @@ class Order extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param  OrderContract  $order
-     * @param  CustomerContract  $customer
+     * @param OrderContract $order
+     * @param CustomerContract $customer
      */
     public function __construct(OrderContract $order, CustomerContract $customer)
     {
@@ -62,9 +63,11 @@ class Order extends Mailable
         }
 
         return $this
-            ->bcc([
-                ['name' => 'Wiringa Technische Groothandel', 'email' => config('wtg.orderReceiveEmail')]
-            ])
+            ->bcc(
+                [
+                    ['name' => 'Wiringa Technische Groothandel', 'email' => config('wtg.orderReceiveEmail')],
+                ]
+            )
             ->markdown('emails.order');
     }
 }

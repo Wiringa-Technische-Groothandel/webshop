@@ -22,7 +22,9 @@
     @endif
 
     <link rel="preconnect dns-prefetch" href="https://fonts.googleapis.com">
-    <link rel="preconnect dns-prefetch" href="https://kit.fontawesome.com/" crossorigin="anonymous">
+
+    <link rel="preload" as="script" href="https://kit.fontawesome.com/4af601a43c.js" crossorigin="anonymous">
+    <link rel="preload" as="script" href="https://cdn.ckeditor.com/4.11.3/standard/ckeditor.js">
 
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
@@ -58,6 +60,7 @@
 </div>
 
 <script src="https://kit.fontawesome.com/4af601a43c.js" crossorigin="anonymous" defer></script>
+<script src="https://cdn.ckeditor.com/4.11.3/standard/ckeditor.js"></script>
 
 </body>
 </html>

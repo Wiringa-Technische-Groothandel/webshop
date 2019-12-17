@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace WTG\Services\Import;
 
 use Carbon\Carbon;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Filesystem\FilesystemManager;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Luna\SeoUrls\SeoUrl;
+use SimpleXMLElement;
 use WTG\Models\ImportData;
-use Illuminate\Support\Collection;
 use WTG\Models\Product as ProductModel;
 use WTG\Soap\GetProducts\Response\Product;
-use Illuminate\Filesystem\FilesystemManager;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
 /**
  * Assortment import.
@@ -23,9 +24,9 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
  */
 class Assortment
 {
-    const FILENAME_PATTERN = '/compleet(?P<date>[0-9]{14})(?P<item>[0-9]{6})\.xml$/';
-    const MUTATION_DELETE = 'D';
-    const MUTATION_UPDATE = 'U';
+    public const FILENAME_PATTERN = '/compleet(?P<date>[0-9]{14})(?P<item>[0-9]{6})\.xml$/';
+    public const MUTATION_DELETE = 'D';
+    public const MUTATION_UPDATE = 'U';
 
     /**
      * @var FilesystemManager
@@ -50,8 +51,8 @@ class Assortment
     /**
      * Assortment constructor.
      *
-     * @param  FilesystemManager  $fs
-     * @param  Carbon  $carbon
+     * @param FilesystemManager $fs
+     * @param Carbon $carbon
      */
     public function __construct(FilesystemManager $fs, Carbon $carbon)
     {
@@ -72,15 +73,19 @@ class Assortment
             return;
         }
 
-        $newUploads->each(function (Collection $fileGroup) {
-            $fileGroup->get('files')->each(function ($filename) {
-                $xml = simplexml_load_string(
-                    $this->readFile($filename)
-                );
+        $newUploads->each(
+            function (Collection $fileGroup) {
+                $fileGroup->get('files')->each(
+                    function ($filename) {
+                        $xml = simplexml_load_string(
+                            $this->readFile($filename)
+                        );
 
-                $this->importProducts($xml);
-            });
-        });
+                        $this->importProducts($xml);
+                    }
+                );
+            }
+        );
 
         $this->createSeoUrls();
     }
@@ -92,75 +97,67 @@ class Assortment
      */
     public function getNewUploads(): Collection
     {
-        return $this->getFileList()->filter(function (Collection $fileGroup) {
-            return $fileGroup->get('date')->timestamp > $this->getLastImportDate()->timestamp;
-        });
+        return $this->getFileList()->filter(
+            function (Collection $fileGroup) {
+                return $fileGroup->get('date')->timestamp > $this->getLastImportDate()->timestamp;
+            }
+        );
     }
 
     /**
      * Get the file list from the ftp location.
      *
-     * @param  bool  $force
-     * @return \Illuminate\Support\Collection
+     * @param bool $force
+     * @return Collection
      */
     public function getFileList(bool $force = false): Collection
     {
-        if ($this->files && !$force) {
+        if ($this->files && ! $force) {
             return $this->files;
         }
 
         $this->files = collect(
-                $this->fs->disk('sftp')->allFiles('assortment')
-            )->map(function ($filename) {
+            $this->fs->disk('sftp')->allFiles('assortment')
+        )->map(
+            function ($filename) {
                 if (! preg_match(self::FILENAME_PATTERN, $filename, $match)) {
                     return null;
                 }
 
-                return collect([
-                    'filename' => $filename,
-                    'date' => Carbon::createFromFormat('YmdHis', $match['date'], 'Europe/Amsterdam'),
-                    'item' => (int) $match['item']
-                ]);
-            })
+                return collect(
+                    [
+                        'filename' => $filename,
+                        'date'     => Carbon::createFromFormat('YmdHis', $match['date'], 'Europe/Amsterdam'),
+                        'item'     => (int)$match['item'],
+                    ]
+                );
+            }
+        )
             ->filter()
-            ->groupBy(function (Collection $item) {
-                return $item->get('date')->timestamp;
-            })
-            ->map(function (Collection $fileGroup) {
-                $files = $fileGroup->map(function (Collection $file) {
-                    return $file->get('filename');
-                });
+            ->groupBy(
+                function (Collection $item) {
+                    return $item->get('date')->timestamp;
+                }
+            )
+            ->map(
+                function (Collection $fileGroup) {
+                    $files = $fileGroup->map(
+                        function (Collection $file) {
+                            return $file->get('filename');
+                        }
+                    );
 
-                return collect([
-                    'files' => $files,
-                    'count' => $files->count(),
-                    'date'  => $fileGroup->first()->get('date')
-                ]);
-            });
+                    return collect(
+                        [
+                            'files' => $files,
+                            'count' => $files->count(),
+                            'date'  => $fileGroup->first()->get('date'),
+                        ]
+                    );
+                }
+            );
 
         return $this->files;
-    }
-
-    /**
-     * Read a file from the SFTP location.
-     *
-     * @param  string  $file
-     * @return string
-     * @throws FileNotFoundException
-     */
-    public function readFile(string $file): string
-    {
-        return $this->fs->disk('sftp')->get($file);
-    }
-
-    /**
-     * Get the name of the last imported file.
-     *
-     * @return string|null
-     */
-    public function getLastImportedFile(): ?string
-    {
-        return ImportData::key(ImportData::KEY_LAST_ASSORTMENT_FILE)->value('value');
     }
 
     /**
@@ -181,18 +178,30 @@ class Assortment
     }
 
     /**
+     * Read a file from the SFTP location.
+     *
+     * @param string $file
+     * @return string
+     * @throws FileNotFoundException
+     */
+    public function readFile(string $file): string
+    {
+        return $this->fs->disk('sftp')->get($file);
+    }
+
+    /**
      * Import products.
      *
-     * @param  \SimpleXMLElement  $products
-     * @param  null|int  $count
+     * @param SimpleXMLElement $products
+     * @param null|int $count
      * @return void
      */
-    public function importProducts(\SimpleXMLElement $products, ?int &$count = null)
+    public function importProducts(SimpleXMLElement $products, ?int &$count = null)
     {
         foreach ($products->children() as $xmlProduct) {
-            $mutation = substr((string) $xmlProduct->Mutation, 0, 1) ?: self::MUTATION_UPDATE;
-            $sku = (string) $xmlProduct->ProductId;
-            $unit = (string) $xmlProduct->UnitId;
+            $mutation = substr((string)$xmlProduct->Mutation, 0, 1) ?: self::MUTATION_UPDATE;
+            $sku = (string)$xmlProduct->ProductId;
+            $unit = (string)$xmlProduct->UnitId;
 
             if ($mutation === self::MUTATION_DELETE) {
                 $product = $this->findProduct($sku, $unit);
@@ -214,34 +223,37 @@ class Assortment
             /** @var Product $soapProduct */
             $soapProduct = app()->make(Product::class);
 
-            $soapProduct->sku             = $sku;
-            $soapProduct->name            = (string) $xmlProduct->ShortDescriptions->ShortDescription->Description;
-            $soapProduct->group           = (string) $xmlProduct->Categories->Category->Groups->Group->ProdGrpId;
-            $soapProduct->ean             = (string) $xmlProduct->EanCode;
-            $soapProduct->blocked         = ((string) $xmlProduct->Blocked) === "true";
-            $soapProduct->inactive        = ((string) $xmlProduct->Inactive) === "true";
-            $soapProduct->discontinued    = ((string) $xmlProduct->Discontinued) === "true";
-            $soapProduct->vat             = (float) $xmlProduct->VatPercentage;
-            $soapProduct->sales_unit      = $unit;
-            $soapProduct->packing_unit    = (string) $xmlProduct->PackagingUnitId;
-            $soapProduct->width           = (float) $xmlProduct->ProductWidthCm;
-            $soapProduct->length          = (float) $xmlProduct->ProductLengthCm;
-            $soapProduct->weight          = (float) $xmlProduct->ProductWeightKg;
-            $soapProduct->height          = (float) $xmlProduct->ProductHeightCm;
-            $soapProduct->stock_display   = (string) $xmlProduct->StockDisplay ?: 'S';
+            $soapProduct->sku = $sku;
+            $soapProduct->name = (string)$xmlProduct->ShortDescriptions->ShortDescription->Description;
+            $soapProduct->group = (string)$xmlProduct->Categories->Category->Groups->Group->ProdGrpId;
+            $soapProduct->ean = (string)$xmlProduct->EanCode;
+            $soapProduct->blocked = ((string)$xmlProduct->Blocked) === "true";
+            $soapProduct->inactive = ((string)$xmlProduct->Inactive) === "true";
+            $soapProduct->discontinued = ((string)$xmlProduct->Discontinued) === "true";
+            $soapProduct->vat = (float)$xmlProduct->VatPercentage;
+            $soapProduct->sales_unit = $unit;
+            $soapProduct->packing_unit = (string)$xmlProduct->PackagingUnitId;
+            $soapProduct->width = (float)$xmlProduct->ProductWidthCm;
+            $soapProduct->length = (float)$xmlProduct->ProductLengthCm;
+            $soapProduct->weight = (float)$xmlProduct->ProductWeightKg;
+            $soapProduct->height = (float)$xmlProduct->ProductHeightCm;
+            $soapProduct->stock_display = (string)$xmlProduct->StockDisplay ?: 'S';
 
             $this->assignAttributes($soapProduct, $xmlProduct);
 
             // Skip this product
             if (! $soapProduct->webshop) {
-                Log::info(sprintf('[Product import] Skipped %s. Reason: %s', $sku, 'products is not enabled for the webshop'));
+                Log::info(
+                    sprintf('[Product import] Skipped %s. Reason: %s', $sku, 'products is not enabled for the webshop')
+                );
 
                 continue;
             }
 
             $product = ProductModel::createFromSoapProduct($soapProduct);
             $product->setAttribute('synchronized_at', $this->runTime);
-            $product->setAttribute('deleted_at',
+            $product->setAttribute(
+                'deleted_at',
                 ($soapProduct->inactive || $soapProduct->blocked || $soapProduct->discontinued) ? Carbon::now() : null
             );
 
@@ -249,7 +261,7 @@ class Assortment
 
             $this->urls[$product->getSku()] = [
                 'name' => $product->getName(),
-                'id' => $product->getId()
+                'id'   => $product->getId(),
             ];
 
             if ($count !== null) {
@@ -261,28 +273,31 @@ class Assortment
     }
 
     /**
-     * Update the last import data.
+     * Find a product for the import process.
      *
-     * @return void
+     * @param string $sku
+     * @param string $unit
+     * @return null|ProductModel
      */
-    public function updateImportData(): void
+    public static function findProduct(string $sku, string $unit): ?ProductModel
     {
-        ImportData::key(ImportData::KEY_LAST_ASSORTMENT_RUN_TIME)->update([
-            'value' => $this->runTime
-        ]);
+        return app()->make(ProductModel::class)
+            ->where('sku', $sku)
+            ->where('sales_unit', $unit)
+            ->first();
     }
 
     /**
      * Assign product attributes.
      *
-     * @param  Product  $responseProduct
-     * @param  \SimpleXMLElement  $product
+     * @param Product $responseProduct
+     * @param SimpleXMLElement $product
      * @return void
      */
     public function assignAttributes(Product &$responseProduct, $product): void
     {
         foreach ($product->Attributes->children() as $attribute) {
-            $value = (string) $attribute->AttributeValues->AttributeValue->NativeDescription;
+            $value = (string)$attribute->AttributeValues->AttributeValue->NativeDescription;
 
             switch ($attribute->AttributeId) {
                 case 'FAB':
@@ -301,28 +316,13 @@ class Assortment
                     $responseProduct->related = $value;
                     break;
                 case 'WEB':
-                    $responseProduct->webshop = (bool) $value;
+                    $responseProduct->webshop = (bool)$value;
                     break;
                 case 'ATT':
                     $responseProduct->keywords = $value;
                     break;
             }
         }
-    }
-
-    /**
-     * Find a product for the import process.
-     *
-     * @param  string  $sku
-     * @param  string  $unit
-     * @return null|ProductModel
-     */
-    public static function findProduct(string $sku, string $unit): ?ProductModel
-    {
-        return app()->make(ProductModel::class)
-            ->where('sku', $sku)
-            ->where('sales_unit', $unit)
-            ->first();
     }
 
     /**
@@ -339,7 +339,7 @@ class Assortment
             $seoUrl = SeoUrl::where('target_path', 'product/' . $sku)->first();
 
             if (! $seoUrl) {
-                $seoUrl = new SeoUrl;
+                $seoUrl = new SeoUrl();
             }
 
             $seoUrl->target_path = 'product/' . $sku;
@@ -349,5 +349,29 @@ class Assortment
 
             $seoUrl->save();
         }
+    }
+
+    /**
+     * Get the name of the last imported file.
+     *
+     * @return string|null
+     */
+    public function getLastImportedFile(): ?string
+    {
+        return ImportData::key(ImportData::KEY_LAST_ASSORTMENT_FILE)->value('value');
+    }
+
+    /**
+     * Update the last import data.
+     *
+     * @return void
+     */
+    public function updateImportData(): void
+    {
+        ImportData::key(ImportData::KEY_LAST_ASSORTMENT_RUN_TIME)->update(
+            [
+                'value' => $this->runTime,
+            ]
+        );
     }
 }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace WTG\Models;
 
@@ -18,48 +20,6 @@ class Synonym extends Model
     public $timestamps = false;
 
     /**
-     * @return int|null
-     */
-    public function getId(): ?int
-    {
-        return $this->getAttribute('id');
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getSource(): ?string
-    {
-        return $this->getAttribute('source');
-    }
-
-    /**
-     * @param string $source
-     * @return Synonym
-     */
-    public function setSource(string $source): self
-    {
-        return $this->setAttribute('source', $source);
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getTarget(): ?string
-    {
-        return $this->getAttribute('target');
-    }
-
-    /**
-     * @param string $target
-     * @return Synonym
-     */
-    public function setTarget(string $target): self
-    {
-        return $this->setAttribute('target', $target);
-    }
-
-    /**
      * @return array
      */
     public static function createMapping(): array
@@ -72,5 +32,47 @@ class Synonym extends Model
         }
 
         return $mapping;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSource(): ?string
+    {
+        return $this->getAttribute('source');
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTarget(): ?string
+    {
+        return $this->getAttribute('target');
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->getAttribute('id');
+    }
+
+    /**
+     * @param string $source
+     * @return Synonym
+     */
+    public function setSource(string $source): self
+    {
+        return $this->setAttribute('source', $source);
+    }
+
+    /**
+     * @param string $target
+     * @return Synonym
+     */
+    public function setTarget(string $target): self
+    {
+        return $this->setAttribute('target', $target);
     }
 }

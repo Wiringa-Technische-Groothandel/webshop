@@ -23,7 +23,7 @@ interface DescriptionContract
     /**
      * Set the related product.
      *
-     * @param  ProductContract  $product
+     * @param ProductContract $product
      * @return DescriptionContract
      */
     public function setProduct(ProductContract $product): DescriptionContract;
@@ -38,7 +38,7 @@ interface DescriptionContract
     /**
      * Set the description value.
      *
-     * @param  string  $value
+     * @param string $value
      * @return DescriptionContract
      */
     public function setValue(string $value): DescriptionContract;

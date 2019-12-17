@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace WTG\Converters;
 
+use DB;
+use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * Abstract table converter.
@@ -34,7 +36,7 @@ abstract class AbstractTableConverter implements TableConverter
     /**
      * Run the converter
      *
-     * @param  string  $file
+     * @param string $file
      * @return bool
      */
     public function run(string $file): bool
@@ -43,15 +45,17 @@ abstract class AbstractTableConverter implements TableConverter
 
         $this->filePath = $file;
 
-        if (!$this->fileExists()) {
+        if (! $this->fileExists()) {
             return false;
         }
 
         $this->readFileContents();
 
-        \DB::transaction(function () {
-            $this->parseFileContents();
-        });
+        DB::transaction(
+            function () {
+                $this->parseFileContents();
+            }
+        );
 
         return true;
     }
@@ -70,7 +74,7 @@ abstract class AbstractTableConverter implements TableConverter
      * Read file contents.
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function readFileContents()
     {
@@ -78,7 +82,7 @@ abstract class AbstractTableConverter implements TableConverter
 
         $file = fopen($this->filePath, "r");
 
-        while (($data = fgetcsv($file)) !== FALSE) {
+        while (($data = fgetcsv($file)) !== false) {
             $lines[] = $data;
         }
         fclose($file);
@@ -90,31 +94,33 @@ abstract class AbstractTableConverter implements TableConverter
      * Parse the file contents.
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function parseFileContents()
     {
-        $this->fileContents->each(function ($item) {
-            $model = $this->createModel($this->mapCsvFields($item));
+        $this->fileContents->each(
+            function ($item) {
+                $model = $this->createModel($this->mapCsvFields($item));
 
-            if ($model) {
-                $model->save();
+                if ($model) {
+                    $model->save();
+                }
             }
-        });
+        );
     }
 
     /**
      * Create a new entity.
      *
-     * @param  array  $data
+     * @param array $data
      * @return Model|null
      */
-    public abstract function createModel(array $data): ?Model;
+    abstract public function createModel(array $data): ?Model;
 
     /**
      * Map the csv fields.
      *
-     * @param  array  $data
+     * @param array $data
      * @return array
      */
     public function mapCsvFields(array $data)

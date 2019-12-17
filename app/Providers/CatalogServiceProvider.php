@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace WTG\Providers;
 
-use WTG\Models\Product;
 use Illuminate\Support\ServiceProvider;
 use WTG\Contracts\Models\ProductContract;
+use WTG\Models\Product;
 
 /**
  * Catalog service provider.

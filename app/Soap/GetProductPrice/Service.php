@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace WTG\Soap\GetProductPrice;
 
 use Exception;
-use WTG\Soap\AbstractService;
+use Log;
 use WTG\Contracts\Models\ProductContract;
+use WTG\Soap\AbstractService;
 
 /**
  * GetProductPrice service.
@@ -59,9 +60,9 @@ class Service extends AbstractService
     /**
      * Run the service.
      *
-     * @param  ProductContract  $product
-     * @param  float  $quantity
-     * @param  string  $customerId
+     * @param ProductContract $product
+     * @param float $quantity
+     * @param string $customerId
      * @return Response
      */
     public function handle(ProductContract $product, float $quantity, string $customerId)
@@ -78,8 +79,8 @@ class Service extends AbstractService
                 $this->request
             );
             $this->buildResponse($soapResponse);
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
         }
 
         return $this->response;
@@ -101,7 +102,7 @@ class Service extends AbstractService
     /**
      * Build the response.
      *
-     * @param  object  $soapResponse
+     * @param object $soapResponse
      * @return void
      * @throws Exception
      */
@@ -110,32 +111,38 @@ class Service extends AbstractService
         $soapProduct = $soapResponse->ProductPricesV2->ProductPriceV2;
         $soapPrice = $soapProduct->ProductPriceDetailsV2->ProductPriceDetailV2;
 
-        $refactor = (float) $soapProduct->ConversionFactor;
-        $grossPrice = (float) $soapProduct->GrossPrice;
-        $netPrice = (float) $soapProduct->NettPrice;
-        $pricePer = (float) $soapProduct->PricePer;
+        $refactor = (float)$soapProduct->ConversionFactor;
+        $grossPrice = (float)$soapProduct->GrossPrice;
+        $netPrice = (float)$soapProduct->NettPrice;
+        $pricePer = (float)$soapProduct->PricePer;
 
         /** @var Response\Product $product */
         $product = app()->make(Response\Product::class);
-        $product->sku           = $soapProduct->ProductId;
-        $product->sales_unit    = $soapProduct->UnitId;
-        $product->quantity      = (float) $soapPrice->NumberRequested;
-        $product->gross_price   = (float) (($grossPrice * $refactor) / $pricePer);
-        $product->net_price     = (float) (($netPrice * $refactor) / $pricePer);
-        $product->discount      = (float) $soapPrice->Discount;
-        $product->discountType  = $soapPrice->DiscountOrigin;
-        $product->price_per     = $pricePer;
-        $product->price_unit    = $soapPrice->PriceUnit;
-        $product->refactor      = $refactor;
-        $product->action        = $product->net_price === $product->gross_price;
+        $product->sku = $soapProduct->ProductId;
+        $product->sales_unit = $soapProduct->UnitId;
+        $product->quantity = (float)$soapPrice->NumberRequested;
+        $product->gross_price = (float)(($grossPrice * $refactor) / $pricePer);
+        $product->net_price = (float)(($netPrice * $refactor) / $pricePer);
+        $product->discount = (float)$soapPrice->Discount;
+        $product->discountType = $soapPrice->DiscountOrigin;
+        $product->price_per = $pricePer;
+        $product->price_unit = $soapPrice->PriceUnit;
+        $product->refactor = $refactor;
+        $product->action = $product->net_price === $product->gross_price;
 
         if ($product->sales_unit === $product->price_unit) {
-            $pricePerString = sprintf('Prijs per %s %s',
-                $product->price_per, unit_to_str($product->sales_unit, $product->price_per > 1));
+            $pricePerString = sprintf(
+                'Prijs per %s %s',
+                $product->price_per,
+                unit_to_str($product->sales_unit, $product->price_per > 1)
+            );
         } else {
-            $pricePerString = sprintf('Prijs per %s %s van %s %s',
-                $product->price_per, unit_to_str($product->sales_unit, $product->price_per > 1),
-                $product->refactor, unit_to_str($product->price_unit, $product->refactor > 1)
+            $pricePerString = sprintf(
+                'Prijs per %s %s van %s %s',
+                $product->price_per,
+                unit_to_str($product->sales_unit, $product->price_per > 1),
+                $product->refactor,
+                unit_to_str($product->price_unit, $product->refactor > 1)
             );
         }
 
