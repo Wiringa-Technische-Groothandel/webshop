@@ -7,12 +7,12 @@ namespace WTG\RestClient\Model\Parser;
 use WTG\RestClient\Model\Rest\ProductResponse;
 
 /**
- * Products parser.
+ * Product parser.
  *
  * @package     WTG\RestClient
  * @author      Thomas Wiringa <thomas.wiringa@gmail.com>
  */
-class ProductsParser
+class ProductParser
 {
     /**
      * Parse a response product.
@@ -38,6 +38,10 @@ class ProductsParser
         $product->height = $item['height'] ?? $item['heigth']; // Workaround for typo in JSON response
         $product->weight = $item['weight'];
         $product->vat = $item['vatGroup'];
+
+        if (isset($item['productExtendedLanguageNotes'][0])) {
+            $product->description = $item['productExtendedLanguageNotes'][0]['text'];
+        }
 
         $this->mapProductAttributes($product, $item);
 

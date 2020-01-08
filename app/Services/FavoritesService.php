@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WTG\Services;
 
 use Illuminate\Support\Collection;
+use WTG\Catalog\ProductManager;
 use WTG\Contracts\Models\ProductContract;
 use WTG\Contracts\Services\AuthServiceContract;
 use WTG\Contracts\Services\FavoritesServiceContract;
@@ -21,16 +22,23 @@ class FavoritesService implements FavoritesServiceContract
     /**
      * @var AuthServiceContract
      */
-    protected $authService;
+    protected AuthServiceContract $authService;
+
+    /**
+     * @var ProductManager
+     */
+    protected ProductManager $productManager;
 
     /**
      * CartService constructor.
      *
      * @param AuthServiceContract $authService
+     * @param ProductManager      $productManager
      */
-    public function __construct(AuthServiceContract $authService)
+    public function __construct(AuthServiceContract $authService, ProductManager $productManager)
     {
         $this->authService = $authService;
+        $this->productManager = $productManager;
     }
 
     /**
@@ -74,7 +82,7 @@ class FavoritesService implements FavoritesServiceContract
     {
         $customer = $this->authService->getCurrentCustomer();
         $isFavorite = $this->isFavorite($sku);
-        $product = app()->make(ProductContract::class)->findBySku($sku);
+        $product = $this->productManager->find($sku);
 
         if ($isFavorite) {
             $customer->removeFavorite($product);
@@ -94,7 +102,7 @@ class FavoritesService implements FavoritesServiceContract
      */
     public function isFavorite(string $sku): bool
     {
-        $product = app()->make(ProductContract::class)->findBySku($sku);
+        $product = $this->productManager->find($sku);
 
         if ($product === null) {
             throw new ProductNotFoundException(__('Geen product gevonden voor sku :sku', ['sku' => $sku]));

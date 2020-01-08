@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WTG\Services;
 
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use WTG\Contracts\Models\CompanyContract;
 use WTG\Contracts\Models\CustomerContract;
@@ -22,7 +23,7 @@ class AuthService implements AuthServiceContract
     /**
      * @var AuthFactory
      */
-    protected $auth;
+    protected AuthFactory $auth;
 
     /**
      * AuthService constructor.
@@ -39,6 +40,7 @@ class AuthService implements AuthServiceContract
      *
      * @param Request $request
      * @return null|CustomerContract
+     * @throws BindingResolutionException
      */
     public function authenticateByRequest(Request $request): ?CustomerContract
     {
@@ -51,16 +53,16 @@ class AuthService implements AuthServiceContract
             return null;
         }
 
-        $login_data = [
+        $loginData = [
             'company_id' => $company->getAttribute('id'),
             'username'   => $request->input('username'),
             'password'   => $request->input('password'),
             'active'     => true,
         ];
 
-        $this->auth->guard()->attempt($login_data, $request->input('remember', false));
+        $this->auth->guard()->attempt($loginData, $request->input('remember', false));
 
-        return $request->user();
+        return $this->getCurrentCustomer();
     }
 
     /**

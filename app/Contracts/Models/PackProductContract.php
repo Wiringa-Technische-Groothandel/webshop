@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace WTG\Contracts\Models;
 
+use WTG\Catalog\Model\Product;
+
 /**
  * Pack product contract.
  *
@@ -38,17 +40,17 @@ interface PackProductContract
     /**
      * Set the product.
      *
-     * @param ProductContract $product
+     * @param Product $product
      * @return PackProductContract
      */
-    public function setProduct(ProductContract $product): PackProductContract;
+    public function setProduct(Product $product): PackProductContract;
 
     /**
      * Get the product.
      *
-     * @return ProductContract
+     * @return Product
      */
-    public function getProduct(): ProductContract;
+    public function getProduct(): Product;
 
     /**
      * Set the amount.

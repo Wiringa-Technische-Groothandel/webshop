@@ -6,6 +6,7 @@ namespace WTG\Contracts\Models;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use WTG\Catalog\Model\Product;
 
 /**
  * Cart contract.
@@ -33,44 +34,44 @@ interface CartContract
     /**
      * Add a new item to the cart.
      *
-     * @param ProductContract $product
+     * @param Product $product
      * @param float $quantity
      * @return CartItemContract
      */
-    public function addProduct(ProductContract $product, float $quantity): CartItemContract;
+    public function addProduct(Product $product, float $quantity): CartItemContract;
 
     /**
      * Update the item quantity.
      *
-     * @param ProductContract $product
+     * @param Product $product
      * @param float $quantity
      * @return CartItemContract
      */
-    public function updateProduct(ProductContract $product, float $quantity): CartItemContract;
+    public function updateProduct(Product $product, float $quantity): CartItemContract;
 
     /**
      * Remove an item from the cart.
      *
-     * @param ProductContract $product
+     * @param Product $product
      * @return bool
      */
-    public function removeProduct(ProductContract $product): bool;
+    public function removeProduct(Product $product): bool;
 
     /**
      * Find a cart item by product.
      *
-     * @param ProductContract $product
+     * @param Product $product
      * @return null|CartItemContract
      */
-    public function findProduct(ProductContract $product): ?CartItemContract;
+    public function findProduct(Product $product): ?CartItemContract;
 
     /**
      * Check if the cart contains the product.
      *
-     * @param ProductContract $product
+     * @param Product $product
      * @return bool
      */
-    public function hasProduct(ProductContract $product): bool;
+    public function hasProduct(Product $product): bool;
 
     /**
      * Get the delivery address.

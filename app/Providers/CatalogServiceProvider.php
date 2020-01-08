@@ -6,7 +6,7 @@ namespace WTG\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use WTG\Contracts\Models\ProductContract;
-use WTG\Models\Product;
+use WTG\Catalog\Model\Product;
 
 /**
  * Catalog service provider.

@@ -7,8 +7,10 @@ namespace WTG\Import\Processor;
 use Carbon\Carbon;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\Str;
+use Throwable;
 use WTG\Import\Api\ProcessorInterface;
-use WTG\Models\Product as ProductModel;
+use WTG\Models\Description;
+use WTG\Catalog\Model\Product as ProductModel;
 use WTG\RestClient\Model\Rest\ProductResponse;
 
 /**
@@ -36,6 +38,7 @@ class ProductProcessor implements ProcessorInterface
 
     /**
      * @inheritDoc
+     * @throws Throwable
      */
     public function process(array $data): void
     {
@@ -43,10 +46,14 @@ class ProductProcessor implements ProcessorInterface
 
         if ($data['isWeb']) {
             if (! $product) {
-                $this->createProduct($data);
+                $product = $this->fillModel(new ProductModel(), $data);
             } else {
-                $this->updateProduct($product, $data);
+                $product = $this->fillModel($product, $data);
             }
+
+            ProductModel::withoutSyncingToSearch(fn () => $product->saveOrFail());
+
+            $this->setDescription($product, $data['description']);
         }
 
         $this->logManager->debug('[Product processor] Imported/updated product ' . $data['sku']);
@@ -69,18 +76,31 @@ class ProductProcessor implements ProcessorInterface
     }
 
     /**
-     * Create a new product.
-     *
-     * @param array $productData
-     * @return void
+     * @param ProductModel $product
+     * @param null|string $description
+     * @return null|Description
      */
-    protected function createProduct(array $productData): void
+    protected function setDescription(ProductModel $product, ?string $description): ?Description
     {
-        $product = new ProductModel();
+        $query = Description::query()->where('product_id', $product->getId());
 
-        $this->fillModel($product, $productData);
+        if (! $description) {
+            $query->delete();
 
-        $product->save();
+            return null;
+        }
+
+        $descriptionModel = $query->first();
+
+        if (! $descriptionModel) {
+            $descriptionModel = new Description();
+        }
+
+        $descriptionModel->setProduct($product);
+        $descriptionModel->setValue($description);
+        $descriptionModel->save();
+
+        return $descriptionModel;
     }
 
     /**
@@ -90,7 +110,7 @@ class ProductProcessor implements ProcessorInterface
      * @param array $productData
      * @return ProductModel
      */
-    protected function fillModel(ProductModel $productModel, array $productData)
+    protected function fillModel(ProductModel $productModel, array $productData): ProductModel
     {
         $product = new ProductResponse();
         $product->erpId = (string)$productData['erpId'];
@@ -116,6 +136,7 @@ class ProductProcessor implements ProcessorInterface
         $product->related = (string)$productData['related'];
         $product->isWeb = (bool)$productData['isWeb'];
         $product->keywords = (string)$productData['keywords'];
+        $product->description = (string)$productData['description'];
 
         foreach (get_object_vars($product) as $key => $value) {
             $snakeKey = Str::snake($key);
@@ -128,22 +149,8 @@ class ProductProcessor implements ProcessorInterface
         }
 
         $productModel->setAttribute('synchronized_at', Carbon::createFromTimestamp((int)LARAVEL_START));
+        $productModel->setAttribute('deleted_at', null);
 
         return $productModel;
-    }
-
-    /**
-     * Update an existing product.
-     *
-     * @param ProductModel $product
-     * @param array $productData
-     * @return void
-     */
-    protected function updateProduct(ProductModel $product, array $productData): void
-    {
-        $this->fillModel($product, $productData);
-
-        $product->setAttribute('deleted_at', null);
-        $product->save();
     }
 }

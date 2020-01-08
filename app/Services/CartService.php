@@ -10,11 +10,12 @@ use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Collection;
 use Log;
 use Throwable;
+use WTG\Catalog\Model\Product;
 use WTG\Catalog\PriceManager;
+use WTG\Catalog\ProductManager;
 use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\CartContract;
 use WTG\Contracts\Models\CartItemContract;
-use WTG\Contracts\Models\ProductContract;
 use WTG\Contracts\Services\AuthServiceContract;
 use WTG\Contracts\Services\CartServiceContract;
 use WTG\RestClient\Model\Rest\GetProductPrices\Response\Price;
@@ -43,31 +44,42 @@ class CartService implements CartServiceContract
     protected PriceManager $priceManager;
 
     /**
+     * @var ProductManager
+     */
+    protected ProductManager $productManager;
+
+    /**
      * CartService constructor.
      *
      * @param CartContract $cart
      * @param AuthServiceContract $authService
      * @param PriceManager $priceManager
+     * @param ProductManager $productManager
      */
-    public function __construct(CartContract $cart, AuthServiceContract $authService, PriceManager $priceManager)
-    {
+    public function __construct(
+        CartContract $cart,
+        AuthServiceContract $authService,
+        PriceManager $priceManager,
+        ProductManager $productManager
+    ) {
         $this->cart = $cart;
         $this->authService = $authService;
         $this->priceManager = $priceManager;
+        $this->productManager = $productManager;
     }
 
     /**
      * Add a product by sku.
      *
      * @param string $sku
-     * @param float $quantity
+     * @param float  $quantity
      * @return null|CartItemContract
      */
     public function addProductBySku(string $sku, float $quantity = 1.0): ?CartItemContract
     {
         $product = $this->findProduct($sku);
 
-        if (! $product) {
+        if ( ! $product ) {
             return null;
         }
 
@@ -78,21 +90,21 @@ class CartService implements CartServiceContract
      * Find a product.
      *
      * @param string $sku
-     * @return null|ProductContract
+     * @return null|Product
      */
-    protected function findProduct(string $sku): ?ProductContract
+    protected function findProduct(string $sku): ?Product
     {
-        return app()->make(ProductContract::class)->findBySku($sku);
+        return $this->productManager->find($sku);
     }
 
     /**
      * Add a product.
      *
-     * @param ProductContract $product
-     * @param float $quantity
+     * @param Product $product
+     * @param float   $quantity
      * @return null|CartItemContract
      */
-    public function addProduct(ProductContract $product, float $quantity = 1.0): ?CartItemContract
+    public function addProduct(Product $product, float $quantity = 1.0): ?CartItemContract
     {
         $this->cart->loadForCustomer($this->authService->getCurrentCustomer());
 
@@ -103,14 +115,14 @@ class CartService implements CartServiceContract
      * Update a product by sku.
      *
      * @param string $sku
-     * @param float $quantity
+     * @param float  $quantity
      * @return null|CartItemContract
      */
     public function updateProductBySku(string $sku, float $quantity): ?CartItemContract
     {
         $product = $this->findProduct($sku);
 
-        if (! $product) {
+        if ( ! $product ) {
             return null;
         }
 
@@ -129,7 +141,7 @@ class CartService implements CartServiceContract
     {
         $product = $this->findProduct($sku);
 
-        if (! $product) {
+        if ( ! $product ) {
             return null;
         }
 
@@ -174,7 +186,7 @@ class CartService implements CartServiceContract
         $this->cart->loadForCustomer($this->authService->getCurrentCustomer());
         $items = $this->cart->getItems();
 
-        if (! $withPrices) {
+        if ( ! $withPrices ) {
             return $items;
         }
 
@@ -200,11 +212,11 @@ class CartService implements CartServiceContract
                     }
                 );
 
-                if (! $price) {
+                if ( ! $price ) {
                     return $item;
                 }
 
-                $item->setPrice((float)$price->netPrice);
+                $item->setPrice((float) $price->netPrice);
                 $item->setSubtotal($price->netPrice * $item->getQuantity());
                 $item->save();
 

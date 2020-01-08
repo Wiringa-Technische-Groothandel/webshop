@@ -1,4 +1,22 @@
 #navbar-first {
+  .navbar-toggler {
+    padding: 0.75rem;
+  }
+
+  &.navbar-light {
+    .navbar-toggler {
+      color: var(--dark);
+      border-color: var(--dark);
+    }
+  }
+
+  &.navbar-dark {
+    .navbar-toggler {
+      color: var(--light);
+      border-color: var(--light);
+    }
+  }
+
   .navbar-nav .nav-link.btn-outline-success {
     color: white;
   }

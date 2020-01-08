@@ -8,11 +8,11 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Log\LogManager;
 use Illuminate\View\Factory as ViewFactory;
 use WTG\Contracts\Services\CheckoutServiceContract;
 use WTG\Exceptions\Checkout\EmptyCartException;
 use WTG\Http\Controllers\Controller;
-use WTG\Services\CheckoutService;
 
 /**
  * Finish controller.
@@ -24,21 +24,28 @@ use WTG\Services\CheckoutService;
 class FinishController extends Controller
 {
     /**
-     * @var CheckoutService
+     * @var CheckoutServiceContract
      */
-    protected $checkoutService;
+    protected CheckoutServiceContract $checkoutService;
+
+    /**
+     * @var LogManager
+     */
+    protected LogManager $logManager;
 
     /**
      * FinishController constructor.
      *
-     * @param ViewFactory $view
+     * @param ViewFactory             $view
      * @param CheckoutServiceContract $checkoutService
+     * @param LogManager              $logManager
      */
-    public function __construct(ViewFactory $view, CheckoutServiceContract $checkoutService)
+    public function __construct(ViewFactory $view, CheckoutServiceContract $checkoutService, LogManager $logManager)
     {
         parent::__construct($view);
 
         $this->checkoutService = $checkoutService;
+        $this->logManager = $logManager;
     }
 
     /**
@@ -77,10 +84,12 @@ class FinishController extends Controller
                 ->withInput($request->input())
                 ->withErrors(__('U kunt geen bestelling afronden met een lege winkelwagen.'));
         } catch (Exception $e) {
+            $this->logManager->error($e);
+
             return redirect()
                 ->back()
                 ->withInput($request->input())
-                ->withErrors($e->getMessage());
+                ->withErrors(__("Er is een fout opgetreden tijdens het verwerken van uw bestelling"));
         }
 
         return redirect()->route('checkout.finished');

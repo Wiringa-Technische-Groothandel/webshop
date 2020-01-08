@@ -7,7 +7,6 @@ namespace WTG\Catalog;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Collection;
-use WTG\Models\Product;
 use WTG\RestClient\Model\Rest\GetProductStocks\Request as GetProductStocksRequest;
 use WTG\RestClient\Model\Rest\GetProductStocks\Response as GetProductStocksResponse;
 use WTG\RestClient\RestManager;
@@ -26,13 +25,20 @@ class StockManager
     protected RestManager $restManager;
 
     /**
+     * @var ProductManager
+     */
+    protected ProductManager $productManager;
+
+    /**
      * PriceManager constructor.
      *
-     * @param RestManager $restManager
+     * @param RestManager    $restManager
+     * @param ProductManager $productManager
      */
-    public function __construct(RestManager $restManager)
+    public function __construct(RestManager $restManager, ProductManager $productManager)
     {
         $this->restManager = $restManager;
+        $this->productManager = $productManager;
     }
 
     /**
@@ -47,15 +53,14 @@ class StockManager
     {
         $request = new GetProductStocksRequest();
 
-        foreach ($skus as $sku) {
-            $product = Product::findBySku((string)$sku, true);
+        foreach ( $skus as $sku ) {
+            $product = $this->productManager->find($sku);
 
             $request->addProduct($product);
         }
 
         /** @var GetProductStocksResponse $response */
         $response = $this->restManager->handle($request);
-
 
         return $response->getStocks();
     }
@@ -72,7 +77,7 @@ class StockManager
     {
         $request = new GetProductStocksRequest();
 
-        $product = Product::findBySku((string)$sku, true);
+        $product = $this->productManager->find($sku);
         $request->addProduct($product);
 
         /** @var GetProductStocksResponse $response */

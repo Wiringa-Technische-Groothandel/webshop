@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WTG\Catalog\Api\Model;
 
-use WTG\Models\Product;
+use WTG\Catalog\Model\Product;
 
 /**
  * Price factor model interface.

@@ -6,6 +6,7 @@ namespace WTG\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use WTG\Catalog\Model\Product;
 use WTG\Contracts\Models\CartContract;
 use WTG\Contracts\Models\CartItemContract;
 use WTG\Contracts\Models\ProductContract;
@@ -22,10 +23,10 @@ class QuoteItem extends Model implements CartItemContract
     /**
      * Get or set the product.
      *
-     * @param ProductContract|null $product
-     * @return ProductContract|null
+     * @param Product|null $product
+     * @return Product|null
      */
-    public function setProduct(ProductContract $product = null): ?ProductContract
+    public function setProduct(Product $product = null): ?Product
     {
         if ($product) {
             $this->product()->associate($product);
@@ -47,9 +48,9 @@ class QuoteItem extends Model implements CartItemContract
     /**
      * Get the product.
      *
-     * @return null|ProductContract
+     * @return null|Product
      */
-    public function getProduct(): ?ProductContract
+    public function getProduct(): ?Product
     {
         return $this->getAttribute('product');
     }

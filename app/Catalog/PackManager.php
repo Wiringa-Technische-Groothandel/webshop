@@ -7,9 +7,10 @@ namespace WTG\Catalog;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
 use Throwable;
+use WTG\Catalog\Api\Model\ProductInterface;
 use WTG\Models\Pack;
 use WTG\Models\PackProduct;
-use WTG\Models\Product;
+use WTG\Catalog\Model\Product;
 
 /**
  * Pack manager.
@@ -25,13 +26,20 @@ class PackManager
     protected DatabaseManager $databaseManager;
 
     /**
+     * @var ProductManager
+     */
+    protected ProductManager $productManager;
+
+    /**
      * PackManager constructor.
      *
      * @param DatabaseManager $databaseManager
+     * @param ProductManager  $productManager
      */
-    public function __construct(DatabaseManager $databaseManager)
+    public function __construct(DatabaseManager $databaseManager, ProductManager $productManager)
     {
         $this->databaseManager = $databaseManager;
+        $this->productManager = $productManager;
     }
 
     /**
@@ -53,7 +61,7 @@ class PackManager
      */
     public function createPack(?string $sku): Pack
     {
-        $product = Product::findBySku($sku, true);
+        $product = $this->productManager->find($sku);
 
         $pack = new Pack();
         $pack->setProduct($product);
@@ -116,7 +124,7 @@ class PackManager
      */
     public function addProductToPack(Pack $pack, string $sku, int $amount): PackProduct
     {
-        $product = Product::findBySku($sku, true);
+        $product = $this->productManager->find($sku);
 
         $packProduct = new PackProduct();
         $packProduct->setPack($pack);

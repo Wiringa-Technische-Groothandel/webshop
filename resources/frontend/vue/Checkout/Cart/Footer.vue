@@ -10,7 +10,7 @@
 
             <div class="col-5 col-sm-2">
                 <div class="cart-grand-total text-right">
-                    <i class="far fa-fw fa-euro-sign"></i> {{ grandTotal }}
+                    <i class="far fa-euro-sign"></i> {{ grandTotal }}
                 </div>
             </div>
         </div>

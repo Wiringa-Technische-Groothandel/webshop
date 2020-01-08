@@ -7,7 +7,7 @@ namespace WTG\Catalog;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Collection;
-use WTG\Models\Product;
+use WTG\Catalog\Model\Product;
 use WTG\RestClient\Model\Rest\GetProductPrices\Request as GetProductPricesRequest;
 use WTG\RestClient\Model\Rest\GetProductPrices\Response as GetProductPricesResponse;
 use WTG\RestClient\RestManager;
@@ -26,13 +26,20 @@ class PriceManager
     protected RestManager $restManager;
 
     /**
+     * @var ProductManager
+     */
+    protected ProductManager $productManager;
+
+    /**
      * PriceManager constructor.
      *
      * @param RestManager $restManager
+     * @param ProductManager $productManager
      */
-    public function __construct(RestManager $restManager)
+    public function __construct(RestManager $restManager, ProductManager $productManager)
     {
         $this->restManager = $restManager;
+        $this->productManager = $productManager;
     }
 
     /**
@@ -50,8 +57,12 @@ class PriceManager
         $request->setDebtorCode($debtor);
 
         foreach ($products as $product) {
+            /*
+             * If $product is not an instance of a product model assume
+             * it is a sku.
+             */
             if (! $product instanceof Product) {
-                $product = Product::findBySku((string)$product, true);
+                $product = $this->productManager->find((string)$product);
             }
 
             $request->addProduct($product, 1);
@@ -78,7 +89,7 @@ class PriceManager
         $request = new GetProductPricesRequest();
         $request->setDebtorCode($debtor);
 
-        $product = Product::findBySku((string)$sku, true);
+        $product = $this->productManager->find($sku);
         $request->addProduct($product, $qty);
 
         /** @var GetProductPricesResponse $response */

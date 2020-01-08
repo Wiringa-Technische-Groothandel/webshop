@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use WTG\Catalog\Model\Product;
 use WTG\Contracts\Models\PackContract;
 use WTG\Contracts\Models\ProductContract;
 
@@ -42,10 +43,10 @@ class Pack extends Model implements PackContract
     /**
      * Set the product.
      *
-     * @param ProductContract $product
+     * @param Product $product
      * @return PackContract
      */
-    public function setProduct(ProductContract $product): PackContract
+    public function setProduct(Product $product): PackContract
     {
         $this->product()->associate($product);
 

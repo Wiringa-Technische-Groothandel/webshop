@@ -11,7 +11,7 @@ use WTG\Contracts\Services\CartServiceContract;
 use WTG\Contracts\Services\FavoritesServiceContract;
 use WTG\Http\Controllers\Controller;
 use WTG\Http\Requests\AddFavoritesToCartRequest;
-use WTG\Models\Product;
+use WTG\Catalog\Model\Product;
 
 /**
  * Favorites controller.

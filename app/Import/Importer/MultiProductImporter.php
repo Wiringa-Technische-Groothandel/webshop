@@ -8,12 +8,14 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
 use Illuminate\Database\DatabaseManager;
-use Illuminate\Support\Collection;
+use Illuminate\Log\LogManager;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Throwable;
 use WTG\Import\Api\ImporterInterface;
 use WTG\Import\Downloader\ProductsDownloader;
 use WTG\Import\Parser\CsvWithHeaderParser;
 use WTG\Import\Processor\ProductProcessor;
-use WTG\Models\Product;
+use WTG\Catalog\Model\Product;
 
 /**
  * Multi product importer.
@@ -21,7 +23,7 @@ use WTG\Models\Product;
  * @package     WTG\Import
  * @author      Thomas Wiringa <thomas.wiringa@gmail.com>
  */
-class MultiProductImporter implements ImporterInterface
+class MultiProductImporter extends MultiImporter implements ImporterInterface
 {
     /**
      * Full path to the CSV file.
@@ -31,19 +33,9 @@ class MultiProductImporter implements ImporterInterface
     public string $csvFileName = '';
 
     /**
-     * @var ProductsDownloader
+     * @var LogManager
      */
-    protected ProductsDownloader $downloader;
-
-    /**
-     * @var ProductProcessor
-     */
-    protected ProductProcessor $processor;
-
-    /**
-     * @var CsvWithHeaderParser
-     */
-    protected CsvWithHeaderParser $parser;
+    protected LogManager $logManager;
 
     /**
      * @var ConsoleKernel
@@ -61,6 +53,7 @@ class MultiProductImporter implements ImporterInterface
      * @param ProductsDownloader $downloader
      * @param ProductProcessor $processor
      * @param CsvWithHeaderParser $parser
+     * @param LogManager $logManager
      * @param ConsoleKernel $console
      * @param DatabaseManager $databaseManager
      */
@@ -68,12 +61,13 @@ class MultiProductImporter implements ImporterInterface
         ProductsDownloader $downloader,
         ProductProcessor $processor,
         CsvWithHeaderParser $parser,
+        LogManager $logManager,
         ConsoleKernel $console,
         DatabaseManager $databaseManager
     ) {
-        $this->downloader = $downloader;
-        $this->processor = $processor;
-        $this->parser = $parser;
+        parent::__construct($downloader, $processor, $parser);
+
+        $this->logManager = $logManager;
         $this->console = $console;
         $this->databaseManager = $databaseManager;
     }
@@ -82,13 +76,19 @@ class MultiProductImporter implements ImporterInterface
      * Run the importer.
      *
      * @return void
-     * @throws Exception
+     * @throws Throwable
      */
     public function import(): void
     {
         if (! $this->csvFileName) {
-            $filePath = $this->createCSV();
+            $filePath = storage_path(
+                sprintf('app/import/products-%s.csv', Carbon::now()->format('YmdHis'))
+            );
+
+            $this->logManager->info('[Product importer] Creating CSV');
+            $this->createCSV($filePath);
         } else {
+            $this->logManager->info(sprintf('[Product importer] Reading from existing CSV %s', $this->csvFileName));
             $filePath = storage_path(
                 sprintf('app/import/%s', $this->csvFileName)
             );
@@ -97,7 +97,10 @@ class MultiProductImporter implements ImporterInterface
         try {
             $this->databaseManager->beginTransaction();
 
+            $this->logManager->info('[Product importer] Importing CSV');
             $this->importCSV($filePath);
+
+            $this->logManager->info('[Product importer] Deleting stale products');
             $this->deleteProducts();
 
             $this->databaseManager->commit();
@@ -111,67 +114,19 @@ class MultiProductImporter implements ImporterInterface
     }
 
     /**
-     * Create a CSV file with product data.
-     *
-     * @return string CSV file path
-     * @throws Exception
-     */
-    protected function createCSV(): string
-    {
-        $filePath = storage_path(
-            sprintf('app/import/products-%s.csv', Carbon::now()->format('YmdHis'))
-        );
-
-        $f = fopen($filePath, 'a+');
-        $header = [];
-
-        foreach ($this->downloader->download() as $products) {
-            /** @var Collection $products */
-            $products->each(
-                function ($product) use (&$header, $f) {
-                    $allAttributes = get_class_vars(get_class($product));
-                    $attributes = array_merge($allAttributes, get_object_vars($product));
-
-                    if (! $header) {
-                        $header = array_keys($attributes);
-
-                        fputcsv($f, $header);
-                    }
-
-                    fputcsv($f, $attributes);
-                }
-            );
-        }
-
-        fclose($f);
-
-        return $filePath;
-    }
-
-    /**
-     * Import the CSV.
-     *
-     * @param string $filePath
-     * @return void
-     * @throws Exception
-     */
-    protected function importCSV(string $filePath): void
-    {
-        $this->parser->setFilePath($filePath);
-
-        foreach ($this->parser->parse() as $line) {
-            $this->processor->process($line);
-        }
-    }
-
-    /**
      * Delete products that have not been updated.
      *
      * @return void
      */
     protected function deleteProducts(): void
     {
-        Product::query()->where('synchronized_at', '<', Carbon::createFromTimestamp((int)LARAVEL_START))->delete();
+        Product::withoutSyncingToSearch(
+            function () {
+                Product::query()
+                    ->where('synchronized_at', '<', Carbon::createFromTimestamp((int)LARAVEL_START))
+                    ->delete();
+            }
+        );
     }
 
     /**
@@ -181,6 +136,7 @@ class MultiProductImporter implements ImporterInterface
      */
     protected function updateIndex(): void
     {
+        $this->logManager->info('[Product importer] Recreating index');
         $this->console->call(
             'index:recreate',
             [
@@ -188,11 +144,13 @@ class MultiProductImporter implements ImporterInterface
             ]
         );
 
+        $this->logManager->info('[Product importer] Indexing products');
         $this->console->call(
             'scout:import',
             [
                 'model' => Product::class,
-            ]
+            ],
+            app()->runningInConsole() ? app(ConsoleOutput::class) : null
         );
     }
 }

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
+use WTG\Catalog\Model\Product;
 use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\CartContract;
 use WTG\Contracts\Models\CartItemContract;
@@ -146,13 +147,13 @@ class Quote extends Model implements CartContract
     /**
      * Add a product to the cart.
      *
-     * @param ProductContract $product
+     * @param Product $product
      * @param float $quantity
      * @return CartItemContract
      * @throws CartUpdateException
      * @throws BindingResolutionException
      */
-    public function addProduct(ProductContract $product, float $quantity = 1.0): CartItemContract
+    public function addProduct(Product $product, float $quantity = 1.0): CartItemContract
     {
         $item = $this->findProduct($product);
 
@@ -179,10 +180,10 @@ class Quote extends Model implements CartContract
     /**
      * Find a cart item by product.
      *
-     * @param ProductContract $product
+     * @param Product $product
      * @return null|CartItemContract
      */
-    public function findProduct(ProductContract $product): ?CartItemContract
+    public function findProduct(Product $product): ?CartItemContract
     {
         return $this->items()->where('product_id', $product->getId())->first();
     }
@@ -211,12 +212,12 @@ class Quote extends Model implements CartContract
     /**
      * Update a cart item.
      *
-     * @param ProductContract $product
+     * @param Product $product
      * @param float $quantity
      * @return CartItemContract
      * @throws CartUpdateException
      */
-    public function updateProduct(ProductContract $product, float $quantity): CartItemContract
+    public function updateProduct(Product $product, float $quantity): CartItemContract
     {
         /** @var CartItemContract|Model $item */
         $item = $this->findProduct($product);
@@ -235,11 +236,11 @@ class Quote extends Model implements CartContract
     /**
      * Remove a product from the cart.
      *
-     * @param ProductContract $product
+     * @param Product $product
      * @return bool
      * @throws Exception
      */
-    public function removeProduct(ProductContract $product): bool
+    public function removeProduct(Product $product): bool
     {
         /** @var CartItemContract|Model $item */
         $item = $this->findProduct($product);
@@ -254,10 +255,10 @@ class Quote extends Model implements CartContract
     /**
      * Check if the product is in the cart.
      *
-     * @param ProductContract $product
+     * @param Product $product
      * @return bool
      */
-    public function hasProduct(ProductContract $product): bool
+    public function hasProduct(Product $product): bool
     {
         return (bool)$this->findProduct($product);
     }

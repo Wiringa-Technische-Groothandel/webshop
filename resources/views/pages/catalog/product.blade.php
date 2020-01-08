@@ -3,8 +3,6 @@
 @section('title', __(':product', [ 'product' => $product->getName() ]))
 
 @section('content')
-    <hr />
-
     <div class="container">
         <div class="row mb-3">
             <div class="col-12 d-block d-md-none">
@@ -73,7 +71,7 @@
             @endif
 
             <div class="col-12 col-md-8 offset-md-4">
-                @if ($product->hasDescription())
+                @if ($product->getDescription())
                     @include('components.catalog.product.description')
                 @endif
 

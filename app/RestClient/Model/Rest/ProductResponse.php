@@ -38,6 +38,11 @@ class ProductResponse
     public string $name;
 
     /**
+     * @var null|string
+     */
+    public ?string $description = null;
+
+    /**
      * @var string
      */
     public string $ean;

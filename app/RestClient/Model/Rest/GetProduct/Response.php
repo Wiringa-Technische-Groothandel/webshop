@@ -7,7 +7,7 @@ namespace WTG\RestClient\Model\Rest\GetProduct;
 use Illuminate\Log\LogManager;
 use Psr\Http\Message\ResponseInterface as GuzzleResponseInterface;
 use WTG\RestClient\Api\Model\Rest\GetProductInterface;
-use WTG\RestClient\Model\Parser\ProductsParser;
+use WTG\RestClient\Model\Parser\ProductParser;
 use WTG\RestClient\Model\Rest\AbstractResponse;
 use WTG\RestClient\Model\Rest\ProductResponse;
 
@@ -20,25 +20,25 @@ use WTG\RestClient\Model\Rest\ProductResponse;
 class Response extends AbstractResponse implements GetProductInterface
 {
     /**
-     * @var ProductsParser
+     * @var ProductParser
      */
-    protected ProductsParser $productsParser;
+    protected ProductParser $productParser;
 
     /**
      * Response constructor.
      *
      * @param GuzzleResponseInterface $guzzleResponse
      * @param LogManager $logManager
-     * @param ProductsParser $productsParser
+     * @param ProductParser $productParser
      */
     public function __construct(
         GuzzleResponseInterface $guzzleResponse,
         LogManager $logManager,
-        ProductsParser $productsParser
+        ProductParser $productParser
     ) {
         parent::__construct($guzzleResponse, $logManager);
 
-        $this->productsParser = $productsParser;
+        $this->productParser = $productParser;
     }
 
     /**
@@ -48,7 +48,7 @@ class Response extends AbstractResponse implements GetProductInterface
      */
     public function getProduct(): ProductResponse
     {
-        return $this->productsParser->parse($this->toArray());
+        return $this->productParser->parse($this->toArray());
     }
 
     /**

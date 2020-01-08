@@ -7,7 +7,6 @@ namespace WTG\Catalog\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use WTG\Catalog\Api\Model\PriceFactorInterface;
-use WTG\Models\Product;
 
 /**
  * Price factor model.
@@ -25,7 +24,7 @@ class PriceFactor extends Model implements PriceFactorInterface
     /**
      * @var array
      */
-    protected $guarded = ['id'];
+    protected $guarded = [ 'id' ];
 
     /**
      * Get related product.
@@ -88,7 +87,7 @@ class PriceFactor extends Model implements PriceFactorInterface
      */
     public function getPricePer(): float
     {
-        return (float)$this->getAttribute('price_per');
+        return (float) $this->getAttribute('price_per');
     }
 
     /**
@@ -105,7 +104,7 @@ class PriceFactor extends Model implements PriceFactorInterface
      */
     public function getPriceFactor(): float
     {
-        return (float)$this->getAttribute('price_factor');
+        return (float) $this->getAttribute('price_factor');
     }
 
     /**

@@ -27,7 +27,7 @@ class PriceParser
         $price->netPrice = $item['nettPrice'];
         $price->grossPrice = $item['price'];
         $price->discount = $item['discount'];
-        $price->actionPrice = $item['actionPrice'] || ($item['nettPrice'] === $item['price']);
+        $price->actionPrice = $item['actionPrice'];
 
         return $price;
     }
