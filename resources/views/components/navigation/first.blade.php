@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-light bg-transparent" id="navbar-first">
+<nav class="navbar navbar-expand-md bg-transparent {{ Route::is('home') ? 'navbar-dark' : 'navbar-light' }}" id="navbar-first">
     <div class="container">
         <a class="navbar-brand" href="{{ route('home') }}">
             @if (Route::is('home'))
@@ -9,7 +9,7 @@
         </a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-links">
-            <span class="navbar-toggler-icon"></span>
+            <i class="fas fa-fw fa-bars"></i>
         </button>
 
         <div class="my-2 my-lg-0 search-form">

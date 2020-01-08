@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
 use Illuminate\Database\DatabaseManager;
-use Illuminate\Support\Collection;
+use Illuminate\Log\LogManager;
 use WTG\Catalog\Model\PriceFactor;
 use WTG\Import\Api\ImporterInterface;
 use WTG\Import\Downloader\PriceFactorDownloader;
@@ -21,7 +21,7 @@ use WTG\Import\Processor\PriceFactorProcessor;
  * @package     WTG\Import
  * @author      Thomas Wiringa <thomas.wiringa@gmail.com>
  */
-class MultiPriceFactorImporter implements ImporterInterface
+class MultiPriceFactorImporter extends MultiImporter implements ImporterInterface
 {
     /**
      * Full path to the CSV file.
@@ -31,19 +31,9 @@ class MultiPriceFactorImporter implements ImporterInterface
     public string $csvFileName = '';
 
     /**
-     * @var PriceFactorDownloader
+     * @var LogManager
      */
-    protected PriceFactorDownloader $downloader;
-
-    /**
-     * @var PriceFactorProcessor
-     */
-    protected PriceFactorProcessor $processor;
-
-    /**
-     * @var CsvWithHeaderParser
-     */
-    protected CsvWithHeaderParser $parser;
+    protected LogManager $logManager;
 
     /**
      * @var ConsoleKernel
@@ -61,6 +51,7 @@ class MultiPriceFactorImporter implements ImporterInterface
      * @param PriceFactorDownloader $downloader
      * @param PriceFactorProcessor $processor
      * @param CsvWithHeaderParser $parser
+     * @param LogManager $logManager
      * @param ConsoleKernel $console
      * @param DatabaseManager $databaseManager
      */
@@ -68,12 +59,13 @@ class MultiPriceFactorImporter implements ImporterInterface
         PriceFactorDownloader $downloader,
         PriceFactorProcessor $processor,
         CsvWithHeaderParser $parser,
+        LogManager $logManager,
         ConsoleKernel $console,
         DatabaseManager $databaseManager
     ) {
-        $this->downloader = $downloader;
-        $this->processor = $processor;
-        $this->parser = $parser;
+        parent::__construct($downloader, $processor, $parser);
+
+        $this->logManager = $logManager;
         $this->console = $console;
         $this->databaseManager = $databaseManager;
     }
@@ -87,8 +79,16 @@ class MultiPriceFactorImporter implements ImporterInterface
     public function import(): void
     {
         if (! $this->csvFileName) {
-            $filePath = $this->createCSV();
+            $filePath = storage_path(
+                sprintf('app/import/price-factors-%s.csv', Carbon::now()->format('YmdHis'))
+            );
+
+            $this->logManager->info('[Price factor importer] Creating CSV');
+            $this->createCSV($filePath);
         } else {
+            $this->logManager->info(
+                sprintf('[Price factor importer] Reading from existing CSV %s', $this->csvFileName)
+            );
             $filePath = storage_path(
                 sprintf('app/import/%s', $this->csvFileName)
             );
@@ -97,7 +97,10 @@ class MultiPriceFactorImporter implements ImporterInterface
         try {
             $this->databaseManager->beginTransaction();
 
+            $this->logManager->info('[Price factor importer] Importing CSV');
             $this->importCSV($filePath);
+
+            $this->logManager->info('[Price factor importer] Deleting stale products');
             $this->deleteOldModels();
 
             $this->databaseManager->commit();
@@ -106,44 +109,6 @@ class MultiPriceFactorImporter implements ImporterInterface
 
             throw $e;
         }
-    }
-
-    /**
-     * Create a CSV file with product data.
-     *
-     * @return string CSV file path
-     * @throws Exception
-     */
-    protected function createCSV(): string
-    {
-        $filePath = storage_path(
-            sprintf('app/import/price-factors-%s.csv', Carbon::now()->format('YmdHis'))
-        );
-
-        $f = fopen($filePath, 'a+');
-        $header = [];
-
-        foreach ($this->downloader->download() as $priceFactors) {
-            /** @var Collection $priceFactors */
-            $priceFactors->each(
-                function ($priceFactor) use (&$header, $f) {
-                    $allAttributes = get_class_vars(get_class($priceFactor));
-                    $attributes = array_merge($allAttributes, get_object_vars($priceFactor));
-
-                    if (! $header) {
-                        $header = array_keys($attributes);
-
-                        fputcsv($f, $header);
-                    }
-
-                    fputcsv($f, $attributes);
-                }
-            );
-        }
-
-        fclose($f);
-
-        return $filePath;
     }
 
     /**

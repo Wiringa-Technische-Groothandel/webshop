@@ -40,7 +40,7 @@
                 required: true
             },
             defaultAddress: {
-                type: Number,
+                type: Object,
                 required: true
             },
             updateUrl: {

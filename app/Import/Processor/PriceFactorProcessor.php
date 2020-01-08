@@ -8,8 +8,9 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Log\LogManager;
 use WTG\Catalog\Model\PriceFactor;
+use WTG\Catalog\ProductManager;
 use WTG\Import\Api\ProcessorInterface;
-use WTG\Models\Product;
+use WTG\Catalog\Model\Product;
 
 /**
  * Product data processor.
@@ -25,13 +26,20 @@ class PriceFactorProcessor implements ProcessorInterface
     protected LogManager $logManager;
 
     /**
+     * @var ProductManager
+     */
+    protected ProductManager $productManager;
+
+    /**
      * AbstractProductProcessor constructor.
      *
-     * @param LogManager $logManager
+     * @param LogManager     $logManager
+     * @param ProductManager $productManager
      */
-    public function __construct(LogManager $logManager)
+    public function __construct(LogManager $logManager, ProductManager $productManager)
     {
         $this->logManager = $logManager;
+        $this->productManager = $productManager;
     }
 
     /**
@@ -76,7 +84,7 @@ class PriceFactorProcessor implements ProcessorInterface
      */
     protected function fillModel(PriceFactor $priceFactor, array $data): bool
     {
-        $product = Product::findBySku($data['sku'], true);
+        $product = $this->productManager->find($data['sku']);
 
         $priceFactor->setErpId($data['erpId']);
         $priceFactor->setPriceFactor((float)$data['priceUnitFactor']);

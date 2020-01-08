@@ -2,7 +2,7 @@
     <div class="prices" :class="{ 'price-loading': fetching, 'price-loaded': !fetching }">
         <template v-if="fetching && loggedIn">
             <div class="loading-animation text-center">
-                Uw prijs wordt opgehaald <br />
+                Uw persoonlijke prijs wordt opgehaald <br/>
                 <i class="fal fa-sync fa-spin"></i>
             </div>
         </template>
@@ -17,33 +17,48 @@
         </div>
 
         <template v-if="! error">
-            <div class="action-price" v-if="action">
-                Actieprijs:
-                <span class="d-block d-sm-inline">
-                <i class="fas fa-euro-sign"></i> <span>{{ grossPrice }}</span>
-            </span>
-            </div>
+            <template v-if="action">
+                <div class="action-price">
+                    Actieprijs:
+                    <span class="d-block d-sm-inline">
+                        <i class="fas fa-euro-sign"></i> <span>{{ netPrice }}</span>
+                    </span>
+                </div>
+            </template>
 
-            <div class="gross-price" v-if="grossPrice !== false && !action">
-                Bruto:
-                <span class="d-block d-sm-inline">
-                <i class="fas fa-euro-sign"></i> <span>{{ grossPrice }}</span>
-            </span>
-            </div>
+            <template v-else-if="netPrice && showSinglePrice">
+                <div class="net-price">
+                    Bruto / Netto:
+                    <span class="d-block d-sm-inline">
+                        <i class="fas fa-euro-sign"></i> <span>{{ netPrice }}</span>
+                    </span>
+                </div>
+            </template>
 
-            <div class="net-price" v-if="netPrice !== false && !action">
-                Netto:
-                <span class="d-block d-sm-inline">
-                <i class="fas fa-euro-sign"></i> <span>{{ netPrice }}</span>
-            </span>
-            </div>
+            <template v-else-if="netPrice && grossPrice">
+                <div class="gross-price">
+                    Bruto:
+                    <span class="d-block d-sm-inline">
+                        <i class="fas fa-euro-sign"></i> <span>{{ grossPrice }}</span>
+                    </span>
+                </div>
+
+                <div class="net-price">
+                    Netto:
+                    <span class="d-block d-sm-inline">
+                        <i class="fas fa-euro-sign"></i> <span>{{ netPrice }}</span>
+                    </span>
+                </div>
+            </template>
         </template>
 
-        <small class="form-text text-muted price-per" v-if="! fetching && loggedIn">
-            {{ product.price_per_str }}
-        </small>
+        <template v-if="!fetching && loggedIn">
+            <small class="form-text text-muted price-per">
+                {{ product.price_per_str }}
+            </small>
 
-        <small class="form-text text-muted stock" v-if="! fetching && loggedIn" v-html="product.stock_status"></small>
+            <small class="form-text text-muted stock" v-html="product.stock_status"></small>
+        </template>
     </div>
 </template>
 
@@ -63,7 +78,7 @@
                 required: true
             }
         },
-        data () {
+        data() {
             return {
                 fetching: true,
                 error: false,
@@ -72,7 +87,14 @@
                 action: false
             }
         },
-        created () {
+        computed: {
+            showSinglePrice() {
+                return !this.action &&
+                    this.netPrice === this.grossPrice &&
+                    (this.product.price_factor && this.product.price_factor.price_unit === 'DAG')
+            }
+        },
+        created() {
             if (this.loggedIn) {
                 this.$root.$emit('fetch-price', this.product.sku);
 

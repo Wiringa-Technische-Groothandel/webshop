@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace WTG\Contracts\Models;
 
+use WTG\Catalog\Model\Product;
+
 /**
  * Cart item contract.
  *
@@ -15,17 +17,17 @@ interface CartItemContract
     /**
      * Set the product.
      *
-     * @param ProductContract|null $product
-     * @return ProductContract|null
+     * @param Product|null $product
+     * @return Product|null
      */
-    public function setProduct(ProductContract $product): ?ProductContract;
+    public function setProduct(Product $product): ?Product;
 
     /**
      * Get the product.
      *
-     * @return null|ProductContract
+     * @return null|Product
      */
-    public function getProduct(): ?ProductContract;
+    public function getProduct(): ?Product;
 
     /**
      * Set the cart.

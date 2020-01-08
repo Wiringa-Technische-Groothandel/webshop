@@ -83,35 +83,32 @@
 
 @push('scripts')
     <script async defer>
-        setTimeout(function () {
+        window.updateShippingAddress = function(target) {
             const $deliveryAddress = $("#delivery-address");
             const $changeAddressModal = $('#change-address-modal');
+            const $this = $(target);
+            const $selectedAddress = $($this.data('target'));
 
-            $('.change-address-button').on('click', function () {
-                const $this = $(this);
-                const $selectedAddress = $($this.data('target'));
+            $deliveryAddress.html($selectedAddress.html());
+            $changeAddressModal.modal('hide');
 
-                $deliveryAddress.html($selectedAddress.html());
-                $changeAddressModal.modal('hide');
-
-                axios.patch(window.location.href, {
-                    addressId: $this.data('address-id')
-                })
-                    .then((resp) => {
-                        window.vm.$root.$emit('send-notify', {
-                            text: resp.data.message,
-                            success: resp.data.success
-                        });
-
-                        window.vm.$root.$emit('cart-address-changed', resp.data.address);
-                    })
-                    .catch(function (error) {
-                        window.vm.$root.$emit('send-notify', {
-                            text: error,
-                            success: false
-                        });
+            axios.patch(window.location.href, {
+                addressId: $this.data('address-id')
+            })
+                .then((resp) => {
+                    window.vm.$root.$emit('send-notify', {
+                        text: resp.data.message,
+                        success: resp.data.success
                     });
-            });
-        }, 200);
+
+                    window.vm.$root.$emit('cart-address-changed', resp.data.address);
+                })
+                .catch(function (error) {
+                    window.vm.$root.$emit('send-notify', {
+                        text: error,
+                        success: false
+                    });
+                });
+        }
     </script>
 @endpush

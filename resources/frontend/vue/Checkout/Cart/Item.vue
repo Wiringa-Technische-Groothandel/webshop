@@ -27,14 +27,14 @@
                             <div class="col text-left">
                                 <div class="cart-item-price">
                                     <label class="d-block d-md-none">Prijs</label>
-                                    <i class="far fa-fw fa-euro-sign"></i> {{ item.price.toFixed(2).replace(".", ",") }} per {{ item.product.sales_unit_long }}
+                                    <i class="far fa-euro-sign"></i> {{ item.price.toFixed(2).replace(".", ",") }} per {{ item.product.sales_unit_long }}
                                 </div>
                             </div>
 
                             <div class="col text-right">
                                 <div class="cart-item-subtotal">
                                     <label class="d-block d-md-none">Subtotaal</label>
-                                    <i class="far fa-fw fa-euro-sign"></i> {{ item.subtotal.toFixed(2).replace(".", ",") }}
+                                    <i class="far fa-euro-sign"></i> {{ item.subtotal.toFixed(2).replace(".", ",") }}
                                 </div>
                             </div>
                         </div>

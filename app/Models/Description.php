@@ -87,6 +87,6 @@ class Description extends Model implements DescriptionContract
     {
         $string = $this->getAttribute('value');
 
-        return $string ? new HtmlString($string) : null;
+        return $string ? (string)(new HtmlString($string)) : null;
     }
 }

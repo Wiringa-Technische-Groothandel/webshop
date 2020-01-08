@@ -9,7 +9,7 @@ use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use WTG\Http\Controllers\Admin\Controller;
-use WTG\Models\Product;
+use WTG\Catalog\Model\Product;
 
 /**
  * Product catalog reindex products controller.

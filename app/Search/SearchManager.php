@@ -7,7 +7,7 @@ namespace WTG\Search;
 use Elasticsearch\Client;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use WTG\Models\Product;
+use WTG\Catalog\Model\Product;
 
 /**
  * Search manager.

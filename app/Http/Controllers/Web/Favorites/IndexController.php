@@ -7,11 +7,12 @@ namespace WTG\Http\Controllers\Web\Favorites;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\Factory as ViewFactory;
+use WTG\Catalog\ProductManager;
 use WTG\Contracts\Models\CustomerContract;
 use WTG\Contracts\Services\FavoritesServiceContract;
 use WTG\Exceptions\ProductNotFoundException;
 use WTG\Http\Controllers\Controller;
-use WTG\Models\Product;
+use WTG\Catalog\Model\Product;
 
 /**
  * Favorites index controller.
@@ -25,21 +26,29 @@ class IndexController extends Controller
     /**
      * @var FavoritesServiceContract
      */
-    protected $favoritesService;
+    protected FavoritesServiceContract $favoritesService;
+
+    /**
+     * @var ProductManager
+     */
+    protected ProductManager $productManager;
 
     /**
      * FavoritesController constructor.
      *
-     * @param ViewFactory $view
+     * @param ViewFactory              $view
      * @param FavoritesServiceContract $favoritesService
+     * @param ProductManager           $productManager
      */
     public function __construct(
         ViewFactory $view,
-        FavoritesServiceContract $favoritesService
+        FavoritesServiceContract $favoritesService,
+        ProductManager $productManager
     ) {
         parent::__construct($view);
 
         $this->favoritesService = $favoritesService;
+        $this->productManager = $productManager;
     }
 
     /**
@@ -123,7 +132,7 @@ class IndexController extends Controller
 
         /** @var CustomerContract $customer */
         $customer = $request->user();
-        $product = Product::findBySku($sku);
+        $product = $this->productManager->find($sku);
 
         if (! $product) {
             return response()->json(

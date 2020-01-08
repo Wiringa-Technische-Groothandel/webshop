@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace WTG\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use WTG\Catalog\Model\Product;
+use WTG\Catalog\ProductManager;
 use WTG\Contracts\Models\OrderContract;
 use WTG\Contracts\Models\OrderItemContract;
-use WTG\Contracts\Models\ProductContract;
 
 /**
  * Order item model.
@@ -23,6 +25,23 @@ class OrderItem extends Model implements OrderItemContract
      * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * @var ProductManager
+     */
+    protected ProductManager $productManager;
+
+    /**
+     * OrderItem constructor.
+     *
+     * @param array          $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->productManager = app(ProductManager::class);
+    }
 
     /**
      * Set the order.
@@ -163,11 +182,15 @@ class OrderItem extends Model implements OrderItemContract
     }
 
     /**
-     * @return ProductContract|null
+     * @return Product|null
      */
-    public function getProduct(): ?ProductContract
+    public function getProduct(): ?Product
     {
-        return Product::findBySku($this->getSku());
+        try {
+            return $this->productManager->find($this->getSku());
+        } catch (Exception $exception) {
+            return null;
+        }
     }
 
     /**

@@ -6,9 +6,9 @@ namespace WTG\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use WTG\Catalog\Model\Product;
 use WTG\Contracts\Models\PackContract;
 use WTG\Contracts\Models\PackProductContract;
-use WTG\Contracts\Models\ProductContract;
 
 /**
  * Pack product model.
@@ -31,10 +31,10 @@ class PackProduct extends Model implements PackProductContract
     /**
      * Set the product.
      *
-     * @param ProductContract $product
+     * @param Product $product
      * @return PackProductContract
      */
-    public function setProduct(ProductContract $product): PackProductContract
+    public function setProduct(Product $product): PackProductContract
     {
         $this->product()->associate($product);
 
@@ -54,9 +54,9 @@ class PackProduct extends Model implements PackProductContract
     /**
      * Get the product.
      *
-     * @return ProductContract
+     * @return Product
      */
-    public function getProduct(): ProductContract
+    public function getProduct(): Product
     {
         return $this->getAttribute('product');
     }

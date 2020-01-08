@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace WTG\Contracts\Services;
 
 use Illuminate\Support\Collection;
+use WTG\Catalog\Model\Product;
 use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\CartItemContract;
-use WTG\Contracts\Models\ProductContract;
 
 /**
  * Interface CartServiceContract
@@ -28,11 +28,11 @@ interface CartServiceContract
     /**
      * Add a product.
      *
-     * @param ProductContract $product
+     * @param Product $product
      * @param float $quantity
      * @return null|CartItemContract
      */
-    public function addProduct(ProductContract $product, float $quantity = 1.0): ?CartItemContract;
+    public function addProduct(Product $product, float $quantity = 1.0): ?CartItemContract;
 
     /**
      * Update a product by sku.

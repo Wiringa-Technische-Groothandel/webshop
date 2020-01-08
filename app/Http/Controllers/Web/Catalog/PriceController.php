@@ -10,10 +10,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\Factory as ViewFactory;
 use WTG\Catalog\PriceManager;
+use WTG\Catalog\ProductManager;
 use WTG\Contracts\Models\CustomerContract;
 use WTG\Http\Controllers\Controller;
 use WTG\Http\Requests\FetchPriceRequest;
-use WTG\Models\Product;
+use WTG\Catalog\Model\Product;
 
 /**
  * Assortment controller.
@@ -30,16 +31,23 @@ class PriceController extends Controller
     protected PriceManager $priceManager;
 
     /**
+     * @var ProductManager
+     */
+    protected ProductManager $productManager;
+
+    /**
      * PriceController constructor.
      *
-     * @param ViewFactory $view
-     * @param PriceManager $priceManager
+     * @param ViewFactory    $view
+     * @param PriceManager   $priceManager
+     * @param ProductManager $productManager
      */
-    public function __construct(ViewFactory $view, PriceManager $priceManager)
+    public function __construct(ViewFactory $view, PriceManager $priceManager, ProductManager $productManager)
     {
         parent::__construct($view);
 
         $this->priceManager = $priceManager;
+        $this->productManager = $productManager;
     }
 
     /**
@@ -51,7 +59,7 @@ class PriceController extends Controller
      */
     public function getAction(Request $request, string $sku): JsonResponse
     {
-        $product = Product::findBySku($sku);
+        $product = $this->productManager->find($sku);
 
         if (! $product) {
             return response()->json(

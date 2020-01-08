@@ -13,10 +13,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
+use WTG\Catalog\Model\Product;
 use WTG\Contracts\Models\CompanyContract;
 use WTG\Contracts\Models\ContactContract;
 use WTG\Contracts\Models\CustomerContract;
-use WTG\Contracts\Models\ProductContract;
 use WTG\Contracts\Models\RoleContract;
 use WTG\Notifications\ResetPassword;
 
@@ -76,7 +76,7 @@ class Customer extends Authenticatable implements CustomerContract
     {
         $contact = $this->getAttribute('contact');
 
-        if (! $contact) {
+        if ( ! $contact ) {
             /** @var Contact $contact */
             $contact = app()->make(ContactContract::class);
             $contact->setAttribute('customer_id', $this->getId());
@@ -217,7 +217,7 @@ class Customer extends Authenticatable implements CustomerContract
      */
     public function getActive(): bool
     {
-        return (bool)$this->getAttribute('active');
+        return (bool) $this->getAttribute('active');
     }
 
     /**
@@ -243,10 +243,10 @@ class Customer extends Authenticatable implements CustomerContract
     /**
      * Check if the customer has set the product as favorite.
      *
-     * @param ProductContract $product
+     * @param Product $product
      * @return bool
      */
-    public function hasFavorite(ProductContract $product): bool
+    public function hasFavorite(Product $product): bool
     {
         return $this->favorites()->where('product_id', $product->getId())->exists();
     }
@@ -264,10 +264,10 @@ class Customer extends Authenticatable implements CustomerContract
     /**
      * Add a product as favorite.
      *
-     * @param ProductContract $product
+     * @param Product $product
      * @return void
      */
-    public function addFavorite(ProductContract $product): void
+    public function addFavorite(Product $product): void
     {
         $this->favorites()->attach($product->getId());
     }
@@ -275,10 +275,10 @@ class Customer extends Authenticatable implements CustomerContract
     /**
      * Add a product as favorite.
      *
-     * @param ProductContract $product
+     * @param Product $product
      * @return void
      */
-    public function removeFavorite(ProductContract $product): void
+    public function removeFavorite(Product $product): void
     {
         $this->favorites()->detach($product->getId());
     }

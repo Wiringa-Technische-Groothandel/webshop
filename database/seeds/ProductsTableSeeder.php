@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use WTG\Catalog\Model\PriceFactor;
-use WTG\Models\Product;
+use WTG\Catalog\Model\Product;
 
 /**
  * Products table seeder.

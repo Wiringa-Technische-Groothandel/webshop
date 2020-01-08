@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WTG\RestClient\Model\Rest\GetProductStocks;
 
-use WTG\Models\Product;
+use WTG\Catalog\Model\Product;
 use WTG\RestClient\Api\Model\RequestInterface;
 use WTG\RestClient\Model\Rest\AbstractRequest;
 

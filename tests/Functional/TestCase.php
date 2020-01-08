@@ -33,7 +33,7 @@ abstract class TestCase extends \Tests\TestCase
 
         $this->artisan('db:seed');
 
-        $this->mailFake = new MailFake;
+        $this->mailFake = new MailFake();
         $this->app->instance(MailerContract::class, $this->mailFake);
     }
 }
