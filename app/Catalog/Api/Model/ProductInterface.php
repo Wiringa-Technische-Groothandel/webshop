@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace WTG\Catalog\Api\Model;
 
 use Illuminate\Support\Collection;
+use WTG\Catalog\Model\Pack;
 use WTG\Catalog\Model\PriceFactor;
 use WTG\Contracts\Models\DescriptionContract;
-use WTG\Models\Pack;
 
 /**
  * Product model interface.
@@ -41,7 +41,6 @@ interface ProductInterface
     public const FIELD_GROUP = 'group';
     public const FIELD_SUPPLIER_CODE = 'supplier_code';
     public const FIELD_DESCRIPTION = 'description';
-
     // Relation getters
 
     /**

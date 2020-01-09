@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace WTG\Providers;
 
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
-use Storage;
 use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\AdminContract;
 use WTG\Contracts\Models\BlockContract;
@@ -20,8 +20,6 @@ use WTG\Contracts\Models\CustomerContract;
 use WTG\Contracts\Models\DescriptionContract;
 use WTG\Contracts\Models\OrderContract;
 use WTG\Contracts\Models\OrderItemContract;
-use WTG\Contracts\Models\PackContract;
-use WTG\Contracts\Models\PackProductContract;
 use WTG\Contracts\Services\Account\AddressServiceContract;
 use WTG\Contracts\Services\CartServiceContract;
 use WTG\Contracts\Services\CheckoutServiceContract;
@@ -36,8 +34,6 @@ use WTG\Models\Customer;
 use WTG\Models\Description;
 use WTG\Models\Order;
 use WTG\Models\OrderItem;
-use WTG\Models\Pack;
-use WTG\Models\PackProduct;
 use WTG\Models\Quote;
 use WTG\Models\QuoteItem;
 use WTG\Services\Account\AddressService;
@@ -68,7 +64,7 @@ class AppServiceProvider extends ServiceProvider
         view()->composer(
             '*',
             function ($view) {
-                if (auth('web')->check()) {
+                if ( auth('web')->check() ) {
                     /** @var CustomerContract $customer */
                     $customer = auth('web')->user();
 
@@ -99,7 +95,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->alias(RecaptchaService::class, 'captcha');
 
         // Model bindings
-        $this->app->bind(PackContract::class, Pack::class);
         $this->app->bind(CartContract::class, Quote::class);
         $this->app->bind(AdminContract::class, Admin::class);
         $this->app->bind(BlockContract::class, Block::class);
@@ -111,7 +106,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CartItemContract::class, QuoteItem::class);
         $this->app->bind(OrderItemContract::class, OrderItem::class);
         $this->app->bind(DescriptionContract::class, Description::class);
-        $this->app->bind(PackProductContract::class, PackProduct::class);
 
         // Service bindings
         $this->app->bind(CartServiceContract::class, CartService::class);

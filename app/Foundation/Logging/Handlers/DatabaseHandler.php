@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace WTG\LogHandlers;
+namespace WTG\Foundation\Logging\Handlers;
 
-use DB;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\HandlerInterface;
 
@@ -16,12 +16,12 @@ use Monolog\Handler\HandlerInterface;
  * @subpackage  LogHandlers
  * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
-class DatabaseLogHandler extends AbstractHandler implements HandlerInterface
+class DatabaseHandler extends AbstractHandler implements HandlerInterface
 {
     /**
      * @var bool
      */
-    protected $failed = false;
+    protected bool $failed = false;
 
     /**
      * @param array $record

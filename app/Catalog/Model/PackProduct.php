@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace WTG\Models;
+namespace WTG\Catalog\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use WTG\Catalog\Model\Product;
 use WTG\Contracts\Models\PackContract;
 use WTG\Contracts\Models\PackProductContract;
 

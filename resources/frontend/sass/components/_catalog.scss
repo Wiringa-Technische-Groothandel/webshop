@@ -43,6 +43,11 @@
     }
   }
 
+  .gross-price {
+    font-size: 16px;
+    text-decoration: line-through;
+  }
+
   .error {
     color: var(--danger);
   }

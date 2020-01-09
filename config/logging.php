@@ -42,7 +42,7 @@ return [
 
         'database' => [
             'driver' => 'monolog',
-            'handler' => \WTG\LogHandlers\DatabaseLogHandler::class,
+            'handler' => \WTG\Foundation\Logging\Handlers\DatabaseHandler::class,
             'level' => 'info'
         ],
 

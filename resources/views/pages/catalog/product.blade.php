@@ -17,9 +17,9 @@
                         <i class="fal fa-fw fa-chevron-left"></i> {{ __('Terug naar overzicht') }}
                     </a>
 
-                    <a href="{{ $product->getImageUrl('large') }}" data-alt="{{ $product->getName() }}"
+                    <a href="{{ $product->getImageUrl(\WTG\Catalog\Model\Product::IMAGE_SIZE_ORIGINAL) }}" data-alt="{{ $product->getName() }}"
                        data-caption="{{ $product->getName() }}" data-lightbox="desktop-product-image">
-                        <img src="{{ $product->getImageUrl('medium') }}" alt="{{ $product->getName() }}" class="img-thumbnail">
+                        <img src="{{ $product->getImageUrl(\WTG\Catalog\Model\Product::IMAGE_SIZE_MEDIUM) }}" alt="{{ $product->getName() }}" class="img-thumbnail">
                     </a>
                 </div>
             </div>
@@ -31,10 +31,10 @@
 
                 <div class="row">
                     <div class="col-12 col-md-6 mb-3">
-                        <a href="{{ $product->getImageUrl('large') }}" data-alt="{{ $product->getName() }}"
+                        <a href="{{ $product->getImageUrl(\WTG\Catalog\Model\Product::IMAGE_SIZE_LARGE) }}" data-alt="{{ $product->getName() }}"
                            data-caption="{{ $product->getName() }}" data-lightbox="mobile-product-image"
                            class="d-block d-sm-none">
-                            <img src="{{ $product->getImageUrl('medium') }}" class="img-thumbnail w-25 float-right">
+                            <img src="{{ $product->getImageUrl(\WTG\Catalog\Model\Product::IMAGE_SIZE_MEDIUM) }}" class="img-thumbnail w-25 float-right">
                         </a>
 
                         @include('components.catalog.product.price')
