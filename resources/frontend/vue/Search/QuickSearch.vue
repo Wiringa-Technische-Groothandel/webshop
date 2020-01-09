@@ -14,7 +14,9 @@
         <div class="card" v-if="totalItems > 0">
             <div class="card-header">
                 Suggesties
-                <i class="float-right far fa-fw fa-times" v-on:click="reset"></i>
+                <div class="float-right" @click="reset">
+                    <i class="far fa-fw fa-times"></i>
+                </div>
             </div>
 
             <div class="list-group">
@@ -51,6 +53,13 @@
                 inputQuery: this.query,
                 totalItems: 0,
                 items: []
+            }
+        },
+        watch: {
+            inputQuery (val) {
+                if (val.length === 0) {
+                    this.reset();
+                }
             }
         },
         methods: {
