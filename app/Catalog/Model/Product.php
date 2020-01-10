@@ -68,6 +68,22 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
         'stock_status',
     ];
 
+    /**
+     * @var bool
+     */
+    public static $withoutAppends = false;
+
+    /**
+     * @return array
+     */
+    protected function getArrayableAppends()
+    {
+        if (self::$withoutAppends) {
+            return [];
+        }
+        return parent::getArrayableAppends();
+    }
+
     // Model relations
 
     /**
@@ -201,7 +217,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getGroup(): string
     {
-        return (string) $this->getAttribute(self::FIELD_GROUP);
+        return (string)$this->getAttribute(self::FIELD_GROUP);
     }
 
     /**
@@ -296,7 +312,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getLength(): float
     {
-        return (float) $this->getAttribute(self::FIELD_LENGTH);
+        return (float)$this->getAttribute(self::FIELD_LENGTH);
     }
 
     /**
@@ -317,7 +333,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getHeight(): float
     {
-        return (float) $this->getAttribute(self::FIELD_HEIGHT);
+        return (float)$this->getAttribute(self::FIELD_HEIGHT);
     }
 
     /**
@@ -338,7 +354,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getWidth(): float
     {
-        return (float) $this->getAttribute(self::FIELD_WIDTH);
+        return (float)$this->getAttribute(self::FIELD_WIDTH);
     }
 
     /**
@@ -359,7 +375,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getWeight(): float
     {
-        return (float) $this->getAttribute(self::FIELD_WEIGHT);
+        return (float)$this->getAttribute(self::FIELD_WEIGHT);
     }
 
     /**
@@ -401,7 +417,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function isDiscontinued(): bool
     {
-        return (bool) $this->getAttribute(self::FIELD_DISCONTINUED);
+        return (bool)$this->getAttribute(self::FIELD_DISCONTINUED);
     }
 
     /**
@@ -422,7 +438,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function isBlocked(): bool
     {
-        return (bool) $this->getAttribute(self::FIELD_BLOCKED);
+        return (bool)$this->getAttribute(self::FIELD_BLOCKED);
     }
 
     /**
@@ -443,7 +459,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function isInactive(): bool
     {
-        return (bool) $this->getAttribute(self::FIELD_INACTIVE);
+        return (bool)$this->getAttribute(self::FIELD_INACTIVE);
     }
 
     /**
@@ -582,16 +598,16 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     {
         $searchableArray = [];
 
-        foreach ( $this->getSearchableFields() as $name => $field ) {
+        foreach ($this->getSearchableFields() as $name => $field) {
             $values = [];
             $name = is_numeric($name) ? $field : $name;
 
-            if ( is_array($field) ) {
-                foreach ( $field as $f ) {
+            if (is_array($field)) {
+                foreach ($field as $f) {
                     $values[] = $this->$f;
                 }
             } else {
-                $values = [ $this->$field ];
+                $values = [$this->$field];
             }
 
             $searchableArray[$name] = join(' ', $values);
@@ -610,7 +626,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
         return [
             'sku',
             'group',
-            'description' => [ 'name', 'keywords' ],
+            'description' => ['name', 'keywords'],
             'brand',
             'series',
             'type',
@@ -654,7 +670,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
         $path = public_path($relativePath);
         $cacheKey = 'product-image-' . $this->getAttribute(self::FIELD_SKU) . '-' . $size;
 
-        if ( ! file_exists($path) ) {
+        if (! file_exists($path)) {
             $path = public_path(static::IMAGE_PLACEHOLDER_PATH);
             $cacheKey = static::IMAGE_PLACEHOLDER_CACHE_KEY . '-' . $size;
         }
@@ -773,7 +789,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
                 $stockManager = app(StockManager::class);
                 $stock = $stockManager->fetchStock($this->getSku());
 
-                if ( $stock ) {
+                if ($stock) {
                     return get_object_vars($stock);
                 }
 
@@ -789,7 +805,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getSku(): string
     {
-        return (string) $this->getAttribute(self::FIELD_SKU);
+        return (string)$this->getAttribute(self::FIELD_SKU);
     }
 
     /**
@@ -799,7 +815,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getSalesUnit(): string
     {
-        return $this->getAttribute(self::FIELD_SALES_UNIT);
+        return $this->getAttribute(self::FIELD_SALES_UNIT) ?: '';
     }
 
     /**
@@ -837,13 +853,13 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getPricePerStr(): string
     {
-        if ( ! $this->getPriceFactor()->getId() ) {
+        if (! $this->getPriceFactor()->getId()) {
             return '';
         }
 
-        if ( $this->getPriceFactor()->getPriceUnit() === 'DAG' ) {
+        if ($this->getPriceFactor()->getPriceUnit() === 'DAG') {
             $pricePerString = sprintf('Huurprijs per dag');
-        } elseif ( $this->getPriceFactor()->getScaleUnit() === $this->getPriceFactor()->getPriceUnit() ) {
+        } elseif ($this->getPriceFactor()->getScaleUnit() === $this->getPriceFactor()->getPriceUnit()) {
             $pricePerString = sprintf(
                 'Prijs per %s',
                 unit_to_str($this->getPriceFactor()->getPriceUnit(), false)

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace WTG\Contracts\Models;
 
-use WTG\Catalog\Model\Product;
 use Illuminate\Support\Collection;
+use WTG\Catalog\Api\Model\ProductInterface;
 
 /**
  * Pack contract.
@@ -26,17 +26,17 @@ interface PackContract
     /**
      * Set the product.
      *
-     * @param Product $product
+     * @param ProductInterface $product
      * @return PackContract
      */
-    public function setProduct(Product $product): PackContract;
+    public function setProduct(ProductInterface $product): PackContract;
 
     /**
      * Get the product.
      *
-     * @return ProductContract
+     * @return ProductInterface
      */
-    public function getProduct(): ProductContract;
+    public function getProduct(): ProductInterface;
 
     /**
      * Get the items.

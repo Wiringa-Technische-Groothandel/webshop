@@ -8,6 +8,7 @@ use Elasticsearch\Client;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use WTG\Catalog\Model\Product;
+use WTG\Catalog\ProductManager;
 
 /**
  * Search manager.
@@ -16,6 +17,21 @@ use WTG\Catalog\Model\Product;
  */
 class SearchManager
 {
+    /**
+     * @var ProductManager
+     */
+    protected ProductManager $productManager;
+
+    /**
+     * SearchManager constructor.
+     *
+     * @param ProductManager $productManager
+     */
+    public function __construct(ProductManager $productManager)
+    {
+        $this->productManager = $productManager;
+    }
+
     /**
      * Product listing.
      *
@@ -251,52 +267,10 @@ class SearchManager
         }
 
         return [
-            'required' => $this->escapeCharacters(join(' ', $requiredTerms)),
-            'any'      => $this->escapeCharacters(join(' ', $anyTerms)),
-            'optional' => $this->escapeCharacters(join(' ', $optionalTerms)),
+            'required' => join(' ', $requiredTerms),
+            'any'      => join(' ', $anyTerms),
+            'optional' => join(' ', $optionalTerms),
         ];
-    }
-
-    /**
-     * Escape reserved Elasticsearch characters.
-     *
-     * @param string $query
-     * @return string  The escaped query
-     */
-    protected function escapeCharacters(string $query)
-    {
-        $reserved = [
-            "\\",
-            "+",
-            "-",
-            "=",
-            "&&",
-            "||",
-            "!",
-            "(",
-            ")",
-            "{",
-            "}",
-            "[",
-            "]",
-            "^",
-            "\"",
-            "~",
-            "*",
-            "?",
-            ":",
-            "/",
-        ];
-
-        foreach ($reserved as $char) {
-            $query = str_replace($char, "\\$char", $query);
-        }
-
-        foreach (["<", ">"] as $char) {
-            $query = str_replace($char, "", $query);
-        }
-
-        return $query;
     }
 
     /**
@@ -321,7 +295,7 @@ class SearchManager
             ->map(
                 function (Product $product) {
                     return [
-                        'url'  => $product->getUrl(),
+                        'url'  => $this->productManager->getProductUrl($product),
                         'name' => $product->getName(),
                     ];
                 }

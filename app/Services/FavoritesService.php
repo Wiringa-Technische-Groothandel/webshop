@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace WTG\Services;
 
 use Illuminate\Support\Collection;
+use WTG\Catalog\Api\Model\ProductInterface;
 use WTG\Catalog\ProductManager;
-use WTG\Contracts\Models\ProductContract;
 use WTG\Contracts\Services\AuthServiceContract;
 use WTG\Contracts\Services\FavoritesServiceContract;
 use WTG\Exceptions\ProductNotFoundException;
@@ -52,7 +52,7 @@ class FavoritesService implements FavoritesServiceContract
             ->getCurrentCustomer()
             ->getFavorites()
             ->mapToGroups(
-                function (ProductContract $item) {
+                function (ProductInterface $item) {
                     return [$item->getSeries() => $item];
                 }
             );

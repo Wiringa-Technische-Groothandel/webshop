@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use WTG\Http\Controllers\Admin\Controller;
+use WTG\Import\Importer\SingleProductImporter;
+use WTG\Import\ImportManager;
 use WTG\Import\ProductImport;
 
 /**
@@ -26,20 +28,20 @@ class SyncController extends Controller
     protected Request $request;
 
     /**
-     * @var ProductImport
+     * @var ImportManager
      */
-    protected ProductImport $productImporter;
+    protected ImportManager $importManager;
 
     /**
      * SyncController constructor.
      *
      * @param Request $request
-     * @param ProductImport $productImporter
+     * @param ImportManager $importManager
      */
-    public function __construct(Request $request, ProductImport $productImporter)
+    public function __construct(Request $request, ImportManager $importManager)
     {
         $this->request = $request;
-        $this->productImporter = $productImporter;
+        $this->importManager = $importManager;
     }
 
     /**
@@ -50,7 +52,11 @@ class SyncController extends Controller
         $sku = (string)$this->request->input('sku');
 
         try {
-            $this->productImporter->executeSingle($sku);
+            /** @var SingleProductImporter $importer */
+            $importer = app(SingleProductImporter::class);
+            $importer->setSku($sku);
+
+            $this->importManager->run($importer);
         } catch (ModelNotFoundException $e) {
             return response()->json(
                 [

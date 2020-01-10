@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace WTG\Contracts\Models;
 
+use WTG\Catalog\Api\Model\ProductInterface;
+
 /**
  * Favorite contract.
  *
@@ -15,9 +17,9 @@ interface FavoriteContract
     /**
      * Get the product.
      *
-     * @return null|ProductContract
+     * @return null|ProductInterface
      */
-    public function getProduct(): ?ProductContract;
+    public function getProduct(): ?ProductInterface;
 
     /**
      * Get the customer.

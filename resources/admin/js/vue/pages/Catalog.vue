@@ -6,7 +6,7 @@
             </div>
 
             <div class="col-sm-3">
-                <sync-product :sku="sku"></sync-product>
+                <sync-product :sku="sku" @synced="handleSync"></sync-product>
 
                 <product-indexer></product-indexer>
             </div>
@@ -33,6 +33,10 @@
         methods: {
             setSku (product) {
                 this.sku = product.sku;
+            },
+            handleSync() {
+                this.sku = '';
+                this.$root.$emit('reload-products-table');
             }
         }
     }

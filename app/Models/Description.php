@@ -7,8 +7,9 @@ namespace WTG\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\HtmlString;
+use WTG\Catalog\Api\Model\ProductInterface;
+use WTG\Catalog\Model\Product;
 use WTG\Contracts\Models\DescriptionContract;
-use WTG\Contracts\Models\ProductContract;
 
 /**
  * Description model.
@@ -27,9 +28,9 @@ class Description extends Model implements DescriptionContract
     /**
      * Get the related product.
      *
-     * @return ProductContract
+     * @return ProductInterface
      */
-    public function getProduct(): ProductContract
+    public function getProduct(): ProductInterface
     {
         return $this->getAttribute('product');
     }
@@ -37,10 +38,10 @@ class Description extends Model implements DescriptionContract
     /**
      * Set the related product.
      *
-     * @param ProductContract $product
+     * @param ProductInterface $product
      * @return DescriptionContract
      */
-    public function setProduct(ProductContract $product): DescriptionContract
+    public function setProduct(ProductInterface $product): DescriptionContract
     {
         $this->product()->associate($product);
 

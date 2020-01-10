@@ -31,8 +31,6 @@
 
     @routes
 
-    <script src="{{ mix('assets/base-components.js') }}" async defer></script>
-    <script src="{{ mix('assets/polyfills.js') }}" async defer></script>
     <script src="{{ mix('assets/admin/main.js') }}" async defer></script>
 </head>
 

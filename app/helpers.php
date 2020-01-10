@@ -7,6 +7,20 @@ const ENV_TESTING = 'testing';
 const ENV_STAGING = 'staging';
 const ENV_PROD = 'production';
 
+if (! function_exists('route_class')) {
+    /**
+     * Return a string (css class) if the provided route name matches with the current route name.
+     *
+     * @param string $routeName
+     * @param string $className
+     * @return string
+     */
+    function route_class(string $routeName, string $className = 'active'): string
+    {
+        return request()->is($routeName) ? $className : '';
+    }
+}
+
 if (! function_exists('block')) {
     /**
      * Find a block by name.

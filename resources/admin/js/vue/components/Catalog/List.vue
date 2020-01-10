@@ -49,6 +49,9 @@
                     return;
                 }
 
+                this.fetchProducts();
+            },
+            fetchProducts () {
                 this.$http.get(route('admin.api.products'))
                     .then((response) => {
                         this.products = response.data.products;
@@ -89,6 +92,8 @@
         },
         mounted () {
             this.fetchTableData();
+
+            this.$root.$on('reload-products-table', this.fetchProducts)
         }
     }
 </script>

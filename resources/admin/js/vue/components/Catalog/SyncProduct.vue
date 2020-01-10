@@ -57,7 +57,6 @@
                 }).then((response) => {
                     if (response.data.success) {
                         this.$emit('synced', this.skuInput);
-                        this.skuInput = null;
                     }
 
                     this.$root.$emit('send-notify', {

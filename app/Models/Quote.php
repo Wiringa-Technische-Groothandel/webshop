@@ -17,7 +17,6 @@ use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\CartContract;
 use WTG\Contracts\Models\CartItemContract;
 use WTG\Contracts\Models\CustomerContract;
-use WTG\Contracts\Models\ProductContract;
 use WTG\Contracts\Services\Account\AddressServiceContract;
 use WTG\Exceptions\CartUpdateException;
 
@@ -53,6 +52,7 @@ class Quote extends Model implements CartContract
      * Get the cart address.
      *
      * @return null|AddressContract
+     * @throws BindingResolutionException
      */
     public function getAddress(): ?AddressContract
     {

@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use WTG\Catalog\Model\Product;
 use WTG\Contracts\Models\CartContract;
 use WTG\Contracts\Models\CartItemContract;
-use WTG\Contracts\Models\ProductContract;
 
 /**
  * Quote item model.

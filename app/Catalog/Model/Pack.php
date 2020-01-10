@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use WTG\Catalog\Api\Model\ProductInterface;
 use WTG\Contracts\Models\PackContract;
-use WTG\Contracts\Models\ProductContract;
 
 /**
  * Pack model.
@@ -42,10 +42,10 @@ class Pack extends Model implements PackContract
     /**
      * Set the product.
      *
-     * @param Product $product
+     * @param ProductInterface $product
      * @return PackContract
      */
-    public function setProduct(Product $product): PackContract
+    public function setProduct(ProductInterface $product): PackContract
     {
         $this->product()->associate($product);
 
@@ -65,9 +65,9 @@ class Pack extends Model implements PackContract
     /**
      * Get the product.
      *
-     * @return ProductContract
+     * @return ProductInterface
      */
-    public function getProduct(): ProductContract
+    public function getProduct(): ProductInterface
     {
         return $this->getAttribute('product');
     }

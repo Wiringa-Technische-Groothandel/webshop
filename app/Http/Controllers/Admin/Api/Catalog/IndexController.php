@@ -21,7 +21,10 @@ class IndexController extends Controller
      */
     public function execute(): Response
     {
-        $products = Product::all([ 'sku', 'group', 'name', 'created_at', 'updated_at' ]);
+        Product::$withoutAppends = true;
+        $products = Product::query()
+            ->without('priceFactor')
+            ->get(['sku', 'group', 'name', 'created_at', 'updated_at']);
 
         return response()->json(
             [

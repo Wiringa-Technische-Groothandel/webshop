@@ -36,7 +36,7 @@ class Request extends AbstractRequest implements RequestInterface
      */
     public function path(): string
     {
-        return sprintf('%s/product/%s', config('wtg.rest.admin_code'), $this->id);
+        return sprintf('%s/products/%s', config('wtg.rest.admin_code'), $this->id);
     }
 
     /**

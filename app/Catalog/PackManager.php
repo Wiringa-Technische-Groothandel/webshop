@@ -7,10 +7,8 @@ namespace WTG\Catalog;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
 use Throwable;
-use WTG\Catalog\Api\Model\ProductInterface;
-use WTG\Models\Pack;
-use WTG\Models\PackProduct;
-use WTG\Catalog\Model\Product;
+use WTG\Catalog\Model\Pack;
+use WTG\Catalog\Model\PackProduct;
 
 /**
  * Pack manager.
@@ -34,7 +32,7 @@ class PackManager
      * PackManager constructor.
      *
      * @param DatabaseManager $databaseManager
-     * @param ProductManager  $productManager
+     * @param ProductManager $productManager
      */
     public function __construct(DatabaseManager $databaseManager, ProductManager $productManager)
     {
