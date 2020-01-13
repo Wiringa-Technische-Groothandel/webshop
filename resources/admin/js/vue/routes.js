@@ -54,6 +54,14 @@ const routes = [
             icon: 'fa-box',
             name: 'Actiepaketten'
         }
+    },
+    {
+        path: '/logs',
+        component: () => import('../vue/pages/Logs'),
+        meta: {
+            icon: 'fa-book-open',
+            name: 'Applicatie logs'
+        }
     }
 ];
 

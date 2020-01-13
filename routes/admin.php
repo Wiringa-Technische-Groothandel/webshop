@@ -93,6 +93,12 @@ Route::group([
                 Route::delete('delete', 'DeleteController')->name('delete-pack');
                 Route::delete('item/delete', 'DeleteItemController')->name('delete-pack-item');
             });
+
+            Route::group(['prefix' => 'logs', 'namespace' => 'Logs'], function () {
+                Route::get('/', 'IndexController')->name('logs');
+
+                Route::delete('delete', 'DeleteController')->name('delete-logs');
+            });
         });
     });
 });

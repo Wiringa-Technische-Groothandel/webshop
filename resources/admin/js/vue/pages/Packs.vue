@@ -9,26 +9,36 @@
         </button>
 
         <div class="row mb-3">
-            <template v-if="packs.length > 0">
-                <div class="col-md-7">
-                    <pack-list :packs="packs" @click="showPack"></pack-list>
-                </div>
+            <template v-if="!loading">
+                <template v-if="packs.length > 0">
+                    <div class="col-md-7" :class="{'offset-md-2': !pack}">
+                        <pack-list :packs="packs" @click="showPack"></pack-list>
+                    </div>
 
-                <div class="col-md-5" v-if="pack">
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <pack :pack="pack" @delete="deletePack(pack)"
-                                  @delete-item="deletePackItem" @add-item="addPackItem"></pack>
+                    <div class="col-md-5" v-if="pack">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <pack :pack="pack" @delete="deletePack(pack)"
+                                      @delete-item="deletePackItem" @add-item="addPackItem"></pack>
+                            </div>
                         </div>
+                    </div>
+                </template>
+
+                <div class="col-sm-6 offset-sm-3" v-else>
+                    <div class="alert alert-info">
+                        Geen actiepakketten gevonden.
                     </div>
                 </div>
             </template>
 
-            <div class="col-sm-6 offset-sm-3" v-else>
-                <div class="alert alert-info">
-                    Geen actiepakketten gevonden.
+            <template v-else>
+                <div class="col-sm-6 offset-sm-3">
+                    <div class="alert alert-info">
+                        Actiepakketten worden geladen...
+                    </div>
                 </div>
-            </div>
+            </template>
         </div>
     </div>
 </template>
@@ -58,7 +68,8 @@
                 showModal: false,
                 pack: null,
                 packIndex: null,
-                packs: []
+                packs: [],
+                loading: true,
             }
         },
         methods: {
@@ -72,6 +83,8 @@
                         if (response.data.packs) {
                             this.packs = response.data.packs;
                         }
+
+                        this.loading = false;
                     })
                     .catch(this._handleAxiosError);
             },

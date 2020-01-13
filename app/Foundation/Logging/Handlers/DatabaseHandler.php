@@ -8,12 +8,13 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\HandlerInterface;
+use Monolog\Logger;
+use WTG\Foundation\Logging\LogManager;
 
 /**
  * Database log handler.
  *
- * @package     WTG
- * @subpackage  LogHandlers
+ * @package     WTG\Foundation
  * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
 class DatabaseHandler extends AbstractHandler implements HandlerInterface
@@ -22,6 +23,24 @@ class DatabaseHandler extends AbstractHandler implements HandlerInterface
      * @var bool
      */
     protected bool $failed = false;
+
+    /**
+     * @var LogManager
+     */
+    protected LogManager $logManager;
+
+    /**
+     * DatabaseHandler constructor.
+     *
+     * @param int $level
+     * @param bool $bubble
+     */
+    public function __construct($level = Logger::DEBUG, bool $bubble = true)
+    {
+        parent::__construct($level, $bubble);
+
+        $this->logManager = app(LogManager::class);
+    }
 
     /**
      * @param array $record
@@ -36,17 +55,13 @@ class DatabaseHandler extends AbstractHandler implements HandlerInterface
         $this->failed = true;
 
         try {
-            $isRecordInserted = DB::table('logs')
-                ->insert(
-                    [
-                        'message'    => $record['message'] ?? "No message provided",
-                        'context'    => json_encode($record['context']),
-                        'level'      => $record['level'],
-                        'level_name' => $record['level_name'],
-                        'logged_at'  => $record['datetime'] ?? now(),
-                        'extra'      => json_encode($record['extra']),
-                    ]
-                );
+            $isRecordInserted = $this->logManager->databaseLog(
+                $record['message'] ?? "No message provided",
+                $record['level'],
+                $record['context'],
+                $record['extra'],
+                $record['datetime'] ?? null
+            );
 
             if (! $isRecordInserted) {
                 return false;
