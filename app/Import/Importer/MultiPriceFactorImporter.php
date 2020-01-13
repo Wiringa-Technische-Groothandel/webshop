@@ -24,13 +24,6 @@ use WTG\Import\Processor\PriceFactorProcessor;
 class MultiPriceFactorImporter extends MultiImporter implements ImporterInterface
 {
     /**
-     * Full path to the CSV file.
-     *
-     * @var string
-     */
-    public string $csvFileName = '';
-
-    /**
      * @var LogManager
      */
     protected LogManager $logManager;

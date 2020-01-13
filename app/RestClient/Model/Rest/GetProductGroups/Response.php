@@ -2,57 +2,57 @@
 
 declare(strict_types=1);
 
-namespace WTG\RestClient\Model\Rest\GetProductPrices;
+namespace WTG\RestClient\Model\Rest\GetProductGroups;
 
 use Illuminate\Log\LogManager;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface as GuzzleResponseInterface;
-use WTG\RestClient\Api\Model\Rest\GetProductPricesInterface;
-use WTG\RestClient\Model\Parser\PriceParser;
+use WTG\RestClient\Api\Model\Rest\GetProductGroupsInterface;
+use WTG\RestClient\Model\Parser\GroupParser;
 use WTG\RestClient\Model\Rest\AbstractResponse;
 
 /**
- * GetProductPrices response model.
+ * GetProductGroups response model.
  *
  * @package     WTG\RestClient
  * @author      Thomas Wiringa <thomas.wiringa@gmail.com>
  */
-class Response extends AbstractResponse implements GetProductPricesInterface
+class Response extends AbstractResponse implements GetProductGroupsInterface
 {
     /**
-     * @var PriceParser
+     * @var GroupParser
      */
-    protected PriceParser $priceParser;
+    protected GroupParser $groupParser;
 
     /**
      * Response constructor.
      *
      * @param GuzzleResponseInterface $guzzleResponse
      * @param LogManager $logManager
-     * @param PriceParser $priceParser
+     * @param GroupParser $groupParser
      */
     public function __construct(
         GuzzleResponseInterface $guzzleResponse,
         LogManager $logManager,
-        PriceParser $priceParser
+        GroupParser $groupParser
     ) {
         parent::__construct($guzzleResponse, $logManager);
 
-        $this->priceParser = $priceParser;
+        $this->groupParser = $groupParser;
     }
 
     /**
-     * Get prices from the response.
+     * Get product groups from the response.
      *
      * @return Collection
      */
-    public function getPrices(): Collection
+    public function getGroups(): Collection
     {
         $prices = collect();
 
-        foreach ($this->toArray()['resultData'] as $price) {
+        foreach ($this->toArray() as $price) {
             $prices->push(
-                $this->priceParser->parse($price)
+                $this->groupParser->parse($price)
             );
         }
 
@@ -60,11 +60,11 @@ class Response extends AbstractResponse implements GetProductPricesInterface
     }
 
     /**
-     * Get raw, unmapped prices from the response.
+     * Get raw, unmapped product from the response.
      *
      * @return Collection
      */
-    public function getRawPrices(): Collection
+    public function getRawGroups(): Collection
     {
         return collect($this->toArray());
     }

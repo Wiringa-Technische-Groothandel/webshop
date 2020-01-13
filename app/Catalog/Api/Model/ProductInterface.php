@@ -41,6 +41,7 @@ interface ProductInterface
     public const FIELD_GROUP = 'group';
     public const FIELD_SUPPLIER_CODE = 'supplier_code';
     public const FIELD_DESCRIPTION = 'description';
+    public const FIELD_CATEGORY_ID = 'category_id';
     // Relation getters
 
     /**

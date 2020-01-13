@@ -26,13 +26,6 @@ use WTG\Catalog\Model\Product;
 class MultiProductImporter extends MultiImporter implements ImporterInterface
 {
     /**
-     * Full path to the CSV file.
-     *
-     * @var string
-     */
-    public string $csvFileName = '';
-
-    /**
      * @var LogManager
      */
     protected LogManager $logManager;

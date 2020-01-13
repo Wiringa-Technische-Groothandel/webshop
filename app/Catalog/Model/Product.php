@@ -6,6 +6,7 @@ namespace WTG\Catalog\Model;
 
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
@@ -85,6 +86,37 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     }
 
     // Model relations
+
+    /**
+     * Category relation.
+     *
+     * @return BelongsTo
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * Get the related category.
+     *
+     * @return Category
+     */
+    public function getCategory(): Category
+    {
+        return $this->getAttribute('category');
+    }
+
+    /**
+     * Set the product category.
+     *
+     * @param Category $category
+     * @return void
+     */
+    public function setCategory(Category $category)
+    {
+        $this->category()->associate($category);
+    }
 
     /**
      * Description relation.

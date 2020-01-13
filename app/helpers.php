@@ -12,12 +12,13 @@ if (! function_exists('route_class')) {
      * Return a string (css class) if the provided route name matches with the current route name.
      *
      * @param string $routeName
-     * @param string $className
+     * @param string $match
+     * @param string $else
      * @return string
      */
-    function route_class(string $routeName, string $className = 'active'): string
+    function route_class(string $routeName, string $match = 'active', string $else = ''): string
     {
-        return request()->is($routeName) ? $className : '';
+        return request()->is($routeName) ? $match : $else;
     }
 }
 

@@ -8,6 +8,8 @@ use Carbon\Carbon;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\Str;
 use Throwable;
+use WTG\Catalog\CategoryManager;
+use WTG\Catalog\Model\Category;
 use WTG\Import\Api\ProcessorInterface;
 use WTG\Models\Description;
 use WTG\Catalog\Model\Product as ProductModel;
@@ -27,13 +29,25 @@ class ProductProcessor implements ProcessorInterface
     protected LogManager $logManager;
 
     /**
+     * @var CategoryManager
+     */
+    protected CategoryManager $categoryManager;
+
+    /**
+     * @var Category[]
+     */
+    private array $categories = [];
+
+    /**
      * AbstractProductProcessor constructor.
      *
-     * @param LogManager $logManager
+     * @param LogManager      $logManager
+     * @param CategoryManager $categoryManager
      */
-    public function __construct(LogManager $logManager)
+    public function __construct(LogManager $logManager, CategoryManager $categoryManager)
     {
         $this->logManager = $logManager;
+        $this->categoryManager = $categoryManager;
     }
 
     /**
@@ -146,6 +160,12 @@ class ProductProcessor implements ProcessorInterface
             }
 
             $productModel->setAttribute($snakeKey, $value);
+
+            if (!isset($this->categories[$product->group])) {
+                $this->categories[$product->group] = $this->categoryManager->find($product->group, Category::FIELD_CODE);
+            }
+
+            $productModel->setCategory($this->categories[$product->group]);
         }
 
         $productModel->setAttribute('synchronized_at', Carbon::createFromTimestamp((int)LARAVEL_START));

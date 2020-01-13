@@ -27,7 +27,7 @@
     @endpush
 @endguest
 
-<nav class="navbar navbar-expand-md navbar-dark {{ Route::is('home') ? 'bg-transparent' : 'bg-gradient' }}"
+<nav class="navbar navbar-expand-md navbar-dark {{ route_class('home', 'bg-transparent', 'bg-gradient') }}"
      id="navbar-second">
     <div class="container">
         <div class="collapse navbar-collapse" id="navbar-links">
@@ -41,8 +41,8 @@
                 </li>
 
                 <li class="nav-item {{ route_class('catalog.assortment') }}">
-                    <a class="nav-link"
-                       href="{{ route('catalog.assortment') }}">{{ trans('navigation.items.assortment') }}</a>
+                    <span class="nav-link" onclick="window.toggleMenu()"
+                          data-href="{{ route('catalog.assortment') }}">{{ trans('navigation.items.assortment') }}</span>
                 </li>
             </ul>
 
@@ -54,7 +54,7 @@
                                        cart-url="{{ route('checkout.cart') }}"></mini-cart>
                         </li>
 
-                        <li class="d-none d-md-inline nav-item dropdown {{ request()->is('account/*') ? 'active' : '' }}">
+                        <li class="d-none d-md-inline nav-item dropdown {{ route_class('account/*') }}">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
                                 <i class="far fa-fw fa-user"></i>
                             </a>
@@ -111,4 +111,82 @@
             </div>
         </div>
     </div>
+
+    <div id="assortment-menu" style="
+        display:none;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 58px;
+        z-index: 100;
+        box-shadow: 0 5px 5px -2px rgba(0,0,0,0.5);
+        padding: 20px 0;
+        background: white;">
+
+        <div class="container position-relative" id="category-list-wrapper">
+            @php
+                /** @var \WTG\Catalog\Model\Category $rootCategory */
+                $rootCategory = app(\WTG\Catalog\CategoryManager::class)->loadCategoryTree();
+            @endphp
+
+            <ul class="list-group list-group-flush d-inline-flex" id="category-list">
+                @foreach($rootCategory->getChildren() as $level1Child)
+                    @if ($level1Child->getChildren()->isNotEmpty())
+                        <li onmouseenter="window.showCategoryBlock(this)"
+                            onmouseleave="window.hideCategoryBlock(this)"
+                            class="list-group-item position-static list-group-item-action p-2 border-0"
+                            data-target="#category-{{ $level1Child->getCode() }}">
+                            <span>{{ $level1Child->getName() }}</span>
+
+                            <div class="list-group list-group-flush position-absolute" style="top:0; display: none;" id="category-{{ $level1Child->getCode() }}">
+                                <div class="d-flex" style="justify-content: space-around; align-items: center; flex-wrap: wrap">
+                                    @foreach($level1Child->getChildren() as $level2Child)
+                                        @if ($level2Child->getChildren()->isNotEmpty())
+                                            <div class="d-inline-block" style="flex: 0 0 25%">
+                                                <b>{{ $level2Child->getName() }}</b>
+
+{{--                                                <ul>--}}
+{{--                                                    @foreach($level2Child->getChildren() as $level3Child)--}}
+{{--                                                        <li>{{ $level3Child->getName() }}</li>--}}
+{{--                                                    @endforeach--}}
+{{--                                                </ul>--}}
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            </div>
+                        </li>
+                    @endif
+                @endforeach
+            </ul>
+        </div>
+    </div>
 </nav>
+
+@push('scripts')
+    <script>
+        window.toggleMenu = function () {
+            var $menu = $('#assortment-menu');
+            $menu.toggle();
+        };
+
+        window.showCategoryBlock = function (el) {
+            var $this = $(el);
+            var $target = $($this.data('target'));
+            $target.css({
+                left: $('#category-list').width(),
+                width: $('#category-list-wrapper').width() - $('#category-list').width(),
+                height: $('#category-list').height()
+            });
+
+            $target.show();
+        };
+
+        window.hideCategoryBlock = function (el) {
+            var $this = $(el);
+            var $target = $($this.data('target'));
+
+            $target.hide();
+        };
+    </script>
+@endpush
