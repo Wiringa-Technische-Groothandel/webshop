@@ -35,7 +35,7 @@ abstract class TestCase extends \Tests\TestCase
         $this->artisan(
             'db:seed',
             [
-                'class' => DatabaseSeeder::class
+                '--class' => DatabaseSeeder::class
             ]
         );
 
