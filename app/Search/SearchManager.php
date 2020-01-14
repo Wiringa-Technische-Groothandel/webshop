@@ -49,7 +49,6 @@ class SearchManager
         int $page = 1
     ): Collection {
         $query = Product::query();
-        $query->with('priceFactor');
         $query->where('inactive', false);
         $query->where('blocked', false);
 
@@ -65,17 +64,17 @@ class SearchManager
             }
         }
 
-        $results = $query->get();
-
-        $paginator = new LengthAwarePaginator($results->forPage($page, 10), $results->count(), 10, $page);
-        $paginator->withPath('assortment');
-        $paginator->appends(
+        $results = $query->get(
             [
-                'brand'  => $brand,
-                'series' => $series,
-                'type'   => $type,
+                'brand',
+                'series',
+                'type',
             ]
         );
+
+        $query->with('priceFactor');
+
+        $paginator = $query->paginate(10, ['*'], 'page', $page);
 
         return collect(
             [
@@ -148,12 +147,14 @@ class SearchManager
                     return $results;
                 }
             )
-                ->query(function (Builder $query) {
-                    $query
-                        ->with('priceFactor')
-                        ->where('inactive', 0)
-                        ->where('blocked', 0);
-                })
+                ->query(
+                    function (Builder $query) {
+                        $query
+                            ->with('priceFactor')
+                            ->where('inactive', 0)
+                            ->where('blocked', 0);
+                    }
+                )
                 ->get();
         }
 
