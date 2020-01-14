@@ -8,7 +8,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DropSeoUrlsTable extends Migration
+class DummyClass extends Migration
 {
     /**
      * Run the migrations.
@@ -17,7 +17,7 @@ class DropSeoUrlsTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('seo_urls');
+        //
     }
 
     /**

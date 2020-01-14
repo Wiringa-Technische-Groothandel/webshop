@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
+namespace Database\Migrations;
+
 use Symfony\Component\Console\Output\ConsoleOutput;
 use WTG\Models\Role;
 use WTG\Models\Block;
@@ -660,7 +664,7 @@ class DatabaseSetup extends Migration
      */
     private function createBlock($name, $title, $content): Block
     {
-        $block = new Block;
+        $block = new Block();
 
         $block->setAttribute('name', $name);
         $block->setAttribute('title', $title);
