@@ -39,7 +39,7 @@ steps:
     failure: ignore
     commands:
       # Run phpcs
-      - vendor/bin/phpcs -d memory_limit=1G --standard=PSR12 --ignore=\*blade.php,\*.js,\*/vendor/\*,\*/storage/framework/\* --extensions=php .
+      - vendor/bin/phpcs -d memory_limit=1G --standard=PSR12 --ignore=\*blade.php,\*.js,\*/vendor/\*,\*/storage/framework/\*,\*/bootstrap/cache/\* --extensions=php .
 
   - name: test
     image: lunamoonfang/wtg-webshop:build-7.4
