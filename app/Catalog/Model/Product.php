@@ -54,10 +54,6 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
         'description',
     ];
 
-    protected $with = [
-        'priceFactor',
-    ];
-
     /**
      * @var string[]
      */
@@ -114,6 +110,16 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     public function priceFactor(): HasOne
     {
         return $this->hasOne(PriceFactor::class);
+    }
+
+    /**
+     * Get the price factor related model.
+     *
+     * @return PriceFactor
+     */
+    public function getPriceFactor(): PriceFactor
+    {
+        return $this->getAttribute(self::FIELD_PRICE_FACTOR) ?: new PriceFactor();
     }
 
     /**
@@ -874,15 +880,5 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
         }
 
         return $pricePerString;
-    }
-
-    /**
-     * Get the price factor related model.
-     *
-     * @return PriceFactor
-     */
-    public function getPriceFactor(): PriceFactor
-    {
-        return $this->getAttribute(self::FIELD_PRICE_FACTOR) ?: new PriceFactor();
     }
 }

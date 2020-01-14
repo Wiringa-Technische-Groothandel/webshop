@@ -32,7 +32,7 @@ class StockManager
     /**
      * PriceManager constructor.
      *
-     * @param RestManager    $restManager
+     * @param RestManager $restManager
      * @param ProductManager $productManager
      */
     public function __construct(RestManager $restManager, ProductManager $productManager)
@@ -53,9 +53,9 @@ class StockManager
     {
         $request = new GetProductStocksRequest();
 
-        foreach ( $skus as $sku ) {
-            $product = $this->productManager->find($sku);
+        $products = $this->productManager->findAll($skus);
 
+        foreach ($products as $product) {
             $request->addProduct($product);
         }
 

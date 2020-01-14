@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WTG\Catalog;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Collection;
 use WTG\Catalog\Api\Model\ProductInterface;
 use WTG\Catalog\Model\Product;
 
@@ -28,6 +29,16 @@ class ProductManager
         $product = Product::query()->where($field, $value)->firstOrFail();
 
         return $product;
+    }
+
+    /**
+     * @param array $values
+     * @param string $field
+     * @return Collection
+     */
+    public function findAll(array $values, string $field = ProductInterface::FIELD_SKU): Collection
+    {
+        return Product::query()->whereIn($field, $values)->get();
     }
 
     /**

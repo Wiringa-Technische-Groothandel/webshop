@@ -64,11 +64,8 @@ class AppServiceProvider extends ServiceProvider
         view()->composer(
             '*',
             function ($view) {
-                if ( auth('web')->check() ) {
-                    /** @var CustomerContract $customer */
-                    $customer = auth('web')->user();
-
-                    $view->with('cart', app()->make(CartContract::class)->loadForCustomer($customer));
+                if (auth('web')->check()) {
+                    $view->with('cart', $this->app['cart']);
                 }
             }
         );
@@ -81,6 +78,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton(
+            'cart',
+            function () {
+                /** @var CustomerContract $customer */
+                $customer = auth('web')->user();
+
+                return $this->app->make(CartContract::class)->loadForCustomer($customer);
+            }
+        );
+
         $this->app->when(RecaptchaService::class)
             ->needs(Client::class)
             ->give(

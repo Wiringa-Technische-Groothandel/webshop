@@ -19,7 +19,7 @@ class Request extends AbstractRequest implements RequestInterface
     /**
      * @var array
      */
-    protected array $products;
+    protected array $products = [];
 
     /**
      * @var string

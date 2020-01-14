@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WTG\Search;
 
 use Elasticsearch\Client;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use WTG\Catalog\Model\Product;
@@ -48,6 +49,7 @@ class SearchManager
         int $page = 1
     ): Collection {
         $query = Product::query();
+        $query->with('priceFactor');
         $query->where('inactive', false);
         $query->where('blocked', false);
 
@@ -107,8 +109,8 @@ class SearchManager
                                 ->orWhere('supplier_code', $query);
                         }
                     )
-                        ->where('inactive', false)
-                        ->where('blocked', false)
+                        ->where('inactive', 0)
+                        ->where('blocked', 0)
                         ->first(),
                 ]
             )->filter();
@@ -146,9 +148,13 @@ class SearchManager
                     return $results;
                 }
             )
-                ->get()
-                ->where('inactive', 0)
-                ->where('blocked', 0);
+                ->query(function (Builder $query) {
+                    $query
+                        ->with('priceFactor')
+                        ->where('inactive', 0)
+                        ->where('blocked', 0);
+                })
+                ->get();
         }
 
         $paginator = new LengthAwarePaginator($results->forPage($page, 10), $results->count(), 10, $page);

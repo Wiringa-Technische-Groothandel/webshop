@@ -270,7 +270,13 @@ class Quote extends Model implements CartContract
      */
     public function getItems(): Collection
     {
-        return $this->items()->with('product')->get();
+        if (! app()->has('cartItems')) {
+            $items = $this->items()->with('product.priceFactor')->get();
+
+            app()->instance('cartItems', $items);
+        }
+
+        return app('cartItems');
     }
 
     /**
@@ -280,6 +286,12 @@ class Quote extends Model implements CartContract
      */
     public function getCount(): int
     {
-        return $this->items()->count();
+        if (! app()->has('cartItemCount')) {
+            $items = $this->items()->count();
+
+            app()->instance('cartItemCount', $items);
+        }
+
+        return (int) app('cartItemCount');
     }
 }

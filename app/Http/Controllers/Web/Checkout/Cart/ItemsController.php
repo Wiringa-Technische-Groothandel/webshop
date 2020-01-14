@@ -21,7 +21,7 @@ class ItemsController extends Controller
     /**
      * @var CartServiceContract
      */
-    protected $cartService;
+    protected CartServiceContract $cartService;
 
     /**
      * CartController constructor.

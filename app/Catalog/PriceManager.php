@@ -46,25 +46,17 @@ class PriceManager
      * Fetch prices for multiple products.
      *
      * @param string $debtor
-     * @param array $products Product model or sku
+     * @param Collection $products
      * @return Collection
      * @throws GuzzleException
      * @throws BindingResolutionException
      */
-    public function fetchPrices(string $debtor, array $products): Collection
+    public function fetchPrices(string $debtor, Collection $products): Collection
     {
         $request = new GetProductPricesRequest();
         $request->setDebtorCode($debtor);
 
-        foreach ($products as $product) {
-            /*
-             * If $product is not an instance of a product model assume
-             * it is a sku.
-             */
-            if (! $product instanceof Product) {
-                $product = $this->productManager->find((string)$product);
-            }
-
+        foreach ($products->all() as $product) {
             $request->addProduct($product, 1);
         }
 

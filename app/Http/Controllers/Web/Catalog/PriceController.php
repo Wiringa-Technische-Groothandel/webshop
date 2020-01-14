@@ -123,9 +123,9 @@ class PriceController extends Controller
      */
     public function postAction(FetchPriceRequest $request): JsonResponse
     {
-        $products = $request->input('skus', []);
+        $skus = $request->input('skus', []);
 
-        if (! is_array($products) || empty($products)) {
+        if (! is_array($skus) || empty($skus)) {
             return response()->json(
                 [
                     'message' => 'Invalid value for parameter "skus"',
@@ -138,6 +138,7 @@ class PriceController extends Controller
         /** @var CustomerContract $customer */
         $customer = $request->user();
         $customerNumber = $customer->getCompany()->getCustomerNumber();
+        $products = $this->productManager->findAll($skus);
 
         $prices = $this->priceManager->fetchPrices($customerNumber, $products);
 

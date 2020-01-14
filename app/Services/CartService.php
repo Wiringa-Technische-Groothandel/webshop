@@ -193,7 +193,7 @@ class CartService implements CartServiceContract
         try {
             $prices = $this->priceManager->fetchPrices(
                 $this->authService->getCurrentCustomer()->getCompany()->getCustomerNumber(),
-                $items->pluck('product')->pluck('sku')->all()
+                $items->pluck('product')
             );
         } catch (GuzzleException | Throwable $e) {
             Log::error($e);
