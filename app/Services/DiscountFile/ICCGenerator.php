@@ -16,24 +16,24 @@ use WTG\Models\Discount;
  */
 class ICCGenerator extends AbstractGenerator implements Generator
 {
-    const GLN = 8714253038995;
-    const END_DATE = 99991231;
-    const DISCOUNT_2 = '00000';
-    const DISCOUNT_3 = '00000';
-    const FILE_VERSION = '1.1  ';
-    const NET_PRICE = '000000000';
-    const SMALL_SPACING = '       ';
-    const LARGE_SPACING = '               ';
+    private const GLN = 8714253038995;
+    private const END_DATE = 99991231;
+    private const DISCOUNT_2 = '00000';
+    private const DISCOUNT_3 = '00000';
+    private const FILE_VERSION = '1.1  ';
+    private const NET_PRICE = '000000000';
+    private const SMALL_SPACING = '       ';
+    private const LARGE_SPACING = '               ';
 
     /**
      * @var int
      */
-    protected $count = 0;
+    protected int $count = 0;
 
     /**
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * ICCGenerator constructor.
