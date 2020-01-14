@@ -6,6 +6,7 @@ namespace WTG\Foundation\Logging;
 
 use DateTimeImmutable;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Log\LogManager as LaravelLogManager;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -73,13 +74,15 @@ class LogManager extends LaravelLogManager
     }
 
     /**
-     * @return Collection
+     * @param int $page
+     * @param int $limit
+     * @return LengthAwarePaginator
      */
-    public function getSortedLogs(): Collection
+    public function getSortedLogs(int $page, int $limit): LengthAwarePaginator
     {
         return Log::query()
             ->orderBy('logged_at', 'desc')
             ->orderBy('id', 'desc')
-            ->get();
+            ->paginate($limit, ['*'], 'page', $page);
     }
 }

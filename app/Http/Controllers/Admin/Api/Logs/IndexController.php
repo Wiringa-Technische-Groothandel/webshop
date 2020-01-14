@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WTG\Http\Controllers\Admin\Api\Logs;
 
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WTG\Foundation\Logging\LogManager;
 use WTG\Http\Controllers\Admin\Controller;
@@ -22,13 +23,20 @@ class IndexController extends Controller
     protected LogManager $logManager;
 
     /**
+     * @var Request
+     */
+    protected Request $request;
+
+    /**
      * IndexController constructor.
      *
      * @param LogManager $logManager
+     * @param Request    $request
      */
-    public function __construct(LogManager $logManager)
+    public function __construct(LogManager $logManager, Request $request)
     {
         $this->logManager = $logManager;
+        $this->request = $request;
     }
 
     /**
@@ -39,7 +47,10 @@ class IndexController extends Controller
         return response()->json(
             [
                 'message' => '',
-                'logs'    => $this->logManager->getSortedLogs(),
+                'logs'    => $this->logManager->getSortedLogs(
+                    (int) $this->request->input('page', 1),
+                    (int) $this->request->input('limit', 20)
+                ),
             ]
         );
     }

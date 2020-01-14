@@ -20,10 +20,22 @@
 
                         <hr/>
 
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="btn-group">
+                                    <button class="btn btn-default" @click="page--" v-if="page > 1">Nieuwere logs</button>
+                                    <button class="btn btn-default" @click="page--" v-if="page < lastPage">Oudere logs</button>
+                                </div>
+                            </div>
+
+                            <div class="col text-right">
+                                Pagina {{ page }} van {{ lastPage }} - {{ total }} log items
+                            </div>
+                        </div>
+
                         <table class="table table-striped table-hover">
                             <thead>
                             <tr>
-                                <th>ID</th>
                                 <th class="text-center">Level</th>
                                 <th>Bericht</th>
                                 <th>Tijd</th>
@@ -32,8 +44,8 @@
 
                             <tbody>
                             <tr v-for="log in logs" @click="$emit('click', log)">
-                                <td>{{ log.id }}</td>
-                                <td class="text-center"><span class="badge font-weight-normal" :class="getBadgeClass(log.level)">{{ log.level_name }}</span>
+                                <td class="text-center">
+                                    <span class="badge font-weight-normal" :class="getBadgeClass(log.level)">{{ log.level_name }}</span>
                                 </td>
                                 <td class="w-75">{{ log.message }}</td>
                                 <td>{{ log.logged_at }}</td>
@@ -62,14 +74,23 @@
     export default {
         data() {
             return {
+                page: 1,
+                lastPage: 1,
+                total: 0,
                 logs: []
             }
         },
         methods: {
             getLogs() {
-                this.$http.get(route('admin.api.logs'))
+                this.$http.get(route('admin.api.logs'), {
+                    params: {
+                        page: this.page
+                    }
+                })
                     .then(response => {
-                        this.logs = response.data.logs;
+                        this.logs = response.data.logs.data;
+                        this.lastPage = response.data.logs.last_page;
+                        this.total = response.data.logs.total;
                     })
                     .catch(this.handleAxiosError);
             },
