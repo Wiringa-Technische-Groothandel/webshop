@@ -11,6 +11,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Foundation\Application;
 use LogicException;
 use Psr\Http\Message\ResponseInterface as GuzzleResponseInterface;
+use WTG\Foundation\Logging\LogManager;
 use WTG\RestClient\Api\Model\RequestInterface;
 use WTG\RestClient\Api\Model\ResponseInterface;
 use WTG\RestClient\Api\RestManagerInterface;
@@ -34,15 +35,22 @@ class RestManager implements RestManagerInterface
     protected Application $app;
 
     /**
+     * @var LogManager
+     */
+    protected LogManager $logManager;
+
+    /**
      * AbstractService constructor.
      *
      * @param ClientInterface $httpClient
      * @param Application $app
+     * @param LogManager $logManager
      */
-    public function __construct(ClientInterface $httpClient, Application $app)
+    public function __construct(ClientInterface $httpClient, Application $app, LogManager $logManager)
     {
         $this->httpClient = $httpClient;
         $this->app = $app;
+        $this->logManager = $logManager;
     }
 
     /**
@@ -51,7 +59,6 @@ class RestManager implements RestManagerInterface
      * @param RequestInterface $request
      * @return ResponseInterface
      * @throws BindingResolutionException
-     * @throws GuzzleException
      */
     public function handle(RequestInterface $request): ResponseInterface
     {
@@ -74,11 +81,15 @@ class RestManager implements RestManagerInterface
             }
         }
 
-        $guzzleResponse = $this->httpClient->request(
-            $request->type(),
-            $request->path(),
-            $options
-        );
+        try {
+            $guzzleResponse = $this->httpClient->request(
+                $request->type(),
+                $request->path(),
+                $options
+            );
+        } catch (GuzzleException $e) {
+            $this->logManager->alert($e);
+        }
 
         return $this->createResponse($request, $guzzleResponse);
     }
@@ -89,6 +100,7 @@ class RestManager implements RestManagerInterface
      * @param RequestInterface $request
      * @param GuzzleResponseInterface $guzzleResponse
      * @return ResponseInterface
+     * @throws LogicException
      * @throws BindingResolutionException
      */
     protected function createResponse(
@@ -102,7 +114,7 @@ class RestManager implements RestManagerInterface
         if (! class_exists($generatedResponseClassNamespace)) {
             throw new LogicException(
                 sprintf(
-                    "[WTG RestClient] REST service [%s] does not have a response class or the class does not exist [%s]",
+                    "[WTG RestClient] REST service [%s] does not have a response class or the class does not exist [%s]", // phpcs:ignore
                     substr($namespace, strrpos($namespace, '\\') + 1),
                     $generatedResponseClassNamespace
                 )
