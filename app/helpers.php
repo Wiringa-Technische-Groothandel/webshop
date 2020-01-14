@@ -2,6 +2,7 @@
 
 use Illuminate\View\View;
 use WTG\Models\Block;
+
 const ENV_LOCAL = 'local';
 const ENV_TESTING = 'testing';
 const ENV_STAGING = 'staging';

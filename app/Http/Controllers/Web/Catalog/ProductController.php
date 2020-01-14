@@ -47,7 +47,7 @@ class ProductController extends Controller
         $product = $this->productManager->find($sku);
         $previousUrl = $this->getAssortmentUrl();
 
-        if ( ! $product ) {
+        if (! $product) {
             abort(404, __("Er is geen product gevonden met productnummer :sku", [ 'sku' => $sku ]));
         }
 
@@ -63,7 +63,7 @@ class ProductController extends Controller
     {
         $lastUrl = url()->previous();
 
-        if ( strpos($lastUrl, route('catalog.assortment')) !== false ) {
+        if (strpos($lastUrl, route('catalog.assortment')) !== false) {
             return $lastUrl;
         }
 

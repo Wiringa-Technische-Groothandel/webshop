@@ -37,6 +37,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     use HasSynchronizedAt;
     use Searchable;
     use SoftDeletes;
+
     public const IMAGE_PLACEHOLDER_PATH = 'storage/static/images/product-image-placeholder.png';
     public const IMAGE_PLACEHOLDER_CACHE_KEY = 'product-image-placeholder';
     public const IMAGE_SIZE_LARGE = 'large';

@@ -79,7 +79,7 @@ class CartService implements CartServiceContract
     {
         $product = $this->findProduct($sku);
 
-        if ( ! $product ) {
+        if (! $product) {
             return null;
         }
 
@@ -122,7 +122,7 @@ class CartService implements CartServiceContract
     {
         $product = $this->findProduct($sku);
 
-        if ( ! $product ) {
+        if (! $product) {
             return null;
         }
 
@@ -141,7 +141,7 @@ class CartService implements CartServiceContract
     {
         $product = $this->findProduct($sku);
 
-        if ( ! $product ) {
+        if (! $product) {
             return null;
         }
 
@@ -186,7 +186,7 @@ class CartService implements CartServiceContract
         $this->cart->loadForCustomer($this->authService->getCurrentCustomer());
         $items = $this->cart->getItems();
 
-        if ( ! $withPrices ) {
+        if (! $withPrices) {
             return $items;
         }
 
@@ -212,7 +212,7 @@ class CartService implements CartServiceContract
                     }
                 );
 
-                if ( ! $price ) {
+                if (! $price) {
                     return $item;
                 }
 

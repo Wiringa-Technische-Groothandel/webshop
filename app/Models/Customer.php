@@ -76,7 +76,7 @@ class Customer extends Authenticatable implements CustomerContract
     {
         $contact = $this->getAttribute('contact');
 
-        if ( ! $contact ) {
+        if (! $contact) {
             /** @var Contact $contact */
             $contact = app()->make(ContactContract::class);
             $contact->setAttribute('customer_id', $this->getId());
