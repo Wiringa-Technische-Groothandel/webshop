@@ -14,7 +14,7 @@ class Discount extends Command
     /**
      * @var string
      */
-    protected $signature = 'import:discounts';
+    protected $name = 'import:discounts';
 
     /**
      * @var string
@@ -24,12 +24,12 @@ class Discount extends Command
     /**
      * @var Service
      */
-    protected $service;
+    protected Service $service;
 
     /**
      * @var DatabaseManager
      */
-    protected $dm;
+    protected DatabaseManager $dm;
 
     /**
      * AssortmentFiles constructor.

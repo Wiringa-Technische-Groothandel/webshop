@@ -16,15 +16,11 @@ use WTG\Import\ImportManager;
 class PriceFactors extends AbstractImportCommand
 {
     /**
-     * The name and signature of the console command.
-     *
      * @var string
      */
-    protected $signature = 'import:price-factors {--S|skipDownload= : Skip file download, use an existing file in storage/app/import}';
+    protected $name = 'import:price-factors';
 
     /**
-     * The console command description.
-     *
      * @var string
      */
     protected $description = 'Update the price factors';

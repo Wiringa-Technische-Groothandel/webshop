@@ -34,9 +34,7 @@ class CheckActive
 
                 return redirect(route('home'))
                     ->withErrors(
-                        __(
-                            'Uw account is gedeactiveerd. Neem contact met ons of uw accountbeheerder op voor meer informatie.'
-                        )
+                        __("Uw account is gedeactiveerd. Neem contact met ons of uw accountbeheerder op voor meer informatie.") // phpcs:ignore
                     );
             }
         }

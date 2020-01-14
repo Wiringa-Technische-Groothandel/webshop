@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WTG\Console\Commands\Sys\Cleanup;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Input\InputOption;
 use Throwable;
 use WTG\Models\Company;
 
@@ -19,7 +20,7 @@ class Companies extends Command
     /**
      * @var string
      */
-    protected $signature = 'sys:cleanup:companies {--H|hours=6}';
+    protected $name = 'sys:cleanup:companies';
 
     /**
      * @var string
@@ -47,5 +48,21 @@ class Companies extends Command
                     $company->forceDelete();
                 }
             );
+    }
+
+    /**
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [
+            [
+                "hours",
+                "H",
+                InputOption::VALUE_REQUIRED,
+                "Remove soft-deleted companies older than this",
+                6
+            ]
+        ];
     }
 }

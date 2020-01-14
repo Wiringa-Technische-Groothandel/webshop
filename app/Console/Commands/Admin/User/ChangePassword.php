@@ -13,7 +13,6 @@ use WTG\Models\Admin;
  * Admin user change password command.
  *
  * @package     WTG\Console
- * @subpackage  Commands
  * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
 class ChangePassword extends Command
@@ -22,28 +21,14 @@ class ChangePassword extends Command
     public const MIN_PASSWORD_LENGTH = 5;
 
     /**
-     * The name and signature of the console command.
-     *
      * @var string
      */
-    protected $signature = 'admin:user:change-password';
+    protected $name = 'admin:user:change-password';
 
     /**
-     * The console command description.
-     *
      * @var string
      */
     protected $description = 'Change the password of an admin account';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.

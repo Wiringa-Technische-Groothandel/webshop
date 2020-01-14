@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WTG\Console\Commands;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Input\InputOption;
 use Throwable;
 
 /**
@@ -17,28 +18,14 @@ use Throwable;
 class Mysql extends Command
 {
     /**
-     * The name and signature of the console command.
-     *
      * @var string
      */
-    protected $signature = 'mysql {--mycli : Use mycli instead of mysql}';
+    protected $name = 'mysql';
 
     /**
-     * The console command description.
-     *
      * @var string
      */
     protected $description = 'Open a mysql cli session';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.
@@ -72,5 +59,20 @@ class Mysql extends Command
         if (is_resource($process)) {
             proc_close($process);
         }
+    }
+
+    /**
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [
+            [
+                "mycli",
+                null,
+                InputOption::VALUE_NONE,
+                "Use mycli instead of mysql"
+            ]
+        ];
     }
 }

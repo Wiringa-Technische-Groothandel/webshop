@@ -7,7 +7,9 @@ namespace WTG\Console\Commands\Index;
 use Elasticsearch\Client as ElasticClient;
 use Exception;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use WTG\Models\Synonym;
 
@@ -20,15 +22,11 @@ use WTG\Models\Synonym;
 class Recreate extends Command
 {
     /**
-     * The name and signature of the console command.
-     *
      * @var string
      */
-    protected $signature = 'index:recreate {index : The alias of an index}';
+    protected $name = 'index:recreate';
 
     /**
-     * The console command description.
-     *
      * @var string
      */
     protected $description = 'Recreate an elasticsearch index.';
@@ -36,7 +34,7 @@ class Recreate extends Command
     /**
      * @var ElasticClient
      */
-    protected $elastic;
+    protected ElasticClient $elastic;
 
     /**
      * UpdateSettings constructor.
@@ -106,5 +104,20 @@ class Recreate extends Command
         $output->writeln("<info>Index '$indexAlias' has been recreated</info>");
 
         return 0;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [
+            [
+                "index",
+                InputArgument::REQUIRED,
+                "The alias of an index",
+                null
+            ],
+        ];
     }
 }

@@ -6,9 +6,10 @@ namespace WTG\Http\Controllers\Web\Account;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\View\Factory as ViewFactory;
 use Illuminate\View\View;
-use Log;
-use Validator;
+use WTG\Foundation\Logging\LogManager;
 use WTG\Http\Controllers\Controller;
 use WTG\Models\Customer;
 
@@ -21,6 +22,24 @@ use WTG\Models\Customer;
  */
 class PasswordController extends Controller
 {
+    /**
+     * @var LogManager
+     */
+    protected LogManager $logManager;
+
+    /**
+     * PasswordController constructor.
+     *
+     * @param ViewFactory $view
+     * @param LogManager $logManager
+     */
+    public function __construct(ViewFactory $view, LogManager $logManager)
+    {
+        parent::__construct($view);
+
+        $this->logManager = $logManager;
+    }
+
     /**
      * Change password page.
      *
@@ -51,9 +70,9 @@ class PasswordController extends Controller
         $user = auth()->user();
 
         $user_details = [
-            'username' => $user->getAttribute('username'),
+            'username'   => $user->getAttribute('username'),
             'company_id' => $user->getAttribute('company_id'),
-            'password' => $request->input('password_old'),
+            'password'   => $request->input('password_old'),
         ];
 
         if ($validator->passes()) {
@@ -61,23 +80,32 @@ class PasswordController extends Controller
                 $user->setAttribute('password', bcrypt($request->input('password')));
                 $user->save();
 
-                Log::info("[Password change] User with id '{$user->getAttribute('id')}' changed their password.");
-
-                return redirect()
-                    ->back()
-                    ->with('status', 'Uw wachtwoord is gewijzigd');
-            } else {
-                Log::warning(
-                    "[Password change] User with id '{$user->getAttribute('id')}' failed to change their password. Reason: Credential validation failed"
+                $this->logManager->info(
+                    sprintf("[Password change] User with id '%s' changed their password.", $user->getAttribute('id'))
                 );
 
                 return redirect()
                     ->back()
-                    ->withErrors('Het oude wachtwoord en uw huidige wachtwoord komen niet overeen.');
+                    ->with('status', __("Uw wachtwoord is gewijzigd"));
+            } else {
+                $this->logManager->warning(
+                    sprintf(
+                        "[Password change] User with id '%s' failed to change their password. Reason: %s",
+                        $user->getAttribute('id'),
+                        __("Credential validation failed")
+                    )
+                );
+
+                return redirect()
+                    ->back()
+                    ->withErrors(__("Het oude wachtwoord en uw huidige wachtwoord komen niet overeen."));
             }
         } else {
-            Log::warning(
-                "[Password change] User with id '{$user->getAttribute('id')}' failed to change their password. Reason: " . $validator->errors(
+            $this->logManager->warning(
+                sprintf(
+                    "[Password change] User with id '%s' failed to change their password. Reason: %s",
+                    $user->getAttribute('id'),
+                    $validator->errors()
                 )
             );
 

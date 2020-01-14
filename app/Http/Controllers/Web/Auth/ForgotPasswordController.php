@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WTG\Http\Controllers\Web\Auth;
 
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -12,22 +13,19 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use WTG\Contracts\Models\CompanyContract;
 use WTG\Models\Company;
 
+/**
+ * Forgot password controller.
+ *
+ * @package     WTG\Http
+ * @author      Thomas Wiringa <thomas.wiringa@gmail.com>
+ */
 class ForgotPasswordController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Password Reset Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller is responsible for handling password reset emails and
-    | includes a trait which assists in sending these notifications from
-    | your application to your users. Feel free to explore this trait.
-    |
-    */
     use SendsPasswordResetEmails;
     use ValidatesRequests;
 
@@ -56,6 +54,7 @@ class ForgotPasswordController extends Controller
      *
      * @param Request $request
      * @return RedirectResponse|JsonResponse
+     * @throws BindingResolutionException
      */
     public function sendResetLinkEmail(Request $request)
     {
@@ -83,6 +82,7 @@ class ForgotPasswordController extends Controller
      *
      * @param Request $request
      * @return void
+     * @throws ValidationException
      */
     protected function validateEmail(Request $request)
     {

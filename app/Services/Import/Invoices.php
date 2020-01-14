@@ -21,6 +21,7 @@ use WTG\Models\Company;
  */
 class Invoices
 {
+    // phpcs:ignore
     public const FILENAME_PATTERN = '/(?P<invoice>[0-9]{8})_(?P<customer>[0-9]{5})_(?P<date>[0-9]{8})_(?P<time>[0-9]{6})\.PDF$/';
     public const SORT_ORDER_ASC = 1;
     public const SORT_ORDER_DESC = 2;

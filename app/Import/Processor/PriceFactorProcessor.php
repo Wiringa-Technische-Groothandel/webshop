@@ -10,7 +10,6 @@ use Illuminate\Log\LogManager;
 use WTG\Catalog\Model\PriceFactor;
 use WTG\Catalog\ProductManager;
 use WTG\Import\Api\ProcessorInterface;
-use WTG\Catalog\Model\Product;
 
 /**
  * Product data processor.
@@ -33,7 +32,7 @@ class PriceFactorProcessor implements ProcessorInterface
     /**
      * AbstractProductProcessor constructor.
      *
-     * @param LogManager     $logManager
+     * @param LogManager $logManager
      * @param ProductManager $productManager
      */
     public function __construct(LogManager $logManager, ProductManager $productManager)
@@ -59,7 +58,10 @@ class PriceFactorProcessor implements ProcessorInterface
             $this->logManager->debug('[Price factor processor] Imported/updated price factor ' . $data['erpId']);
         } catch (ModelNotFoundException $exception) {
             $this->logManager->debug(
-                '[Price factor processor] Skipped price factor ' . $data['erpId'] . ': Referenced product does not exist'
+                sprintf(
+                    '[Price factor processor] Skipped price factor %s: Referenced product does not exist',
+                    $data['erpId']
+                )
             );
         }
     }

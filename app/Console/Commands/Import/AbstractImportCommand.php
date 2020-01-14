@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WTG\Console\Commands\Import;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Input\InputOption;
 use Throwable;
 use WTG\Import\Api\ImporterInterface;
 use WTG\Import\ImportManager;
@@ -50,8 +51,8 @@ abstract class AbstractImportCommand extends Command
     public function handle(): void
     {
         try {
-            if ($this->option('skipDownload')) {
-                $this->importer->csvFileName = $this->option('skipDownload');
+            if ($this->option('file')) {
+                $this->importer->csvFileName = $this->option('file');
             }
 
             if (! $this->importManager->run($this->importer)) {
@@ -64,5 +65,20 @@ abstract class AbstractImportCommand extends Command
         }
 
         $this->getOutput()->success('Import success');
+    }
+
+    /**
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [
+            [
+                "file",
+                "f",
+                InputOption::VALUE_REQUIRED,
+                "Use an existing file in storage/app/import"
+            ],
+        ];
     }
 }

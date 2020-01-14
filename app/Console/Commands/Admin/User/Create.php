@@ -22,28 +22,14 @@ class Create extends Command
     public const MIN_PASSWORD_LENGTH = 5;
 
     /**
-     * The name and signature of the console command.
-     *
      * @var string
      */
-    protected $signature = 'admin:user:create';
+    protected $name = 'admin:user:create';
 
     /**
-     * The console command description.
-     *
      * @var string
      */
     protected $description = 'Create an admin account';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.
