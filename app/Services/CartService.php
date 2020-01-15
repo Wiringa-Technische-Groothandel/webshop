@@ -216,7 +216,10 @@ class CartService implements CartServiceContract
                     return $item;
                 }
 
-                $item->setPrice((float) $price->netPrice);
+                $price->netPrice *= $item->getProduct()->getPriceFactor()->getPriceFactor();
+                $price->netPrice = $price->netPrice / $price->pricePer;
+
+                $item->setPrice($price->netPrice);
                 $item->setSubtotal($price->netPrice * $item->getQuantity());
                 $item->save();
 

@@ -36,4 +36,14 @@ class Price
      * @var float
      */
     public float $grossPrice;
+
+    /**
+     * @var float
+     */
+    public float $pricePer;
+
+    /**
+     * @var float
+     */
+    public float $priceFactor;
 }

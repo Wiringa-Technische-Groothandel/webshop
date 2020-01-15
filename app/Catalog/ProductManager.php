@@ -20,13 +20,19 @@ class ProductManager
     /**
      * @param string $value
      * @param string $field
+     * @param bool $withTrashed
      * @return Product
-     * @throws ModelNotFoundException
      */
-    public function find(string $value, string $field = ProductInterface::FIELD_SKU): Product
+    public function find(string $value, string $field = ProductInterface::FIELD_SKU, bool $withTrashed = false): Product
     {
+        if ($withTrashed) {
+            $query = Product::withTrashed();
+        } else {
+            $query = Product::query();
+        }
+
         /** @var Product $product */
-        $product = Product::query()->where($field, $value)->firstOrFail();
+        $product = $query->where($field, $value)->firstOrFail();
 
         return $product;
     }

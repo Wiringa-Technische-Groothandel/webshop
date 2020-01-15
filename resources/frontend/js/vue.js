@@ -19,7 +19,7 @@ const QuickSearch = () => import(/* webpackChunkName: 'vue-components' */ '../vu
 
 window.vm = new Vue({
     el: '#app',
-    data () {
+    data() {
         return {
             showMaps: false,
             loadingPrices: false,
@@ -45,7 +45,7 @@ window.vm = new Vue({
         QuickSearch,
     },
     methods: {
-        fetchPrices () {
+        fetchPrices() {
             axios.post('/fetchPrices', {
                 skus: this.$data.skus
             })
@@ -54,6 +54,7 @@ window.vm = new Vue({
                         this.$root.$emit('price-fetched-' + item.sku, {
                             netPrice: item.netPrice,
                             grossPrice: item.grossPrice,
+                            pricePer: item.pricePer,
                             stock: item.stock_string,
                             action: item.actionPrice
                         });
@@ -64,17 +65,17 @@ window.vm = new Vue({
                 });
         }
     },
-    created () {
+    created() {
         let fetchPriceTimeout;
 
         this.$root.$on('fetch-price', (sku) => {
-            if (! window.Laravel.isLoggedIn) {
+            if (!window.Laravel.isLoggedIn) {
                 return;
             }
 
             this.$data.skus.push(sku);
 
-            if (! this.$data.loadingPrices && fetchPriceTimeout) {
+            if (!this.$data.loadingPrices && fetchPriceTimeout) {
                 clearTimeout(fetchPriceTimeout);
             }
 
@@ -94,14 +95,14 @@ window.vm = new Vue({
             }
         });
     },
-    mounted () {
+    mounted() {
         document.body.style.opacity = "1";
 
         $(document).ready(function () {
 
             let $formControls = $('.form-control');
 
-            $formControls.on("change", function(event) {
+            $formControls.on("change", function (event) {
                 const $target = $(event.target);
 
                 $target.val() ? $target.addClass("not-empty") : $target.removeClass("not-empty");

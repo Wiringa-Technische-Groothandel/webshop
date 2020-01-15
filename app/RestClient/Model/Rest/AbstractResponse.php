@@ -63,7 +63,7 @@ abstract class AbstractResponse implements ResponseInterface
             return [];
         }
 
-        return json_decode((string)$this->getGuzzleResponse()->getBody(), true) ?: [];
+        return json_decode($this->getBody(), true) ?: [];
     }
 
     /**

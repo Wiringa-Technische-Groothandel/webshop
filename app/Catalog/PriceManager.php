@@ -7,7 +7,6 @@ namespace WTG\Catalog;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Collection;
-use WTG\Catalog\Model\Product;
 use WTG\RestClient\Model\Rest\GetProductPrices\Request as GetProductPricesRequest;
 use WTG\RestClient\Model\Rest\GetProductPrices\Response as GetProductPricesResponse;
 use WTG\RestClient\RestManager;

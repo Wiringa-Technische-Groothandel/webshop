@@ -28,6 +28,7 @@ class PriceParser
         $price->grossPrice = $item['price'];
         $price->discount = $item['discount'];
         $price->actionPrice = $item['actionPrice'];
+        $price->pricePer = $item['pricePerUnit'];
 
         return $price;
     }

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace WTG\Import\Importer;
 
 use Exception;
-use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Log\LogManager;
 use Throwable;
+use WTG\Catalog\Api\Model\ProductInterface;
 use WTG\Catalog\ProductManager;
 use WTG\Import\Api\ImporterInterface;
 use WTG\Import\Downloader\ProductDownloader;
@@ -87,8 +87,7 @@ class SingleProductImporter implements ImporterInterface
             $this->databaseManager->beginTransaction();
 
             $this->logManager->info("[Single product importer] Loading product from database");
-            $product = $this->productManager->find($this->sku);
-
+            $product = $this->productManager->find($this->sku, ProductInterface::FIELD_SKU, true);
 
             $this->logManager->info("[Single product importer] Fetching fresh product data from API");
             $this->downloader->setId($product->getErpId());

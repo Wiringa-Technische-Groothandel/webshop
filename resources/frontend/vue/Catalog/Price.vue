@@ -39,14 +39,14 @@
                 <div class="gross-price">
                     Bruto:
                     <span class="d-block d-sm-inline">
-                        <i class="fas fa-euro-sign"></i> <span>{{ grossPrice }}</span>
+                        <i class="fas fa-euro-sign"></i> <span>{{ formatPrice(grossPrice) }}</span>
                     </span>
                 </div>
 
                 <div class="net-price">
                     Netto:
                     <span class="d-block d-sm-inline">
-                        <i class="fas fa-euro-sign"></i> <span>{{ netPrice }}</span>
+                        <i class="fas fa-euro-sign"></i> <span>{{ formatPrice(netPrice) }}</span>
                     </span>
                 </div>
             </template>
@@ -84,6 +84,7 @@
                 error: false,
                 netPrice: false,
                 grossPrice: false,
+                pricePer: false,
                 action: false
             }
         },
@@ -92,6 +93,11 @@
                 return !this.action &&
                     this.netPrice === this.grossPrice &&
                     (this.product.price_factor && this.product.price_factor.price_unit === 'DAG')
+            }
+        },
+        methods: {
+            formatPrice(price) {
+                return ((price * this.product.price_factor.price_factor) / this.pricePer).toFixed(2)
             }
         },
         created() {
@@ -107,8 +113,9 @@
                     clearTimeout(timeout);
 
                     this.fetching = false;
-                    this.netPrice = data.netPrice.toFixed(2);
-                    this.grossPrice = data.grossPrice.toFixed(2);
+                    this.netPrice = data.netPrice;
+                    this.grossPrice = data.grossPrice;
+                    this.pricePer = data.pricePer;
                     this.action = data.action;
                 });
             } else {
