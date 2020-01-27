@@ -18,7 +18,7 @@
                     </template>
                 </dt>
                 <dd>
-                    <select class="form-control" v-model="role" :readonly="showSpinner"
+                    <select class="custom-select" v-model="role" :readonly="showSpinner"
                             :disabled="!canEdit" @change="updateRole">
                         <option :value="roleManager">Manager</option>
                         <option :value="roleUser">Gebruiker</option>
