@@ -21,7 +21,7 @@
                 <div class="action-price">
                     Actieprijs:
                     <span class="d-block d-sm-inline">
-                        <i class="fas fa-euro-sign"></i> <span>{{ netPrice }}</span>
+                        <i class="fas fa-euro-sign"></i> <span>{{ formatPrice(netPrice) }}</span>
                     </span>
                 </div>
             </template>
@@ -30,7 +30,7 @@
                 <div class="net-price">
                     Bruto / Netto:
                     <span class="d-block d-sm-inline">
-                        <i class="fas fa-euro-sign"></i> <span>{{ netPrice }}</span>
+                        <i class="fas fa-euro-sign"></i> <span>{{ formatPrice(netPrice) }}</span>
                     </span>
                 </div>
             </template>
@@ -39,14 +39,14 @@
                 <div class="gross-price">
                     Bruto:
                     <span class="d-block d-sm-inline">
-                        <i class="fas fa-euro-sign"></i> <span>{{ formatPrice(grossPrice) }}</span>
+                        <i class="fas fa-euro-sign"></i> <span>{{ formatPrice(calculatePrice(grossPrice)) }}</span>
                     </span>
                 </div>
 
                 <div class="net-price">
                     Netto:
                     <span class="d-block d-sm-inline">
-                        <i class="fas fa-euro-sign"></i> <span>{{ formatPrice(netPrice) }}</span>
+                        <i class="fas fa-euro-sign"></i> <span>{{ formatPrice(calculatePrice(netPrice)) }}</span>
                     </span>
                 </div>
             </template>
@@ -96,8 +96,11 @@
             }
         },
         methods: {
+            calculatePrice(price) {
+                return (price * this.product.price_factor.price_factor) / this.pricePer;
+            },
             formatPrice(price) {
-                return ((price * this.product.price_factor.price_factor) / this.pricePer).toFixed(2)
+                return price.toFixed(2)
             }
         },
         created() {
