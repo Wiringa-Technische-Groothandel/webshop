@@ -89,6 +89,8 @@ class RestManager implements RestManagerInterface
             );
         } catch (GuzzleException $e) {
             $this->logManager->alert($e);
+
+            throw $e;
         }
 
         return $this->createResponse($request, $guzzleResponse);
