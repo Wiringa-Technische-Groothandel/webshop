@@ -25,7 +25,7 @@ steps:
       - npm run prod-silent
 
       # Compress the build files
-      - tar --exclude=build --exclude=./.git --exclude=node_modules --exclude=.env.example --exclude=.env.testing --exclude=composer.json --exclude=composer.lock --exclude=package.json --exclude=package-lock.json --exclude=webpack.mix.js --exclude=storage/app/public/uploads -cvzf build/deployment.tar.gz *
+      - tar --exclude=build --exclude=./.git --exclude=node_modules --exclude=.env.example --exclude=.env.testing --exclude=package.json --exclude=package-lock.json --exclude=webpack.mix.js --exclude=storage/app/public/uploads -cvzf build/deployment.tar.gz *
 
   - name: "install dev modules"
     image: lunamoonfang/wtg-webshop:build-7.4
