@@ -61,6 +61,17 @@ steps:
     when:
       branch:
         - master
+    environment:
+      SSH_KNOWN_HOSTS:
+        from_secret: ssh-known-hosts
+      SSH_PUBLIC_KEY:
+        from_secret: ssh-public-key
+      SSH_PRIVATE_KEY:
+        from_secret: ssh-private-key
+      SSH_CONFIG:
+        from_secret: ssh-config
+      SSH_HOSTNAME:
+        from_secret: ssh-hostname
     commands:
       # Install ssh if not already installed
       - 'which ssh || ( apt-get update -y && apt-get install openssh-client -y )'

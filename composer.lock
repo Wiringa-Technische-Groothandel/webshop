@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9761ddf42dd71af7793c5fcf7606477f",
+    "content-hash": "a1a57b5b2c294f9c684dc6fae40dd0e9",
     "packages": [
         {
             "name": "barryvdh/laravel-snappy",
@@ -989,6 +989,7 @@
                 }
             ],
             "description": "Provides a simple API and specification that abstracts away the details of HTTP into a single PHP function.",
+            "abandoned": true,
             "time": "2018-07-31T13:22:33+00:00"
         },
         {
@@ -1039,6 +1040,7 @@
                 "Guzzle",
                 "stream"
             ],
+            "abandoned": true,
             "time": "2014-10-12T19:18:40+00:00"
         },
         {
@@ -8341,6 +8343,7 @@
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.4.0",
+        "ext-imagick": "*",
         "ext-json": "*"
     },
     "platform-dev": []
