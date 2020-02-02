@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Contracts\Models;
 
 use Illuminate\Support\Collection;
@@ -22,14 +24,14 @@ interface CompanyContract
     /**
      * Get the identifier.
      *
-     * @return null|string
+     * @return null|int
      */
-    public function getId(): ?string;
+    public function getId(): ?int;
 
     /**
      * Get or set the name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return CompanyContract
      */
     public function setName(string $name): CompanyContract;
@@ -44,7 +46,7 @@ interface CompanyContract
     /**
      * Set the customer number.
      *
-     * @param  string  $customerNumber
+     * @param string $customerNumber
      * @return CompanyContract
      */
     public function setCustomerNumber(string $customerNumber): CompanyContract;
@@ -66,7 +68,7 @@ interface CompanyContract
     /**
      * Set the street.
      *
-     * @param  string  $street
+     * @param string $street
      * @return CompanyContract
      */
     public function setStreet(string $street): CompanyContract;
@@ -81,7 +83,7 @@ interface CompanyContract
     /**
      * Set the postcode.
      *
-     * @param  null|string  $postcode
+     * @param null|string $postcode
      * @return CompanyContract
      */
     public function setPostcode(string $postcode): CompanyContract;
@@ -96,7 +98,7 @@ interface CompanyContract
     /**
      * Set the city.
      *
-     * @param  null|string  $city
+     * @param null|string $city
      * @return CompanyContract
      */
     public function setCity(string $city): CompanyContract;
@@ -111,7 +113,7 @@ interface CompanyContract
     /**
      * Set the active state.
      *
-     * @param  bool  $active
+     * @param bool $active
      * @return CompanyContract
      */
     public function setActive(bool $active): CompanyContract;

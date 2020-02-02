@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Controllers\Web\Checkout;
 
-use Illuminate\Http\Request;
+use Exception;
 use Illuminate\Http\JsonResponse;
-use WTG\Http\Controllers\Controller;
 use Illuminate\View\Factory as ViewFactory;
+use Illuminate\View\View;
 use WTG\Contracts\Services\CartServiceContract;
-use WTG\Http\Requests\Checkout\Cart\UpdateRequest;
+use WTG\Http\Controllers\Controller;
 use WTG\Http\Requests\Checkout\Cart\AddProductRequest;
+use WTG\Http\Requests\Checkout\Cart\UpdateRequest;
 
 /**
  * Cart controller.
@@ -27,8 +30,8 @@ class CartController extends Controller
     /**
      * CartController constructor.
      *
-     * @param  ViewFactory  $view
-     * @param  CartServiceContract  $cartService
+     * @param ViewFactory $view
+     * @param CartServiceContract $cartService
      */
     public function __construct(ViewFactory $view, CartServiceContract $cartService)
     {
@@ -40,7 +43,7 @@ class CartController extends Controller
     /**
      * Cart overview page.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function getAction()
     {
@@ -56,61 +59,85 @@ class CartController extends Controller
     /**
      * Add a product to the cart.
      *
-     * @param  AddProductRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param AddProductRequest $request
+     * @return JsonResponse
      */
     public function putAction(AddProductRequest $request): JsonResponse
     {
         $cartItem = $this->cartService->addProductBySku(
             $request->input('product'),
-            $request->input('quantity')
+            (float)$request->input('quantity')
         );
 
         if (! $cartItem) {
             return $this->productNotFoundResponse($request->input('product'));
         }
 
-        return response()->json([
-            'message' => __("Toegevoegd aan uw winkelwagen: <br><br> :quantity x :product", [
-                'quantity' => $request->input('quantity'),
-                'product' => $cartItem->getProduct()->getName()
-            ]),
-            'success' => true,
-            'count' => $this->cartService->getItemCount(),
-            'code' => 200
-        ]);
+        return response()->json(
+            [
+                'message' => __(
+                    "Toegevoegd aan uw winkelwagen: <br><br> :quantity x :product",
+                    [
+                        'quantity' => $request->input('quantity'),
+                        'product'  => $cartItem->getProduct()->getName(),
+                    ]
+                ),
+                'success' => true,
+                'count'   => $this->cartService->getItemCount(),
+                'code'    => 200,
+            ]
+        );
+    }
+
+    /**
+     * Send a product not found response.
+     *
+     * @param string $sku
+     * @return JsonResponse
+     */
+    protected function productNotFoundResponse(string $sku): JsonResponse
+    {
+        return response()->json(
+            [
+                'message' => __('Geen product gevonden met sku :sku', ['sku' => $sku]),
+                'success' => false,
+                'code'    => 400,
+            ]
+        );
     }
 
     /**
      * Update the cart.
      *
-     * @param  UpdateRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param UpdateRequest $request
+     * @return JsonResponse
      */
-    public function patchAction(UpdateRequest $request)
+    public function patchAction(UpdateRequest $request): JsonResponse
     {
         $cartItem = $this->cartService->updateProductBySku(
-            $request->input('sku'),
-            $request->input('quantity')
+            (string)$request->input('sku'),
+            (float)$request->input('quantity')
         );
 
         if (! $cartItem) {
             return $this->productNotFoundResponse($request->input('sku'));
         }
 
-        return response()->json([
-            'success' => true,
-            'code' => 200
-        ]);
+        return response()->json(
+            [
+                'success' => true,
+                'code'    => 200,
+            ]
+        );
     }
 
     /**
      * Remove an item from the cart.
      *
-     * @param  null|string  $sku
-     * @return \Illuminate\Http\JsonResponse
+     * @param null|string $sku
+     * @return JsonResponse
      */
-    public function deleteAction(?string $sku = null)
+    public function deleteAction(?string $sku = null): JsonResponse
     {
         try {
             if ($sku) {
@@ -118,36 +145,25 @@ class CartController extends Controller
             } else {
                 $this->cartService->destroy();
             }
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-                'success' => false,
-                'code' => 400
-            ]);
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'message' => $e->getMessage(),
+                    'success' => false,
+                    'code'    => 400,
+                ]
+            );
         }
 
-        return response()->json([
-            'message' => $sku ?
-                __('Het product is verwijderd uit uw winkelwagen.') :
-                __('De producten zijn verwijderd uit uw winkelwagen.'),
-            'count' => $this->cartService->getItemCount(),
-            'success' => true,
-            'code' => 200
-        ]);
-    }
-
-    /**
-     * Send a product not found response.
-     *
-     * @param  string  $sku
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function productNotFoundResponse(string $sku): JsonResponse
-    {
-        return response()->json([
-            'message' => __('Geen product gevonden met sku :sku', ['sku' => $sku]),
-            'success' => false,
-            'code' => 400
-        ]);
+        return response()->json(
+            [
+                'message' => $sku ?
+                    __('Het product is verwijderd uit uw winkelwagen.') :
+                    __('De producten zijn verwijderd uit uw winkelwagen.'),
+                'count'   => $this->cartService->getItemCount(),
+                'success' => true,
+                'code'    => 200,
+            ]
+        );
     }
 }

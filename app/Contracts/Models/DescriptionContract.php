@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Contracts\Models;
+
+use WTG\Catalog\Api\Model\ProductInterface;
 
 /**
  * Description contract.
@@ -14,17 +18,17 @@ interface DescriptionContract
     /**
      * Get the related product.
      *
-     * @return ProductContract
+     * @return ProductInterface
      */
-    public function getProduct(): ProductContract;
+    public function getProduct(): ProductInterface;
 
     /**
      * Set the related product.
      *
-     * @param  ProductContract  $product
+     * @param ProductInterface $product
      * @return DescriptionContract
      */
-    public function setProduct(ProductContract $product): DescriptionContract;
+    public function setProduct(ProductInterface $product): DescriptionContract;
 
     /**
      * Get the description identifier.
@@ -36,7 +40,7 @@ interface DescriptionContract
     /**
      * Set the description value.
      *
-     * @param  string  $value
+     * @param string $value
      * @return DescriptionContract
      */
     public function setValue(string $value): DescriptionContract;

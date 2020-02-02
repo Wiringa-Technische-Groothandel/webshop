@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Providers;
 
 use Illuminate\Support\Facades\Blade;
@@ -21,9 +23,12 @@ class BladeServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Blade::directive('block', function (string $blockName) {
-            return "<?php echo block($blockName); ?>";
-        });
+        Blade::directive(
+            'block',
+            function (string $blockName) {
+                return "<?php echo block($blockName); ?>";
+            }
+        );
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -31,7 +33,7 @@ class AddFavoritesToCartRequest extends FormRequest
     public function rules()
     {
         return [
-            'products' => ['required', 'array']
+            'products' => ['required', 'array'],
         ];
     }
 }

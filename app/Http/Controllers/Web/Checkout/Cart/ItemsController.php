@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Controllers\Web\Checkout\Cart;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use WTG\Http\Controllers\Controller;
-use WTG\Contracts\Models\CartItemContract;
 use Illuminate\View\Factory as ViewFactory;
 use WTG\Contracts\Services\CartServiceContract;
+use WTG\Http\Controllers\Controller;
 
 /**
  * Checkout cart items controller.
@@ -21,13 +21,13 @@ class ItemsController extends Controller
     /**
      * @var CartServiceContract
      */
-    protected $cartService;
+    protected CartServiceContract $cartService;
 
     /**
      * CartController constructor.
      *
-     * @param  ViewFactory  $view
-     * @param  CartServiceContract  $cartService
+     * @param ViewFactory $view
+     * @param CartServiceContract $cartService
      */
     public function __construct(ViewFactory $view, CartServiceContract $cartService)
     {
@@ -39,17 +39,19 @@ class ItemsController extends Controller
     /**
      * Get the items in the cart.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function getAction(): JsonResponse
     {
         $items = $this->cartService->getItems(true);
 
-        return response()->json([
-            'payload' => [
-                'items' => $items,
-                'grandTotal' => format_price($this->cartService->getGrandTotal())
+        return response()->json(
+            [
+                'payload' => [
+                    'items'      => $items,
+                    'grandTotal' => format_price($this->cartService->getGrandTotal()),
+                ],
             ]
-        ]);
+        );
     }
 }

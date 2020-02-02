@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Controllers\Web\Auth;
 
-use Illuminate\View\View;
-use Illuminate\Http\Request;
-use WTG\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Log;
 use WTG\Contracts\Models\CompanyContract;
 use WTG\Contracts\Services\AuthServiceContract as AuthService;
+use WTG\Http\Controllers\Controller;
 
 /**
  * Login controller.
@@ -38,8 +41,8 @@ class LoginController extends Controller
     /**
      * Attempt to login.
      *
-     * @param  Request  $request
-     * @param  AuthService  $authService
+     * @param Request $request
+     * @param AuthService $authService
      * @return RedirectResponse
      */
     public function postAction(Request $request, AuthService $authService): RedirectResponse
@@ -60,7 +63,7 @@ class LoginController extends Controller
      */
     protected function failedAuthentication()
     {
-        \Log::info("[Login] Customer '".request('company')."' - '".request('username')."' failed to login");
+        Log::info("[Login] Customer '" . request('company') . "' - '" . request('username') . "' failed to login");
 
         return back()
             ->withErrors(trans("auth.login.failed"));
@@ -69,12 +72,12 @@ class LoginController extends Controller
     /**
      * Login success handler.
      *
-     * @param  CompanyContract  $company
+     * @param CompanyContract $company
      * @return RedirectResponse
      */
     protected function successAuthentication(CompanyContract $company)
     {
-        \Log::info("[Login] Customer '".request('company')."' - '".request('username')."' has logged in");
+        Log::info("[Login] Customer '" . request('company') . "' - '" . request('username') . "' has logged in");
 
         return redirect(request('toUrl') ?: route('home'))
             ->with('status', trans('auth.login.success', ['name' => $company->getName()]));

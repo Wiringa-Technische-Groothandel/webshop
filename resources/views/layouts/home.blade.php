@@ -4,7 +4,7 @@
         @include('components.head')
     </head>
 
-    <body>
+    <body  style="opacity: 0;">
         <div id="app">
             @yield('before_content')
 
@@ -25,9 +25,6 @@
             <notification :php-errors="{{ $errors->toJson() }}"
                           php-success="{{ session('status') }}"></notification>
         </div>
-
-        <script src="{{ mix('assets/frontend/js/vendors.js') }}"></script>
-        <script src="{{ mix('assets/frontend/js/app.js') }}"></script>
 
         @stack('scripts')
     </body>

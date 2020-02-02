@@ -1,20 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Services;
 
-use Illuminate\Mail\Message;
-use WTG\Contracts\Models\CustomerContract;
-use WTG\Models\Order;
-use WTG\Models\OrderItem;
-use WTG\Contracts\Models\OrderContract;
+use Exception;
+use Illuminate\Contracts\Mail\Mailer as MailerContract;
+use Illuminate\Database\Connection as DbConnection;
 use WTG\Contracts\Models\CartItemContract;
+use WTG\Contracts\Models\CustomerContract;
+use WTG\Contracts\Models\OrderContract;
 use WTG\Contracts\Models\OrderItemContract;
-use WTG\Exceptions\Checkout\EmptyCartException;
 use WTG\Contracts\Services\AuthServiceContract;
 use WTG\Contracts\Services\CartServiceContract;
 use WTG\Contracts\Services\CheckoutServiceContract;
-use Illuminate\Database\Connection as DbConnection;
-use Illuminate\Contracts\Mail\Mailer as MailerContract;
+use WTG\Exceptions\Checkout\EmptyCartException;
+use WTG\Models\Order;
+use WTG\Models\OrderItem;
 
 /**
  * Checkout service.
@@ -47,13 +49,16 @@ class CheckoutService implements CheckoutServiceContract
     /**
      * CartService constructor.
      *
-     * @param  CartServiceContract  $cartService
-     * @param  AuthServiceContract  $authService
-     * @param  MailerContract  $mailer
-     * @param  DbConnection  $db
+     * @param CartServiceContract $cartService
+     * @param AuthServiceContract $authService
+     * @param MailerContract $mailer
+     * @param DbConnection $db
      */
     public function __construct(
-        CartServiceContract $cartService, AuthServiceContract $authService, MailerContract $mailer, DbConnection $db
+        CartServiceContract $cartService,
+        AuthServiceContract $authService,
+        MailerContract $mailer,
+        DbConnection $db
     ) {
         $this->cartService = $cartService;
         $this->authService = $authService;
@@ -64,10 +69,10 @@ class CheckoutService implements CheckoutServiceContract
     /**
      * Create an order.
      *
-     * @param  null|string  $comment
+     * @param null|string $comment
      * @return OrderContract
      * @throws EmptyCartException
-     * @throws \Exception
+     * @throws Exception
      */
     public function createOrder(?string $comment = null): OrderContract
     {
@@ -76,7 +81,7 @@ class CheckoutService implements CheckoutServiceContract
         $items = $this->cartService->getItems(true);
 
         if (count($items) < 1) {
-            throw new EmptyCartException;
+            throw new EmptyCartException();
         }
 
         $this->db->beginTransaction();
@@ -107,7 +112,7 @@ class CheckoutService implements CheckoutServiceContract
             $this->cartService->markFinished();
 
             $this->db->commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->db->rollBack();
 
             throw $e;
@@ -119,7 +124,7 @@ class CheckoutService implements CheckoutServiceContract
     /**
      * Turn a quote item into an order item.
      *
-     * @param  CartItemContract  $item
+     * @param CartItemContract $item
      * @return OrderItem
      */
     public function createOrderItem(CartItemContract $item): OrderItemContract
@@ -138,8 +143,8 @@ class CheckoutService implements CheckoutServiceContract
     /**
      * Send a new order email.
      *
-     * @param  OrderContract  $order
-     * @param  CustomerContract  $customer
+     * @param OrderContract $order
+     * @param CustomerContract $customer
      * @return void
      */
     protected function sendNewOrderMail(OrderContract $order, CustomerContract $customer): void

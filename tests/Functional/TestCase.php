@@ -2,9 +2,10 @@
 
 namespace Tests\Functional;
 
-use Illuminate\Support\Testing\Fakes\MailFake;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Database\Seeders\DatabaseSeeder;
 use Illuminate\Contracts\Mail\Mailer as MailerContract;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Testing\Fakes\MailFake;
 
 /**
  * Functional test case.
@@ -31,9 +32,14 @@ abstract class TestCase extends \Tests\TestCase
     {
         parent::setUp();
 
-        $this->artisan('db:seed');
+        $this->artisan(
+            'db:seed',
+            [
+                '--class' => DatabaseSeeder::class
+            ]
+        );
 
-        $this->mailFake = new MailFake;
+        $this->mailFake = new MailFake();
         $this->app->instance(MailerContract::class, $this->mailFake);
     }
 }

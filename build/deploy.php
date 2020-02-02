@@ -1,9 +1,10 @@
 <?php
+
 namespace Deployer;
 
 require 'recipe/laravel.php';
 
-// Shared files/dirs between deploys 
+// Shared files/dirs between deploys
 set('shared_files', [
     '.env'
 ]);

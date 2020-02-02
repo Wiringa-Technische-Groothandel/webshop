@@ -1,43 +1,96 @@
 <template>
     <div class="col-12">
         <div class="row cart-item">
-            <div class="col-10 col-sm-5 col-lg-6">
-                <div class="cart-item-name">
-                    <a class="product-name" :href="'/product/' + item.product.sku">
-                        {{ item.product.name }}
-                    </a>
+            <div class="col-11">
+                <div class="row">
+                    <div class="col-md-6 col-lg-8">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="cart-item-name">
+                                    <a class="product-name" :href="'/product/' + item.product.sku">
+                                        {{ item.product.name }}
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <div class="cart-item-qty">
+                                    <input type="number" class="form-control" placeholder="Aantal" min="1" step="1"
+                                           v-model="quantity" v-on:input="this.update" :id="'cart-item-qty-' + item.product.sku" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="row">
+                            <div class="col text-left">
+                                <div class="cart-item-price">
+                                    <label class="d-block d-md-none">Prijs</label>
+                                    <i class="far fa-euro-sign"></i> {{ item.price.toFixed(2).replace(".", ",") }} per {{ item.product.sales_unit_long }}
+                                </div>
+                            </div>
+
+                            <div class="col text-right">
+                                <div class="cart-item-subtotal">
+                                    <label class="d-block d-md-none">Subtotaal</label>
+                                    <i class="far fa-euro-sign"></i> {{ item.subtotal.toFixed(2).replace(".", ",") }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="col-2 col-sm-1 order-sm-2">
+            <div class="col-1 px-0">
                 <div class="cart-item-delete text-right">
-                    <button class="btn btn-link" v-on:click="this.delete">
+                    <button class="btn btn-link px-0 px-sm-1" v-on:click="this.delete">
                         <i class="fal fa-fw fa-trash-alt"></i>
                     </button>
-                </div>
-            </div>
-
-            <div class="col-4 col-sm-2 order-sm-1 d-none d-md-block d-lg-block d-xl-block">
-                <div class="cart-item-price text-left">
-                    <i class="far fa-fw fa-euro-sign"></i> {{ item.price.toFixed(2).replace(".", ",") }}
-                </div>
-            </div>
-
-            <div class="col-4 col-md-2 col-lg-1 col-sm-3 order-sm-1">
-                <div class="cart-item-qty text-right">
-                    <input type="number" class="form-control" placeholder="Aantal" min="1" step="1"
-                           v-model="quantity" v-on:input="this.update" />
-                </div>
-            </div>
-
-            <div class="col-4 col-sm-2 order-sm-1">
-                <div class="cart-item-subtotal text-right">
-                    <i class="far fa-fw fa-euro-sign"></i> {{ item.subtotal.toFixed(2).replace(".", ",") }}
                 </div>
             </div>
         </div>
     </div>
 </template>
+
+<style lang="scss" scoped>
+    .cart-item {
+        font-size: 15px;
+        line-height: 2.6;
+        border: 1px solid #efefef;
+        border-left: none;
+        border-right: none;
+        padding: 8px 0;
+
+        .cart-item-price,
+        .cart-item-subtotal {
+            @media only screen and (max-width: 767px) {
+                line-height: initial;
+            }
+
+            white-space: nowrap;
+
+            label {
+                margin-top: 10px;
+                font-weight: bold;
+            }
+        }
+
+        .cart-item-name {
+            a {
+                font-weight: bold;
+                color: #333;
+            }
+        }
+
+        .cart-item-delete {
+            .btn-link {
+                font-size: 1.2rem;
+                color: var(--danger);
+            }
+        }
+    }
+</style>
 
 <script>
     export default {
@@ -94,11 +147,11 @@
         },
         data () {
             return {
-                quantity: this.item.qty
+                quantity: Math.round(this.item.qty)
             };
         },
-        mounted () {
-            console.log('Cart item component mounted');
+        mounted() {
+            $('#cart-item-qty-' + this.item.product.sku).inputSpinner();
         }
     }
 </script>

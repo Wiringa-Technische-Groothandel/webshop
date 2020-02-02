@@ -1,14 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Exceptions;
 
-use WTG\Constant;
-use WTG\Contracts\Models\CustomerContract;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Session\TokenMismatchException;
+use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Session\TokenMismatchException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use WTG\Contracts\Models\CustomerContract;
 
 /**
  * Exception handler.
@@ -29,13 +33,18 @@ class Handler extends ExceptionHandler
     ];
 
     /**
+     * @var string
+     */
+    private $referenceId;
+
+    /**
      * Report or log an exception.
      *
-     * @param  \Exception  $exception
+     * @param Exception $exception
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
-    public function report(\Exception $exception)
+    public function report(Exception $exception)
     {
         if (
             ! app()->environment(ENV_LOCAL) &&
@@ -51,11 +60,11 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param Request $request
+     * @param Exception $exception
+     * @return Response
      */
-    public function render($request, \Exception $exception)
+    public function render($request, Exception $exception)
     {
         if ($exception instanceof TokenMismatchException) {
             return back()->withInput($request->except('password'))
@@ -73,17 +82,15 @@ class Handler extends ExceptionHandler
     /**
      * Convert an authentication exception into a response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Auth\AuthenticationException  $exception
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param AuthenticationException $exception
+     * @return Response
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        $guards = $exception->guards();
-
-        return $request->expectsJson()
+        return $request->expectsJson() || in_array('admin', $exception->guards())
             ? response()->json(['message' => 'Unauthenticated.'], 401)
-            : redirect()->guest(in_array('admin', $guards) ? route('admin.auth.login') : route('auth.login'));
+            : redirect()->guest(route('auth.login'));
     }
 
     /**
@@ -94,36 +101,53 @@ class Handler extends ExceptionHandler
     protected function context()
     {
         try {
+            $this->referenceId = uniqid();
+        } catch (Exception $e) {
+            $this->referenceId = null;
+        }
+
+        try {
             /** @var null|CustomerContract $customer */
             $customer = auth()->user();
 
             return [
-                'userId' => auth()->id(),
-                'email' => $customer ? $customer->getContact()->contactEmail() : null,
+                'userId'          => auth()->id(),
+                'email'           => $customer ? $customer->getContact()->contactEmail() : null,
                 'customer_number' => $customer ? $customer->getCompany()->customerNumber() : null,
+                'referenceId'     => $this->referenceId,
             ];
-        } catch (\Exception $e) {
-            return [];
+        } catch (Exception $e) {
+            return [
+                'referenceId' => $this->referenceId,
+            ];
         }
     }
 
     /**
      * Render the given HttpException.
      *
-     * @param  \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface  $e
+     * @param HttpExceptionInterface $e
      * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function renderHttpException(HttpExceptionInterface $e)
     {
         $status = $e->getStatusCode();
 
-        view()->replaceNamespace('errors', [
-            resource_path('views/pages/errors'),
-            base_path('vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/views'),
-        ]);
+        view()->replaceNamespace(
+            'errors',
+            [
+                resource_path('views/pages/errors'),
+                base_path('vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/views'),
+            ]
+        );
 
         if (view()->exists($view = "errors::{$status}")) {
-            return response()->view($view, ['exception' => $e], $status, $e->getHeaders());
+            return response()->view(
+                $view,
+                ['exception' => $e, 'title' => "Error {$status}", 'referenceId' => $this->referenceId],
+                $status,
+                $e->getHeaders()
+            );
         }
 
         return $this->convertExceptionToResponse($e);
@@ -132,10 +156,10 @@ class Handler extends ExceptionHandler
     /**
      * Prepare exception for rendering.
      *
-     * @param  \Exception  $e
-     * @return \Exception
+     * @param Exception $e
+     * @return Exception
      */
-    protected function prepareException(\Exception $e)
+    protected function prepareException(Exception $e)
     {
         if ($e instanceof TokenMismatchException) {
             return $e;

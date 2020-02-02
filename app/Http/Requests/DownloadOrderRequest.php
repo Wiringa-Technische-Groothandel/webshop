@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,7 +26,7 @@ class DownloadOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'order' => ['required']
+            'order' => ['required'],
         ];
     }
 }

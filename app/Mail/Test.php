@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Mail;
 
 use Illuminate\Bus\Queueable;
@@ -14,7 +16,8 @@ use Illuminate\Queue\SerializesModels;
  */
 class Test extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * @var string

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Controllers;
 
-use Illuminate\View\Factory as ViewFactory;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\View\Factory as ViewFactory;
 
 /**
  * Abstract controller.
@@ -17,17 +19,19 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
  */
 abstract class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use AuthorizesRequests;
+    use DispatchesJobs;
+    use ValidatesRequests;
 
     /**
      * @var ViewFactory
      */
-    protected $view;
+    protected ViewFactory $view;
 
     /**
      * Controller constructor.
      *
-     * @param  ViewFactory  $view
+     * @param ViewFactory $view
      */
     public function __construct(ViewFactory $view)
     {

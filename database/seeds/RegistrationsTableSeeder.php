@@ -1,5 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
 use WTG\Models\Registration;
 
 /**
@@ -7,7 +12,7 @@ use WTG\Models\Registration;
  *
  * @author  Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
-class RegistrationsTableSeeder extends \Illuminate\Database\Seeder
+class RegistrationsTableSeeder extends Seeder
 {
     /**
      * Run the seeder.

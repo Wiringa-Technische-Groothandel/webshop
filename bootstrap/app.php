@@ -11,8 +11,14 @@
 |
 */
 
+// phpcs:disable
+if (! defined('LARAVEL_START')) {
+    define('LARAVEL_START', microtime(true));
+}
+// phpcs:enable
+
 $app = new Illuminate\Foundation\Application(
-    realpath(__DIR__.'/../')
+    realpath(__DIR__ . '/../')
 );
 
 /*

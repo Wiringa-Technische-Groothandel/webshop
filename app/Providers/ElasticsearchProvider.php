@@ -1,14 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Providers;
 
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder as ElasticBuilder;
-
 use Illuminate\Support\ServiceProvider;
-
 use Laravel\Scout\EngineManager;
-
 use ScoutEngines\Elasticsearch\ElasticsearchEngine;
 
 /**
@@ -24,18 +23,25 @@ class ElasticsearchProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->bind(Client::class, function ($app) {
-            return ElasticBuilder::create()
-                ->setHosts(config('scout.elasticsearch.hosts'))
-                ->build();
-        });
+        $this->app->bind(
+            Client::class,
+            function ($app) {
+                return ElasticBuilder::create()
+                    ->setHosts(config('scout.elasticsearch.hosts'))
+                    ->build();
+            }
+        );
 
         /** @var EngineManager $engineManager */
         $engineManager = $this->app[EngineManager::class];
-        $engineManager->extend('elasticsearch', function ($app) {
-            return new ElasticsearchEngine(
-                $app[Client::class], config('scout.elasticsearch.index')
-            );
-        });
+        $engineManager->extend(
+            'elasticsearch',
+            function ($app) {
+                return new ElasticsearchEngine(
+                    $app[Client::class],
+                    config('scout.elasticsearch.index')
+                );
+            }
+        );
     }
 }

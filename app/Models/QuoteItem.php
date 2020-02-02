@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Models;
 
-use WTG\Contracts\Models\CartContract;
 use Illuminate\Database\Eloquent\Model;
-use WTG\Contracts\Models\ProductContract;
-use WTG\Contracts\Models\CartItemContract;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use WTG\Catalog\Model\Product;
+use WTG\Contracts\Models\CartContract;
+use WTG\Contracts\Models\CartItemContract;
 
 /**
  * Quote item model.
@@ -18,32 +20,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class QuoteItem extends Model implements CartItemContract
 {
     /**
-     * Quote relation.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function quote(): BelongsTo
-    {
-        return $this->belongsTo(Quote::class);
-    }
-
-    /**
-     * Product relation.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
-    }
-
-    /**
      * Get or set the product.
      *
-     * @param  ProductContract|null  $product
-     * @return ProductContract|null
+     * @param Product|null $product
+     * @return Product|null
      */
-    public function setProduct(ProductContract $product = null): ?ProductContract
+    public function setProduct(Product $product = null): ?Product
     {
         if ($product) {
             $this->product()->associate($product);
@@ -53,11 +35,21 @@ class QuoteItem extends Model implements CartItemContract
     }
 
     /**
+     * Product relation.
+     *
+     * @return BelongsTo
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    /**
      * Get the product.
      *
-     * @return null|ProductContract
+     * @return null|Product
      */
-    public function getProduct(): ?ProductContract
+    public function getProduct(): ?Product
     {
         return $this->getAttribute('product');
     }
@@ -65,7 +57,7 @@ class QuoteItem extends Model implements CartItemContract
     /**
      * Set the item quantity.
      *
-     * @param  float|null  $quantity
+     * @param float|null $quantity
      * @return CartItemContract
      */
     public function setQuantity(float $quantity): CartItemContract
@@ -80,13 +72,13 @@ class QuoteItem extends Model implements CartItemContract
      */
     public function getQuantity(): ?float
     {
-        return $this->getAttribute('qty');
+        return (float)$this->getAttribute('qty');
     }
 
     /**
      * Set the cart.
      *
-     * @param  CartContract  $cart
+     * @param CartContract $cart
      * @return CartItemContract
      */
     public function setCart(CartContract $cart): CartItemContract
@@ -94,6 +86,16 @@ class QuoteItem extends Model implements CartItemContract
         $this->quote()->associate($cart);
 
         return $this;
+    }
+
+    /**
+     * Quote relation.
+     *
+     * @return BelongsTo
+     */
+    public function quote(): BelongsTo
+    {
+        return $this->belongsTo(Quote::class);
     }
 
     /**
@@ -109,7 +111,7 @@ class QuoteItem extends Model implements CartItemContract
     /**
      * Set the price.
      *
-     * @param  float  $price
+     * @param float $price
      * @return CartItemContract
      */
     public function setPrice(float $price): CartItemContract
@@ -124,13 +126,13 @@ class QuoteItem extends Model implements CartItemContract
      */
     public function getPrice(): ?float
     {
-        return $this->getAttribute('price');
+        return (float)$this->getAttribute('price');
     }
 
     /**
      * Set the subtotal.
      *
-     * @param  float  $subtotal
+     * @param float $subtotal
      * @return CartItemContract
      */
     public function setSubtotal(float $subtotal): CartItemContract
@@ -145,6 +147,6 @@ class QuoteItem extends Model implements CartItemContract
      */
     public function getSubtotal(): ?float
     {
-        return $this->getAttribute('subtotal');
+        return (float)$this->getAttribute('subtotal');
     }
 }

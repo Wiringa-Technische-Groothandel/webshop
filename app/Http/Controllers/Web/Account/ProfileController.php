@@ -1,15 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Controllers\Web\Account;
 
-use WTG\Models\Customer;
-use Illuminate\Http\Request;
-use Psr\Log\LoggerInterface as Log;
+use Exception;
 use Illuminate\Contracts\View\View;
-use WTG\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\Factory as ViewFactory;
+use Psr\Log\LoggerInterface as Log;
+use WTG\Http\Controllers\Controller;
 use WTG\Http\Requests\Account\Profile\UpdateRequest;
+use WTG\Models\Customer;
 
 /**
  * Profile controller.
@@ -28,8 +31,8 @@ class ProfileController extends Controller
     /**
      * ProfileController constructor.
      *
-     * @param  ViewFactory  $view
-     * @param  Log  $log
+     * @param ViewFactory $view
+     * @param Log $log
      */
     public function __construct(ViewFactory $view, Log $log)
     {
@@ -41,8 +44,8 @@ class ProfileController extends Controller
     /**
      * The account dashboard.
      *
-     * @param  Request  $request
-     * @return \Illuminate\Contracts\View\View
+     * @param Request $request
+     * @return View
      */
     public function getAction(Request $request): View
     {
@@ -56,8 +59,8 @@ class ProfileController extends Controller
     /**
      * The account dashboard.
      *
-     * @param  Request  $request
-     * @return \Illuminate\Contracts\View\View
+     * @param Request $request
+     * @return View
      */
     public function editAction(Request $request): View
     {
@@ -70,7 +73,7 @@ class ProfileController extends Controller
     /**
      * Update the customer profile.
      *
-     * @param  UpdateRequest  $request
+     * @param UpdateRequest $request
      * @return RedirectResponse
      */
     public function postAction(UpdateRequest $request): RedirectResponse
@@ -84,7 +87,7 @@ class ProfileController extends Controller
             $contact->setOrderEmail($request->input('order-email'));
 
             $contact->save();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->log->error($e);
 
             return back()

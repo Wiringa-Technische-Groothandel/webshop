@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Controllers\Web\Catalog;
 
 use Illuminate\View\Factory as ViewFactory;
 use Illuminate\View\View;
+use WTG\Catalog\ProductManager;
 use WTG\Http\Controllers\Controller;
-use WTG\Repositories\ProductRepository;
 
 /**
  * Product controller.
@@ -17,36 +19,36 @@ use WTG\Repositories\ProductRepository;
 class ProductController extends Controller
 {
     /**
-     * @var ProductRepository
+     * @var ProductManager
      */
-    protected $productRepository;
+    protected ProductManager $productManager;
 
     /**
      * ProductController constructor.
      *
-     * @param  ViewFactory  $view
-     * @param  ProductRepository  $productRepository
+     * @param ViewFactory    $view
+     * @param ProductManager $productManager
      */
-    public function __construct(ViewFactory $view, ProductRepository $productRepository)
+    public function __construct(ViewFactory $view, ProductManager $productManager)
     {
         parent::__construct($view);
 
-        $this->productRepository = $productRepository;
+        $this->productManager = $productManager;
     }
 
     /**
      * Product detail page.
      *
-     * @param  string  $sku
-     * @return \Illuminate\View\View
+     * @param string $sku
+     * @return View
      */
     public function getAction(string $sku): View
     {
-        $product = $this->productRepository->findBySku($sku);
+        $product = $this->productManager->find($sku);
         $previousUrl = $this->getAssortmentUrl();
 
         if (! $product) {
-            abort(404, __("Er is geen product gevonden met productnummer :sku", ['sku' => $sku]));
+            abort(404, __("Er is geen product gevonden met productnummer :sku", [ 'sku' => $sku ]));
         }
 
         return view('pages.catalog.product', compact('product', 'previousUrl'));

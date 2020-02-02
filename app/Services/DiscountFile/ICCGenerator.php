@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Services\DiscountFile;
 
-use WTG\Models\Discount;
 use WTG\Models\Customer;
+use WTG\Models\Discount;
 
 /**
  * ICC generator.
@@ -14,29 +16,29 @@ use WTG\Models\Customer;
  */
 class ICCGenerator extends AbstractGenerator implements Generator
 {
-    const GLN = 8714253038995;
-    const END_DATE = 99991231;
-    const DISCOUNT_2 = '00000';
-    const DISCOUNT_3 = '00000';
-    const FILE_VERSION = '1.1  ';
-    const NET_PRICE = '000000000';
-    const SMALL_SPACING = '       ';
-    const LARGE_SPACING = '               ';
+    private const GLN = 8714253038995;
+    private const END_DATE = 99991231;
+    private const DISCOUNT_2 = '00000';
+    private const DISCOUNT_3 = '00000';
+    private const FILE_VERSION = '1.1  ';
+    private const NET_PRICE = '000000000';
+    private const SMALL_SPACING = '       ';
+    private const LARGE_SPACING = '               ';
 
     /**
      * @var int
      */
-    protected $count = 0;
+    protected int $count = 0;
 
     /**
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * ICCGenerator constructor.
      *
-     * @param  Customer  $customer
+     * @param Customer $customer
      */
     public function __construct(Customer $customer)
     {
@@ -66,6 +68,35 @@ class ICCGenerator extends AbstractGenerator implements Generator
     }
 
     /**
+     * Generate a line for a group discount
+     *
+     * @param Discount $discount
+     * @return string
+     */
+    public function generateGroupDiscountLine(Discount $discount)
+    {
+        $groupNumber = str_pad($discount->product, 20);
+        $productNumber = str_pad("", 20);
+        $description = str_pad(
+            preg_replace("/[\r\n]*/", '', $discount->group_desc),
+            50
+        );
+        $discountAmount = ($discount->discount < 10 ? '00' : '0') . preg_replace("/\./", '', $discount->discount);
+        $discountAmount = str_pad($discountAmount, 5, '0');
+
+        return $groupNumber .
+            $productNumber .
+            $description .
+            $discountAmount .
+            static::DISCOUNT_2 .
+            static::DISCOUNT_3 .
+            static::NET_PRICE .
+            $this->start_date .
+            static::END_DATE .
+            "\r\n";
+    }
+
+    /**
      * Add the default group bound discounts
      *
      * @return void
@@ -74,12 +105,15 @@ class ICCGenerator extends AbstractGenerator implements Generator
     {
         $discounts = Discount::where('importance', Discount::IMPORTANCE_GENERIC)
             ->where('group_desc', '!=', 'Vervallen')
-            ->whereNotIn('product', function ($query) {
-                $query->select('product')
-                    ->from('discounts')
-                    ->where('importance', Discount::IMPORTANCE_GROUP)
-                    ->where('company_id', $this->customer->getCompany()->getCustomerNumber());
-            })
+            ->whereNotIn(
+                'product',
+                function ($query) {
+                    $query->select('product')
+                        ->from('discounts')
+                        ->where('importance', Discount::IMPORTANCE_GROUP)
+                        ->where('company_id', $this->customer->getCompany()->getCustomerNumber());
+                }
+            )
             ->get();
 
         $this->count += $discounts->count();
@@ -97,12 +131,15 @@ class ICCGenerator extends AbstractGenerator implements Generator
     public function addDefaultProductDiscounts()
     {
         $discounts = Discount::where('importance', Discount::IMPORTANCE_PRODUCT)
-            ->whereNotIn('product', function ($query) {
-                $query->select('product')
-                    ->from('discounts')
-                    ->where('importance', Discount::IMPORTANCE_CUSTOMER)
-                    ->where('company_id', $this->customer->getCompany()->getCustomerNumber());
-            })
+            ->whereNotIn(
+                'product',
+                function ($query) {
+                    $query->select('product')
+                        ->from('discounts')
+                        ->where('importance', Discount::IMPORTANCE_CUSTOMER)
+                        ->where('company_id', $this->customer->getCompany()->getCustomerNumber());
+                }
+            )
             ->get();
 
         $this->count += $discounts->count();
@@ -110,6 +147,35 @@ class ICCGenerator extends AbstractGenerator implements Generator
         foreach ($discounts as $discount) {
             $this->text .= $this->generateProductDiscountLine($discount);
         }
+    }
+
+    /**
+     * Generate a product discount line
+     *
+     * @param Discount $discount
+     * @return string
+     */
+    public function generateProductDiscountLine(Discount $discount)
+    {
+        $groupNumber = str_pad("", 20);
+        $productNumber = str_pad($discount->product, 20);
+        $description = str_pad(
+            preg_replace("/[\r\n]*/", '', $discount->product_desc),
+            50
+        );
+        $discountAmount = ($discount->discount < 10 ? '00' : '0') . preg_replace("/\./", '', $discount->discount);
+        $discountAmount = str_pad($discountAmount, 5, '0');
+
+        return $groupNumber .
+            $productNumber .
+            $description .
+            $discountAmount .
+            static::DISCOUNT_2 .
+            static::DISCOUNT_3 .
+            static::NET_PRICE .
+            $this->start_date .
+            static::END_DATE .
+            "\r\n";
     }
 
     /**
@@ -131,64 +197,6 @@ class ICCGenerator extends AbstractGenerator implements Generator
     }
 
     /**
-     * Generate a line for a group discount
-     *
-     * @param  Discount  $discount
-     * @return string
-     */
-    public function generateGroupDiscountLine(Discount $discount)
-    {
-        $groupNumber = str_pad($discount->product, 20);
-        $productNumber = str_pad("", 20);
-        $description = str_pad(
-            preg_replace("/[\r\n]*/", '', $discount->group_desc),
-            50
-        );
-        $discountAmount = ($discount->discount < 10 ? '00' : '0').preg_replace("/\./", '', $discount->discount);
-        $discountAmount = str_pad($discountAmount, 5, '0');
-
-        return $groupNumber.
-            $productNumber.
-            $description.
-            $discountAmount.
-            static::DISCOUNT_2.
-            static::DISCOUNT_3.
-            static::NET_PRICE.
-            $this->start_date.
-            static::END_DATE.
-            "\r\n";
-    }
-
-    /**
-     * Generate a product discount line
-     *
-     * @param  Discount  $discount
-     * @return string
-     */
-    public function generateProductDiscountLine(Discount $discount)
-    {
-        $groupNumber = str_pad("", 20);
-        $productNumber = str_pad($discount->product, 20);
-        $description = str_pad(
-            preg_replace("/[\r\n]*/", '', $discount->product_desc),
-            50
-        );
-        $discountAmount = ($discount->discount < 10 ? '00' : '0').preg_replace("/\./", '', $discount->discount);
-        $discountAmount = str_pad($discountAmount, 5, '0');
-
-        return $groupNumber.
-            $productNumber.
-            $description.
-            $discountAmount.
-            static::DISCOUNT_2.
-            static::DISCOUNT_3.
-            static::NET_PRICE.
-            $this->start_date.
-            static::END_DATE.
-            "\r\n";
-    }
-
-    /**
      * Prepend the first line
      *
      * @return void
@@ -196,16 +204,16 @@ class ICCGenerator extends AbstractGenerator implements Generator
     public function prependHeaderLine()
     {
         $this->text = str_pad(
-                static::GLN.
-                static::SMALL_SPACING.
-                $this->customer->getCompany()->getCustomerNumber().
-                static::LARGE_SPACING.
-                $this->start_date.
-                sprintf("%'06d", $this->count).
-                static::FILE_VERSION.
+            static::GLN .
+                static::SMALL_SPACING .
+                $this->customer->getCompany()->getCustomerNumber() .
+                static::LARGE_SPACING .
+                $this->start_date .
+                sprintf("%'06d", $this->count) .
+                static::FILE_VERSION .
                 $this->name,
-                130
-            ) . "\r\n".
+            130
+        ) . "\r\n" .
             $this->text;
     }
 }

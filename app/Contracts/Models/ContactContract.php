@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Contracts\Models;
 
 /**
@@ -27,7 +29,7 @@ interface ContactContract
     /**
      * Set the contact email.
      *
-     * @param  string  $email
+     * @param string $email
      * @return ContactContract
      */
     public function setContactEmail(string $email): ContactContract;
@@ -42,7 +44,7 @@ interface ContactContract
     /**
      * Set the order email.
      *
-     * @param  null|string  $email
+     * @param null|string $email
      * @return ContactContract
      */
     public function setOrderEmail(?string $email): ContactContract;
@@ -57,7 +59,7 @@ interface ContactContract
     /**
      * Set the default address.
      *
-     * @param  int  $addressId
+     * @param int $addressId
      * @return ContactContract
      */
     public function setDefaultAddress(int $addressId): ContactContract;

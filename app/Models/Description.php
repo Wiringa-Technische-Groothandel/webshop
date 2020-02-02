@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\HtmlString;
-use WTG\Contracts\Models\ProductContract;
+use WTG\Catalog\Api\Model\ProductInterface;
+use WTG\Catalog\Model\Product;
 use WTG\Contracts\Models\DescriptionContract;
 
 /**
@@ -23,21 +26,11 @@ class Description extends Model implements DescriptionContract
     public $timestamps = false;
 
     /**
-     * Product relation.
-     *
-     * @return BelongsTo
-     */
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
-    }
-
-    /**
      * Get the related product.
      *
-     * @return ProductContract
+     * @return ProductInterface
      */
-    public function getProduct(): ProductContract
+    public function getProduct(): ProductInterface
     {
         return $this->getAttribute('product');
     }
@@ -45,14 +38,24 @@ class Description extends Model implements DescriptionContract
     /**
      * Set the related product.
      *
-     * @param  ProductContract  $product
+     * @param ProductInterface $product
      * @return DescriptionContract
      */
-    public function setProduct(ProductContract $product): DescriptionContract
+    public function setProduct(ProductInterface $product): DescriptionContract
     {
         $this->product()->associate($product);
 
         return $this;
+    }
+
+    /**
+     * Product relation.
+     *
+     * @return BelongsTo
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
     }
 
     /**
@@ -68,7 +71,7 @@ class Description extends Model implements DescriptionContract
     /**
      * Set the description value.
      *
-     * @param  string  $value
+     * @param string $value
      * @return DescriptionContract
      */
     public function setValue(string $value): DescriptionContract
@@ -85,6 +88,6 @@ class Description extends Model implements DescriptionContract
     {
         $string = $this->getAttribute('value');
 
-        return $string ? new HtmlString($string) : null;
+        return $string ? (string)(new HtmlString($string)) : null;
     }
 }

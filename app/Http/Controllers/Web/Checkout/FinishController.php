@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Controllers\Web\Checkout;
 
+use Exception;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use WTG\Models\Order;
-use WTG\Services\CheckoutService;
-use Illuminate\Contracts\View\View;
-use WTG\Http\Controllers\Controller;
+use Illuminate\Log\LogManager;
 use Illuminate\View\Factory as ViewFactory;
-use WTG\Exceptions\Checkout\EmptyCartException;
 use WTG\Contracts\Services\CheckoutServiceContract;
+use WTG\Exceptions\Checkout\EmptyCartException;
+use WTG\Http\Controllers\Controller;
 
 /**
  * Finish controller.
@@ -22,33 +24,40 @@ use WTG\Contracts\Services\CheckoutServiceContract;
 class FinishController extends Controller
 {
     /**
-     * @var CheckoutService
+     * @var CheckoutServiceContract
      */
-    protected $checkoutService;
+    protected CheckoutServiceContract $checkoutService;
+
+    /**
+     * @var LogManager
+     */
+    protected LogManager $logManager;
 
     /**
      * FinishController constructor.
      *
-     * @param  ViewFactory  $view
-     * @param  CheckoutServiceContract  $checkoutService
+     * @param ViewFactory             $view
+     * @param CheckoutServiceContract $checkoutService
+     * @param LogManager              $logManager
      */
-    public function __construct(ViewFactory $view, CheckoutServiceContract $checkoutService)
+    public function __construct(ViewFactory $view, CheckoutServiceContract $checkoutService, LogManager $logManager)
     {
         parent::__construct($view);
 
         $this->checkoutService = $checkoutService;
+        $this->logManager = $logManager;
     }
 
     /**
      * Order finished page.
      *
-     * @return \Illuminate\Contracts\View\View|RedirectResponse
+     * @return View|RedirectResponse
      */
     public function getAction()
     {
         $order = session('order');
 
-        if (!$order) {
+        if (! $order) {
             return back();
         }
 
@@ -58,7 +67,7 @@ class FinishController extends Controller
     /**
      * Finish order action.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return RedirectResponse
      */
     public function postAction(Request $request): RedirectResponse
@@ -74,11 +83,13 @@ class FinishController extends Controller
                 ->back()
                 ->withInput($request->input())
                 ->withErrors(__('U kunt geen bestelling afronden met een lege winkelwagen.'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
+            $this->logManager->error($e);
+
             return redirect()
                 ->back()
                 ->withInput($request->input())
-                ->withErrors($e->getMessage());
+                ->withErrors(__("Er is een fout opgetreden tijdens het verwerken van uw bestelling"));
         }
 
         return redirect()->route('checkout.finished');

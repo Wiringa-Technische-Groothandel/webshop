@@ -1,5 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
 use WTG\Models\Quote;
 
 /**
@@ -7,7 +12,7 @@ use WTG\Models\Quote;
  *
  * @author  Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
-class QuotesTableSeeder extends \Illuminate\Database\Seeder
+class QuotesTableSeeder extends Seeder
 {
     /**
      * Run the seeder.

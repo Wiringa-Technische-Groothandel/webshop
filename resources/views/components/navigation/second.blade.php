@@ -5,7 +5,8 @@
                 <div class="modal-header">
                     <h5 class="modal-title mx-auto">{{ __('Klant login') }}</h5>
 
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 20px; top: 18px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            style="position: absolute; right: 20px; top: 18px;">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -26,26 +27,31 @@
     @endpush
 @endguest
 
-<nav class="navbar navbar-expand-md navbar-dark {{ Route::is('home') ? 'bg-transparent' : 'bg-gradient' }}" id="navbar-second">
+<nav class="navbar navbar-expand-md navbar-dark {{ Route::is('home') ? 'bg-transparent' : 'bg-gradient' }}"
+     id="navbar-second">
     <div class="container">
         <div class="collapse navbar-collapse" id="navbar-links">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item {{ Route::is('home') ? 'active' :'' }}">
+                <li class="nav-item {{ route_class('home') }}">
                     <a class="nav-link" href="{{ route('home') }}">{{ trans('navigation.items.home') }}</a>
                 </li>
-                <li class="nav-item {{ Route::is('downloads') ? 'active' : '' }}">
+
+                <li class="nav-item {{ route_class('downloads') }}">
                     <a class="nav-link" href="{{ route('downloads') }}">{{ trans('navigation.items.downloads') }}</a>
                 </li>
-                <li class="nav-item {{ Route::is('catalog.assortment') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('catalog.assortment') }}">{{ trans('navigation.items.assortment') }}</a>
+
+                <li class="nav-item {{ route_class('catalog.assortment') }}">
+                    <a class="nav-link"
+                       href="{{ route('catalog.assortment') }}">{{ trans('navigation.items.assortment') }}</a>
                 </li>
             </ul>
 
             <div class="navbar-right">
                 <ul class="nav navbar-nav">
                     @auth
-                        <li class="nav-item mx-md-3 {{ request()->is('cart') ? 'active' : '' }}">
-                            <mini-cart :count="{{ $cart->getCount() }}" cart-url="{{ route('checkout.cart') }}"></mini-cart>
+                        <li class="nav-item mx-md-3 {{ route_class('cart') }}">
+                            <mini-cart :count="{{ $cart->getCount() }}"
+                                       cart-url="{{ route('checkout.cart') }}"></mini-cart>
                         </li>
 
                         <li class="d-none d-md-inline nav-item dropdown {{ request()->is('account/*') ? 'active' : '' }}">
@@ -71,13 +77,14 @@
 
                                 <div class="dropdown-divider"></div>
 
-                                <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit()">
+                                <a class="dropdown-item" href="#"
+                                   onclick="document.getElementById('logout-form').submit()">
                                     <i class="far fa-fw fa-sign-out"></i> {{ __('Uitloggen') }}
                                 </a>
                             </div>
                         </li>
 
-                        <li class="d-inline d-md-none nav-item {{ request()->is('account/*') ? 'active' : '' }}">
+                        <li class="d-inline d-md-none nav-item {{ route_class('account/*') }}">
                             <a class="nav-link" href="{{ route('account.profile') }}">
                                 {{ __('Mijn account') }}
                             </a>
@@ -88,11 +95,14 @@
                         </form>
                     @else
                         <li class="nav-item">
-                            <a class="nav-link register-button" href="{{ route('auth.register') }}">{{ __('Registreren') }}</a>
+                            <a class="nav-link register-button"
+                               href="{{ route('auth.register') }}">{{ __('Registreren') }}</a>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link" onclick="event.preventDefault()" data-toggle="modal"
-                               data-target="#loginModal" href="{{ route('auth.login', ['toUrl' => url()->current()]) }}">
+                               data-target="#loginModal"
+                               href="{{ route('auth.login', ['toUrl' => url()->current()]) }}">
                                 {{ __('Login') }}
                             </a>
                         </li>

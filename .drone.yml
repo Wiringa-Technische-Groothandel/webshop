@@ -1,0 +1,103 @@
+kind: pipeline
+type: docker
+name: default
+
+services:
+  - name: redis
+    image: redis
+  - name: mysql
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: testing
+      MYSQL_ROOT_PASSWORD: testing
+
+steps:
+  - name: build
+    image: lunamoonfang/wtg-webshop:build-7.4
+    commands:
+      # Install Composer and project dependencies.
+      - composer install --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
+
+      # Install Node dependencies.
+      - npm ci
+
+      # Build the assets
+      - npm run prod-silent
+
+      # Compress the build files
+      - tar --exclude=build --exclude=./.git --exclude=node_modules --exclude=.env.example --exclude=.env.testing --exclude=composer.json --exclude=composer.lock --exclude=package.json --exclude=package-lock.json --exclude=webpack.mix.js --exclude=storage/app/public/uploads -cvzf build/deployment.tar.gz *
+
+  - name: "install dev modules"
+    image: lunamoonfang/wtg-webshop:build-7.4
+    failure: ignore
+    commands:
+      # Install Composer and project dependencies (including dev).
+      - composer install --verbose --prefer-dist --no-progress --no-interaction --dev --optimize-autoloader
+
+  - name: "code style"
+    image: lunamoonfang/wtg-webshop:build-7.4
+    failure: ignore
+    commands:
+      # Run phpcs
+      - vendor/bin/phpcs -d memory_limit=1G --standard=PSR12 --ignore=\*blade.php,\*.js,\*/vendor/\*,\*/storage/framework/\*,\*/bootstrap/cache/\* --extensions=php .
+
+  - name: test
+    image: lunamoonfang/wtg-webshop:build-7.4
+    environment:
+      MAIL_USERNAME:
+        from_secret: mail-username
+      MAIL_PASSWORD:
+        from_secret: mail-password
+    commands:
+      # Set up testing env variables
+      - php artisan key:generate --env=testing
+      - php artisan jwt:secret --env=testing
+
+      # Run tests
+      - vendor/bin/phpunit
+
+  - name: deploy
+    image: lunamoonfang/wtg-webshop:build-7.4
+    when:
+      branch:
+        - master
+    environment:
+      SSH_KNOWN_HOSTS:
+        from_secret: ssh-known-hosts
+      SSH_PUBLIC_KEY:
+        from_secret: ssh-public-key
+      SSH_PRIVATE_KEY:
+        from_secret: ssh-private-key
+      SSH_CONFIG:
+        from_secret: ssh-config
+      SSH_HOSTNAME:
+        from_secret: ssh-hostname
+    commands:
+      # Install ssh if not already installed
+      - 'which ssh || ( apt-get update -y && apt-get install openssh-client -y )'
+
+      # Create the SSH directory and give it the right permissions
+      - mkdir -p ~/.ssh
+      - chmod 700 ~/.ssh
+
+      # Known host checking
+      - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      # Add keypair
+      - echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
+      - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+
+      # Add SSH config
+      - echo "$SSH_CONFIG" > ~/.ssh/config
+
+      # Fix permissions
+      - chmod 600 ~/.ssh/id_rsa*
+      - chmod 600 ~/.ssh/config
+      - chmod 644 ~/.ssh/known_hosts
+
+      # Test ssh connection
+      - ssh $SSH_HOSTNAME "echo $0"
+
+      # Release to production
+      - cd build && composer install --no-progress --verbose --prefer-dist --no-interaction
+      - vendor/bin/dep deploy production

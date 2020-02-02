@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Contracts\Services;
 
 use Illuminate\Http\Request;
@@ -17,7 +19,7 @@ interface AuthServiceContract
     /**
      * Authenticate a user by request.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return null|CustomerContract
      */
     public function authenticateByRequest(Request $request): ?CustomerContract;

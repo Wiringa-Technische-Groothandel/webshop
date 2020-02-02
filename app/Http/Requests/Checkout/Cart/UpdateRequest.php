@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Requests\Checkout\Cart;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -31,8 +33,8 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'sku' => ['required'],
-            'quantity' => ['required']
+            'sku'      => ['required'],
+            'quantity' => ['required'],
         ];
     }
 }

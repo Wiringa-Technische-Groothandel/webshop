@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Contracts\Models;
 
 use Illuminate\Support\Collection;
+use WTG\Catalog\Model\Product;
 
 /**
  * Customer contract.
@@ -15,14 +18,14 @@ interface CustomerContract
     /**
      * Get the identifier.
      *
-     * @return null|string
+     * @return null|int
      */
-    public function getId(): ?string;
+    public function getId(): ?int;
 
     /**
      * Set the username.
      *
-     * @param  string  $username
+     * @param string $username
      * @return CustomerContract
      */
     public function setUsername(string $username): CustomerContract;
@@ -37,7 +40,7 @@ interface CustomerContract
     /**
      * Set the password.
      *
-     * @param  string  $password
+     * @param string $password
      * @return CustomerContract
      */
     public function setPassword(string $password): CustomerContract;
@@ -52,7 +55,7 @@ interface CustomerContract
     /**
      * Set the active.
      *
-     * @param  bool  $active
+     * @param bool $active
      * @return CustomerContract
      */
     public function setActive(bool $active): CustomerContract;
@@ -88,24 +91,24 @@ interface CustomerContract
     /**
      * Check if the customer has set the product as favorite.
      *
-     * @param  ProductContract  $product
+     * @param Product $product
      * @return bool
      */
-    public function hasFavorite(ProductContract $product): bool;
+    public function hasFavorite(Product $product): bool;
 
     /**
      * Add a product as favorite.
      *
-     * @param  ProductContract  $product
+     * @param Product $product
      * @return void
      */
-    public function addFavorite(ProductContract $product): void;
+    public function addFavorite(Product $product): void;
 
     /**
      * Add a product as favorite.
      *
-     * @param  ProductContract  $product
+     * @param Product $product
      * @return void
      */
-    public function removeFavorite(ProductContract $product): void;
+    public function removeFavorite(Product $product): void;
 }

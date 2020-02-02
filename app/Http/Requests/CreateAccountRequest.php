@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
 use WTG\Models\Customer as CustomerModel;
 use WTG\Models\Role as RoleModel;
-
-use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Class CreateAccountRequest
@@ -37,10 +38,10 @@ class CreateAccountRequest extends FormRequest
     public function rules()
     {
         return [
-            'username'  => ['required'],
-            'email'     => ['required', 'email'],
-            'password'  => ['required', 'confirmed'],
-            'role'      => ['required']
+            'username' => ['required'],
+            'email'    => ['required', 'email'],
+            'password' => ['required', 'confirmed'],
+            'role'     => ['required'],
         ];
     }
 }

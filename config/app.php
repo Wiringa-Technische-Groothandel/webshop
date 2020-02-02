@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'WTG Webshop'),
 
     /*
     |--------------------------------------------------------------------------
@@ -64,7 +64,7 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE', 'UTC'),
+    'timezone' => env('APP_TIMEZONE', 'europe/amsterdam'),
 
     /*
     |--------------------------------------------------------------------------
@@ -127,7 +127,7 @@ return [
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
         Illuminate\Bus\BusServiceProvider::class,
         Illuminate\Cache\CacheServiceProvider::class,
-        Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
+        WTG\Foundation\Providers\ConsoleSupportServiceProvider::class,
         Illuminate\Cookie\CookieServiceProvider::class,
         Illuminate\Database\DatabaseServiceProvider::class,
         Illuminate\Encryption\EncryptionServiceProvider::class,
@@ -156,14 +156,12 @@ return [
         WTG\Providers\AppServiceProvider::class,
         WTG\Providers\AuthServiceProvider::class,
         WTG\Providers\BladeServiceProvider::class,
-        WTG\Providers\CatalogServiceProvider::class,
-        WTG\Providers\CarouselServiceProvider::class,
-        // WTG\Providers\BroadcastServiceProvider::class,
         WTG\Providers\EventServiceProvider::class,
         WTG\Providers\RouteServiceProvider::class,
         WTG\Providers\ElasticsearchProvider::class,
 
-        Luna\SeoUrls\SeoUrlServiceProvider::class
+        WTG\Catalog\ServiceProvider::class,
+        WTG\RestClient\ServiceProvider::class,
     ],
 
     /*

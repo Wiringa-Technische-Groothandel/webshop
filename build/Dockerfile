@@ -1,4 +1,4 @@
-FROM php:7.2-apache-stretch
+FROM php:7.4-apache-stretch
 
 MAINTAINER Thomas Wiringa <thomas.wiringa@gmail.com>
 
@@ -18,7 +18,6 @@ RUN docker-php-ext-configure gd \
 RUN docker-php-ext-install \
     mbstring \
     pdo_mysql \
-    soap \
     gd \
     tokenizer \
     opcache

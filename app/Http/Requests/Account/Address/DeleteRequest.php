@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Requests\Account\Address;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -31,7 +33,7 @@ class DeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'address-id' => ['required', 'exists:addresses,id']
+            'address-id' => ['required', 'exists:addresses,id'],
         ];
     }
 }

@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Controllers\Web\Account;
 
+use Exception;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Contracts\View\View;
-use WTG\Http\Controllers\Controller;
 use Illuminate\View\Factory as ViewFactory;
+use WTG\Http\Controllers\Controller;
 use WTG\Services\Import\Invoices as InvoiceService;
 
 /**
@@ -26,8 +29,8 @@ class InvoiceController extends Controller
     /**
      * InvoiceController constructor.
      *
-     * @param  ViewFactory  $view
-     * @param  InvoiceService  $invoiceService
+     * @param ViewFactory $view
+     * @param InvoiceService $invoiceService
      */
     public function __construct(ViewFactory $view, InvoiceService $invoiceService)
     {
@@ -39,15 +42,15 @@ class InvoiceController extends Controller
     /**
      * Invoice list.
      *
-     * @param  Request  $request
-     * @return \Illuminate\Contracts\View\View
+     * @param Request $request
+     * @return View
      */
     public function getAction(Request $request): View
     {
-        switch ((int) $request->input('sort-order')) {
+        switch ((int)$request->input('sort-order')) {
             case InvoiceService::SORT_ORDER_ASC:
             case InvoiceService::SORT_ORDER_DESC:
-                $sortOrder = (int) $request->input('sort-order');
+                $sortOrder = (int)$request->input('sort-order');
                 break;
             default:
                 $sortOrder = InvoiceService::SORT_ORDER_DESC;
@@ -55,6 +58,7 @@ class InvoiceController extends Controller
 
         $invoices = $this->service->getForCustomer(
             $request->user()->getCompany()->getCustomerNumber(),
+            true,
             $sortOrder
         );
 
@@ -64,8 +68,8 @@ class InvoiceController extends Controller
     /**
      * Invoice view.
      *
-     * @param  Request  $request
-     * @param  int  $file
+     * @param Request $request
+     * @param int $file
      * @return Response
      */
     public function viewAction(Request $request, int $file)
@@ -84,12 +88,16 @@ class InvoiceController extends Controller
 
         try {
             $data = $this->service->readFile($filename);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->withErrors(__('Er is een fout opgetreden tijdens het ophalen van de factuur.'));
         }
 
-        return response()->make($data, 200, [
-            'Content-Type' => 'application/pdf'
-        ]);
+        return response()->make(
+            $data,
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+            ]
+        );
     }
 }

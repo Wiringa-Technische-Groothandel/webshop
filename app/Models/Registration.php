@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -14,10 +16,10 @@ use WTG\Contracts\Models\RegistrationContract;
 class Registration extends Model implements RegistrationContract
 {
     /**
-     * @var array 
+     * @var array
      */
     protected $guarded = [
-        'id'
+        'id',
     ];
 
     /**
@@ -25,7 +27,7 @@ class Registration extends Model implements RegistrationContract
      */
     public function getContactCompany(): string
     {
-        return (string) $this->getAttribute('contact-company');
+        return (string)$this->getAttribute('contact-company');
     }
 
     /**
@@ -33,7 +35,7 @@ class Registration extends Model implements RegistrationContract
      */
     public function getContactName(): string
     {
-        return (string) $this->getAttribute('contact-name');
+        return (string)$this->getAttribute('contact-name');
     }
 
     /**
@@ -41,7 +43,7 @@ class Registration extends Model implements RegistrationContract
      */
     public function getContactAddress(): string
     {
-        return (string) $this->getAttribute('contact-address');
+        return (string)$this->getAttribute('contact-address');
     }
 
     /**
@@ -49,7 +51,7 @@ class Registration extends Model implements RegistrationContract
      */
     public function getContactCity(): string
     {
-        return (string) $this->getAttribute('contact-city');
+        return (string)$this->getAttribute('contact-city');
     }
 
     /**
@@ -57,7 +59,7 @@ class Registration extends Model implements RegistrationContract
      */
     public function getContactPostcode(): string
     {
-        return (string) $this->getAttribute('contact-postcode');
+        return (string)$this->getAttribute('contact-postcode');
     }
 
     /**
@@ -65,7 +67,7 @@ class Registration extends Model implements RegistrationContract
      */
     public function getContactPhoneCompany(): string
     {
-        return (string) $this->getAttribute('contact-phone-company');
+        return (string)$this->getAttribute('contact-phone-company');
     }
 
     /**
@@ -73,7 +75,7 @@ class Registration extends Model implements RegistrationContract
      */
     public function getContactPhone(): string
     {
-        return (string) $this->getAttribute('contact-phone');
+        return (string)$this->getAttribute('contact-phone');
     }
 
     /**
@@ -81,7 +83,7 @@ class Registration extends Model implements RegistrationContract
      */
     public function getContactEmail(): string
     {
-        return (string) $this->getAttribute('contact-email');
+        return (string)$this->getAttribute('contact-email');
     }
 
     /**
@@ -89,7 +91,7 @@ class Registration extends Model implements RegistrationContract
      */
     public function getContactWebsite(): string
     {
-        return (string) $this->getAttribute('contact-website');
+        return (string)$this->getAttribute('contact-website');
     }
 
     /**
@@ -97,7 +99,7 @@ class Registration extends Model implements RegistrationContract
      */
     public function getBusinessAddress(): string
     {
-        return (string) $this->getAttribute('business-address');
+        return (string)$this->getAttribute('business-address');
     }
 
     /**
@@ -105,7 +107,7 @@ class Registration extends Model implements RegistrationContract
      */
     public function getBusinessCity(): string
     {
-        return (string) $this->getAttribute('business-city');
+        return (string)$this->getAttribute('business-city');
     }
 
     /**
@@ -113,7 +115,7 @@ class Registration extends Model implements RegistrationContract
      */
     public function getBusinessPostcode(): string
     {
-        return (string) $this->getAttribute('business-postcode');
+        return (string)$this->getAttribute('business-postcode');
     }
 
     /**
@@ -121,7 +123,7 @@ class Registration extends Model implements RegistrationContract
      */
     public function getBusinessPhone(): string
     {
-        return (string) $this->getAttribute('business-phone');
+        return (string)$this->getAttribute('business-phone');
     }
 
     /**
@@ -129,7 +131,7 @@ class Registration extends Model implements RegistrationContract
      */
     public function getPaymentIban(): string
     {
-        return (string) $this->getAttribute('payment-iban');
+        return (string)$this->getAttribute('payment-iban');
     }
 
     /**
@@ -137,7 +139,7 @@ class Registration extends Model implements RegistrationContract
      */
     public function getPaymentKvk(): string
     {
-        return (string) $this->getAttribute('payment-kvk');
+        return (string)$this->getAttribute('payment-kvk');
     }
 
     /**
@@ -145,7 +147,7 @@ class Registration extends Model implements RegistrationContract
      */
     public function getPaymentVat(): string
     {
-        return (string) $this->getAttribute('payment-vat');
+        return (string)$this->getAttribute('payment-vat');
     }
 
     /**
@@ -153,7 +155,7 @@ class Registration extends Model implements RegistrationContract
      */
     public function getOtherAltEmail(): string
     {
-        return (string) $this->getAttribute('other-alt-email');
+        return (string)$this->getAttribute('other-alt-email');
     }
 
     /**
@@ -161,7 +163,7 @@ class Registration extends Model implements RegistrationContract
      */
     public function getOtherOrderConfirmation(): bool
     {
-        return (bool) $this->getAttribute('other-order-confirmation');
+        return (bool)$this->getAttribute('other-order-confirmation');
     }
 
     /**
@@ -169,6 +171,6 @@ class Registration extends Model implements RegistrationContract
      */
     public function getOtherMailProductfile(): bool
     {
-        return (bool) $this->getAttribute('other-mail-productfile');
+        return (bool)$this->getAttribute('other-mail-productfile');
     }
 }

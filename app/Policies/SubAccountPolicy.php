@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Policies;
 
-use WTG\Models\Role;
-use WTG\Models\Customer;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use WTG\Models\Customer;
+use WTG\Models\Role;
 
 class SubAccountPolicy
 {
@@ -13,7 +15,7 @@ class SubAccountPolicy
     /**
      * View the list of sub-accounts.
      *
-     * @param  \WTG\Models\Customer  $user
+     * @param Customer $user
      * @return mixed
      */
     public function view(Customer $user)
@@ -24,7 +26,7 @@ class SubAccountPolicy
     /**
      * Determine whether the user can assign the manager role.
      *
-     * @param  \WTG\Models\Customer  $user
+     * @param Customer $user
      * @return mixed
      */
     public function assignManagerRole(Customer $user)

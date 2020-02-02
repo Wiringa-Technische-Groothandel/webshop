@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Services;
 
-use WTG\Mail\Registration as RegistrationMail;
-use WTG\Models\Registration;
-use WTG\Mail\RegistrationSuccess;
 use Illuminate\Contracts\Mail\Mailer;
 use WTG\Contracts\Models\RegistrationContract;
 use WTG\Contracts\Services\RegistrationServiceContract;
+use WTG\Mail\Registration as RegistrationMail;
+use WTG\Mail\RegistrationSuccess;
+use WTG\Models\Registration;
 
 /**
  * Registration service.
@@ -25,7 +27,7 @@ class RegistrationService implements RegistrationServiceContract
     /**
      * RegistrationService constructor.
      *
-     * @param  Mailer  $mailer
+     * @param Mailer $mailer
      */
     public function __construct(Mailer $mailer)
     {
@@ -35,18 +37,23 @@ class RegistrationService implements RegistrationServiceContract
     /**
      * Create a registration from request.
      *
-     * @param  array  $data
+     * @param array $data
      * @return RegistrationContract
      */
     public function create(array $data): RegistrationContract
     {
-        $data = array_map(function ($value) {
-            if (strtolower($value) === 'on') {
-                return 1;
-            }
+        $data = array_map(
+            function ($value) {
+                if (is_string($value) && strtolower($value) === 'on') {
+                    return 1;
+                } elseif ($value === false || $value === null) {
+                    return 0;
+                }
 
-            return $value;
-        }, $data);
+                return $value;
+            },
+            $data
+        );
 
         /** @var Registration $registration */
         $registration = app()->make(RegistrationContract::class);
@@ -62,18 +69,18 @@ class RegistrationService implements RegistrationServiceContract
     /**
      * Send a success registration email.
      *
-     * @param  string  $recipientEmail
+     * @param string $recipientEmail
      * @return void
      */
     protected function sendRegistrationSuccessMail(string $recipientEmail): void
     {
-        $this->mailer->to($recipientEmail)->send(new RegistrationSuccess);
+        $this->mailer->to($recipientEmail)->send(new RegistrationSuccess());
     }
 
     /**
      * Send a registration email.
      *
-     * @param  Registration  $registration
+     * @param Registration $registration
      * @return void
      */
     protected function sendRegistrationMail(Registration $registration): void

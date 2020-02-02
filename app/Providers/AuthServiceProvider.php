@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Providers;
 
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
-use WTG\Models\Customer;
-use WTG\Models\Registration;
-use WTG\Services\AuthService;
-use WTG\Policies\SubAccountPolicy;
-use WTG\Services\RegistrationService;
 use WTG\Contracts\Models\RegistrationContract;
 use WTG\Contracts\Services\AuthServiceContract;
 use WTG\Contracts\Services\RegistrationServiceContract;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use WTG\Models\Customer;
+use WTG\Models\Registration;
+use WTG\Policies\SubAccountPolicy;
+use WTG\Services\AuthService;
+use WTG\Services\RegistrationService;
 
 /**
  * Auth service provider.
@@ -47,6 +49,5 @@ class AuthServiceProvider extends ServiceProvider
         $this->app->bind(AuthServiceContract::class, AuthService::class);
         $this->app->bind(RegistrationContract::class, Registration::class);
         $this->app->bind(RegistrationServiceContract::class, RegistrationService::class);
-        $this->app->bind(\WTG\Contracts\Services\Admin\AuthServiceContract::class, \WTG\Services\Admin\AuthService::class);
     }
 }

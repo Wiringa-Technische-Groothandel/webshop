@@ -26,7 +26,7 @@
 
         <div class="text-center">
             <small>
-                Ontwikkeling en design: <a href="https://linkedin.com/in/thomaswiringa" target="_blank">Thomas Wiringa</a> - <i class="fal fa-fw fa-copyright"></i> {{ (new Date()).getFullYear() }}
+                Ontwikkeling en design: <a href="https://linkedin.com/in/thomaswiringa" target="_blank" rel="noreferrer">Thomas Wiringa</a> - <i class="fal fa-fw fa-copyright"></i> {{ (new Date()).getFullYear() }}
             </small>
         </div>
     </footer>

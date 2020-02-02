@@ -1,5 +1,6 @@
 @stack('head_start')
 
+<!--suppress VueDuplicateTag -->
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -15,29 +16,25 @@
 
 <title>WTG - @yield('title', $title ?? '')</title>
 
-<script src="{{ mix('assets/head.js') }}"></script>
-
 @if (config('services.sentry.js-dsn'))
-    <script type="application/javascript">
+    <script type="application/javascript" async defer>
         Sentry.init({ dsn: '{{ config('services.sentry.js-dsn') }}' });
     </script>
 @endif
 
-<link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css">
-<link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick-theme.css">
+<link rel="preconnect dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="preconnect dns-prefetch" href="https://kit-pro.fontawesome.com">
+<link rel="preconnect dns-prefetch" href="https://kit.fontawesome.com">
+<link rel="preconnect dns-prefetch" href="https://cdn.jsdelivr.net">
 
-<link rel="preload" as="style" href="{{ mix('assets/frontend/css/app.css') }}">
+<link rel="preload prefetch" as="script" href="{{ mix('assets/frontend/main.js') }}">
+<link rel="preload prefetch" as="style" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css">
+<link rel="preload prefetch" as="style" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick-theme.css">
 
-<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.8.0/css/all.css"
-      integrity="sha384-/pOR6TNYPdUaQQQRKQ4XHznZ4U2K/Lscb3u6jshUngC/31fLTuyX9FZb24gp4O3J" crossorigin="anonymous">
-
-<link href="https://fonts.googleapis.com/css?family=Muli:300,400,600,800" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Oswald:500,700" rel="stylesheet">
+<script src="https://kit.fontawesome.com/4af601a43c.js" crossorigin="anonymous" async defer></script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick-theme.css"/>
-
-<link rel="stylesheet" href="{{ mix('assets/frontend/css/app.css') }}">
 
 <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
@@ -59,3 +56,7 @@
 </script>
 
 @stack('head_end')
+
+@push('scripts')
+    <script src="{{ mix('assets/frontend/main.js') }}"></script>
+@endpush

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Requests\Account\Address;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -31,12 +33,12 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'      => ['required'],
-            'address'   => ['required'],
-            'postcode'  => ['required'],
-            'city'      => ['required'],
-            'phone'     => [],
-            'mobile'    => []
+            'name'     => ['required'],
+            'address'  => ['required'],
+            'postcode' => ['required'],
+            'city'     => ['required'],
+            'phone'    => [],
+            'mobile'   => [],
         ];
     }
 }

@@ -1,9 +1,9 @@
 <template>
     <div id="cart-address">
-        <address id="delivery-address" v-if="address">
-            <b>{{ address.name }}</b><br />
-            {{ address.street }} <br />
-            {{ address.postcode }} {{ address.city }}
+        <address id="delivery-address" v-if="displayAddress">
+            <b>{{ displayAddress.name }}</b><br />
+            {{ displayAddress.street }} <br />
+            {{ displayAddress.postcode }} {{ displayAddress.city }}
         </address>
 
         <div class="alert alert-warning" v-else>
@@ -15,11 +15,19 @@
 
 <script>
     export default {
-        props: ['address'],
-        created () {
-            this.$root.$on('cart-address-changed', (address) => {
-                this.address = address;
-            });
+        props: {
+            address: {
+                type: Object,
+                required: true
+            }
+        },
+        data () {
+            return {
+                displayAddress: this.address
+            }
+        },
+        mounted () {
+            this.$root.$on('cart-address-changed', address => this.displayAddress = address);
         }
     }
 </script>

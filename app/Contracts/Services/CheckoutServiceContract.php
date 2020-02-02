@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Contracts\Services;
 
-use WTG\Contracts\Models\OrderContract;
 use WTG\Contracts\Models\CartItemContract;
+use WTG\Contracts\Models\OrderContract;
 use WTG\Contracts\Models\OrderItemContract;
 
 /**
@@ -18,7 +20,7 @@ interface CheckoutServiceContract
     /**
      * Convert a quote to an order.
      *
-     * @param  null|string  $comment
+     * @param null|string $comment
      * @return OrderContract
      */
     public function createOrder(?string $comment = null): OrderContract;
@@ -26,7 +28,7 @@ interface CheckoutServiceContract
     /**
      * Turn a quote item into an order item.
      *
-     * @param  CartItemContract  $item
+     * @param CartItemContract $item
      * @return OrderItemContract
      */
     public function createOrderItem(CartItemContract $item): OrderItemContract;

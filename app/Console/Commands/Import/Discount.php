@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Console\Commands\Import;
 
 use Illuminate\Console\Command;
 use Illuminate\Database\DatabaseManager;
+use Throwable;
 use WTG\Services\Import\Discounts as Service;
 
 class Discount extends Command
@@ -11,7 +14,7 @@ class Discount extends Command
     /**
      * @var string
      */
-    protected $signature = 'import:discounts';
+    protected $name = 'import:discounts';
 
     /**
      * @var string
@@ -21,18 +24,18 @@ class Discount extends Command
     /**
      * @var Service
      */
-    protected $service;
+    protected Service $service;
 
     /**
      * @var DatabaseManager
      */
-    protected $dm;
+    protected DatabaseManager $dm;
 
     /**
      * AssortmentFiles constructor.
      *
-     * @param  Service  $service
-     * @param  DatabaseManager  $dm
+     * @param Service $service
+     * @param DatabaseManager $dm
      */
     public function __construct(Service $service, DatabaseManager $dm)
     {
@@ -46,12 +49,14 @@ class Discount extends Command
      * Run the command.
      *
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function handle()
     {
-        $this->dm->transaction(function () {
-            $this->service->run();
-        });
+        $this->dm->transaction(
+            function () {
+                $this->service->run();
+            }
+        );
     }
 }

@@ -1,11 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace WTG\Console\Commands\Index;
 
 use Elasticsearch\Client as ElasticClient;
-
 use Illuminate\Console\Command;
-
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -18,15 +18,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Show extends Command
 {
     /**
-     * The name and signature of the console command.
-     *
      * @var string
      */
-    protected $signature = 'index:show';
+    protected $name = 'index:show';
 
     /**
-     * The console command description.
-     *
      * @var string
      */
     protected $description = 'Show all elastic indices.';
@@ -34,7 +30,7 @@ class Show extends Command
     /**
      * @var ElasticClient
      */
-    protected $elastic;
+    protected ElasticClient $elastic;
 
     /**
      * UpdateSettings constructor.

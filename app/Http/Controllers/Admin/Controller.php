@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Controllers\Admin;
 
-use WTG\Http\Controllers\Controller as BaseController;
+use Illuminate\Routing\Controller as BaseController;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Abstract admin controller.
@@ -13,5 +16,16 @@ use WTG\Http\Controllers\Controller as BaseController;
  */
 abstract class Controller extends BaseController
 {
-    //
+    /**
+     * @return Response
+     */
+    public function __invoke(): Response
+    {
+        return app()->call(static::class . '@execute');
+    }
+
+    /**
+     * @return Response
+     */
+    abstract public function execute(): Response;
 }

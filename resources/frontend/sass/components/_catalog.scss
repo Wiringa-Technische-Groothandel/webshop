@@ -31,7 +31,8 @@
 .prices {
   .gross-price,
   .net-price,
-  .action-price {
+  .action-price,
+  .error {
     font-family: $font-family-sans-serif-oswald;
     font-weight: 700;
     font-size: 20px;
@@ -40,6 +41,15 @@
     span {
       white-space: nowrap;
     }
+  }
+
+  .gross-price {
+    font-size: 16px;
+    text-decoration: line-through;
+  }
+
+  .error {
+    color: var(--danger);
   }
 
   .action-price {

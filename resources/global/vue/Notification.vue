@@ -1,8 +1,13 @@
 <template>
     <div id="notification-wrapper">
-        <div v-for="message in messages" class="notification animated" v-on:click="message.show = false"
-             v-html="message.text"
-             :class="{ success: message.success, danger: !message.success, fadeInLeft: message.show, fadeOutLeft: !message.show }">
+        <div v-for="message in messages">
+            <transition enter-active-class="animated fadeInLeft" leave-active-class="animated fadeOutLeft" mode="out-in">
+                <div class="notification d-flex" v-on:click="message.show = false" v-if="message.show"
+                     :class="{ success: message.success, danger: !message.success }">
+                    <i class="fal fa-fw" :class="{ 'fa-check-circle': message.success, 'fa-times-octagon': !message.success}"></i>
+                    <span class="ml-3" v-html="message.text"></span>
+                </div>
+            </transition>
         </div>
     </div>
 </template>
@@ -32,14 +37,18 @@
                 let notification = {
                     success: success,
                     text: text,
-                    show: true
+                    show: false
                 };
 
                 this.$data.messages.push(notification);
 
-                setTimeout(() => {
-                    notification.show = false;
-                }, 5000);
+                this.$nextTick(() => {
+                    notification.show = true;
+
+                    setTimeout(() => {
+                        notification.show = false;
+                    }, 5000);
+                });
             }
         },
         created() {
@@ -72,40 +81,19 @@
             display: inline-block;
             margin-top: 10px;
             padding: 20px;
-            font-size: 15px;
+            font-size: 17px;
+            line-height: 17px;
             font-weight: 300;
             border-radius: 4px;
 
-            &:before {
-                font-family: "Font Awesome 5 Pro", sans-serif;
-                margin: 0 10px 0 0;
-            }
-
             &.success {
-                background: green;
+                background: var(--success);
                 color: white;
-
-                &:before {
-                    content: "\f058"; // check-circle
-                }
             }
 
             &.danger {
-                background: red;
+                background: var(--danger);
                 color: white;
-
-                &:before {
-                    content: "\f2f0"; // times-octagon
-                }
-            }
-
-            &.warning {
-                background: yellow;
-                color: white;
-
-                &:before {
-                    content: "\f071"; // exclamation-triangle
-                }
             }
         }
     }

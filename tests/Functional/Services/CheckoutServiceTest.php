@@ -2,13 +2,14 @@
 
 namespace Tests\Functional\Services;
 
+use Tests\Functional\TestCase;
+use WTG\Contracts\Services\CartServiceContract;
+use WTG\Exceptions\Checkout\EmptyCartException;
 use WTG\Mail\Order;
 use WTG\Models\Address;
 use WTG\Models\Customer;
 use WTG\Models\QuoteItem;
-use Tests\Functional\TestCase;
 use WTG\Services\CheckoutService;
-use WTG\Contracts\Services\CartServiceContract;
 
 /**
  * Unit test case.
@@ -31,18 +32,19 @@ class CheckoutServiceTest extends TestCase
 
     /**
      * @test
-     * @expectedException \WTG\Exceptions\Checkout\EmptyCartException
      */
     public function throwsExceptionOnEmptyCart()
     {
+        $this->expectException(EmptyCartException::class);
+
         $cartMock = $this->createMock(CartServiceContract::class);
         $cartMock->method('getItems')->willReturn(collect([]));
         $cartMock->method('getDeliveryAddress')->willReturn(Address::find(1));
 
-        app()->instance(CartServiceContract::class, $cartMock);
+        $this->app->instance(CartServiceContract::class, $cartMock);
 
         /** @var CheckoutService $checkoutService */
-        $checkoutService = app()->make(CheckoutService::class);
+        $checkoutService = $this->app->make(CheckoutService::class);
         $checkoutService->createOrder("Test comment");
     }
 
@@ -55,10 +57,10 @@ class CheckoutServiceTest extends TestCase
         $cartMock->method('getItems')->willReturn(QuoteItem::all());
         $cartMock->method('getDeliveryAddress')->willReturn(Address::find(1));
 
-        app()->instance(CartServiceContract::class, $cartMock);
+        $this->app->instance(CartServiceContract::class, $cartMock);
 
         /** @var CheckoutService $checkoutService */
-        $checkoutService = app()->make(CheckoutService::class);
+        $checkoutService = $this->app->make(CheckoutService::class);
         $order = $checkoutService->createOrder("Test comment");
 
         $this->assertEquals("Test comment", $order->getComment());
@@ -73,10 +75,10 @@ class CheckoutServiceTest extends TestCase
         $cartMock->method('getItems')->willReturn(QuoteItem::all());
         $cartMock->method('getDeliveryAddress')->willReturn(Address::find(1));
 
-        app()->instance(CartServiceContract::class, $cartMock);
+        $this->app->instance(CartServiceContract::class, $cartMock);
 
         /** @var CheckoutService $checkoutService */
-        $checkoutService = app()->make(CheckoutService::class);
+        $checkoutService = $this->app->make(CheckoutService::class);
         $order = $checkoutService->createOrder();
 
         $this->assertNull($order->getComment());
@@ -91,10 +93,10 @@ class CheckoutServiceTest extends TestCase
         $cartMock->method('getItems')->willReturn(QuoteItem::all());
         $cartMock->method('getDeliveryAddress')->willReturn(Address::find(1));
 
-        app()->instance(CartServiceContract::class, $cartMock);
+        $this->app->instance(CartServiceContract::class, $cartMock);
 
         /** @var CheckoutService $checkoutService */
-        $checkoutService = app()->make(CheckoutService::class);
+        $checkoutService = $this->app->make(CheckoutService::class);
         $checkoutService->createOrder();
 
         $this->mailFake->assertSent(Order::class);

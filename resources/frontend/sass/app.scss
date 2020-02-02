@@ -2,7 +2,8 @@
 @import "variables";
 
 // Imports
-@import "~bootstrap/scss/bootstrap";
+@import "~bootstrap";
+@import "~lightbox2/dist/css/lightbox.min.css";
 
 // Components
 @import "components/notification";

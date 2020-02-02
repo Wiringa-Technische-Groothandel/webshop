@@ -1,10 +1,10 @@
-// ChartJS
-window.Chart.defaults.global.maintainAspectRatio = false;
+WebFont.load({
+    google: {
+        families: ['Muli:300,400,600,800']
+    }
+});
 
-// Names of the months
-window.months = ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December'];
-
-$(document).ready( function() {
+$(document).ready(function () {
     var $page = $('#page-wrapper');
     var $navToggle = $('#toggle-navigation');
 
@@ -17,20 +17,4 @@ $(document).ready( function() {
     });
 });
 
-import Notification from '../../global/vue/Notification'
-import Block from '../vue/Content/Block'
-import Descriptions from '../vue/Content/Descriptions'
-
-window.vm = new Vue({
-    el: '#app',
-    components: {
-        'notification': Notification,
-        'block': Block,
-        'descriptions': Descriptions,
-    },
-    data () {
-        return {
-            filter: {}
-        }
-    }
-});
+require('./vue');

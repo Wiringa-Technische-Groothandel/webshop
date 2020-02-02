@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -31,8 +33,8 @@ class DownloadDiscountFileRequest extends FormRequest
     public function rules()
     {
         return [
-            'format' => ['required', 'in:csv,icc'],
-            'receive' => ['required', 'in:download,email']
+            'format'  => ['required', 'in:csv,icc'],
+            'receive' => ['required', 'in:download,email'],
         ];
     }
 }

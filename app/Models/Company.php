@@ -1,18 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Models;
 
-use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\CompanyContract;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Company model.
  *
- * @package     WTG
- * @subpackage  Models
+ * @package     WTG\Models
  * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
 class Company extends Model implements CompanyContract
@@ -20,9 +22,31 @@ class Company extends Model implements CompanyContract
     use SoftDeletes;
 
     /**
+     * Override parent boot and Call deleting event
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleted(
+            function (self $company) {
+                $company->customers()->delete();
+            }
+        );
+
+        static::restoring(
+            function (self $company) {
+                $company->customers()->withTrashed()->where('deleted_at', '>=', $company->deleted_at)->restore();
+            }
+        );
+    }
+
+    /**
      * Customers relation.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function customers()
     {
@@ -32,7 +56,7 @@ class Company extends Model implements CompanyContract
     /**
      * Address relation.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function addresses()
     {
@@ -42,7 +66,7 @@ class Company extends Model implements CompanyContract
     /**
      * Order relation.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function orders()
     {
@@ -62,9 +86,9 @@ class Company extends Model implements CompanyContract
     /**
      * Get the identifier.
      *
-     * @return null|string
+     * @return null|int
      */
-    public function getId(): ?string
+    public function getId(): ?int
     {
         return $this->getAttribute('id');
     }
@@ -72,7 +96,7 @@ class Company extends Model implements CompanyContract
     /**
      * Get or set the name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return CompanyContract
      */
     public function setName(string $name): CompanyContract
@@ -93,7 +117,7 @@ class Company extends Model implements CompanyContract
     /**
      * Set the customer number.
      *
-     * @param  string  $customerNumber
+     * @param string $customerNumber
      * @return CompanyContract
      */
     public function setCustomerNumber(string $customerNumber): CompanyContract
@@ -124,7 +148,7 @@ class Company extends Model implements CompanyContract
     /**
      * Set the street.
      *
-     * @param  string  $street
+     * @param string $street
      * @return CompanyContract
      */
     public function setStreet(string $street): CompanyContract
@@ -145,7 +169,7 @@ class Company extends Model implements CompanyContract
     /**
      * Set the postcode.
      *
-     * @param  null|string  $postcode
+     * @param null|string $postcode
      * @return CompanyContract
      */
     public function setPostcode(string $postcode): CompanyContract
@@ -166,7 +190,7 @@ class Company extends Model implements CompanyContract
     /**
      * Set the city.
      *
-     * @param  null|string  $city
+     * @param null|string $city
      * @return CompanyContract
      */
     public function setCity(string $city): CompanyContract
@@ -187,7 +211,7 @@ class Company extends Model implements CompanyContract
     /**
      * Set the active state.
      *
-     * @param  bool  $active
+     * @param bool $active
      * @return CompanyContract
      */
     public function setActive(bool $active): CompanyContract

@@ -34,7 +34,20 @@
 
 <script>
     export default {
-        props: ['addresses', 'defaultAddress', 'updateUrl'],
+        props: {
+            addresses: {
+                type: Array,
+                required: true
+            },
+            defaultAddress: {
+                type: Object,
+                required: true
+            },
+            updateUrl: {
+                type: String,
+                required: true
+            }
+        },
         methods: {
             setAddress (addressId) {
                 axios.patch(this.updateUrl, {

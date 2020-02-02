@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Contracts\Models;
 
 /**
@@ -14,9 +16,9 @@ interface AdminContract
     /**
      * Get the model id.
      *
-     * @return null|string
+     * @return null|int
      */
-    public function getId(): ?string;
+    public function getId(): ?int;
 
     /**
      * Get the username.
@@ -28,7 +30,7 @@ interface AdminContract
     /**
      * Set the username.
      *
-     * @param  string  $username
+     * @param string $username
      * @return AdminContract
      */
     public function setUsername(string $username): AdminContract;
@@ -43,7 +45,7 @@ interface AdminContract
     /**
      * Set the password.
      *
-     * @param  string  $password
+     * @param string $password
      * @return AdminContract
      */
     public function setPassword(string $password): AdminContract;

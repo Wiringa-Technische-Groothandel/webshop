@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Services;
 
 use Illuminate\Database\DatabaseManager;
+use Throwable;
 
 /**
  * Import service.
@@ -30,9 +33,9 @@ class ImportService
     /**
      * ImportService constructor.
      *
-     * @param  DatabaseManager  $dm
-     * @param  Import\Assortment  $assortmentImporter
-     * @param  Import\Discounts  $discountImporter
+     * @param DatabaseManager $dm
+     * @param Import\Assortment $assortmentImporter
+     * @param Import\Discounts $discountImporter
      */
     public function __construct(
         DatabaseManager $dm,
@@ -49,25 +52,29 @@ class ImportService
      * Assortment import.
      *
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function assortment(): void
     {
-        $this->dm->transaction(function () {
-            $this->assortmentImporter->run();
-        });
+        $this->dm->transaction(
+            function () {
+                $this->assortmentImporter->run();
+            }
+        );
     }
 
     /**
      * Discount import.
      *
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function discounts(): void
     {
-        $this->dm->transaction(function () {
-            $this->discountImporter->run();
-        });
+        $this->dm->transaction(
+            function () {
+                $this->discountImporter->run();
+            }
+        );
     }
 }

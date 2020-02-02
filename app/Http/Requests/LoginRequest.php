@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Requests;
 
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -20,7 +23,7 @@ class LoginRequest extends FormRequest
      */
     public function authorize()
     {
-        return \Auth::guest();
+        return Auth::guest();
     }
 
     /**
@@ -31,9 +34,9 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            "company" => 'required',
+            "company"  => 'required',
             "username" => 'required',
-            "password" => 'required'
+            "password" => 'required',
         ];
     }
 }

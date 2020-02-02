@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Controllers\Web;
 
 use Illuminate\Contracts\View\View;
-use WTG\Http\Controllers\Controller;
 use Illuminate\View\Factory as ViewFactory;
-use WTG\Contracts\Services\CarouselServiceContract;
+use WTG\Carousel\CarouselManager;
+use WTG\Http\Controllers\Controller;
 
 /**
  * Index controller.
@@ -17,21 +19,21 @@ use WTG\Contracts\Services\CarouselServiceContract;
 class IndexController extends Controller
 {
     /**
-     * @var CarouselServiceContract
+     * @var CarouselManager
      */
-    protected $carouselService;
+    protected CarouselManager $carouselManager;
 
     /**
      * IndexController constructor.
      *
-     * @param  ViewFactory  $view
-     * @param  CarouselServiceContract  $carouselService
+     * @param ViewFactory $view
+     * @param CarouselManager $carouselManager
      */
-    public function __construct(ViewFactory $view, CarouselServiceContract $carouselService)
+    public function __construct(ViewFactory $view, CarouselManager $carouselManager)
     {
         parent::__construct($view);
 
-        $this->carouselService = $carouselService;
+        $this->carouselManager = $carouselManager;
     }
 
     /**
@@ -41,7 +43,7 @@ class IndexController extends Controller
      */
     public function getAction(): View
     {
-        $slides = $this->carouselService->getOrderedSlides();
+        $slides = $this->carouselManager->getOrderedSlides();
 
         return $this->view->make('pages.index', compact('slides'));
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Contracts\Models;
 
 /**
@@ -14,14 +16,14 @@ interface AddressContract
     /**
      * Get the identifier.
      *
-     * @return null|string
+     * @return null|int
      */
-    public function getId(): ?string;
+    public function getId(): ?int;
 
     /**
      * Set the company.
      *
-     * @param  CompanyContract  $company
+     * @param CompanyContract $company
      * @return AddressContract
      */
     public function setCompany(CompanyContract $company): AddressContract;
@@ -36,7 +38,7 @@ interface AddressContract
     /**
      * Set the name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return AddressContract
      */
     public function setName(string $name): AddressContract;
@@ -51,7 +53,7 @@ interface AddressContract
     /**
      * Set the street.
      *
-     * @param  string  $street
+     * @param string $street
      * @return AddressContract
      */
     public function setStreet(string $street): AddressContract;
@@ -66,7 +68,7 @@ interface AddressContract
     /**
      * Set the postcode.
      *
-     * @param  null|string  $postcode
+     * @param null|string $postcode
      * @return AddressContract
      */
     public function setPostcode(string $postcode): AddressContract;
@@ -81,7 +83,7 @@ interface AddressContract
     /**
      * Set the city.
      *
-     * @param  null|string  $city
+     * @param null|string $city
      * @return AddressContract
      */
     public function setCity(string $city): AddressContract;
@@ -96,7 +98,7 @@ interface AddressContract
     /**
      * Set the phone.
      *
-     * @param  null|string  $phone
+     * @param null|string $phone
      * @return AddressContract
      */
     public function setPhone(?string $phone = null): AddressContract;
@@ -111,7 +113,7 @@ interface AddressContract
     /**
      * Set the mobile.
      *
-     * @param  null|string  $mobile
+     * @param null|string $mobile
      * @return AddressContract
      */
     public function setMobile(?string $mobile = null): AddressContract;

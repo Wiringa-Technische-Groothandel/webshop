@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Contracts\Models;
 
 use Illuminate\Support\Collection;
+use WTG\Catalog\Api\Model\ProductInterface;
 
 /**
  * Pack contract.
@@ -16,24 +19,24 @@ interface PackContract
     /**
      * Get the identifier.
      *
-     * @return null|string
+     * @return null|int
      */
-    public function getId(): ?string;
+    public function getId(): ?int;
 
     /**
      * Set the product.
      *
-     * @param  ProductContract  $product
+     * @param ProductInterface $product
      * @return PackContract
      */
-    public function setProduct(ProductContract $product): PackContract;
+    public function setProduct(ProductInterface $product): PackContract;
 
     /**
      * Get the product.
      *
-     * @return ProductContract
+     * @return ProductInterface
      */
-    public function getProduct(): ProductContract;
+    public function getProduct(): ProductInterface;
 
     /**
      * Get the items.

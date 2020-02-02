@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Requests\Account\Address;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -31,7 +33,7 @@ class UpdateDefaultRequest extends FormRequest
     public function rules()
     {
         return [
-            'address' => ['required', 'exists:addresses,id']
+            'address' => ['required', 'exists:addresses,id'],
         ];
     }
 }

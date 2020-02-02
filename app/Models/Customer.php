@@ -1,21 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Models;
 
-use Illuminate\Support\Collection;
-use WTG\Notifications\ResetPassword;
-use WTG\Contracts\Models\RoleContract;
-use Illuminate\Notifications\Notifiable;
-use WTG\Contracts\Models\CompanyContract;
-use WTG\Contracts\Models\ContactContract;
-use WTG\Contracts\Models\ProductContract;
-use WTG\Contracts\Models\CustomerContract;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
+use WTG\Catalog\Model\Product;
+use WTG\Contracts\Models\CompanyContract;
+use WTG\Contracts\Models\ContactContract;
+use WTG\Contracts\Models\CustomerContract;
+use WTG\Contracts\Models\RoleContract;
+use WTG\Notifications\ResetPassword;
 
 /**
  * Customer model.
@@ -26,7 +29,8 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  */
 class Customer extends Authenticatable implements CustomerContract
 {
-    use SoftDeletes, Notifiable;
+    use Notifiable;
+    use SoftDeletes;
 
     /**
      * @var array
@@ -35,18 +39,21 @@ class Customer extends Authenticatable implements CustomerContract
         'id',
         'password',
         'remember_token',
-        'active'
+        'active',
     ];
 
     /**
      * @var array
      */
     protected $hidden = [
-        'password'
+        'password',
     ];
 
+    /**
+     * @var array
+     */
     protected $with = [
-        'contact'
+        'contact',
     ];
 
     /**
@@ -60,17 +67,39 @@ class Customer extends Authenticatable implements CustomerContract
     }
 
     /**
-     * @return string|null
+     * Get the contact.
+     *
+     * @return ContactContract
+     * @throws BindingResolutionException
      */
-    public function routeNotificationForMail()
+    public function getContact(): ContactContract
     {
-        return $this->getContact()->getContactEmail();
+        $contact = $this->getAttribute('contact');
+
+        if (! $contact) {
+            /** @var Contact $contact */
+            $contact = app()->make(ContactContract::class);
+            $contact->setAttribute('customer_id', $this->getId());
+            $contact->save();
+        }
+
+        return $contact;
+    }
+
+    /**
+     * Get the identifier.
+     *
+     * @return null|string
+     */
+    public function getId(): ?int
+    {
+        return $this->getAttribute('id');
     }
 
     /**
      * Send the password reset notification.
      *
-     * @param  string  $token
+     * @param string $token
      * @return void
      */
     public function sendPasswordResetNotification($token)
@@ -81,7 +110,7 @@ class Customer extends Authenticatable implements CustomerContract
     /**
      * Company relation.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function company(): BelongsTo
     {
@@ -101,7 +130,7 @@ class Customer extends Authenticatable implements CustomerContract
     /**
      * Contact relation.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
     public function contact(): HasOne
     {
@@ -109,19 +138,9 @@ class Customer extends Authenticatable implements CustomerContract
     }
 
     /**
-     * Favorites relation.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function favorites(): BelongsToMany
-    {
-        return $this->belongsToMany(Product::class, 'favorites');
-    }
-
-    /**
      * Quote relation.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
     public function quote(): HasOne
     {
@@ -131,7 +150,7 @@ class Customer extends Authenticatable implements CustomerContract
     /**
      * Related quote items through the quote.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     * @return HasManyThrough
      */
     public function quoteItems(): HasManyThrough
     {
@@ -139,38 +158,9 @@ class Customer extends Authenticatable implements CustomerContract
     }
 
     /**
-     * Get the identifier.
-     *
-     * @return null|string
-     */
-    public function getId(): ?string
-    {
-        return $this->getAttribute('id');
-    }
-
-    /**
-     * Get the contact.
-     *
-     * @return ContactContract
-     */
-    public function getContact(): ContactContract
-    {
-        $contact = $this->getAttribute('contact');
-
-        if (! $contact) {
-            /** @var Contact $contact */
-            $contact = app()->make(ContactContract::class);
-            $contact->setAttribute('customer_id', $this->getId());
-            $contact->save();
-        }
-
-        return $contact;
-    }
-
-    /**
      * Set the username.
      *
-     * @param  string  $username
+     * @param string $username
      * @return CustomerContract
      */
     public function setUsername(string $username): CustomerContract
@@ -191,7 +181,7 @@ class Customer extends Authenticatable implements CustomerContract
     /**
      * Set the password.
      *
-     * @param  string  $password
+     * @param string $password
      * @return CustomerContract
      */
     public function setPassword(string $password): CustomerContract
@@ -212,7 +202,7 @@ class Customer extends Authenticatable implements CustomerContract
     /**
      * Set the active.
      *
-     * @param  bool  $active
+     * @param bool $active
      * @return CustomerContract
      */
     public function setActive(bool $active): CustomerContract
@@ -253,21 +243,31 @@ class Customer extends Authenticatable implements CustomerContract
     /**
      * Check if the customer has set the product as favorite.
      *
-     * @param  ProductContract  $product
+     * @param Product $product
      * @return bool
      */
-    public function hasFavorite(ProductContract $product): bool
+    public function hasFavorite(Product $product): bool
     {
         return $this->favorites()->where('product_id', $product->getId())->exists();
     }
 
     /**
+     * Favorites relation.
+     *
+     * @return BelongsToMany
+     */
+    public function favorites(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'favorites');
+    }
+
+    /**
      * Add a product as favorite.
      *
-     * @param  ProductContract  $product
+     * @param Product $product
      * @return void
      */
-    public function addFavorite(ProductContract $product): void
+    public function addFavorite(Product $product): void
     {
         $this->favorites()->attach($product->getId());
     }
@@ -275,10 +275,10 @@ class Customer extends Authenticatable implements CustomerContract
     /**
      * Add a product as favorite.
      *
-     * @param  ProductContract  $product
+     * @param Product $product
      * @return void
      */
-    public function removeFavorite(ProductContract $product): void
+    public function removeFavorite(Product $product): void
     {
         $this->favorites()->detach($product->getId());
     }
@@ -286,7 +286,7 @@ class Customer extends Authenticatable implements CustomerContract
     /**
      * Set the customer role.
      *
-     * @param  RoleContract  $role
+     * @param RoleContract $role
      * @return CustomerContract
      */
     public function setRole(RoleContract $role): CustomerContract

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -31,7 +33,7 @@ class UpdateQuoteAddressRequest extends FormRequest
     public function rules()
     {
         return [
-            'addressId' => ['required']
+            'addressId' => ['required'],
         ];
     }
 }

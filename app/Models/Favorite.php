@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WTG\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use WTG\Catalog\Api\Model\ProductInterface;
+use WTG\Catalog\Model\Product;
 use WTG\Contracts\Models\CustomerContract;
 use WTG\Contracts\Models\FavoriteContract;
-use WTG\Contracts\Models\ProductContract;
 
 /**
  * Favorite model.
@@ -29,7 +33,7 @@ class Favorite extends Model implements FavoriteContract
     /**
      * Customer relation.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function customer()
     {
@@ -39,7 +43,7 @@ class Favorite extends Model implements FavoriteContract
     /**
      * Product relation.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function product()
     {
@@ -49,9 +53,9 @@ class Favorite extends Model implements FavoriteContract
     /**
      * Get the product.
      *
-     * @return null|ProductContract
+     * @return null|ProductInterface
      */
-    public function getProduct(): ?ProductContract
+    public function getProduct(): ?ProductInterface
     {
         return $this->getAttribute('product');
     }

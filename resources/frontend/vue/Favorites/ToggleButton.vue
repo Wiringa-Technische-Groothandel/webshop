@@ -1,6 +1,6 @@
 <template>
     <div id="favorite-button">
-        <button :class="{'btn': true, 'btn-default': !checked, 'btn-success': !isFavorite, 'btn-danger': isFavorite}" @click="this.toggle">
+        <button class="btn" :class="{'btn-default': !checked, 'btn-success': !isFavorite, 'btn-danger': isFavorite}" @click="this.toggle">
             <span class="far fa-fw fa-heart"></span> <span v-if="checked">{{ buttonText}}</span>
         </button>
     </div>

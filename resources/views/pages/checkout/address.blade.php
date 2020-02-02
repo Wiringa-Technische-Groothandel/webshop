@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <hr />
+        <hr/>
 
         <form method="post" action="{{ route('checkout.finish') }}">
             {{ csrf_field() }}
@@ -39,7 +39,8 @@
                             <div class="card-body">
                                 <cart-address :address="{{ $quoteAddress ?: 0 }}"></cart-address>
 
-                                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#change-address-modal">
+                                <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                                        data-target="#change-address-modal">
                                     {{ __('Adres wijzigen') }}
                                 </button>
                             </div>
@@ -53,7 +54,8 @@
                             </div>
                             <div class="card-body">
                                 <textarea title="{{ __('Opmerking') }}" name="comment" style="min-height: 126px;"
-                                          class="form-control" placeholder="{{ __('Optioneel') }}">{{ old('comment') }}</textarea>
+                                          class="form-control"
+                                          placeholder="{{ __('Optioneel') }}">{{ old('comment') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -80,12 +82,11 @@
 @endsection
 
 @push('scripts')
-    <script>
-        const $deliveryAddress = $("#delivery-address");
-        const $changeAddressModal = $('#change-address-modal');
-
-        $('.change-address-button').on('click', function () {
-            const $this = $(this);
+    <script async defer>
+        window.updateShippingAddress = function(target) {
+            const $deliveryAddress = $("#delivery-address");
+            const $changeAddressModal = $('#change-address-modal');
+            const $this = $(target);
             const $selectedAddress = $($this.data('target'));
 
             $deliveryAddress.html($selectedAddress.html());
@@ -98,14 +99,16 @@
                     window.vm.$root.$emit('send-notify', {
                         text: resp.data.message,
                         success: resp.data.success
-                    })
+                    });
+
+                    window.vm.$root.$emit('cart-address-changed', resp.data.address);
                 })
                 .catch(function (error) {
                     window.vm.$root.$emit('send-notify', {
                         text: error,
                         success: false
-                    })
+                    });
                 });
-        });
+        }
     </script>
 @endpush
