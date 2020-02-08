@@ -61,6 +61,8 @@ steps:
     when:
       branch:
         - master
+      event:
+        - push
     environment:
       SSH_KNOWN_HOSTS:
         from_secret: ssh-known-hosts

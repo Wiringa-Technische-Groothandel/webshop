@@ -53,7 +53,7 @@
         props: {
             companyId: {
                 required: true,
-                type: String
+                type: [Number,String]
             }
         },
         data () {

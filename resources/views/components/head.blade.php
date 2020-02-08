@@ -17,6 +17,9 @@
 <title>WTG - @yield('title', $title ?? '')</title>
 
 @if (config('services.sentry.js-dsn'))
+    <script src="https://browser.sentry-cdn.com/5.12.1/bundle.min.js"
+            integrity="sha384-y+an4eARFKvjzOivf/Z7JtMJhaN6b+lLQ5oFbBbUwZNNVir39cYtkjW1r6Xjbxg3" crossorigin="anonymous">
+    </script>
     <script type="application/javascript" async defer>
         Sentry.init({ dsn: '{{ config('services.sentry.js-dsn') }}' });
     </script>

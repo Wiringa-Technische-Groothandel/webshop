@@ -38,6 +38,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('sys:cleanup:companies');
 
         $schedule->command('import:products')->dailyAt('4:00');
+        $schedule->command('import:price-factors')->dailyAt('5:00');
 
         // Re-cache the invoice files
         $schedule->call(

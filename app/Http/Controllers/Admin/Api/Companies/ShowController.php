@@ -6,6 +6,7 @@ namespace WTG\Http\Controllers\Admin\Api\Companies;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
 use WTG\Http\Controllers\Admin\Controller;
 use WTG\Models\Company;
@@ -55,12 +56,16 @@ class ShowController extends Controller
      */
     protected function getInitialPassword(): ?string
     {
-        $companyId = $this->request->input('id');
+        $companyId = (string) $this->request->input('id');
 
-        if (session()->has('new-customer-password') && session()->has('new-customer-password-id')) {
-            if (session()->pull('new-customer-password-id') === $companyId) {
-                return session()->pull('new-customer-password');
+        try {
+            if (cache()->has('new-customer-password') && cache()->has('new-customer-password-id')) {
+                if ((string)cache()->pull('new-customer-password-id') === $companyId) {
+                    return cache()->pull('new-customer-password');
+                }
             }
+        } catch (InvalidArgumentException $e) {
+            //
         }
 
         return null;
