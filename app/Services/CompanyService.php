@@ -135,8 +135,8 @@ class CompanyService implements CompanyServiceContract
     {
         $password = str_random();
 
-        session()->flash('new-customer-password', $password);
-        session()->flash('new-customer-password-id', $company->getId());
+        cache()->put('new-customer-password', $password);
+        cache()->put('new-customer-password-id', $company->getId());
 
         /** @var Customer $customer */
         $customer = app()->make(CustomerContract::class);

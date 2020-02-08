@@ -118,7 +118,10 @@
                             this.resetForm();
 
                             this.$emit('close');
-                            this.$emit('company-created', response.data.companyId);
+
+                            this.$nextTick(() => {
+                                this.$emit('company-created', response.data.companyId);
+                            });
                         }
 
                         this.$root.$emit('send-notify', {

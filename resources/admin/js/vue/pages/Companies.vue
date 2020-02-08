@@ -1,11 +1,12 @@
 <template>
     <div id="page-companies">
-        <company-create-modal :show="showModal" @company-created="showCompany"
-                              @close="showModal = false" @hide="showModal = false"
-                              v-if="!selectedCompany"></company-create-modal>
+        <template v-if="!selectedCompany">
+            <company-create-modal :show="showModal" @company-created="showCompany"
+                                  @close="showModal = false" @hide="showModal = false"></company-create-modal>
+        </template>
 
         <button class="btn btn-success bmd-btn-fab tooltip-toggle" data-toggle="modal" v-if="!selectedCompany"
-                @click="showModal = !showModal" title="Debiteur toevoegen">
+                @click="showModal = true" title="Debiteur toevoegen">
             <i class="fal fa-fw fa-plus"></i>
         </button>
 
