@@ -38,7 +38,7 @@ axios.interceptors.response.use(null, (error) => {
             return axios.request(error.config);
         }).catch(error => {
             if (error.response && error.response.data.logout) {
-                store.commit('logout');
+                store.commit('auth/logout');
             }
         })
     }

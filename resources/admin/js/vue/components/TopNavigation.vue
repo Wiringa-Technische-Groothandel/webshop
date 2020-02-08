@@ -33,8 +33,7 @@
     export default {
         methods: {
             logout () {
-                console.log('logout');
-                this.$store.dispatch('logout');
+                this.$store.commit('auth/logout');
             }
         }
     }
