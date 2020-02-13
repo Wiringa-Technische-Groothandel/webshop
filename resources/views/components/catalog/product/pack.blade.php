@@ -1,6 +1,6 @@
 <div class="card mb-3">
     <div class="card-header">
-        <b>{{ __('Aktiepakket inhoud') }}</b>
+        <b>{{ __('Actiepakket inhoud') }}</b>
     </div>
 
     <div class="card-body">

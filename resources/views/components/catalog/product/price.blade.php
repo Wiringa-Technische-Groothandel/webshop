@@ -4,8 +4,16 @@
         auth-url="{{ route('auth.login', ['toUrl' => url()->current()]) }}"
 ></price>
 
+@if ($product->isDiscontinued())
+    <br/>
+
+    <div class="text-danger">
+        <i class="fas fa-fw fa-exclamation-triangle"></i> {{ __("Dit is een uitlopend artikel") }}
+    </div>
+@endif
+
 @auth
-    <br />
+    <br/>
 
     <div class="row">
         <div class="col-12 mb-3">

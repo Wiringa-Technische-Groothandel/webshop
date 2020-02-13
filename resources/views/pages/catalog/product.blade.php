@@ -52,7 +52,7 @@
                 <div class="col-12 col-md-8 offset-md-4">
                     <div class="card border-warning mb-3">
                         <div class="card-header bg-warning">
-                            <i class="fas fa-fw fa-exclamation-triangle"></i> {{ __('Dit product is onderdeel van een of meer aktiepakketten.') }}
+                            <i class="fas fa-fw fa-exclamation-triangle"></i> {{ __('Dit product is onderdeel van een of meer actiepakketten.') }}
                         </div>
 
                         <div class="card-body">

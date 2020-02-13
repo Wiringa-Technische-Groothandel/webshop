@@ -1,7 +1,7 @@
 <div class="modal fade" id="address-modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form method="POST">
+            <form method="POST" action="{{ route('account.addresses') }}">
                 {{ csrf_field() }}
                 {{ method_field('put') }}
 
@@ -49,6 +49,11 @@
                                    value="{{ old('mobile') }}" name="mobile">
                             <label class="control-label">{{ __("Mobiel") }}</label>
                         </div>
+                    </div>
+
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" name="default" class="custom-control-input" id="makeDefault">
+                        <label class="custom-control-label" for="makeDefault">{{ __("Als standaard instellen") }}</label>
                     </div>
 
                     <small class="form-text text-muted">

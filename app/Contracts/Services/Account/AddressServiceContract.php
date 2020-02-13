@@ -45,6 +45,7 @@ interface AddressServiceContract
      * @param string $city
      * @param null|string $phone
      * @param null|string $mobile
+     * @param bool $isDefault
      * @return bool
      */
     public function createForCustomer(
@@ -54,7 +55,8 @@ interface AddressServiceContract
         string $postcode,
         string $city,
         ?string $phone = null,
-        ?string $mobile = null
+        ?string $mobile = null,
+        bool $isDefault = false
     ): bool;
 
     /**

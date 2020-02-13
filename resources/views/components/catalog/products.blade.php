@@ -14,8 +14,14 @@
                 </a>
 
                 <div class="product-details d-block">
-                    <small class="d-block">{{ __('Artikelnummer') }}: {{ $product->getSku() }}</small>
-                    <small class="product-path">{{ $product->getPath() }}</small>
+                    @if ($product->isDiscontinued())
+                        <small class="text-danger">
+                            <i class="fas fa-fw fa-exclamation-triangle"></i> {{ __("Dit is een uitlopend artikel") }}
+                        </small>
+                    @endif
+
+                    <small>{{ __('Artikelnummer') }}: {{ $product->getSku() }}</small>
+                    <small>{{ $product->getPath() }}</small>
                 </div>
 
                 @auth
