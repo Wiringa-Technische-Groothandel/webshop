@@ -75,7 +75,8 @@ class AddressController extends Controller
             $request->input('postcode'),
             $request->input('city'),
             $request->input('phone', null),
-            $request->input('mobile', null)
+            $request->input('mobile', null),
+            $request->has('default')
         );
 
         if ($isSuccess) {

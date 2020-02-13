@@ -3,6 +3,7 @@
 @section('title', __('Bestelling / Afleveradres'))
 
 @section('content')
+    @include('components.account.addresses.addModal')
     @include('components.checkout.address.changeModal')
 
     <h2 class="text-center block-title">

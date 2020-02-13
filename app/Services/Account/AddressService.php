@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace WTG\Services\Account;
 
 use Exception;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\CustomerContract;
 use WTG\Contracts\Services\Account\AddressServiceContract;
@@ -77,6 +79,7 @@ class AddressService implements AddressServiceContract
      * @param string $city
      * @param null|string $phone
      * @param null|string $mobile
+     * @param bool $isDefault
      * @return bool
      */
     public function createForCustomer(
@@ -86,19 +89,32 @@ class AddressService implements AddressServiceContract
         string $postcode,
         string $city,
         ?string $phone = null,
-        ?string $mobile = null
+        ?string $mobile = null,
+        bool $isDefault = false
     ): bool {
-        /** @var AddressContract $address */
-        $address = app()->make(AddressContract::class);
-        $address->setCompany($customer->getCompany());
-        $address->setName($name);
-        $address->setStreet($street);
-        $address->setPostcode($postcode);
-        $address->setCity($city);
-        $address->setPhone($phone);
-        $address->setMobile($mobile);
+        try {
+            /** @var Address $address */
+            $address = app()->make(AddressContract::class);
+            $address->setCompany($customer->getCompany());
+            $address->setName($name);
+            $address->setStreet($street);
+            $address->setPostcode($postcode);
+            $address->setCity($city);
+            $address->setPhone($phone);
+            $address->setMobile($mobile);
 
-        return $address->save();
+            $address->saveOrFail();
+
+            if ($isDefault) {
+                $this->setDefaultForCustomer($customer, $address->getId());
+            }
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -146,6 +162,10 @@ class AddressService implements AddressServiceContract
     public function getDefaultAddressIdForCustomer(CustomerContract $customer): ?int
     {
         $defaultAddress = $this->getDefaultAddressForCustomer($customer);
+
+        if (!$defaultAddress) {
+            return null;
+        }
 
         return $defaultAddress->getId();
     }

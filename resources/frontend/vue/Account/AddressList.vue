@@ -26,8 +26,8 @@
         </div>
 
         <div class="alert alert-warning mx-auto" v-else>
-            <i class="fal fa-fw fa-exclamation-triangle"></i> <b>Let op:</b>
-            U hebt nog geen addressen gekoppeld aan uw account. Zonder adressen kunt u geen bestellingen plaatsen.
+            <i class="fas fa-fw fa-exclamation-triangle"></i>
+            U hebt nog geen addressen gekoppeld aan uw account.
         </div>
     </div>
 </template>
