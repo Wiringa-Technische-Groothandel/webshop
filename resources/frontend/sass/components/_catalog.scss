@@ -23,6 +23,17 @@
     font-size: 18px;
   }
 
+  .product-details {
+    small {
+      display: block;
+      margin-bottom: 3px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
   &:last-child {
     border-bottom: none;
   }
