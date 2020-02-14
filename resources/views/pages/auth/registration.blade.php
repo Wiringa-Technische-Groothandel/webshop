@@ -15,7 +15,6 @@
 @endsection
 
 @push('scripts')
-    <script src='https://www.google.com/recaptcha/api.js'></script>
     <script async defer>
         // Dirty workaround
         setTimeout(function () {

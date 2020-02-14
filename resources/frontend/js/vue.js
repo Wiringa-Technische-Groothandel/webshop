@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Intersect from 'vue-intersect'
+import VueRecaptcha from 'vue-recaptcha';
 
 const Notification = () => import(/* webpackChunkName: 'vue-global-components' */ '../../global/vue/Notification');
 
@@ -29,6 +30,7 @@ window.vm = new Vue({
     },
     components: {
         Intersect,
+        VueRecaptcha,
         Notification,
         Carousel,
         Price,
