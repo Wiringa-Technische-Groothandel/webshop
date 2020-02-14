@@ -193,7 +193,8 @@
                     <label class="custom-control-label" for="other-order-confirmation">{{ __('Digitale orderbevestiging ontvangen') }}</label>
                 </div>
 
-                <div class="g-recaptcha mb-3" data-sitekey="{{ config('wtg.recaptcha.site-key') }}"></div>
+                <vue-recaptcha sitekey="{{ config('wtg.recaptcha.site-key') }}"
+                               :load-recaptcha-script="true"></vue-recaptcha>
             </section>
         </div>
     </div>
