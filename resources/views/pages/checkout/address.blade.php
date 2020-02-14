@@ -83,12 +83,12 @@
 @endsection
 
 @push('scripts')
-    <script async defer>
-        window.updateShippingAddress = function(target) {
-            const $deliveryAddress = $("#delivery-address");
-            const $changeAddressModal = $('#change-address-modal');
-            const $this = $(target);
-            const $selectedAddress = $($this.data('target'));
+    <script>
+        var updateShippingAddress = function(target) {
+            var $deliveryAddress = $("#delivery-address");
+            var $changeAddressModal = $('#change-address-modal');
+            var $this = $(target);
+            var $selectedAddress = $($this.data('target'));
 
             $deliveryAddress.html($selectedAddress.html());
             $changeAddressModal.modal('hide');
