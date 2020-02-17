@@ -75,6 +75,11 @@ class SearchManager
         $query->with('priceFactor');
 
         $paginator = $query->paginate(10, ['*'], 'page', $page);
+        $paginator->appends([
+            'brand' => $brand,
+            'series' => $series,
+            'type' => $type
+        ]);
 
         return collect(
             [
