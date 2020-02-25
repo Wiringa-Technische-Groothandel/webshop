@@ -14,7 +14,7 @@
 
 @stack('meta')
 
-<title>WTG - @yield('title', $title ?? '')</title>
+<title>Wiringa Technische Groothandel - @yield('title', $title ?? '')</title>
 
 @if (config('services.sentry.js-dsn'))
     <script src="https://browser.sentry-cdn.com/5.12.1/bundle.min.js"

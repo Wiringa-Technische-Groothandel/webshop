@@ -13,7 +13,7 @@
     <meta name="theme-color" content="#c2272d">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>WTG Admin - @yield('title', $title ?? 'Untitled')</title>
+    <title>Wiringa Technische Groothandel Admin - @yield('title', $title ?? 'Untitled')</title>
 
     @if (config('services.sentry.js-dsn'))
         <script src="https://browser.sentry-cdn.com/5.12.1/bundle.min.js" crossorigin="anonymous"
