@@ -55,6 +55,7 @@ class ForgotPasswordController extends Controller
      * @param Request $request
      * @return RedirectResponse|JsonResponse
      * @throws BindingResolutionException
+     * @throws ValidationException
      */
     public function sendResetLinkEmail(Request $request)
     {

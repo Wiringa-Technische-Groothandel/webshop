@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use WTG\Catalog\Model\Product;
 use WTG\Contracts\Models\CompanyContract;
 use WTG\Contracts\Models\ContactContract;
@@ -104,7 +105,7 @@ class Customer extends Authenticatable implements CustomerContract
      */
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new ResetPassword($token));
+        $this->notifyNow(new ResetPassword($token));
     }
 
     /**
@@ -302,5 +303,15 @@ class Customer extends Authenticatable implements CustomerContract
     public function getRole(): RoleContract
     {
         return $this->getAttribute('role');
+    }
+
+    /**
+     * Return an email address here, otherwise the password reset mail functionality breaks for some reason.
+     *
+     * @return string|null
+     */
+    public function routeNotificationForMail()
+    {
+        return $this->getEmailForPasswordReset();
     }
 }
