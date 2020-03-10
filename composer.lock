@@ -1536,16 +1536,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v7.0.5",
+            "version": "v7.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "68ec618a3d78e6efae429ef339d8979faf82ee6e"
+                "reference": "59b97d2868ff42d11626e63c6773b41146b3eb9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/68ec618a3d78e6efae429ef339d8979faf82ee6e",
-                "reference": "68ec618a3d78e6efae429ef339d8979faf82ee6e",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/59b97d2868ff42d11626e63c6773b41146b3eb9c",
+                "reference": "59b97d2868ff42d11626e63c6773b41146b3eb9c",
                 "shasum": ""
             },
             "require": {
@@ -1683,7 +1683,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2020-03-06T13:50:22+00:00"
+            "time": "2020-03-10T14:07:01+00:00"
         },
         {
             "name": "laravel/helpers",
@@ -8177,5 +8177,6 @@
         "ext-imagick": "*",
         "ext-json": "*"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
