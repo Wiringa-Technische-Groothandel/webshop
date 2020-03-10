@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace WTG\Http;
 
-use Closure;
+use Fruitcake\Cors\HandleCors;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
 use Illuminate\Auth\Middleware\Authorize;
-use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
+use Illuminate\Auth\Middleware\RequirePassword;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
@@ -43,11 +44,12 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
+        TrustProxies::class,
+        HandleCors::class,
         CheckForMaintenanceMode::class,
         ValidatePostSize::class,
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
-        TrustProxies::class,
     ];
 
     /**
@@ -62,12 +64,12 @@ class Kernel extends HttpKernel
             StartSession::class,
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
-            'bindings',
+            SubstituteBindings::class,
         ],
 
         'api' => [
 //            'throttle:60,1',
-            'bindings',
+            SubstituteBindings::class
         ],
     ];
 
@@ -79,35 +81,16 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth'          => Authenticate::class,
-        'auth.basic'    => AuthenticateWithBasicAuth::class,
-        'bindings'      => SubstituteBindings::class,
-        'cache.headers' => SetCacheHeaders::class,
-        'can'           => Authorize::class,
-        'guest'         => RedirectIfAuthenticated::class,
-        'signed'        => ValidateSignature::class,
-        'throttle'      => ThrottleRequests::class,
-        'active'        => CheckActive::class,
+        'auth'             => Authenticate::class,
+        'auth.basic'       => AuthenticateWithBasicAuth::class,
+        'bindings'         => SubstituteBindings::class,
+        'cache.headers'    => SetCacheHeaders::class,
+        'can'              => Authorize::class,
+        'guest'            => RedirectIfAuthenticated::class,
+        'password.confirm' => RequirePassword::class,
+        'signed'           => ValidateSignature::class,
+        'throttle'         => ThrottleRequests::class,
+        'active'           => CheckActive::class,
+        'verified'         => EnsureEmailIsVerified::class,
     ];
-
-    /**
-     * Get the route dispatcher callback.
-     *
-     * @return Closure
-     * @throws BindingResolutionException
-     */
-    protected function dispatchToRouter()
-    {
-        $this->router = $this->app->make('router');
-
-        foreach ($this->routeMiddleware as $key => $middleware) {
-            $this->router->aliasMiddleware($key, $middleware);
-        }
-
-        foreach ($this->middlewareGroups as $key => $middleware) {
-            $this->router->middlewareGroup($key, $middleware);
-        }
-
-        return parent::dispatchToRouter();
-    }
 }

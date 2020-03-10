@@ -9,9 +9,10 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Session\TokenMismatchException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Throwable;
 use WTG\Contracts\Models\CustomerContract;
 
 /**
@@ -40,11 +41,11 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param Exception $exception
+     * @param Throwable $exception
      * @return void
      * @throws Exception
      */
-    public function report(Exception $exception)
+    public function report(Throwable $exception)
     {
         if (
             ! app()->environment(ENV_LOCAL) &&
@@ -61,10 +62,11 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param Request $request
-     * @param Exception $exception
+     * @param Throwable $exception
      * @return Response
+     * @throws Throwable
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $exception)
     {
         if ($exception instanceof TokenMismatchException) {
             return back()->withInput($request->except('password'))
@@ -127,7 +129,7 @@ class Handler extends ExceptionHandler
      * Render the given HttpException.
      *
      * @param HttpExceptionInterface $e
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     protected function renderHttpException(HttpExceptionInterface $e)
     {
@@ -156,10 +158,10 @@ class Handler extends ExceptionHandler
     /**
      * Prepare exception for rendering.
      *
-     * @param Exception $e
-     * @return Exception
+     * @param Throwable $e
+     * @return Throwable
      */
-    protected function prepareException(Exception $e)
+    protected function prepareException(Throwable $e)
     {
         if ($e instanceof TokenMismatchException) {
             return $e;
