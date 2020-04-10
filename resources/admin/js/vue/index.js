@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import axios from '../services/axios'
-import * as auth from '../services/auth'
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -24,30 +23,7 @@ router.beforeEach((to, from, next) => {
     next();
 });
 
-axios.interceptors.response.use(null, (error) => {
-    if (error.config && error.response && error.response.status === 401) {
-        return auth.refreshToken().then((data) => {
-
-            store.commit('auth/login', {
-                token: data.token,
-                expires_at: data.expires_at
-            });
-
-            error.config.headers.Authorization = `Bearer ${data.token}`;
-
-            return axios.request(error.config);
-        }).catch(error => {
-            if (error.response && error.response.data.logout) {
-                store.commit('auth/logout');
-            }
-        })
-    }
-
-    return Promise.reject(error);
-});
-
 Vue.prototype.$http = axios;
-Vue.prototype.$auth = auth;
 
 window.vm = new Vue({
     el: '#app',
@@ -59,10 +35,9 @@ window.vm = new Vue({
         LoginForm,
         Notification,
     },
-    computed: {
-        isLoggedIn () {
-            return this.$store.getters['auth/isLoggedIn'];
-        }
+    created () {
+        this.$http.get('/airlock/csrf-cookie');
+        this.$store.commit('auth/check');
     },
     mounted () {
         document.body.style.opacity = "1";

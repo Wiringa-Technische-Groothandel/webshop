@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WTG\Services\Admin;
 
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Auth\SessionGuard;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use WTG\Models\Admin;
 
@@ -39,23 +40,23 @@ class AuthService
      * @param string|null $username
      * @param string|null $password
      *
-     * @return string
+     * @return bool
      * @throws AuthenticationException
      */
-    public function authenticate(?string $username, ?string $password): string
+    public function authenticate(?string $username, ?string $password): bool
     {
         $credentials = [
             'username' => $username,
             'password' => $password,
         ];
 
-        $token = $this->auth->guard(self::GUARD_NAME)->attempt($credentials);
+        $success = $this->auth->guard(self::GUARD_NAME)->attempt($credentials);
 
-        if (! $token) {
+        if (! $success) {
             throw new AuthenticationException(__('Gebruikersnaam en/of wachtwoord onjuist.'), [self::GUARD_NAME]);
         }
 
-        return $token;
+        return $success;
     }
 
     /**

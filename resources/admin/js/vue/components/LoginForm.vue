@@ -49,34 +49,11 @@
             login () {
                 this.loginError = false;
 
-                this.$auth.login(this.username, this.password)
-                    .then((data) => {
-                        if (data.success) {
-                            this.$store.commit('auth/login', {
-                                token: data.token,
-                                expires_at: data.expires_at
-                            });
-                        } else {
-                            this.loginError = data.message;
-                        }
-                    })
-                    .catch((error) => {
-                        console.error(error);
-
-                        this.$root.$emit('send-notify', {
-                            text: error,
-                            success: false
-                        });
-                    });
-            },
-            checkToken () {
-                if (this.$store.getters['auth/hasToken'] && this.$store.getters['auth/isExpired']) {
-                    this.$store.commit('auth/refresh')
-                }
+                this.$store.commit('auth/login', {
+                    username: this.username,
+                    password: this.password
+                });
             }
-        },
-        mounted() {
-            this.checkToken();
         }
     }
 </script>

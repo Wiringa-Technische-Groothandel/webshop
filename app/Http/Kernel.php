@@ -21,6 +21,7 @@ use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Routing\Middleware\ValidateSignature;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Laravel\Airlock\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use WTG\Http\Middleware\CheckActive;
 use WTG\Http\Middleware\CheckForMaintenanceMode;
 use WTG\Http\Middleware\EncryptCookies;
@@ -68,7 +69,8 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-//            'throttle:60,1',
+            EnsureFrontendRequestsAreStateful::class,
+            'throttle:60,1',
             SubstituteBindings::class
         ],
     ];

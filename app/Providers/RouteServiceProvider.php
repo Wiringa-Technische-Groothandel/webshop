@@ -18,12 +18,17 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * @var string
      */
-    protected $webNamespace = 'WTG\Http\Controllers\Web';
+    protected string $apiNamespace = 'WTG\Http\Controllers\Api';
 
     /**
      * @var string
      */
-    protected $adminNamespace = 'WTG\Http\Controllers\Admin';
+    protected string $webNamespace = 'WTG\Http\Controllers\Web';
+
+    /**
+     * @var string
+     */
+    protected string $adminNamespace = 'WTG\Http\Controllers\Admin';
 
     /**
      * Define the routes for the application.
@@ -33,6 +38,8 @@ class RouteServiceProvider extends ServiceProvider
     public function map()
     {
         $this->mapWebRoutes();
+
+        $this->mapApiRoutes();
 
         $this->mapAdminRoutes();
     }
@@ -49,6 +56,20 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware(['web', 'active'])
             ->namespace($this->webNamespace)
             ->group(base_path('routes/web.php'));
+    }
+
+    /**
+     * Define the "api" routes for the application.
+     *
+     * These routes all receive session state, CSRF protection, etc.
+     *
+     * @return void
+     */
+    protected function mapApiRoutes()
+    {
+        Route::middleware(['api', 'active'])
+            ->namespace($this->apiNamespace)
+            ->group(base_path('routes/api.php'));
     }
 
     /**

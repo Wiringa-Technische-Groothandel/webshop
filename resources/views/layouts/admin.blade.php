@@ -40,7 +40,7 @@
 <body style="opacity: 0;">
 
 <div id="app">
-    <template v-if="isLoggedIn">
+    <template v-if="$store.getters['auth/isLoggedIn']">
         <top-navigation></top-navigation>
 
         <div class="container-fluid">

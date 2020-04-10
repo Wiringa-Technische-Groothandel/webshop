@@ -1,55 +1,34 @@
-import * as auth from '../../services/auth'
-import getUnixTime from "date-fns/getUnixTime";
+import axios from "../../services/axios";
 
 export default {
     namespaced: true,
     state: {
-        isLoggedIn: !auth.isTokenExpired(),
-        token: auth.getAccessToken() || '',
-        expires_at: auth.getExpiryTimestamp() || '',
+        user: null
     },
     getters: {
-        isExpired(state) {
-            if (!state.token) {
-                return true;
-            }
-
-            return state.expires_at < getUnixTime(new Date);
-        },
         isLoggedIn(state) {
-            return state.isLoggedIn;
-        },
-        hasToken(state) {
-            return !!state.token;
-        },
-        token(state) {
-            return state.token;
+            return !!state.user;
         }
     },
     mutations: {
-        login(state, {token, expires_at}) {
-            state.isLoggedIn = true;
-            state.token = token;
-            state.expires_at = expires_at;
+        login(state, {username, password}) {
+            axios.post(route('admin.api.login'), { username, password }).then(response => {
+                state.user = response.data.user;
+            });
         },
-        refresh(state) {
-            auth.refreshToken().then((data) => {
-                state.isLoggedIn = true;
-                state.token = data.token;
-                state.expires_at = data.expires_at;
+        check(state) {
+            axios.get(route('admin.api.me')).then(response => {
+                state.user = response.data;
             });
         },
         logout(state) {
-            if (!state.isLoggedIn) {
+            if (!state.user) {
                 return;
             }
 
-            auth.logout()
-                .then(() => {
-                    state.isLoggedIn = false;
-                    state.token = '';
-                    state.expires_at = '';
-                });
+            axios.post(route('admin.api.logout')).then(() => {
+                state.user = null;
+            });
         }
     }
 }

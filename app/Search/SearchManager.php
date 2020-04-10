@@ -84,9 +84,11 @@ class SearchManager
         return collect(
             [
                 'products' => $paginator,
-                'brands'   => $results->pluck('brand')->unique()->sort(),
-                'series'   => $results->pluck('series')->unique()->sort(),
-                'types'    => $results->pluck('type')->unique()->sort(),
+                'filters' => [
+                    'brands'   => $results->pluck('brand')->unique()->sort(),
+                    'series'   => $results->pluck('series')->unique()->sort(),
+                    'types'    => $results->pluck('type')->unique()->sort(),
+                ]
             ]
         );
     }

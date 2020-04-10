@@ -57,16 +57,18 @@ class LoginController extends Controller
     public function execute(): Response
     {
         try {
-            $token = $this->authService->authenticate(
+            $success = $this->authService->authenticate(
                 $this->request->input('username'),
                 $this->request->input('password')
             );
         } catch (AuthenticationException $exception) {
             return response()->json(
                 [
+                    'user'    => null,
                     'message' => $exception->getMessage(),
                     'success' => false,
-                ]
+                ],
+                401
             );
         } catch (Throwable $throwable) {
             $this->logManager->error($throwable);
@@ -77,19 +79,21 @@ class LoginController extends Controller
 
             return response()->json(
                 [
-                    'message' => __('Er is een fout opgetreden tijdens het inloggen.'),
+                    'user'    => null,
+                    'message' => app()->environment('local') ?
+                        $throwable->getMessage() :
+                        __('Er is een fout opgetreden tijdens het inloggen.'),
                     'success' => false,
-                ]
+                ],
+                500
             );
         }
 
         return response()->json(
             [
-                'token'      => $token ?? null,
-                'token_type' => 'bearer',
-                'expires_at' => $this->authService->getExpiryTime(),
+                'user'       => $this->authService->getUser(),
                 'message'    => '',
-                'success'    => true,
+                'success'    => $success,
             ]
         );
     }

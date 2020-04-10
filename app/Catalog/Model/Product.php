@@ -59,10 +59,16 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      * @var string[]
      */
     protected $appends = [
-        'sales_unit_long',
         'price_per_str',
         'stock',
         'stock_status',
+        'path',
+        'image',
+        'small_image',
+        'medium_image',
+        'large_image',
+        'sales_unit',
+        'sales_unit_plural',
     ];
 
     /**
@@ -100,7 +106,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getDescription(): ?DescriptionContract
     {
-        return $this->getAttribute(self::FIELD_DESCRIPTION);
+        return $this->getAttributeFromArray(self::FIELD_DESCRIPTION);
     }
 
     /**
@@ -120,7 +126,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getPriceFactor(): PriceFactor
     {
-        return $this->getAttribute(self::FIELD_PRICE_FACTOR) ?: new PriceFactor();
+        return $this->getAttributeFromArray(self::FIELD_PRICE_FACTOR) ?: new PriceFactor();
     }
 
     /**
@@ -150,7 +156,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getPack(): ?Pack
     {
-        return $this->getAttribute(self::FIELD_PACK);
+        return $this->getAttributeFromArray(self::FIELD_PACK);
     }
 
     /**
@@ -203,7 +209,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getSupplierCode(): string
     {
-        return $this->getAttribute(self::FIELD_SUPPLIER_CODE);
+        return $this->getAttributeFromArray(self::FIELD_SUPPLIER_CODE);
     }
 
     /**
@@ -224,7 +230,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getGroup(): string
     {
-        return (string)$this->getAttribute(self::FIELD_GROUP);
+        return (string)$this->getAttributeFromArray(self::FIELD_GROUP);
     }
 
     /**
@@ -245,7 +251,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getName(): string
     {
-        return $this->getAttribute(self::FIELD_NAME);
+        return $this->getAttributeFromArray(self::FIELD_NAME);
     }
 
     /**
@@ -266,7 +272,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getEan(): string
     {
-        return $this->getAttribute(self::FIELD_EAN);
+        return $this->getAttributeFromArray(self::FIELD_EAN);
     }
 
     /**
@@ -298,7 +304,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getPackingUnit(): string
     {
-        return $this->getAttribute(self::FIELD_PACKING_UNIT);
+        return $this->getAttributeFromArray(self::FIELD_PACKING_UNIT);
     }
 
     /**
@@ -319,7 +325,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getLength(): float
     {
-        return (float)$this->getAttribute(self::FIELD_LENGTH);
+        return (float)$this->getAttributeFromArray(self::FIELD_LENGTH);
     }
 
     /**
@@ -340,7 +346,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getHeight(): float
     {
-        return (float)$this->getAttribute(self::FIELD_HEIGHT);
+        return (float)$this->getAttributeFromArray(self::FIELD_HEIGHT);
     }
 
     /**
@@ -361,7 +367,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getWidth(): float
     {
-        return (float)$this->getAttribute(self::FIELD_WIDTH);
+        return (float)$this->getAttributeFromArray(self::FIELD_WIDTH);
     }
 
     /**
@@ -382,7 +388,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getWeight(): float
     {
-        return (float)$this->getAttribute(self::FIELD_WEIGHT);
+        return (float)$this->getAttributeFromArray(self::FIELD_WEIGHT);
     }
 
     /**
@@ -403,7 +409,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getVat(): string
     {
-        return $this->getAttribute(self::FIELD_VAT);
+        return $this->getAttributeFromArray(self::FIELD_VAT);
     }
 
     /**
@@ -424,7 +430,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function isDiscontinued(): bool
     {
-        return (bool)$this->getAttribute(self::FIELD_DISCONTINUED);
+        return (bool)$this->getAttributeFromArray(self::FIELD_DISCONTINUED);
     }
 
     /**
@@ -445,7 +451,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function isBlocked(): bool
     {
-        return (bool)$this->getAttribute(self::FIELD_BLOCKED);
+        return (bool)$this->getAttributeFromArray(self::FIELD_BLOCKED);
     }
 
     /**
@@ -466,7 +472,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function isInactive(): bool
     {
-        return (bool)$this->getAttribute(self::FIELD_INACTIVE);
+        return (bool)$this->getAttributeFromArray(self::FIELD_INACTIVE);
     }
 
     /**
@@ -487,7 +493,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getBrand(): string
     {
-        return $this->getAttribute(self::FIELD_BRAND);
+        return $this->getAttributeFromArray(self::FIELD_BRAND);
     }
 
     /**
@@ -508,7 +514,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getSeries(): string
     {
-        return $this->getAttribute(self::FIELD_SERIES);
+        return $this->getAttributeFromArray(self::FIELD_SERIES);
     }
 
     /**
@@ -529,7 +535,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getType(): string
     {
-        return $this->getAttribute(self::FIELD_TYPE);
+        return $this->getAttributeFromArray(self::FIELD_TYPE);
     }
 
     /**
@@ -550,7 +556,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getKeywords(): string
     {
-        return $this->getAttribute(self::FIELD_KEYWORDS);
+        return $this->getAttributeFromArray(self::FIELD_KEYWORDS);
     }
 
     /**
@@ -571,7 +577,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getRelated(): string
     {
-        return $this->getAttribute(self::FIELD_RELATED);
+        return $this->getAttributeFromArray(self::FIELD_RELATED);
     }
 
     /**
@@ -643,15 +649,51 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     }
 
     /**
+     * @return string
+     * @throws Exception
+     */
+    public function getSmallImageAttribute(): string
+    {
+        return $this->getImageUrl(self::IMAGE_SIZE_SMALL);
+    }
+
+    /**
+     * @return string
+     * @throws Exception
+     */
+    public function getMediumImageAttribute(): string
+    {
+        return $this->getImageUrl(self::IMAGE_SIZE_MEDIUM);
+    }
+
+    /**
+     * @return string
+     * @throws Exception
+     */
+    public function getLargeImageAttribute(): string
+    {
+        return $this->getImageUrl(self::IMAGE_SIZE_LARGE);
+    }
+
+    /**
+     * @return string
+     * @throws Exception
+     */
+    public function getImageAttribute(): string
+    {
+        return $this->getImageUrl(self::IMAGE_SIZE_ORIGINAL);
+    }
+
+    /**
      * Get the product image url.
      *
      * @param string $size
      * @return string
      * @throws Exception
      */
-    public function getImageUrl(string $size = self::IMAGE_SIZE_LARGE)
+    public function getImageUrl(string $size = self::IMAGE_SIZE_LARGE): string
     {
-        $relativePath = sprintf("storage/uploads/images/products/%s.jpg", $this->getAttribute(self::FIELD_SKU));
+        $relativePath = sprintf("storage/uploads/images/products/%s.jpg", $this->getAttributeFromArray(self::FIELD_SKU));
 
         switch ($size) {
             case self::IMAGE_SIZE_SMALL:
@@ -675,14 +717,14 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
         }
 
         $path = public_path($relativePath);
-        $cacheKey = 'product-image-' . $this->getAttribute(self::FIELD_SKU) . '-' . $size;
+        $cacheKey = 'product-image-' . $this->getAttributeFromArray(self::FIELD_SKU) . '-' . $size;
 
         if (! file_exists($path)) {
             $path = public_path(static::IMAGE_PLACEHOLDER_PATH);
             $cacheKey = static::IMAGE_PLACEHOLDER_CACHE_KEY . '-' . $size;
         }
 
-        return Cache::tags(['product-images'])->remember(
+        return (string) Cache::tags(['product-images'])->remember(
             $cacheKey,
             60 * 60 * 24,
             function () use ($path, $width, $height) {
@@ -703,6 +745,14 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     }
 
     /**
+     * @return string
+     */
+    public function getPathAttribute(): string
+    {
+        return $this->getPath();
+    }
+
+    /**
      * Get the series / type path.
      *
      * @return string
@@ -712,8 +762,8 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     {
         return sprintf(
             '%s  /  %s',
-            $this->getAttribute(self::FIELD_SERIES),
-            $this->getAttribute(self::FIELD_TYPE)
+            $this->getAttributeFromArray(self::FIELD_SERIES),
+            $this->getAttributeFromArray(self::FIELD_TYPE)
         );
     }
 
@@ -779,7 +829,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getStockDisplay(): string
     {
-        return $this->getAttribute(self::FIELD_STOCK_DISPLAY) ?: self::DEFAULT_STOCK_DISPLAY;
+        return $this->getAttributeFromArray(self::FIELD_STOCK_DISPLAY) ?: self::DEFAULT_STOCK_DISPLAY;
     }
 
     /**
@@ -790,7 +840,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     {
         return cache()->remember(
             'product-stock-' . $this->getSku(),
-            3600,
+            60 * 5, // 5 minutes
             function () {
                 /** @var StockManager $stockManager */
                 $stockManager = app(StockManager::class);
@@ -812,7 +862,23 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getSku(): string
     {
-        return (string)$this->getAttribute(self::FIELD_SKU);
+        return (string)$this->getAttributeFromArray(self::FIELD_SKU);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSalesUnitAttribute(): string
+    {
+        return unit_to_str($this->getSalesUnit(), false);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSalesUnitPluralAttribute(): string
+    {
+        return unit_to_str($this->getSalesUnit(), true);
     }
 
     /**
@@ -822,7 +888,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getSalesUnit(): string
     {
-        return $this->getAttribute(self::FIELD_SALES_UNIT) ?: '';
+        return $this->getAttributeFromArray(self::FIELD_SALES_UNIT) ?: '';
     }
 
     /**
@@ -834,14 +900,6 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     public function getStockAttribute(): ?array
     {
         return $this->getStock();
-    }
-
-    /**
-     * @return string
-     */
-    public function getSalesUnitLongAttribute(): string
-    {
-        return unit_to_str($this->getSalesUnit(), false);
     }
 
     /**

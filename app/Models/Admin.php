@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WTG\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use WTG\Contracts\Models\AdminContract;
 
 /**
@@ -14,7 +13,7 @@ use WTG\Contracts\Models\AdminContract;
  * @package     WTG\Models
  * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
-class Admin extends Authenticatable implements AdminContract, JWTSubject
+class Admin extends Authenticatable implements AdminContract
 {
     /**
      * @var array
@@ -25,14 +24,6 @@ class Admin extends Authenticatable implements AdminContract, JWTSubject
     ];
 
     /**
-     * @inheritDoc
-     */
-    public function getJWTIdentifier()
-    {
-        return $this->getId();
-    }
-
-    /**
      * Get the id.
      *
      * @return null|int
@@ -40,14 +31,6 @@ class Admin extends Authenticatable implements AdminContract, JWTSubject
     public function getId(): ?int
     {
         return $this->getAttribute('id');
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getJWTCustomClaims()
-    {
-        return [];
     }
 
     /**
