@@ -44,6 +44,7 @@ Route::group(
                 'as' => 'catalog.'
             ],
             function () {
+                Route::get('search', 'SearchController')->name('search');
                 Route::get('products', 'ProductsController')->name('products');
                 Route::get('price', 'PriceController')->middleware('auth:airlock-web')->name('price');
             }

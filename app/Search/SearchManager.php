@@ -75,19 +75,21 @@ class SearchManager
         $query->with('priceFactor');
 
         $paginator = $query->paginate(10, ['*'], 'page', $page);
-        $paginator->appends([
-            'brand' => $brand,
-            'series' => $series,
-            'type' => $type
-        ]);
+        $paginator->appends(
+            [
+                'brand'  => $brand,
+                'series' => $series,
+                'type'   => $type
+            ]
+        );
 
         return collect(
             [
                 'products' => $paginator,
-                'filters' => [
-                    'brands'   => $results->pluck('brand')->unique()->sort(),
-                    'series'   => $results->pluck('series')->unique()->sort(),
-                    'types'    => $results->pluck('type')->unique()->sort(),
+                'filters'  => [
+                    'brands' => $results->pluck('brand')->unique()->sort(),
+                    'series' => $results->pluck('series')->unique()->sort(),
+                    'types'  => $results->pluck('type')->unique()->sort(),
                 ]
             ]
         );
@@ -96,18 +98,18 @@ class SearchManager
     /**
      * Search for products.
      *
-     * @param array $data
+     * @param SearchFilter $searchFilter
      * @param int $page
-     * @return Collection
+     * @return SearchResults
      */
-    public function searchProducts(array $data, int $page = 1): Collection
+    public function searchProducts(SearchFilter $searchFilter, int $page = 1): SearchResults
     {
-        $query = $data['query'];
+        $query = $searchFilter->getQuery();
 
         if (is_numeric($query)) {
             $results = collect(
                 [
-                    Product::where(
+                    Product::query()->where(
                         function ($builder) use ($query) {
                             return $builder
                                 ->orWhere('sku', $query)
@@ -121,9 +123,9 @@ class SearchManager
                 ]
             )->filter();
         } else {
-            $brand = $data['brand'] ?? false;
-            $series = $data['series'] ?? false;
-            $type = $data['type'] ?? false;
+            $brand = $searchFilter->getBrand() ?: false;
+            $series = $searchFilter->getBrand() ?: false;
+            $type = $searchFilter->getType() ?: false;
             $filters = [];
 
             if ($brand) {
@@ -167,16 +169,45 @@ class SearchManager
 
         $paginator = new LengthAwarePaginator($results->forPage($page, 10), $results->count(), 10, $page);
         $paginator->withPath('search');
-        $paginator->appends($data);
+        $paginator->appends($searchFilter->toArray());
 
-        return collect(
-            [
-                'products' => $paginator,
-                'brands'   => $results->pluck('brand')->unique()->sort(),
-                'series'   => $results->pluck('series')->unique()->sort(),
-                'types'    => $results->pluck('type')->unique()->sort(),
-            ]
-        );
+        $searchResults = new SearchResults();
+
+        $searchResults->setProducts($paginator);
+        $searchResults->setBrands($results->pluck('brand')->unique()->sort());
+        $searchResults->setSeries($results->pluck('series')->unique()->sort());
+        $searchResults->setTypes($results->pluck('type')->unique()->sort());
+
+        return $searchResults;
+    }
+
+    /**
+     * Quicksearch items.
+     *
+     * @param string $query
+     * @return Collection
+     */
+    public function suggestProducts(string $query): Collection
+    {
+        return Product::search(
+            $query,
+            function (Client $elastic, $query, $params) {
+                return $elastic->search(
+                    $this->prepareParameters($query, 5)
+                );
+            }
+        )
+            ->get()
+            ->where('inactive', 0)
+            ->where('blocked', 0)
+            ->map(
+                function (Product $product) {
+                    return [
+                        'url'  => $this->productManager->getProductUrl($product),
+                        'name' => $product->getName(),
+                    ];
+                }
+            );
     }
 
     /**
@@ -285,34 +316,5 @@ class SearchManager
             'any'      => join(' ', $anyTerms),
             'optional' => join(' ', $optionalTerms),
         ];
-    }
-
-    /**
-     * Quicksearch items.
-     *
-     * @param string $query
-     * @return Collection
-     */
-    public function suggestProducts(string $query): Collection
-    {
-        return Product::search(
-            $query,
-            function (Client $elastic, $query, $params) {
-                return $elastic->search(
-                    $this->prepareParameters($query, 5)
-                );
-            }
-        )
-            ->get()
-            ->where('inactive', 0)
-            ->where('blocked', 0)
-            ->map(
-                function (Product $product) {
-                    return [
-                        'url'  => $this->productManager->getProductUrl($product),
-                        'name' => $product->getName(),
-                    ];
-                }
-            );
     }
 }
