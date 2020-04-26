@@ -22,25 +22,6 @@ if (! function_exists('route_class')) {
     }
 }
 
-if (! function_exists('block')) {
-    /**
-     * Find a block by name.
-     *
-     * @param string $blockName
-     * @return string|View
-     */
-    function block(string $blockName)
-    {
-        $block = Block::where('name', $blockName)->first();
-
-        if ($block === null) {
-            return "Block '$blockName' not found";
-        }
-
-        return view('block', compact('block'));
-    }
-}
-
 if (! function_exists('format_price')) {
     /**
      * Format a float into a price.

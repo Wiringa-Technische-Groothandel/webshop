@@ -66,20 +66,20 @@ class Handler extends ExceptionHandler
      * @return Response
      * @throws Throwable
      */
-    public function render($request, Throwable $exception)
-    {
-        if ($exception instanceof TokenMismatchException) {
-            return back()->withInput($request->except('password'))
-                ->withErrors(__("Uw sessie is verlopen, probeer het opnieuw."));
-        }
-
-        if ($exception instanceof AuthorizationException) {
-            return back()->withInput($request->except('password'))
-                ->withErrors(__('U hebt onvoldoende rechten om deze actie uit te voeren.'));
-        }
-
-        return parent::render($request, $exception);
-    }
+//    public function render($request, Throwable $exception)
+//    {
+//        if ($exception instanceof TokenMismatchException) {
+//            return back()->withInput($request->except('password'))
+//                ->withErrors(__("Uw sessie is verlopen, probeer het opnieuw."));
+//        }
+//
+//        if ($exception instanceof AuthorizationException) {
+//            return back()->withInput($request->except('password'))
+//                ->withErrors(__('U hebt onvoldoende rechten om deze actie uit te voeren.'));
+//        }
+//
+//        return parent::render($request, $exception);
+//    }
 
     /**
      * Convert an authentication exception into a response.
@@ -123,50 +123,5 @@ class Handler extends ExceptionHandler
                 'referenceId' => $this->referenceId,
             ];
         }
-    }
-
-    /**
-     * Render the given HttpException.
-     *
-     * @param HttpExceptionInterface $e
-     * @return Response
-     */
-    protected function renderHttpException(HttpExceptionInterface $e)
-    {
-        $status = $e->getStatusCode();
-
-        view()->replaceNamespace(
-            'errors',
-            [
-                resource_path('views/pages/errors'),
-                base_path('vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/views'),
-            ]
-        );
-
-        if (view()->exists($view = "errors::{$status}")) {
-            return response()->view(
-                $view,
-                ['exception' => $e, 'title' => "Error {$status}", 'referenceId' => $this->referenceId],
-                $status,
-                $e->getHeaders()
-            );
-        }
-
-        return $this->convertExceptionToResponse($e);
-    }
-
-    /**
-     * Prepare exception for rendering.
-     *
-     * @param Throwable $e
-     * @return Throwable
-     */
-    protected function prepareException(Throwable $e)
-    {
-        if ($e instanceof TokenMismatchException) {
-            return $e;
-        }
-
-        return parent::prepareException($e);
     }
 }

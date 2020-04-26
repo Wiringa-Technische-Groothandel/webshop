@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WTG\Http\Controllers\Admin\Api\CMS;
 
 use Symfony\Component\HttpFoundation\Response;
-use WTG\Http\Controllers\Admin\Controller;
+use WTG\Http\Controllers\Controller;
 use WTG\Models\Block;
 
 /**

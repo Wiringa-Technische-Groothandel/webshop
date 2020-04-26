@@ -63,15 +63,6 @@ class AppServiceProvider extends ServiceProvider
                 return new Filesystem($adapter);
             }
         );
-
-        view()->composer(
-            '*',
-            function ($view) {
-                if (auth('web')->check()) {
-                    $view->with('cart', $this->app['cart']);
-                }
-            }
-        );
     }
 
     /**

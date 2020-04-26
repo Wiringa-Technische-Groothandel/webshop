@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\View\Factory as ViewFactory;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Abstract controller.
@@ -24,17 +24,15 @@ abstract class Controller extends BaseController
     use ValidatesRequests;
 
     /**
-     * @var ViewFactory
+     * @return Response
      */
-    protected ViewFactory $view;
+    public function __invoke(): Response
+    {
+        return app()->call(static::class . '@execute');
+    }
 
     /**
-     * Controller constructor.
-     *
-     * @param ViewFactory $view
+     * @return Response
      */
-    public function __construct(ViewFactory $view)
-    {
-        $this->view = $view;
-    }
+    abstract public function execute(): Response;
 }

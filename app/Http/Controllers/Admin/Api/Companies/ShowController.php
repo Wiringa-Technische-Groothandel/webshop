@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
-use WTG\Http\Controllers\Admin\Controller;
+use WTG\Http\Controllers\Controller;
 use WTG\Models\Company;
 
 /**

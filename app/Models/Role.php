@@ -26,6 +26,15 @@ class Role extends Model implements RoleContract
     protected $guarded = ['id'];
 
     /**
+     * @var string[]
+     */
+    protected $hidden = [
+        'id',
+        'created_at',
+        'updated_at',
+    ];
+
+    /**
      * Query scope for level field.
      *
      * @param Builder $query

@@ -12,13 +12,20 @@ use WTG\Contracts\Models\CompanyContract;
 /**
  * Address model.
  *
- * @package     WTG
- * @subpackage  Models
  * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
 class Address extends Model implements AddressContract
 {
     public const DEFAULT_ID = 0;
+
+    /**
+     * @var string[]
+     */
+    protected $hidden = [
+        'company_id',
+        'created_at',
+        'updated_at'
+    ];
 
     /**
      * Get the identifier.

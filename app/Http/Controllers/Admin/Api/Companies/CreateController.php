@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use WTG\Contracts\Services\CompanyServiceContract;
 use WTG\Exceptions\Company\IncompleteDataException;
-use WTG\Http\Controllers\Admin\Controller;
+use WTG\Http\Controllers\Controller;
 
 /**
  * Admin API create company controller.
