@@ -11,6 +11,8 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', 'IndexController@getAction')->name('home');
 Route::get('downloads', 'DownloadsController@getAction')->name('downloads');
 

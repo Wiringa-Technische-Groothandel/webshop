@@ -14,6 +14,8 @@ Passport::routes(
 
 Route::get('routes', Routes\IndexController::class)->name('routes');
 
+Route::get('cms/block', Cms\BlockController::class)->name('cms.block');
+
 Route::get('carousel/items', Carousel\IndexController::class)->name('carousel.items');
 
 Route::group(

@@ -48,9 +48,6 @@ class BlocksSaveController extends Controller
         $this->logManager = $logManager;
     }
 
-    /**
-     * @return Response
-     */
     public function execute(): Response
     {
         $blockId = $this->request->input('block');
