@@ -15,7 +15,7 @@
 
                             <div class="col-lg-4">
                                 <div class="cart-item-qty">
-                                    <input type="number" class="form-control" placeholder="Aantal" min="1" step="1"
+                                    <input type="number" class="form-control" placeholder="Aantal" :min="item.product.minimal_purchase" step="1"
                                            v-model="quantity" v-on:input="this.update" :id="'cart-item-qty-' + item.product.sku" />
                                 </div>
                             </div>
@@ -117,10 +117,18 @@
                     });
             },
             update (event) {
-                let currentQty = this.$data.quantity;
+                let currentQty = this.quantity;
 
                 setTimeout(() => {
-                    if (currentQty !== this.$data.quantity) {
+                    if (currentQty !== this.quantity) {
+                        return;
+                    }
+                    
+                    if (this.quantity < this.item.product.minimal_purchase && this.quantity > 0) {
+                        this.$root.$emit('send-notify', {
+                            error: true,
+                            text: `De minimale besteleenheid is ${this.item.product.minimal_purchase}`
+                        });
                         return;
                     }
 
@@ -130,7 +138,7 @@
 
                     axios.patch('/checkout/cart', {
                         sku: this.item.product.sku,
-                        quantity: this.$data.quantity
+                        quantity: this.quantity
                     })
                         .then((response) => {
                             if (response.data.success) {

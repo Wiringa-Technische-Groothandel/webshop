@@ -26,7 +26,7 @@
 
         <div class="col-4 col-md-2 col-lg-1 col-sm-3 order-sm-1">
             <div class="cart-item-qty text-right">
-                <input type="number" class="form-control" placeholder="Aantal" min="1" step="1"
+                <input type="number" class="form-control" placeholder="Aantal" min="{{ $product->getMinimalPurchaseAmount() }}" step="1"
                        value="{{ $item->quantity() }}" oninput="cart.update(this)"
                        data-update-url="{{ route('checkout.cart.update', ['item' => $item->getAttribute('id')]) }}" />
             </div>

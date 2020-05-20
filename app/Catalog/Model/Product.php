@@ -882,4 +882,16 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
 
         return $pricePerString;
     }
+
+    /**
+     * Get the minimal purchase amount.
+     *
+     * @return float
+     */
+    public function getMinimalPurchaseAmount(): float
+    {
+        $minimalPurchase = $this->getAttributeFromArray('minimal_purchase');
+
+        return $minimalPurchase > 0.0 ? $minimalPurchase : 1.0;
+    }
 }

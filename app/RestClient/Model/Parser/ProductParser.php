@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WTG\RestClient\Model\Parser;
 
+use Illuminate\Support\Facades\Log;
 use WTG\RestClient\Model\Rest\ProductResponse;
 
 /**
@@ -28,6 +29,7 @@ class ProductParser
         $product->sku = $item['productCode'];
         $product->group = $item['productClassification'][0]['productGroupCode'];
         $product->salesUnit = $item['unitCode'];
+        $product->minimalPurchase = $item['minimalPurchase'];
         $product->packingUnit = $item['packingUnit'];
         $product->inactive = $item['inactive'];
         $product->discontinued = $item['discontinued'];

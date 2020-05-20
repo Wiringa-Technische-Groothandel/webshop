@@ -3,7 +3,7 @@
         <div class="input-group-prepend">
             <span class="input-group-text">{{ quantity > 1 ? salesUnitPlural : salesUnitSingle }}</span>
         </div>
-        <input type="number" step="1" min="1" class="form-control" placeholder="Aantal" v-model="quantity">
+        <input type="number" step="1" :min="initialQuantity" class="form-control" placeholder="Aantal" v-model="quantity">
         <div class="input-group-append">
             <button class="btn btn-outline-success" v-on:click="this.addToCart">
                 <span><i class="fas fa-fw fa-cart-plus"></i></span>
@@ -14,10 +14,34 @@
 
 <script>
     export default {
-        props: ['sku', 'salesUnitSingle', 'salesUnitPlural', 'submitUrl'],
+        props: {
+            sku: {
+                required: true,
+                type: String
+            },
+            salesUnitSingle: {
+                required: true,
+                type: String
+            },
+            salesUnitPlural: {
+                required: true,
+                type: String
+            },
+            submitUrl: {
+                required: true,
+                type: String
+            },
+            initialQuantity: {
+                required: false,
+                type: Number,
+                default () {
+                    return 1;
+                }
+            }
+        },
         data () {
             return {
-                quantity: 1
+                quantity: this.initialQuantity
             };
         },
         methods: {

@@ -2,13 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Database\Migrations;
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DummyClass extends Migration
+class AddMinimalPurchaseColumnToProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -17,8 +15,8 @@ class DummyClass extends Migration
      */
     public function up()
     {
-        Schema::table('DummyTable', function (Blueprint $table) {
-            //
+        Schema::table('products', function (Blueprint $table) {
+            $table->unsignedFloat('minimal_purchase')->default(1);
         });
     }
 
@@ -29,8 +27,8 @@ class DummyClass extends Migration
      */
     public function down()
     {
-        Schema::table('DummyTable', function (Blueprint $table) {
-            //
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('minimal_purchase');
         });
     }
 }
