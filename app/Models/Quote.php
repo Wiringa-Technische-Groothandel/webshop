@@ -157,8 +157,19 @@ class Quote extends Model implements CartContract
     {
         $item = $this->findProduct($product);
 
+        if ($quantity < $product->getMinimalPurchaseAmount()) {
+            $quantity = $product->getMinimalPurchaseAmount();
+        } else {
+            $quantity = ceil($quantity / $product->getMinimalPurchaseAmount()) * $product->getMinimalPurchaseAmount();
+        }
+
         if ($item) {
-            $item->setQuantity($quantity + $item->getQuantity());
+            $newQuantity = $quantity + $item->getQuantity();
+            $newQuantity = ceil(
+                $newQuantity / $product->getMinimalPurchaseAmount()
+            ) * $product->getMinimalPurchaseAmount();
+
+            $item->setQuantity($newQuantity);
         } else {
             /** @var CartItemContract|Model $item */
             $item = app()->make(CartItemContract::class);
@@ -196,17 +207,6 @@ class Quote extends Model implements CartContract
     public function items(): HasMany
     {
         return $this->hasMany(QuoteItem::class);
-    }
-
-    /**
-     * Throw a cart update exception.
-     *
-     * @return void
-     * @throws CartUpdateException
-     */
-    protected function throwFailedCartException(): void
-    {
-        throw new CartUpdateException('An error occurred while saving a cart.');
     }
 
     /**
@@ -292,6 +292,17 @@ class Quote extends Model implements CartContract
             app()->instance('cartItemCount', $items);
         }
 
-        return (int) app('cartItemCount');
+        return (int)app('cartItemCount');
+    }
+
+    /**
+     * Throw a cart update exception.
+     *
+     * @return void
+     * @throws CartUpdateException
+     */
+    protected function throwFailedCartException(): void
+    {
+        throw new CartUpdateException('An error occurred while saving a cart.');
     }
 }

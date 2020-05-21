@@ -26,7 +26,7 @@
 
                 @auth
                     <add-to-cart sku="{{ $product->getSku() }}"
-                                 :initial-quantity="{{ $product->getMinimalPurchaseAmount() }}"
+                                 :step="{{ $product->getMinimalPurchaseAmount() }}"
                                  sales-unit-single="{{ ucfirst(unit_to_str($product->getSalesUnit(), false)) }}"
                                  sales-unit-plural="{{ ucfirst(unit_to_str($product->getSalesUnit())) }}"
                                  submit-url="{{ route('checkout.cart') }}"></add-to-cart>

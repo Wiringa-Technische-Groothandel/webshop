@@ -45,9 +45,10 @@
                 this.$nextTick(() => {
                     notification.show = true;
 
+                    // Auto hide success messages after 5 seconds, errors after 10
                     setTimeout(() => {
                         notification.show = false;
-                    }, 5000);
+                    }, success ? 5000 : 10000);
                 });
             }
         },

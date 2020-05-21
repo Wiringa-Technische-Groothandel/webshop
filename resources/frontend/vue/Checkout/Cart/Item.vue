@@ -15,7 +15,9 @@
 
                             <div class="col-lg-4">
                                 <div class="cart-item-qty">
-                                    <input type="number" class="form-control" placeholder="Aantal" :min="item.product.minimal_purchase" step="1"
+                                    <input type="number" class="form-control" placeholder="Aantal"
+                                           :min="item.product.minimal_purchase"
+                                           :step="item.product.minimal_purchase"
                                            v-model="quantity" v-on:input="this.update" :id="'cart-item-qty-' + item.product.sku" />
                                 </div>
                             </div>
@@ -127,7 +129,15 @@
                     if (this.quantity < this.item.product.minimal_purchase && this.quantity > 0) {
                         this.$root.$emit('send-notify', {
                             error: true,
-                            text: `De minimale besteleenheid is ${this.item.product.minimal_purchase}`
+                            text: `Het product "${this.item.product.name}" heeft een minimale besteleenheid van ${this.item.product.minimal_purchase}`
+                        });
+                        return;
+                    }
+
+                    if ((this.quantity % this.item.product.minimal_purchase) !== 0) {
+                        this.$root.$emit('send-notify', {
+                            error: true,
+                            text: `Het product "${this.item.product.name}" kan alleen in veelvouden van ${this.item.product.minimal_purchase} besteld worden`
                         });
                         return;
                     }

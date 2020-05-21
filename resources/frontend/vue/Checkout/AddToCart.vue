@@ -3,9 +3,10 @@
         <div class="input-group-prepend">
             <span class="input-group-text">{{ quantity > 1 ? salesUnitPlural : salesUnitSingle }}</span>
         </div>
-        <input type="number" step="1" :min="initialQuantity" class="form-control" placeholder="Aantal" v-model="quantity">
+        <input ref="input" type="number" :step="step" :min="step"
+               class="form-control" placeholder="Aantal" v-model="quantity">
         <div class="input-group-append">
-            <button class="btn btn-outline-success" v-on:click="this.addToCart">
+            <button class="btn btn-outline-success" @click="this.addToCart">
                 <span><i class="fas fa-fw fa-cart-plus"></i></span>
             </button>
         </div>
@@ -31,7 +32,7 @@
                 required: true,
                 type: String
             },
-            initialQuantity: {
+            step: {
                 required: false,
                 type: Number,
                 default () {
@@ -41,13 +42,25 @@
         },
         data () {
             return {
-                quantity: this.initialQuantity
+                quantity: this.step
             };
         },
         methods: {
             addToCart () {
+                if (typeof this.$refs.input.reportValidity !== "function") {
+                    if (this.quantity < this.step) {
+                        this.quantity = this.step;
+                    } else if (this.quantity % this.step !== 0) {
+                        this.quantity = Math.ceil(this.quantity / this.step) * this.step;
+                    }
+                } else {
+                    if (! this.$refs.input.reportValidity()) {
+                        return;
+                    }
+                }
+
                 axios.put(this.submitUrl, {
-                    quantity: this.$data.quantity,
+                    quantity: this.quantity,
                     product: this.sku
                 })
                     .then((response) => {
