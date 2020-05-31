@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Collection;
-use Log;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 use WTG\Catalog\Model\Product;
 use WTG\Catalog\PriceManager;

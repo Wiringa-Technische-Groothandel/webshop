@@ -18,6 +18,7 @@
     <div class="row">
         <div class="col-12 mb-3">
             <add-to-cart sku="{{ $product->getSku() }}"
+                         :step="{{ $product->getMinimalPurchaseAmount() }}"
                          sales-unit-single="{{ ucfirst(unit_to_str($product->getSalesUnit(), false)) }}"
                          sales-unit-plural="{{ ucfirst(unit_to_str($product->getSalesUnit())) }}"
                          submit-url="{{ route('checkout.cart') }}"></add-to-cart>

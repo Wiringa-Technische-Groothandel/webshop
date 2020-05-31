@@ -15,7 +15,8 @@
 
                             <div class="col-lg-4">
                                 <div class="cart-item-qty">
-                                    <input type="number" class="form-control" placeholder="Aantal" min="1" step="1"
+                                    <input type="number" class="form-control" placeholder="Aantal"
+                                           :min="item.product.minimal_purchase" :step="item.product.minimal_purchase"
                                            v-model="quantity" v-on:input="this.update" :id="'cart-item-qty-' + item.product.sku" />
                                 </div>
                             </div>
@@ -96,6 +97,11 @@
     export default {
         props: ['item'],
         methods: {
+            resetQuantity() {
+                $('#cart-item-qty-' + this.item.product.sku).val(Math.round(this.item.qty));
+
+                this.quantity = Math.round(this.item.qty);
+            },
             delete () {
                 this.$root.$emit('show-cart-overlay');
 
@@ -117,10 +123,28 @@
                     });
             },
             update (event) {
-                let currentQty = this.$data.quantity;
+                let currentQty = this.quantity;
 
                 setTimeout(() => {
-                    if (currentQty !== this.$data.quantity) {
+                    if (currentQty !== this.quantity) {
+                        return;
+                    }
+                    
+                    if (this.quantity < this.item.product.minimal_purchase && this.quantity > 0) {
+                        this.$root.$emit('send-notify', {
+                            error: true,
+                            text: `Het product "${this.item.product.name}" heeft een minimale besteleenheid van ${this.item.product.minimal_purchase}`
+                        });
+                        this.resetQuantity();
+                        return;
+                    }
+
+                    if ((this.quantity % this.item.product.minimal_purchase) !== 0) {
+                        this.$root.$emit('send-notify', {
+                            error: true,
+                            text: `Het product "${this.item.product.name}" kan alleen in veelvouden van ${this.item.product.minimal_purchase} besteld worden`
+                        });
+                        this.resetQuantity();
                         return;
                     }
 
@@ -130,7 +154,7 @@
 
                     axios.patch('/checkout/cart', {
                         sku: this.item.product.sku,
-                        quantity: this.$data.quantity
+                        quantity: this.quantity
                     })
                         .then((response) => {
                             if (response.data.success) {

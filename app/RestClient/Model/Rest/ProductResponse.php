@@ -131,4 +131,9 @@ class ProductResponse
      * @var string
      */
     public string $supplierCode;
+
+    /**
+     * @var float
+     */
+    public float $minimalPurchase = 1.0;
 }

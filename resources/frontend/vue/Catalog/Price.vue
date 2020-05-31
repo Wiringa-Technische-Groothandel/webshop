@@ -90,9 +90,7 @@
         },
         computed: {
             showSinglePrice() {
-                return !this.action &&
-                    this.netPrice === this.grossPrice &&
-                    (this.product.price_factor && this.product.price_factor.price_unit === 'DAG')
+                return !this.action && this.netPrice === this.grossPrice
             }
         },
         methods: {

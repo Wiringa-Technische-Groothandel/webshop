@@ -64,21 +64,31 @@ class CartController extends Controller
      */
     public function putAction(AddProductRequest $request): JsonResponse
     {
+        $quantity = (float)$request->input('quantity');
+
         $cartItem = $this->cartService->addProductBySku(
             $request->input('product'),
-            (float)$request->input('quantity')
+            $quantity
         );
 
         if (! $cartItem) {
             return $this->productNotFoundResponse($request->input('product'));
         }
 
+        $minimalPurchaseAmount = $cartItem->getProduct()->getMinimalPurchaseAmount();
+
+        if ($quantity < $minimalPurchaseAmount) {
+            $quantity = $minimalPurchaseAmount;
+        } elseif (fmod($quantity, $minimalPurchaseAmount) !== 0) {
+            $quantity = ceil($quantity / $minimalPurchaseAmount) * $minimalPurchaseAmount;
+        }
+
         return response()->json(
             [
                 'message' => __(
-                    "Toegevoegd aan uw winkelwagen: <br><br> :quantity x :product",
+                    "Toegevoegd aan uw winkelwagen: <br><br> :quantity x \":product\"",
                     [
-                        'quantity' => $request->input('quantity'),
+                        'quantity' => $quantity,
                         'product'  => $cartItem->getProduct()->getName(),
                     ]
                 ),

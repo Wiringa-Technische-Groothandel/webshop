@@ -751,13 +751,17 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
         switch ($this->getStockDisplay()) {
             case 'S':
                 $stock = $this->getStock();
-                $status = $stock ?
-                    sprintf(
+
+                if ($stock) {
+                    $availableStock = $stock['availableStockBasedOnComponents'] ?: $stock['availableStock'];
+                    $status = sprintf(
                         '<span class="d-none d-md-inline">Voorraad: </span> %s %s',
-                        $stock['availableStock'],
-                        unit_to_str($this->getSalesUnit(), $stock['availableStock'] > 1)
-                    ) :
-                    'In bestelling, bel voor meer info';
+                        $availableStock,
+                        unit_to_str($this->getSalesUnit(), $availableStock > 1)
+                    );
+                } else {
+                    $status = 'In bestelling, bel voor meer info';
+                }
                 break;
             case 'A':
                 $status = 'Levertijd in overleg';
@@ -881,5 +885,17 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
         }
 
         return $pricePerString;
+    }
+
+    /**
+     * Get the minimal purchase amount.
+     *
+     * @return float
+     */
+    public function getMinimalPurchaseAmount(): float
+    {
+        $minimalPurchase = $this->getAttributeFromArray('minimal_purchase');
+
+        return $minimalPurchase > 0.0 ? $minimalPurchase : 1.0;
     }
 }

@@ -129,6 +129,7 @@ class ProductProcessor implements ProcessorInterface
         $product->weight = (float)$productData['weight'];
         $product->height = (float)$productData['height'];
         $product->stockDisplay = (string)$productData['stockDisplay'] ?: 'S';
+        $product->minimalPurchase = (float)$productData['minimalPurchase'];
         $product->supplierCode = (string)$productData['supplierCode'];
         $product->brand = (string)$productData['brand'];
         $product->series = (string)$productData['series'];
