@@ -16,8 +16,7 @@
                             <div class="col-lg-4">
                                 <div class="cart-item-qty">
                                     <input type="number" class="form-control" placeholder="Aantal"
-                                           :min="item.product.minimal_purchase"
-                                           :step="item.product.minimal_purchase"
+                                           :min="item.product.minimal_purchase" :step="item.product.minimal_purchase"
                                            v-model="quantity" v-on:input="this.update" :id="'cart-item-qty-' + item.product.sku" />
                                 </div>
                             </div>
@@ -98,6 +97,11 @@
     export default {
         props: ['item'],
         methods: {
+            resetQuantity() {
+                $('#cart-item-qty-' + this.item.product.sku).val(Math.round(this.item.qty));
+
+                this.quantity = Math.round(this.item.qty);
+            },
             delete () {
                 this.$root.$emit('show-cart-overlay');
 
@@ -131,6 +135,7 @@
                             error: true,
                             text: `Het product "${this.item.product.name}" heeft een minimale besteleenheid van ${this.item.product.minimal_purchase}`
                         });
+                        this.resetQuantity();
                         return;
                     }
 
@@ -139,6 +144,7 @@
                             error: true,
                             text: `Het product "${this.item.product.name}" kan alleen in veelvouden van ${this.item.product.minimal_purchase} besteld worden`
                         });
+                        this.resetQuantity();
                         return;
                     }
 
