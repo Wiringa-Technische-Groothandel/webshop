@@ -2,6 +2,10 @@
 
 @section('title', __('Zoekresultaten'))
 
+@push('meta')
+    <meta name="robots" content="noindex">
+@endpush
+
 @section('content')
     <h2 class="text-center block-title">{{ __('Zoekresultaten') }}</h2>
 
