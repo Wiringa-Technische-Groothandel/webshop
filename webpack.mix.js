@@ -3,7 +3,7 @@ const mix = require('laravel-mix');
 mix.webpackConfig({
     output: {
         publicPath: '/',
-        chunkFilename: 'assets/chunks/[name].js',
+        chunkFilename: 'assets/chunks/[name].js?id=[chunkhash]',
     }
 });
 
