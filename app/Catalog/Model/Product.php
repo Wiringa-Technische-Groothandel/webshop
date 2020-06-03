@@ -794,7 +794,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     {
         return cache()->remember(
             'product-stock-' . $this->getSku(),
-            3600,
+            60 * 5,
             function () {
                 /** @var StockManager $stockManager */
                 $stockManager = app(StockManager::class);
