@@ -22,7 +22,7 @@
                 <div style="position: fixed;bottom: 20px;right: 20px;background-color: red;color:#333;padding:5px;border:3px solid #333;">{{ ucfirst(app()->environment()) }}</div>
             @endif
 
-            <notification :php-errors="{{ $errors->toJson() }}"
+            <notification :php-errors="{{ json_encode($errors->all()) }}"
                           php-success="{{ session('status') }}"></notification>
         </div>
 

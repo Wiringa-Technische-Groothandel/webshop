@@ -14,7 +14,22 @@
 
 <script>
     export default {
-        props: ['phpErrors', 'phpSuccess'],
+        props: {
+            phpErrors: {
+                required: false,
+                type: Array,
+                default () {
+                    return [];
+                }
+            },
+            phpSuccess: {
+                required: false,
+                type: String,
+                default () {
+                    return "";
+                }
+            }
+        },
         data () {
             return {
                 messages: []

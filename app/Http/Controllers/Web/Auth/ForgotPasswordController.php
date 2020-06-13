@@ -66,6 +66,10 @@ class ForgotPasswordController extends Controller
             ->where('customer_number', $request->input('company'))
             ->first();
 
+        if (! $company) {
+            return $this->sendResetLinkFailedResponse($request, Password::INVALID_USER);
+        }
+
         $response = $this->broker()->sendResetLink(
             [
                 'company_id' => $company->getId(),

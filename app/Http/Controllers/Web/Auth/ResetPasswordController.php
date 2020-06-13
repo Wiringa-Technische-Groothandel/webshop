@@ -75,6 +75,10 @@ class ResetPasswordController extends Controller
             ->where('customer_number', $request->input('company'))
             ->first();
 
+        if (! $company) {
+            return $this->sendResetFailedResponse($request, Password::INVALID_USER);
+        }
+
         $credentials = $request->only('password', 'password_confirmation', 'token', 'username');
 
         // Here we will attempt to reset the user's password. If it is successful we
