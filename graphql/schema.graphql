@@ -1,0 +1,77 @@
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"A datetime and timezone string in ISO 8601 format `Y-m-dTH:i:sO`, e.g. `2020-04-20T13:53:12+02:00`."
+scalar DateTimeTz @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTimeTz")
+
+type Query {
+    me: User @auth
+    token: String
+}
+
+type Company {
+    id: ID!
+    name: String!
+    customer_number: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+    users: [User]!
+}
+
+type User {
+    id: ID!
+    name: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+    company: Company!
+}
+
+type Mutation {
+    login(input: LoginInput @spread): AuthPayload!
+#    refreshToken(input: RefreshTokenInput @spread): AuthPayload!
+#    logout: LogoutResponse!
+#    forgotPassword(input: ForgotPasswordInput! @spread): ForgotPasswordResponse!
+#    updateForgottenPassword(input: NewPasswordWithCodeInput! @spread): ForgotPasswordResponse!
+}
+
+input LoginInput {
+    customer_number: String!
+    username: String!
+    password: String!
+}
+
+input RefreshTokenInput {
+    refresh_token: String
+}
+
+type AuthPayload {
+    access_token: String!
+    refresh_token: String!
+    expires_in: Int!
+    token_type: String!
+    user: User!
+}
+
+type LogoutResponse {
+    status: String!
+    message: String
+}
+
+type ForgotPasswordResponse {
+    status: String!
+    message: String
+}
+
+input ForgotPasswordInput {
+    email: String!
+}
+
+input NewPasswordWithCodeInput {
+    email: String!
+    token: String!
+    password: String!
+    password_confirmation: String!
+}
