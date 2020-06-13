@@ -88,6 +88,10 @@
                     }
                 })
                     .then(response => {
+                        if (! response) {
+                            return;
+                        }
+
                         this.logs = response.data.logs.data;
                         this.lastPage = response.data.logs.last_page;
                         this.total = response.data.logs.total;

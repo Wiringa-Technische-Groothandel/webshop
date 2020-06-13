@@ -26,21 +26,25 @@ router.beforeEach((to, from, next) => {
 
 axios.interceptors.response.use(null, (error) => {
     if (error.config && error.response && error.response.status === 401) {
-        return auth.refreshToken().then((data) => {
+        return auth.refreshToken(true)
+            .then((data) => {
+                if (! data.success) {
+                    store.commit('auth/logout');
 
-            store.commit('auth/login', {
-                token: data.token,
-                expires_at: data.expires_at
-            });
+                    Promise.reject(error);
+                } else {
+                    store.commit('auth/login', {
+                        token: data.token,
+                        expires_at: data.expires_at
+                    });
 
-            error.config.headers.Authorization = `Bearer ${data.token}`;
+                    error.config.headers.Authorization = `Bearer ${data.token}`;
 
-            return axios.request(error.config);
-        }).catch(error => {
-            if (error.response && error.response.data.logout) {
+                    return axios.request(error.config);
+                }
+            }).catch(error => {
                 store.commit('auth/logout');
-            }
-        })
+            })
     }
 
     return Promise.reject(error);
