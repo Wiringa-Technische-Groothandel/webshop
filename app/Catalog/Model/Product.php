@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Intervention\Image\Facades\Image;
@@ -53,6 +54,13 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
         'id',
         'is_web',
         'description',
+    ];
+
+    /**
+     * @var string[]
+     */
+    protected $with = [
+        'description'
     ];
 
     /**
@@ -399,7 +407,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     /**
      * Get the product vat.
      *
-     * @return float
+     * @return string
      */
     public function getVat(): string
     {
@@ -611,10 +619,16 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
 
             if (is_array($field)) {
                 foreach ($field as $f) {
-                    $values[] = $this->$f;
+                    $values[] = $this->getAttribute($f);
+                }
+            } elseif (str_contains($field, '.')) {
+                $values = Arr::get($this->toArray(), $field);
+
+                if (!is_array($values)) {
+                    $values = [$values];
                 }
             } else {
-                $values = [$this->$field];
+                $values = [$this->getAttributeValue($field)];
             }
 
             $searchableArray[$name] = join(' ', $values);
@@ -639,6 +653,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
             'type',
             'ean',
             'supplier_code',
+            'long_description' => 'description.value'
         ];
     }
 
@@ -794,7 +809,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     {
         return cache()->remember(
             'product-stock-' . $this->getSku(),
-            3600,
+            60 * 5,
             function () {
                 /** @var StockManager $stockManager */
                 $stockManager = app(StockManager::class);

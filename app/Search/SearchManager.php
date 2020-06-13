@@ -75,11 +75,13 @@ class SearchManager
         $query->with('priceFactor');
 
         $paginator = $query->paginate(10, ['*'], 'page', $page);
-        $paginator->appends([
-            'brand' => $brand,
-            'series' => $series,
-            'type' => $type
-        ]);
+        $paginator->appends(
+            [
+                'brand'  => $brand,
+                'series' => $series,
+                'type'   => $type,
+            ]
+        );
 
         return collect(
             [
@@ -201,6 +203,7 @@ class SearchManager
                         'series^1.5',
                         'type^1',
                         'supplier_code^1',
+                        'long_description^0.7',
                     ],
                     'fuzziness'            => $fuzzy ? 'AUTO' : 0,
                     'minimum_should_match' => '95%',
@@ -219,6 +222,7 @@ class SearchManager
                         'series^1.5',
                         'type^1',
                         'supplier_code^1',
+                        'long_description^0.7',
                     ],
                     'fuzziness'            => $fuzzy ? 'AUTO' : 0,
                     'minimum_should_match' => '1',
@@ -236,7 +240,14 @@ class SearchManager
                     'should' => $terms['optional'] ? [
                         'multi_match' => [
                             'query'     => $terms['optional'],
-                            'fields'    => ['description^1.5', 'brand^1', 'series^1.5', 'type^1', 'supplier_code^1'],
+                            'fields'    => [
+                                'description^1.5',
+                                'brand^1',
+                                'series^1.5',
+                                'type^1',
+                                'supplier_code^1',
+                                'long_description^0.7',
+                            ],
                             'fuzziness' => $fuzzy ? 'AUTO' : 0,
                             'operator'  => 'or',
                         ],

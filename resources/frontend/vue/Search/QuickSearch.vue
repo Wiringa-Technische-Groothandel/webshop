@@ -34,6 +34,8 @@
 </template>
 
 <script>
+    import {debounce} from 'lodash'
+
     export default {
         props: {
             searchUrl: {
@@ -67,34 +69,70 @@
                 this.items = [];
                 this.totalItems = 0;
             },
-            search () {
-                let query = this.inputQuery;
+            search: debounce(
+                function () {
+                    let query = this.inputQuery;
 
-                if (query.length < 1) {
-                    this.$data.showSuggestions = false;
+                    if (query.length < 1) {
+                        this.$data.showSuggestions = false;
 
-                    return;
-                }
+                        return;
+                    }
 
-                axios.post(this.searchUrl, {
+                    axios.post(this.searchUrl, {
                         query: query
                     })
-                    .then((response) => {
-                        if (query !== this.inputQuery) {
-                            return;
-                        }
+                        .then((response) => {
+                            if (query !== this.inputQuery) {
+                                return;
+                            }
 
-                        this.items = response.data.products;
-                        this.totalItems = this.items.length;
-                        this.$data.showSuggestions = response.data.totalItems > 0;
-                    })
-                    .catch((error) => {
-                        this.$root.$emit('send-notify', {
-                            text: error.response.data.message,
-                            success: false
+                            this.items = response.data.products;
+                            this.totalItems = this.items.length;
+                            this.$data.showSuggestions = response.data.totalItems > 0;
+                        })
+                        .catch((error) => {
+                            this.$root.$emit('send-notify', {
+                                text: error.response.data.message,
+                                success: false
+                            });
                         });
-                    });
-            }
+                },
+                250
+            )
+            // search () {
+            //     let query = this.inputQuery;
+            //
+            //     if (query.length < 1) {
+            //         this.$data.showSuggestions = false;
+            //
+            //         return;
+            //     }
+            //
+            //     _.debounce(
+            //         () => {
+            //             axios.post(this.searchUrl, {
+            //                 query: query
+            //             })
+            //                 .then((response) => {
+            //                     if (query !== this.inputQuery) {
+            //                         return;
+            //                     }
+            //
+            //                     this.items = response.data.products;
+            //                     this.totalItems = this.items.length;
+            //                     this.$data.showSuggestions = response.data.totalItems > 0;
+            //                 })
+            //                 .catch((error) => {
+            //                     this.$root.$emit('send-notify', {
+            //                         text: error.response.data.message,
+            //                         success: false
+            //                     });
+            //                 });
+            //         },
+            //         250
+            //     );
+            // }
         }
     }
 </script>

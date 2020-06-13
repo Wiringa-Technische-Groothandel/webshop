@@ -98,6 +98,8 @@ window.vm = new Vue({
         });
     },
     mounted() {
+        const vueLoadedEvent = new Event('vue-loaded');
+
         document.body.style.opacity = "1";
 
         $(document).ready(function () {
@@ -116,5 +118,6 @@ window.vm = new Vue({
         checkInputLabelStates();
 
         this.$emit('vue-loaded');
+        window.dispatchEvent(vueLoadedEvent);
     }
 });

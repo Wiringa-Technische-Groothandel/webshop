@@ -9,12 +9,12 @@ const KEY_TOKEN_EXPIRY = 'admin-token-expiry';
  *
  * @returns {Promise<string|boolean|*>}
  */
-export const refreshToken = async () => {
+export const refreshToken = async (force = false) => {
     if (! hasAccessToken()) {
         return false;
     }
 
-    if (! isTokenExpired()) {
+    if (! isTokenExpired() && !force) {
         return getAccessToken();
     }
 

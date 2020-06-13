@@ -33,23 +33,23 @@ export default {
             state.expires_at = expires_at;
         },
         refresh(state) {
-            auth.refreshToken().then((data) => {
-                state.isLoggedIn = true;
-                state.token = data.token;
-                state.expires_at = data.expires_at;
-            });
+            auth.refreshToken()
+                .then((data) => {
+                    state.isLoggedIn = true;
+                    state.token = data.token;
+                    state.expires_at = data.expires_at;
+                });
         },
         logout(state) {
             if (!state.isLoggedIn) {
                 return;
             }
 
-            auth.logout()
-                .then(() => {
-                    state.isLoggedIn = false;
-                    state.token = '';
-                    state.expires_at = '';
-                });
+            state.isLoggedIn = false;
+            state.token = '';
+            state.expires_at = '';
+
+            auth.logout();
         }
     }
 }
