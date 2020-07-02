@@ -76,6 +76,30 @@ class ProductManager
     }
 
     /**
+     * Get the related products for a product.
+     *
+     * @param ProductInterface $product
+     * @return Collection
+     */
+    public function getRelatedProducts(ProductInterface $product): Collection
+    {
+        $relatedProducts = array_filter(explode(',', $product->getRelated()));
+        $products = collect();
+
+        foreach ($relatedProducts as $relatedProduct) {
+            try {
+                $product = $this->find($relatedProduct);
+            } catch (ModelNotFoundException $exception) {
+                continue;
+            }
+
+            $products->push($product);
+        }
+
+        return $products;
+    }
+
+    /**
      * Delete a product.
      *
      * @param int $id

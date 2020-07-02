@@ -1,5 +1,7 @@
 @extends('layouts.main')
 
+@inject('productManager', 'WTG\Catalog\ProductManager')
+
 @section('title', __(':product', [ 'product' => $product->getName() ]))
 
 @section('content')
@@ -70,13 +72,31 @@
                 </div>
             @endif
 
-            <div class="col-12 col-md-8 offset-md-4">
+            <div class="col-12 col-md-8 offset-md-4 mb-3">
                 @if ($product->getDescription())
                     @include('components.catalog.product.description')
                 @endif
 
                 @include('components.catalog.product.details')
             </div>
+
+            @php
+                $relatedProducts = $productManager->getRelatedProducts($product)
+            @endphp
+
+            @if ($relatedProducts->isNotEmpty())
+                <div class="col-12 col-sm-8 offset-sm-4">
+                    <h4>{{ _('Gerelateerde producten') }}</h4>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-12">
+                            @include('components.catalog.products', [ 'products' => $relatedProducts, 'withImage' => false ])
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 @endsection

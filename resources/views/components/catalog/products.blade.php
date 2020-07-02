@@ -1,15 +1,18 @@
+@php($withImage = $withImage ?? true)
+
 @foreach ($products as $product)
     <div class="product-listing" id="product-{{ $product->getId() }}">
         <div class="row">
-            <div class="col-2 d-none d-sm-block">
-                <div class="product-thumbnail">
-                    <img src="{{ $product->getImageUrl(\WTG\Catalog\Model\Product::IMAGE_SIZE_MEDIUM) }}" class="img-thumbnail">
+            @if ($withImage)
+                <div class="col-2 d-none d-sm-block">
+                    <div class="product-thumbnail">
+                        <img src="{{ $product->getImageUrl(\WTG\Catalog\Model\Product::IMAGE_SIZE_MEDIUM) }}" class="img-thumbnail">
+                    </div>
                 </div>
-            </div>
+            @endif
 
-            <div class="col-12 col-sm-7">
-                <a class="product-name d-block mb-2"
-                   href="{{ $product->getUrl() }}">
+            <div class="col-12 {{ $withImage ? 'col-sm-7' : 'col-sm-9' }}">
+                <a class="product-name d-block mb-2" href="{{ $product->getUrl() }}">
                     {{ $product->getName() }}
                 </a>
 
