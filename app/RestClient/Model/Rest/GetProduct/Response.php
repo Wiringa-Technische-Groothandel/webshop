@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace WTG\RestClient\Model\Rest\GetProduct;
 
 use Illuminate\Log\LogManager;
-use Psr\Http\Message\ResponseInterface as GuzzleResponseInterface;
-use WTG\RestClient\Api\Model\Rest\GetProductInterface;
 use WTG\RestClient\Model\Parser\ProductParser;
 use WTG\RestClient\Model\Rest\AbstractResponse;
 use WTG\RestClient\Model\Rest\ProductResponse;
@@ -17,47 +15,34 @@ use WTG\RestClient\Model\Rest\ProductResponse;
  * @package     WTG\RestClient
  * @author      Thomas Wiringa <thomas.wiringa@gmail.com>
  */
-class Response extends AbstractResponse implements GetProductInterface
+class Response extends AbstractResponse
 {
-    /**
-     * @var ProductParser
-     */
+    public ProductResponse $product;
+
     protected ProductParser $productParser;
 
     /**
      * Response constructor.
      *
-     * @param GuzzleResponseInterface $guzzleResponse
+     * @param array $responseData
      * @param LogManager $logManager
      * @param ProductParser $productParser
      */
     public function __construct(
-        GuzzleResponseInterface $guzzleResponse,
+        array $responseData,
         LogManager $logManager,
         ProductParser $productParser
     ) {
-        parent::__construct($guzzleResponse, $logManager);
-
         $this->productParser = $productParser;
+
+        parent::__construct($responseData, $logManager);
     }
 
     /**
-     * Get products from the response.
-     *
-     * @return ProductResponse
+     * @inheritDoc
      */
-    public function getProduct(): ProductResponse
+    public function parse(): void
     {
-        return $this->productParser->parse($this->toArray());
-    }
-
-    /**
-     * Get raw, unmapped product from the response.
-     *
-     * @return array
-     */
-    public function getRawProduct(): array
-    {
-        return $this->toArray();
+        $this->product = $this->productParser->parse($this->responseData);
     }
 }

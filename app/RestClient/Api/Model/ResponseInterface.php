@@ -14,26 +14,11 @@ namespace WTG\RestClient\Api\Model;
 interface ResponseInterface
 {
     /**
-     * Transform the response into an array.
+     * Parse the response data.
      *
-     * @return array
+     * @return void
      */
-    public function toArray(): array;
-
-    /**
-     * @return bool
-     */
-    public function isSuccess(): bool;
-
-    /**
-     * @return int
-     */
-    public function getStatusCode(): int;
-
-    /**
-     * @return string
-     */
-    public function getBody(): string;
+    public function parse(): void;
 
     /**
      * @return array

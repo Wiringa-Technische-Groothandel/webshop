@@ -6,8 +6,6 @@ namespace WTG\RestClient\Model\Rest\GetProducts;
 
 use Illuminate\Log\LogManager;
 use Illuminate\Support\Collection;
-use Psr\Http\Message\ResponseInterface as GuzzleResponseInterface;
-use WTG\RestClient\Api\Model\Rest\GetProductsInterface;
 use WTG\RestClient\Model\Parser\ProductParser;
 use WTG\RestClient\Model\Rest\AbstractResponse;
 
@@ -17,55 +15,42 @@ use WTG\RestClient\Model\Rest\AbstractResponse;
  * @package     WTG\RestClient
  * @author      Thomas Wiringa <thomas.wiringa@gmail.com>
  */
-class Response extends AbstractResponse implements GetProductsInterface
+class Response extends AbstractResponse
 {
-    /**
-     * @var ProductParser
-     */
+    public Collection $products;
+
     protected ProductParser $productParser;
 
     /**
      * Response constructor.
      *
-     * @param GuzzleResponseInterface $guzzleResponse
+     * @param array $responseData
      * @param LogManager $logManager
      * @param ProductParser $productParser
      */
     public function __construct(
-        GuzzleResponseInterface $guzzleResponse,
+        array $responseData,
         LogManager $logManager,
         ProductParser $productParser
     ) {
-        parent::__construct($guzzleResponse, $logManager);
-
         $this->productParser = $productParser;
+
+        parent::__construct($responseData, $logManager);
     }
 
     /**
-     * Get products from the response.
-     *
-     * @return Collection
+     * @inheritDoc
      */
-    public function getProducts(): Collection
+    public function parse(): void
     {
         $products = collect();
 
-        foreach ($this->toArray() as $item) {
+        foreach ($this->responseData as $item) {
             $products->push(
                 $this->productParser->parse($item)
             );
         }
 
-        return $products;
-    }
-
-    /**
-     * Get raw, unmapped products from the response.
-     *
-     * @return Collection
-     */
-    public function getRawProducts(): Collection
-    {
-        return collect($this->toArray());
+        $this->products = $products;
     }
 }

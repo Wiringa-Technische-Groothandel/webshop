@@ -7,6 +7,7 @@ namespace WTG\RestClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use WTG\RestClient\Api\RestManagerInterface;
 
 /**
  * RestClient service provider.
@@ -21,6 +22,8 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind(RestManagerInterface::class, RestManager::class);
+
         $this->app->bind(
             ClientInterface::class,
             function () {
