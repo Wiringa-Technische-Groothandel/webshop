@@ -62,7 +62,7 @@ class StockManager
         /** @var GetProductStocksResponse $response */
         $response = $this->restManager->handle($request);
 
-        return $response->getStocks();
+        return $response->stocks;
     }
 
     /**
@@ -83,6 +83,6 @@ class StockManager
         /** @var GetProductStocksResponse $response */
         $response = $this->restManager->handle($request);
 
-        return $response->getStocks()->first();
+        return $response->stocks->first();
     }
 }

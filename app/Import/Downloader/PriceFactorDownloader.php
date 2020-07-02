@@ -61,11 +61,11 @@ class PriceFactorDownloader implements BulkDownloaderInterface
                     new GetPriceApplicationsRequest($this->getOffset(), $this->getLimit(), 'PriceType EQ "VERK"')
                 );
 
-                if ($response->getPriceFactors()->isEmpty()) {
+                if ($response->priceFactors->isEmpty()) {
                     break;
                 }
 
-                yield $response->getPriceFactors();
+                yield $response->priceFactors;
 
                 $this->setOffset($this->getOffset() + $this->getLimit());
             }

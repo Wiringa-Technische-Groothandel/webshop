@@ -807,6 +807,10 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     public function getStock(): ?array
     {
+        if (app()->runningInConsole()) {
+            return null;
+        }
+
         return cache()->remember(
             'product-stock-' . $this->getSku(),
             60 * 5,

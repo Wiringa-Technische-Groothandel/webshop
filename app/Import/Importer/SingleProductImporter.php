@@ -22,35 +22,14 @@ use WTG\Import\Processor\ProductProcessor;
  */
 class SingleProductImporter implements ImporterInterface
 {
-    /**
-     * @var ProductDownloader
-     */
     protected ProductDownloader $downloader;
-
-    /**
-     * @var ProductProcessor
-     */
     protected ProductProcessor $processor;
-
-    /**
-     * @var LogManager
-     */
     protected LogManager $logManager;
-
-    /**
-     * @var DatabaseManager
-     */
     protected DatabaseManager $databaseManager;
-
-    /**
-     * @var ProductManager
-     */
     protected ProductManager $productManager;
 
-    /**
-     * @var string
-     */
-    private string $sku;
+    private ?string $sku = null;
+    private ?string $erpIp = null;
 
     /**
      * MultiProductImporter constructor.
@@ -83,17 +62,28 @@ class SingleProductImporter implements ImporterInterface
      */
     public function import(): void
     {
+        $product = null;
+
         try {
             $this->databaseManager->beginTransaction();
 
-            $this->logManager->info("[Single product importer] Loading product from database");
-            $product = $this->productManager->find($this->sku, ProductInterface::FIELD_SKU, true);
+            if ($this->sku) {
+                $this->logManager->info("[Single product importer] Loading product from database");
+                $product = $this->productManager->find($this->sku, ProductInterface::FIELD_SKU, true);
+
+                $this->erpIp = $product->getErpId();
+            }
+
+            if (! $this->erpIp) {
+                throw new \Exception("Missing erp ID");
+            }
 
             $this->logManager->info("[Single product importer] Fetching fresh product data from API");
-            $this->downloader->setId($product->getErpId());
+            $this->downloader->setId($this->erpIp);
+
             $downloadResponse = $this->downloader->download();
 
-            $responseProduct = $downloadResponse->getProduct();
+            $responseProduct = $downloadResponse->product;
 
             $this->logManager->info("[Single product importer] Processing response product data");
             $this->processor->process(
@@ -115,6 +105,17 @@ class SingleProductImporter implements ImporterInterface
     public function setSku(string $sku): self
     {
         $this->sku = $sku;
+
+        return $this;
+    }
+
+    /**
+     * @param string $erpIp
+     * @return $this
+     */
+    public function setErpIp(string $erpIp): self
+    {
+        $this->erpIp = $erpIp;
 
         return $this;
     }

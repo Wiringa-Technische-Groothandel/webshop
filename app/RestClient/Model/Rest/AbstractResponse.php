@@ -16,26 +16,21 @@ use WTG\RestClient\Api\Model\ResponseInterface;
  */
 abstract class AbstractResponse implements ResponseInterface
 {
-    /**
-     * @var GuzzleResponseInterface
-     */
-    protected GuzzleResponseInterface $guzzleResponse;
-
-    /**
-     * @var LogManager
-     */
+    protected array $responseData;
     protected LogManager $logManager;
 
     /**
      * Response constructor.
      *
-     * @param GuzzleResponseInterface $guzzleResponse
+     * @param array $responseData
      * @param LogManager $logManager
      */
-    public function __construct(GuzzleResponseInterface $guzzleResponse, LogManager $logManager)
+    public function __construct(array $responseData, LogManager $logManager)
     {
-        $this->guzzleResponse = $guzzleResponse;
+        $this->responseData = $responseData;
         $this->logManager = $logManager;
+
+        $this->parse();
     }
 
     /**
@@ -43,59 +38,7 @@ abstract class AbstractResponse implements ResponseInterface
      */
     public function __toArray(): array
     {
-        return $this->toArray();
-    }
-
-    /**
-     * @return array
-     */
-    public function toArray(): array
-    {
-        if (! $this->isSuccess()) {
-            $this->logManager->warning(
-                sprintf(
-                    '[WTG RestClient] Warning: Failed request with code %d, response: %s',
-                    $this->getStatusCode(),
-                    $this->getBody()
-                )
-            );
-
-            return [];
-        }
-
-        return json_decode($this->getBody(), true) ?: [];
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSuccess(): bool
-    {
-        return $this->getStatusCode() >= 200 && $this->getStatusCode() < 300;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStatusCode(): int
-    {
-        return $this->getGuzzleResponse()->getStatusCode();
-    }
-
-    /**
-     * @return GuzzleResponseInterface
-     */
-    public function getGuzzleResponse(): GuzzleResponseInterface
-    {
-        return $this->guzzleResponse;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBody(): string
-    {
-        return (string)$this->getGuzzleResponse()->getBody();
+        return $this->responseData;
     }
 
     /**
@@ -103,6 +46,6 @@ abstract class AbstractResponse implements ResponseInterface
      */
     public function __toString(): string
     {
-        return json_encode($this->toArray());
+        return json_encode($this->responseData);
     }
 }

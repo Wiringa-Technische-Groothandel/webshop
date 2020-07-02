@@ -12,38 +12,11 @@ namespace WTG\RestClient\Model\Rest\GetProductPrices\Response;
  */
 class Price
 {
-    /**
-     * @var string
-     */
     public string $sku;
-
-    /**
-     * @var float
-     */
     public float $discount;
-
-    /**
-     * @var bool
-     */
     public bool $actionPrice;
-
-    /**
-     * @var float
-     */
     public float $netPrice;
-
-    /**
-     * @var float
-     */
     public float $grossPrice;
-
-    /**
-     * @var float
-     */
     public float $pricePer;
-
-    /**
-     * @var float
-     */
     public float $priceFactor;
 }

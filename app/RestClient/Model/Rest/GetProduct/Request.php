@@ -16,7 +16,6 @@ use WTG\RestClient\Model\Rest\AbstractRequest;
 class Request extends AbstractRequest implements RequestInterface
 {
     private string $id;
-
     private string $select;
 
     /**

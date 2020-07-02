@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace WTG\Catalog;
 
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Collection;
 use WTG\RestClient\Model\Rest\GetProductPrices\Request as GetProductPricesRequest;
@@ -47,7 +46,6 @@ class PriceManager
      * @param string $debtor
      * @param Collection $products
      * @return Collection
-     * @throws GuzzleException
      * @throws BindingResolutionException
      */
     public function fetchPrices(string $debtor, Collection $products): Collection
@@ -62,7 +60,7 @@ class PriceManager
         /** @var GetProductPricesResponse $response */
         $response = $this->restManager->handle($request);
 
-        return $response->getPrices();
+        return $response->prices;
     }
 
     /**
@@ -73,7 +71,6 @@ class PriceManager
      * @param float $qty
      * @return null|GetProductPricesResponse\Price
      * @throws BindingResolutionException
-     * @throws GuzzleException
      */
     public function fetchPrice(string $debtor, string $sku, float $qty): ?GetProductPricesResponse\Price
     {
@@ -86,6 +83,6 @@ class PriceManager
         /** @var GetProductPricesResponse $response */
         $response = $this->restManager->handle($request);
 
-        return $response->getPrices()->first();
+        return $response->prices->first();
     }
 }

@@ -76,7 +76,7 @@ class ProductParser
                     $product->type = $value;
                     break;
                 case 'TBH':
-                    $product->related = $value;
+                    $product->related = $value ?: null;
                     break;
                 case 'WEB':
                     $product->isWeb = (bool)$value;

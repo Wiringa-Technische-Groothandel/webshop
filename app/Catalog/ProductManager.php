@@ -22,6 +22,7 @@ class ProductManager
      * @param string $field
      * @param bool $withTrashed
      * @return Product
+     * @throws ModelNotFoundException
      */
     public function find(string $value, string $field = ProductInterface::FIELD_SKU, bool $withTrashed = false): Product
     {
@@ -72,5 +73,40 @@ class ProductManager
                 'sku' => $product->getSku(),
             ]
         );
+    }
+
+    /**
+     * Get the related products for a product.
+     *
+     * @param ProductInterface $product
+     * @return Collection
+     */
+    public function getRelatedProducts(ProductInterface $product): Collection
+    {
+        $relatedProducts = array_filter(explode(',', $product->getRelated()));
+        $products = collect();
+
+        foreach ($relatedProducts as $relatedProduct) {
+            try {
+                $product = $this->find($relatedProduct);
+            } catch (ModelNotFoundException $exception) {
+                continue;
+            }
+
+            $products->push($product);
+        }
+
+        return $products;
+    }
+
+    /**
+     * Delete a product.
+     *
+     * @param int $id
+     * @return void
+     */
+    public function delete(int $id)
+    {
+        Product::query()->where('id', $id)->delete();
     }
 }
