@@ -26,15 +26,6 @@
                 </div>
             </template>
 
-            <template v-else-if="netPrice && showSinglePrice">
-                <div class="net-price">
-                    Bruto / Netto:
-                    <span class="d-block d-sm-inline">
-                        <i class="fas fa-euro-sign"></i> <span>{{ formatPrice(netPrice) }}</span>
-                    </span>
-                </div>
-            </template>
-
             <template v-else-if="netPrice && grossPrice">
                 <div class="gross-price">
                     Bruto:
@@ -44,7 +35,7 @@
                 </div>
 
                 <div class="net-price">
-                    Netto:
+                    Uw prijs:
                     <span class="d-block d-sm-inline">
                         <i class="fas fa-euro-sign"></i> <span>{{ formatPrice(calculatePrice(netPrice)) }}</span>
                     </span>
@@ -86,11 +77,6 @@
                 grossPrice: false,
                 pricePer: false,
                 action: false
-            }
-        },
-        computed: {
-            showSinglePrice() {
-                return !this.action && this.netPrice === this.grossPrice
             }
         },
         methods: {
