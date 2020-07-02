@@ -23,7 +23,7 @@ class Products extends AbstractImportCommand
     /**
      * @var string
      */
-    protected $description = 'Update the products';
+    protected $description = 'Run a full product import';
 
     /**
      * Products constructor.

@@ -15,6 +15,7 @@ use WTG\Foundation\Logging\LogManager;
 use WTG\RestClient\Api\Model\RequestInterface;
 use WTG\RestClient\Api\Model\ResponseInterface;
 use WTG\RestClient\Api\RestManagerInterface;
+use WTG\RestClient\Model\Rest\ErrorResponse;
 
 /**
  * Rest manager.
@@ -62,7 +63,9 @@ class RestManager implements RestManagerInterface
      */
     public function handle(RequestInterface $request): ResponseInterface
     {
-        $options = [];
+        $options = [
+            RequestOptions::HTTP_ERRORS => false,
+        ];
 
         if ($request->params()) {
             $options[RequestOptions::QUERY] = $request->params();
@@ -90,10 +93,30 @@ class RestManager implements RestManagerInterface
         } catch (GuzzleException $e) {
             $this->logManager->alert($e);
 
-            throw $e;
+            return $this->createErrorResponse($e);
+        }
+
+        if (! $this->isSuccess($guzzleResponse)) {
+            $this->logManager->warning(
+                sprintf(
+                    '[WTG RestClient] Warning: Failed request with code %d, response: %s',
+                    $guzzleResponse->getStatusCode(),
+                    $guzzleResponse->getBody()
+                )
+            );
         }
 
         return $this->createResponse($request, $guzzleResponse);
+    }
+
+    /**
+     * @param null|GuzzleResponseInterface $guzzleResponse
+     * @return bool
+     */
+    protected function isSuccess(?GuzzleResponseInterface $guzzleResponse): bool
+    {
+        return $guzzleResponse === null ? false :
+            $guzzleResponse->getStatusCode() >= 200 && $guzzleResponse->getStatusCode() < 300;
     }
 
     /**
@@ -126,8 +149,19 @@ class RestManager implements RestManagerInterface
         return $this->app->make(
             $generatedResponseClassNamespace,
             [
-                'guzzleResponse' => $guzzleResponse,
+                'responseData' => json_decode((string) $guzzleResponse->getBody(), true) ?: [],
             ]
         );
+    }
+
+    /**
+     * Create an error response.
+     *
+     * @param GuzzleException $e
+     * @return ErrorResponse
+     */
+    protected function createErrorResponse(GuzzleException $e): ErrorResponse
+    {
+        return new ErrorResponse($e);
     }
 }

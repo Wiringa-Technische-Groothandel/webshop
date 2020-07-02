@@ -6,8 +6,6 @@ namespace WTG\RestClient\Model\Rest\GetProductStocks;
 
 use Illuminate\Log\LogManager;
 use Illuminate\Support\Collection;
-use Psr\Http\Message\ResponseInterface as GuzzleResponseInterface;
-use WTG\RestClient\Api\Model\Rest\GetProductStocksInterface;
 use WTG\RestClient\Model\Parser\StockParser;
 use WTG\RestClient\Model\Rest\AbstractResponse;
 
@@ -17,55 +15,42 @@ use WTG\RestClient\Model\Rest\AbstractResponse;
  * @package     WTG\RestClient
  * @author      Thomas Wiringa <thomas.wiringa@gmail.com>
  */
-class Response extends AbstractResponse implements GetProductStocksInterface
+class Response extends AbstractResponse
 {
-    /**
-     * @var StockParser
-     */
+    public Collection $stocks;
+
     protected StockParser $stockParser;
 
     /**
      * Response constructor.
      *
-     * @param GuzzleResponseInterface $guzzleResponse
+     * @param array $responseData
      * @param LogManager $logManager
      * @param StockParser $stockParser
      */
     public function __construct(
-        GuzzleResponseInterface $guzzleResponse,
+        array $responseData,
         LogManager $logManager,
         StockParser $stockParser
     ) {
-        parent::__construct($guzzleResponse, $logManager);
-
         $this->stockParser = $stockParser;
+
+        parent::__construct($responseData, $logManager);
     }
 
     /**
-     * Get products from the response.
-     *
-     * @return Collection
+     * @inheritDoc
      */
-    public function getStocks(): Collection
+    public function parse(): void
     {
-        $prices = collect();
+        $stocks = collect();
 
-        foreach ($this->toArray()['resultData'] as $price) {
-            $prices->push(
-                $this->stockParser->parse($price)
+        foreach ($this->responseData['resultData'] as $stock) {
+            $stocks->push(
+                $this->stockParser->parse($stock)
             );
         }
 
-        return $prices;
-    }
-
-    /**
-     * Get raw, unmapped product from the response.
-     *
-     * @return Collection
-     */
-    public function getRawStocks(): Collection
-    {
-        return collect($this->toArray());
+        $this->stocks = $stocks;
     }
 }

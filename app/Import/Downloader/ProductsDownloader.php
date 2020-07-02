@@ -61,11 +61,11 @@ class ProductsDownloader implements BulkDownloaderInterface
                     new GetProductsRequest($this->getOffset(), $this->getLimit())
                 );
 
-                if ($response->getProducts()->isEmpty()) {
+                if ($response->products->isEmpty()) {
                     break;
                 }
 
-                yield $response->getProducts();
+                yield $response->products;
 
                 $this->setOffset($this->getOffset() + $this->getLimit());
             }
