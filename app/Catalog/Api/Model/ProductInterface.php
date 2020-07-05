@@ -6,7 +6,6 @@ namespace WTG\Catalog\Api\Model;
 
 use Illuminate\Support\Collection;
 use WTG\Catalog\Model\Pack;
-use WTG\Catalog\Model\PriceFactor;
 use WTG\Contracts\Models\DescriptionContract;
 
 /**
@@ -17,7 +16,6 @@ use WTG\Contracts\Models\DescriptionContract;
  */
 interface ProductInterface
 {
-    public const FIELD_PRICE_FACTOR = 'priceFactor';
     public const FIELD_PACK = 'pack';
     public const FIELD_TYPE = 'type';
     public const FIELD_SERIES = 'series';
@@ -49,13 +47,6 @@ interface ProductInterface
      * @return null|DescriptionContract
      */
     public function getDescription(): ?DescriptionContract;
-
-    /**
-     * Get the price factor related model.
-     *
-     * @return PriceFactor
-     */
-    public function getPriceFactor(): PriceFactor;
 
     /**
      * Is this product a pack product.

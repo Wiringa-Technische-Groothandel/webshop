@@ -25,14 +25,7 @@ use WTG\Catalog\Model\Product;
  */
 class PriceController extends Controller
 {
-    /**
-     * @var PriceManager
-     */
     protected PriceManager $priceManager;
-
-    /**
-     * @var ProductManager
-     */
     protected ProductManager $productManager;
 
     /**
@@ -78,7 +71,7 @@ class PriceController extends Controller
 
         try {
             $price = $this->priceManager->fetchPrice($customerNumber, $sku, 1.0);
-        } catch (GuzzleException | BindingResolutionException $e) {
+        } catch (BindingResolutionException $e) {
             return response()->json(
                 [
                     'message' => __('Geen prijs gevonden voor het opgegeven product.'),
@@ -103,8 +96,8 @@ class PriceController extends Controller
         return response()->json(
             [
                 'pricePer'   => __(''),
-                'grossPrice' => $price->grossPrice * $product->getPriceFactor()->getPriceFactor(),
-                'netPrice'   => $price->netPrice * $product->getPriceFactor()->getPriceFactor(),
+                'grossPrice' => ($price->grossPrice * $price->priceFactor) / $price->pricePer,
+                'netPrice'   => ($price->netPricePerUnit * $price->priceFactor) / $price->pricePer,
                 'action'     => $price->actionPrice,
                 'message'    => '',
                 'code'       => 200,
@@ -119,7 +112,6 @@ class PriceController extends Controller
      * @param FetchPriceRequest $request
      * @return JsonResponse
      * @throws BindingResolutionException
-     * @throws GuzzleException
      */
     public function postAction(FetchPriceRequest $request): JsonResponse
     {

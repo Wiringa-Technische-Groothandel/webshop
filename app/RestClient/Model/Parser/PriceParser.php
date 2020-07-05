@@ -25,10 +25,15 @@ class PriceParser
         $price = new Price();
         $price->sku = $item['productIdentifier']['productCode'];
         $price->netPrice = $item['nettPrice'];
+        $price->netPricePerUnit = $item['nettAmountPerUnit'];
+        $price->netTotal = $item['nettAmountTotal'];
         $price->grossPrice = $item['price'];
         $price->discount = $item['discount'];
         $price->actionPrice = $item['actionPrice'];
         $price->pricePer = $item['pricePerUnit'];
+        $price->priceFactor = $item['conversionFactor'];
+        $price->scaleUnit = unit_to_str($item['unitCode'], false);
+        $price->priceUnit = unit_to_str($item['priceUnit'], false);
 
         return $price;
     }

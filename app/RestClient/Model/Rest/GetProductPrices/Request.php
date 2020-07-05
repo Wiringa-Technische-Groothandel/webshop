@@ -86,6 +86,7 @@ class Request extends AbstractRequest implements RequestInterface
                 'productIdentifier' => [
                     'productCode' => (string)$product['sku'],
                 ],
+                'quantity'          => $product['quantity'],
                 'unitCode'          => $product['salesUnit'],
             ];
         }

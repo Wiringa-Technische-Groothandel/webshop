@@ -23,7 +23,6 @@ class IndexController extends Controller
     {
         Product::$withoutAppends = true;
         $products = Product::query()
-            ->without('priceFactor')
             ->get(['sku', 'group', 'name', 'created_at', 'updated_at']);
 
         return response()->json(

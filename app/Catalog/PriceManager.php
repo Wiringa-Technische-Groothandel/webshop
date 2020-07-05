@@ -6,6 +6,7 @@ namespace WTG\Catalog;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Collection;
+use WTG\Contracts\Models\CartItemContract;
 use WTG\RestClient\Model\Rest\GetProductPrices\Request as GetProductPricesRequest;
 use WTG\RestClient\Model\Rest\GetProductPrices\Response as GetProductPricesResponse;
 use WTG\RestClient\RestManager;
@@ -45,7 +46,7 @@ class PriceManager
      *
      * @param string $debtor
      * @param Collection $products
-     * @return Collection
+     * @return Collection|GetProductPricesResponse\Price[]
      * @throws BindingResolutionException
      */
     public function fetchPrices(string $debtor, Collection $products): Collection
@@ -55,6 +56,29 @@ class PriceManager
 
         foreach ($products->all() as $product) {
             $request->addProduct($product, 1);
+        }
+
+        /** @var GetProductPricesResponse $response */
+        $response = $this->restManager->handle($request);
+
+        return $response->prices;
+    }
+
+    /**
+     * Fetch prices for multiple products.
+     *
+     * @param string $debtor
+     * @param Collection|CartItemContract[] $cartItems
+     * @return Collection|GetProductPricesResponse\Price[]
+     * @throws BindingResolutionException
+     */
+    public function fetchCartPrices(string $debtor, Collection $cartItems): Collection
+    {
+        $request = new GetProductPricesRequest();
+        $request->setDebtorCode($debtor);
+
+        foreach ($cartItems as $cartItem) {
+            $request->addProduct($cartItem->product, $cartItem->getQuantity());
         }
 
         /** @var GetProductPricesResponse $response */

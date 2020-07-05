@@ -45,7 +45,7 @@
 
         <template v-if="!fetching && loggedIn">
             <small class="form-text text-muted price-per">
-                {{ product.price_per_str }}
+                {{ pricePerStr }}
             </small>
 
             <small class="form-text text-muted stock" v-html="product.stock_status"></small>
@@ -76,15 +76,34 @@
                 netPrice: false,
                 grossPrice: false,
                 pricePer: false,
-                action: false
+                action: false,
+                priceFactor: false,
+                priceUnit: false,
+                scaleUnit: false,
             }
         },
         methods: {
             calculatePrice(price) {
-                return (price * this.product.price_factor.price_factor) / this.pricePer;
+                return (price * this.priceFactor) / this.pricePer;
             },
             formatPrice(price) {
                 return price.toFixed(2)
+            }
+        },
+        computed: {
+            pricePerStr () {
+                if (this.priceUnit === 'DAG') {
+                    return 'Huurprijs per dag';
+                }
+
+                if (this.priceUnit === this.scaleUnit) {
+                    return 'Prijs per %1'.replace('%1', this.priceUnit);
+                }
+
+                return 'Prijs per %1 van %2 %3'
+                    .replace('%1', this.scaleUnit)
+                    .replace('%2', this.priceFactor)
+                    .replace('%3', this.priceUnit);
             }
         },
         created() {
@@ -104,6 +123,9 @@
                     this.grossPrice = data.grossPrice;
                     this.pricePer = data.pricePer;
                     this.action = data.action;
+                    this.priceFactor = data.priceFactor;
+                    this.priceUnit = data.priceUnit;
+                    this.scaleUnit = data.scaleUnit;
                 });
             } else {
                 this.fetching = false;

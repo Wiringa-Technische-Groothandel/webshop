@@ -191,11 +191,11 @@ class CartService implements CartServiceContract
         }
 
         try {
-            $prices = $this->priceManager->fetchPrices(
+            $prices = $this->priceManager->fetchCartPrices(
                 $this->authService->getCurrentCustomer()->getCompany()->getCustomerNumber(),
-                $items->pluck('product')
+                $items
             );
-        } catch (GuzzleException | Throwable $e) {
+        } catch (Throwable $e) {
             Log::error($e);
             Log::error('Failed to load prices for quote items: ' . $items->implode('id', ', '));
 
@@ -216,11 +216,8 @@ class CartService implements CartServiceContract
                     return $item;
                 }
 
-                $price->netPrice *= $item->getProduct()->getPriceFactor()->getPriceFactor();
-                $price->netPrice = $price->netPrice / $price->pricePer;
-
-                $item->setPrice($price->netPrice);
-                $item->setSubtotal($price->netPrice * $item->getQuantity());
+                $item->setPrice(($price->netPricePerUnit * $price->priceFactor) / $price->pricePer);
+                $item->setSubtotal(($price->netTotal * $price->priceFactor) / $price->pricePer);
                 $item->save();
 
                 return $item;

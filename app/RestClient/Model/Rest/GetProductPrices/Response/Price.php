@@ -13,9 +13,15 @@ namespace WTG\RestClient\Model\Rest\GetProductPrices\Response;
 class Price
 {
     public string $sku;
-    public float $discount;
+    public string $scaleUnit;
+    public string $priceUnit;
+
     public bool $actionPrice;
+
+    public float $discount;
     public float $netPrice;
+    public float $netPricePerUnit;
+    public float $netTotal;
     public float $grossPrice;
     public float $pricePer;
     public float $priceFactor;

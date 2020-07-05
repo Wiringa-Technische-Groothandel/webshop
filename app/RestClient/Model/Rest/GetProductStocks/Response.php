@@ -44,8 +44,9 @@ class Response extends AbstractResponse
     public function parse(): void
     {
         $stocks = collect();
+        $resultData = $this->responseData['resultData'] ?? [];
 
-        foreach ($this->responseData['resultData'] as $stock) {
+        foreach ($resultData as $stock) {
             $stocks->push(
                 $this->stockParser->parse($stock)
             );
