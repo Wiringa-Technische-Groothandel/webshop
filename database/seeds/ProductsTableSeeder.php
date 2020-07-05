@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use WTG\Catalog\Model\PriceFactor;
 use WTG\Catalog\Model\Product;
 
 /**
@@ -23,7 +22,7 @@ class ProductsTableSeeder extends Seeder
     public function run()
     {
         Product::withoutSyncingToSearch(function () {
-            $product = Product::create(
+            Product::create(
                 [
                     'id'            => 1,
                     'erp_id'        => '1234,STK',
@@ -46,18 +45,6 @@ class ProductsTableSeeder extends Seeder
                     'series'        => 'Bar',
                     'type'          => 'Baz',
                     'keywords'      => 'foo bar baz',
-                ]
-            );
-
-            PriceFactor::create(
-                [
-                    'id'           => 1,
-                    'erp_id'       => '1234,STK,FOO',
-                    'product_id'   => $product->getId(),
-                    'price_per'    => 1.0,
-                    'price_factor' => 2.0,
-                    'scale_unit'   => 'DS',
-                    'price_unit'   => 'STK',
                 ]
             );
         });

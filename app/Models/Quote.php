@@ -271,7 +271,7 @@ class Quote extends Model implements CartContract
     public function getItems(): Collection
     {
         if (! app()->has('cartItems')) {
-            $items = $this->items()->with('product.priceFactor')->get();
+            $items = $this->items()->with('product')->get();
 
             app()->instance('cartItems', $items);
         }

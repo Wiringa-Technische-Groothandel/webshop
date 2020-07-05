@@ -41,9 +41,10 @@ class Request extends AbstractRequest implements RequestInterface
     {
         return [
             'changeNumberStart' => $this->getLastChange(),
-            'requestNames' => [
+            'requestGroups' => [
                 [
-                    'requestName' => 'Products',
+                    'requestGroup' => 'Products',
+                    'standardGroup' => true,
                 ]
             ],
             'useFieldCodes' => true,

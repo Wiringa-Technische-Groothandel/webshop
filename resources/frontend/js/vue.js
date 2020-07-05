@@ -54,11 +54,14 @@ window.vm = new Vue({
                 .then((response) => {
                     response.data.payload.forEach((item) => {
                         this.$root.$emit('price-fetched-' + item.sku, {
-                            netPrice: item.netPrice,
+                            netPrice: item.netPricePerUnit,
                             grossPrice: item.grossPrice,
                             pricePer: item.pricePer,
                             stock: item.stock_string,
-                            action: item.actionPrice
+                            action: item.actionPrice,
+                            priceFactor: item.priceFactor,
+                            scaleUnit: item.scaleUnit,
+                            priceUnit: item.priceUnit,
                         });
                     });
                 })

@@ -40,9 +40,6 @@ class Kernel extends ConsoleKernel
         // Full product import
         $schedule->command('import:products')->dailyAt('4:00');
 
-        // Import price factors
-        $schedule->command('import:price-factors')->dailyAt('5:00');
-
         // Import product changes
         $schedule->command('import:product-changes')->between('7:00', '20:00');
 

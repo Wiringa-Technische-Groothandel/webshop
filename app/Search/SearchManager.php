@@ -72,8 +72,6 @@ class SearchManager
             ]
         );
 
-        $query->with('priceFactor');
-
         $paginator = $query->paginate(10, ['*'], 'page', $page);
         $paginator->appends(
             [
@@ -157,7 +155,6 @@ class SearchManager
                 ->query(
                     function (Builder $query) {
                         $query
-                            ->with('priceFactor')
                             ->where('inactive', 0)
                             ->where('blocked', 0);
                     }

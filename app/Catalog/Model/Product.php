@@ -68,7 +68,6 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     protected $appends = [
         'sales_unit_long',
-        'price_per_str',
         'stock',
         'stock_status',
     ];
@@ -109,26 +108,6 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     public function getDescription(): ?DescriptionContract
     {
         return $this->getAttribute(self::FIELD_DESCRIPTION);
-    }
-
-    /**
-     * Price factor relation.
-     *
-     * @return HasOne
-     */
-    public function priceFactor(): HasOne
-    {
-        return $this->hasOne(PriceFactor::class);
-    }
-
-    /**
-     * Get the price factor related model.
-     *
-     * @return PriceFactor
-     */
-    public function getPriceFactor(): PriceFactor
-    {
-        return $this->getAttribute(self::FIELD_PRICE_FACTOR) ?: new PriceFactor();
     }
 
     /**
@@ -865,45 +844,6 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     public function getSalesUnitLongAttribute(): string
     {
         return unit_to_str($this->getSalesUnit(), false);
-    }
-
-    /**
-     * Price per string accessor.
-     *
-     * @return string
-     * @throws Exception
-     */
-    public function getPricePerStrAttribute(): string
-    {
-        return $this->getPricePerStr();
-    }
-
-    /**
-     * @return string
-     */
-    public function getPricePerStr(): string
-    {
-        if (! $this->getPriceFactor()->getId()) {
-            return '';
-        }
-
-        if ($this->getPriceFactor()->getPriceUnit() === 'DAG') {
-            $pricePerString = sprintf('Huurprijs per dag');
-        } elseif ($this->getPriceFactor()->getScaleUnit() === $this->getPriceFactor()->getPriceUnit()) {
-            $pricePerString = sprintf(
-                'Prijs per %s',
-                unit_to_str($this->getPriceFactor()->getPriceUnit(), false)
-            );
-        } else {
-            $pricePerString = sprintf(
-                'Prijs per %s van %s %s',
-                unit_to_str($this->getPriceFactor()->getScaleUnit(), false),
-                $this->getPriceFactor()->getPriceFactor(),
-                unit_to_str($this->getPriceFactor()->getPriceUnit(), $this->getPriceFactor()->getPriceFactor() > 1)
-            );
-        }
-
-        return $pricePerString;
     }
 
     /**
