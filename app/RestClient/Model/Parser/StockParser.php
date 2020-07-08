@@ -35,6 +35,8 @@ class StockParser
         $stock->freeStockNoPurch = $item['freeStockNoPurch'];
         $stock->reservedStock = $item['reservedStock'];
 
+        $stock->displayStock = $item['availableStockBasedOnComponents'] ?: $item['availableStock'];
+
         return $stock;
     }
 }

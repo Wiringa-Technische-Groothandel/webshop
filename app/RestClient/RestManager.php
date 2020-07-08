@@ -29,16 +29,10 @@ class RestManager implements RestManagerInterface
      * @var ClientInterface
      */
     protected ClientInterface $httpClient;
-
-    /**
-     * @var Application
-     */
     protected Application $app;
-
-    /**
-     * @var LogManager
-     */
     protected LogManager $logManager;
+
+    private bool $offline = false;
 
     /**
      * AbstractService constructor.
@@ -65,6 +59,7 @@ class RestManager implements RestManagerInterface
     {
         $options = [
             RequestOptions::HTTP_ERRORS => false,
+            RequestOptions::TIMEOUT     => 5,
         ];
 
         if ($request->params()) {
@@ -84,26 +79,43 @@ class RestManager implements RestManagerInterface
             }
         }
 
+        if ($this->offline) {
+            $this->logManager->warning('Skipped sending REST API request ' . $request->path() . ' - API offline');
+
+            return $this->createErrorResponse('API offline');
+        }
+
         try {
+            $this->logManager->debug('Sending REST API request ' . $request->path());
+
             $guzzleResponse = $this->httpClient->request(
                 $request->type(),
                 $request->path(),
                 $options
             );
         } catch (GuzzleException $e) {
-            $this->logManager->alert($e);
+            $this->logManager->alert($e->getMessage());
 
-            return $this->createErrorResponse($e);
+            $this->offline = true;
+
+            return $this->createErrorResponse($e->getMessage());
         }
 
-        if (! $this->isSuccess($guzzleResponse)) {
+        if (!$this->isSuccess($guzzleResponse)) {
             $this->logManager->warning(
                 sprintf(
-                    '[WTG RestClient] Warning: Failed request with code %d, response: %s',
+                    '[WTG RestClient] Warning: Failed request %s with code %d, response: %s',
+                    $request->path(),
                     $guzzleResponse->getStatusCode(),
                     $guzzleResponse->getBody()
                 )
             );
+
+            if ($guzzleResponse->getStatusCode() === 401) {
+                $this->offline = true;
+
+                return $this->createErrorResponse('API offline');
+            }
         }
 
         return $this->createResponse($request, $guzzleResponse);
@@ -131,12 +143,13 @@ class RestManager implements RestManagerInterface
     protected function createResponse(
         RequestInterface $request,
         GuzzleResponseInterface $guzzleResponse
-    ): ResponseInterface {
+    ): ResponseInterface
+    {
         $fullNamespace = get_class($request);
         $namespace = substr($fullNamespace, 0, strrpos($fullNamespace, '\\'));
         $generatedResponseClassNamespace = sprintf('%s\\Response', $namespace);
 
-        if (! class_exists($generatedResponseClassNamespace)) {
+        if (!class_exists($generatedResponseClassNamespace)) {
             throw new LogicException(
                 sprintf(
                     "[WTG RestClient] REST service [%s] does not have a response class or the class does not exist [%s]", // phpcs:ignore
@@ -149,7 +162,7 @@ class RestManager implements RestManagerInterface
         return $this->app->make(
             $generatedResponseClassNamespace,
             [
-                'responseData' => json_decode((string) $guzzleResponse->getBody(), true) ?: [],
+                'responseData' => json_decode((string)$guzzleResponse->getBody(), true) ?: [],
             ]
         );
     }
@@ -157,11 +170,11 @@ class RestManager implements RestManagerInterface
     /**
      * Create an error response.
      *
-     * @param GuzzleException $e
+     * @param string $message
      * @return ErrorResponse
      */
-    protected function createErrorResponse(GuzzleException $e): ErrorResponse
+    protected function createErrorResponse(string $message): ErrorResponse
     {
-        return new ErrorResponse($e);
+        return new ErrorResponse($message);
     }
 }

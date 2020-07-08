@@ -47,22 +47,13 @@ window.vm = new Vue({
         QuickSearch,
     },
     methods: {
-        fetchPrices() {
-            axios.post('/fetchPrices', {
+        fetchPricesAndStocks() {
+            axios.post('/fetchPricesAndStocks', {
                 skus: this.$data.skus
             })
                 .then((response) => {
                     response.data.payload.forEach((item) => {
-                        this.$root.$emit('price-fetched-' + item.sku, {
-                            netPrice: item.netPricePerUnit,
-                            grossPrice: item.grossPrice,
-                            pricePer: item.pricePer,
-                            stock: item.stock_string,
-                            action: item.actionPrice,
-                            priceFactor: item.priceFactor,
-                            scaleUnit: item.scaleUnit,
-                            priceUnit: item.priceUnit,
-                        });
+                        this.$root.$emit('price-fetched-' + item.sku, item);
                     });
                 })
                 .catch((error) => {
@@ -87,7 +78,7 @@ window.vm = new Vue({
             fetchPriceTimeout = setTimeout(() => {
                 this.$data.loadingPrices = true;
 
-                this.fetchPrices();
+                this.fetchPricesAndStocks();
             }, 1000);
         });
 

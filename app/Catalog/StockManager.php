@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace WTG\Catalog;
 
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Collection;
+use WTG\RestClient\Model\Rest\ErrorResponse;
 use WTG\RestClient\Model\Rest\GetProductStocks\Request as GetProductStocksRequest;
 use WTG\RestClient\Model\Rest\GetProductStocks\Response as GetProductStocksResponse;
 use WTG\RestClient\RestManager;
@@ -42,36 +42,32 @@ class StockManager
     }
 
     /**
-     * Fetch prices for multiple products.
+     * Fetch stocks for multiple products.
      *
-     * @param array $skus
+     * @param Collection $products
      * @return Collection
-     * @throws GuzzleException
      * @throws BindingResolutionException
      */
-    public function fetchStocks(array $skus): Collection
+    public function fetchStocks(Collection $products): Collection
     {
         $request = new GetProductStocksRequest();
 
-        $products = $this->productManager->findAll($skus);
-
-        foreach ($products as $product) {
+        foreach ($products->all() as $product) {
             $request->addProduct($product);
         }
 
         /** @var GetProductStocksResponse $response */
         $response = $this->restManager->handle($request);
 
-        return $response->stocks;
+        return ($response instanceof ErrorResponse) ? collect() : $response->stocks;
     }
 
     /**
-     * Fetch prices for multiple products.
+     * Fetch the stock for a product.
      *
      * @param string $sku
      * @return null|GetProductStocksResponse\Stock
      * @throws BindingResolutionException
-     * @throws GuzzleException
      */
     public function fetchStock(string $sku): ?GetProductStocksResponse\Stock
     {
@@ -83,6 +79,6 @@ class StockManager
         /** @var GetProductStocksResponse $response */
         $response = $this->restManager->handle($request);
 
-        return $response->stocks->first();
+        return ($response instanceof ErrorResponse) ? null : $response->stocks->first();
     }
 }

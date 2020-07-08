@@ -6,7 +6,6 @@ namespace WTG\Import\Downloader;
 
 use Exception;
 use Generator;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Log\LogManager;
 use WTG\Import\Api\BulkDownloaderInterface;
@@ -69,7 +68,7 @@ class ProductsDownloader implements BulkDownloaderInterface
 
                 $this->setOffset($this->getOffset() + $this->getLimit());
             }
-        } catch (GuzzleException | BindingResolutionException $e) {
+        } catch (BindingResolutionException $e) {
             throw new Exception('Products download failed', 1576147791, $e);
         }
     }

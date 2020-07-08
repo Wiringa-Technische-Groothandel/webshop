@@ -45,7 +45,7 @@ class Response extends AbstractResponse
     {
         $prices = collect();
 
-        foreach ($this->responseData['resultData'] as $price) {
+        foreach ($this->responseData['resultData'] ?? [] as $price) {
             $prices->push(
                 $this->priceParser->parse($price)
             );

@@ -68,8 +68,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
      */
     protected $appends = [
         'sales_unit_long',
-        'stock',
-        'stock_status',
+        'sales_unit_long_plural',
     ];
 
     /**
@@ -726,55 +725,6 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     }
 
     /**
-     * Stock status accessor.
-     *
-     * @return string
-     * @throws Exception
-     */
-    public function getStockStatusAttribute(): string
-    {
-        return $this->getStockStatus();
-    }
-
-    /**
-     * @return string
-     * @throws Exception
-     */
-    public function getStockStatus(): string
-    {
-        switch ($this->getStockDisplay()) {
-            case 'S':
-                try {
-                    $stock = $this->getStock();
-                } catch (\Throwable $e) {
-                    return '<span class="d-none d-md-inline">Voorraad: </span> N.B.';
-                }
-
-                if ($stock) {
-                    $availableStock = $stock['availableStockBasedOnComponents'] ?: $stock['availableStock'];
-                    $status = sprintf(
-                        '<span class="d-none d-md-inline">Voorraad: </span> %s %s',
-                        $availableStock,
-                        unit_to_str($this->getSalesUnit(), $availableStock > 1)
-                    );
-                } else {
-                    $status = 'In bestelling, bel voor meer info';
-                }
-                break;
-            case 'A':
-                $status = 'Levertijd in overleg';
-                break;
-            case 'V':
-                $status = 'Binnen 24/48 uur mits voor 16.00 besteld';
-                break;
-            default:
-                $status = '';
-        }
-
-        return $status;
-    }
-
-    /**
      * Get the stock display.
      *
      * @return string
@@ -782,33 +732,6 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     public function getStockDisplay(): string
     {
         return $this->getAttribute(self::FIELD_STOCK_DISPLAY) ?: self::DEFAULT_STOCK_DISPLAY;
-    }
-
-    /**
-     * @return null|array
-     * @throws Exception
-     */
-    public function getStock(): ?array
-    {
-        if (app()->runningInConsole()) {
-            return null;
-        }
-
-        return cache()->remember(
-            'product-stock-' . $this->getSku(),
-            60 * 5,
-            function () {
-                /** @var StockManager $stockManager */
-                $stockManager = app(StockManager::class);
-                $stock = $stockManager->fetchStock($this->getSku());
-
-                if ($stock) {
-                    return get_object_vars($stock);
-                }
-
-                return null;
-            }
-        );
     }
 
     /**
@@ -832,22 +755,19 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     }
 
     /**
-     * Stock accessor.
-     *
-     * @return null|array
-     * @throws Exception
-     */
-    public function getStockAttribute(): ?array
-    {
-        return $this->getStock();
-    }
-
-    /**
      * @return string
      */
     public function getSalesUnitLongAttribute(): string
     {
         return unit_to_str($this->getSalesUnit(), false);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSalesUnitLongPluralAttribute(): string
+    {
+        return unit_to_str($this->getSalesUnit(), true);
     }
 
     /**

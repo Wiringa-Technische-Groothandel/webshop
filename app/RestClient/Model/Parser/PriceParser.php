@@ -33,7 +33,7 @@ class PriceParser
         $price->pricePer = $item['pricePerUnit'];
         $price->priceFactor = $item['conversionFactor'];
         $price->scaleUnit = unit_to_str($item['unitCode'], false);
-        $price->priceUnit = unit_to_str($item['priceUnit'], false);
+        $price->priceUnit = unit_to_str($item['priceUnit'], $price->priceFactor > 1);
 
         return $price;
     }
