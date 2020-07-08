@@ -744,7 +744,11 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     {
         switch ($this->getStockDisplay()) {
             case 'S':
-                $stock = $this->getStock();
+                try {
+                    $stock = $this->getStock();
+                } catch (\Throwable $e) {
+                    return '<span class="d-none d-md-inline">Voorraad: </span> N.B.';
+                }
 
                 if ($stock) {
                     $availableStock = $stock['availableStockBasedOnComponents'] ?: $stock['availableStock'];
