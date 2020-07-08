@@ -142,7 +142,7 @@ class CartService implements CartServiceContract
         $product = $this->findProduct($sku);
 
         if (! $product) {
-            return null;
+            return false;
         }
 
         $this->cart->loadForCustomer($this->authService->getCurrentCustomer());
@@ -153,7 +153,7 @@ class CartService implements CartServiceContract
     /**
      * Destroy the cart.
      *
-     * @return void
+     * @return bool
      * @throws Exception
      */
     public function destroy(): bool
@@ -196,7 +196,7 @@ class CartService implements CartServiceContract
                 $items
             );
         } catch (Throwable $e) {
-            Log::error($e);
+            Log::error($e->__toString());
             Log::error('Failed to load prices for quote items: ' . $items->implode('id', ', '));
 
             // Return the items if the prices failed to load.
@@ -216,8 +216,8 @@ class CartService implements CartServiceContract
                     return $item;
                 }
 
-                $item->setPrice(($price->netPricePerUnit * $price->priceFactor) / $price->pricePer);
-                $item->setSubtotal(($price->netTotal * $price->priceFactor) / $price->pricePer);
+                $item->setPrice($price->netPricePerUnit * $price->priceFactor);
+                $item->setSubtotal($price->netTotal * $price->priceFactor);
                 $item->save();
 
                 return $item;

@@ -30,7 +30,7 @@
                 <div class="gross-price">
                     Bruto:
                     <span class="d-block d-sm-inline">
-                        <i class="fas fa-euro-sign"></i> <span>{{ formatPrice(calculatePrice(grossPrice)) }}</span>
+                        <i class="fas fa-euro-sign"></i> <span>{{ formatPrice(calculatePrice(grossPrice) / this.pricePer) }}</span>
                     </span>
                 </div>
 
@@ -44,7 +44,7 @@
         </template>
 
         <template v-if="!fetching && loggedIn">
-            <small class="form-text text-muted price-per">
+            <small class="form-text text-muted price-per" v-if="priceUnit">
                 {{ pricePerStr }}
             </small>
 
@@ -84,7 +84,7 @@
         },
         methods: {
             calculatePrice(price) {
-                return (price * this.priceFactor) / this.pricePer;
+                return price * this.priceFactor;
             },
             formatPrice(price) {
                 return price.toFixed(2)
