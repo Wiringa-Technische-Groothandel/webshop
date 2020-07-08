@@ -44,9 +44,9 @@ Route::group([
     Route::group([
         'middleware' => ['auth']
     ], function () {
-        Route::get('product/{sku}/price', 'PriceController@getAction');
+        Route::get('product/{sku}/priceAndStock', 'PriceAndStockController@getAction');
 
-        Route::post('fetchPrices', 'PriceController@postAction')->name('fetchPrices');
+        Route::post('fetchPricesAndStocks', 'PriceAndStockController@postAction')->name('fetchPricesAndStocks');
     });
 });
 

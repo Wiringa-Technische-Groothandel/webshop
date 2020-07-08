@@ -7,6 +7,7 @@ namespace WTG\Catalog;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Collection;
 use WTG\Contracts\Models\CartItemContract;
+use WTG\RestClient\Model\Rest\ErrorResponse;
 use WTG\RestClient\Model\Rest\GetProductPrices\Request as GetProductPricesRequest;
 use WTG\RestClient\Model\Rest\GetProductPrices\Response as GetProductPricesResponse;
 use WTG\RestClient\RestManager;
@@ -61,7 +62,7 @@ class PriceManager
         /** @var GetProductPricesResponse $response */
         $response = $this->restManager->handle($request);
 
-        return $response->prices;
+        return ($response instanceof ErrorResponse) ? collect() : $response->prices;
     }
 
     /**
@@ -84,7 +85,7 @@ class PriceManager
         /** @var GetProductPricesResponse $response */
         $response = $this->restManager->handle($request);
 
-        return $response->prices;
+        return($response instanceof ErrorResponse) ? collect() :  $response->prices;
     }
 
     /**
@@ -107,6 +108,6 @@ class PriceManager
         /** @var GetProductPricesResponse $response */
         $response = $this->restManager->handle($request);
 
-        return $response->prices->first();
+        return ($response instanceof ErrorResponse) ? null : $response->prices->first();
     }
 }

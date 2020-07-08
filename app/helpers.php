@@ -108,6 +108,8 @@ if (! function_exists('unit_to_str')) {
                 return $plural ? __('flessen') : __('fles');
             case 'DAG':
                 return $plural ? __('dagen') : __('dag');
+            case 'KG':
+                return __('kilo');
             default:
                 return $unit;
         }

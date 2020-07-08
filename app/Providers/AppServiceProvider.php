@@ -36,6 +36,7 @@ use WTG\Models\Order;
 use WTG\Models\OrderItem;
 use WTG\Models\Quote;
 use WTG\Models\QuoteItem;
+use WTG\RestClient\RestManager;
 use WTG\Services\Account\AddressService;
 use WTG\Services\CartService;
 use WTG\Services\CheckoutService;
@@ -78,6 +79,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton(RestManager::class);
+
         $this->app->singleton(
             'cart',
             function () {

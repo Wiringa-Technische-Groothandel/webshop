@@ -17,16 +17,16 @@ class ErrorResponse implements ResponseInterface
 {
     public string $message;
 
-    protected GuzzleException $exception;
-
     /**
      * ErrorResponse constructor.
      *
-     * @param GuzzleException $exception
+     * @param string $message
      */
-    public function __construct(GuzzleException $exception)
+    public function __construct(string $message)
     {
-        $this->exception = $exception;
+        $this->message = $message;
+
+        $this->parse();
     }
 
     /**
@@ -34,7 +34,7 @@ class ErrorResponse implements ResponseInterface
      */
     public function parse(): void
     {
-        $this->message = $this->exception->getMessage();
+        //
     }
 
     /**
