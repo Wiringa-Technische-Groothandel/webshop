@@ -21,7 +21,7 @@
                 <div class="action-price">
                     Actieprijs:
                     <span class="d-block d-sm-inline">
-                        <i class="fas fa-euro-sign"></i> <span>{{ formatPrice(netPrice) }}</span>
+                        <i class="fas fa-euro-sign"></i> <span>{{ formatPrice(calculatePrice(netPrice)) }}</span>
                     </span>
                 </div>
             </template>
