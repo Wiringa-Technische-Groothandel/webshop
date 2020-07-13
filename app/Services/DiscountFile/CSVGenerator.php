@@ -6,6 +6,7 @@ namespace WTG\Services\DiscountFile;
 
 use WTG\Models\Customer;
 use WTG\Models\Discount;
+use WTG\Services\DiscountFile\Api\Generator;
 
 /**
  * CSV Generator.

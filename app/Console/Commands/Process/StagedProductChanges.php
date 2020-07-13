@@ -7,12 +7,11 @@ namespace WTG\Console\Commands\Process;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
-use WTG\Catalog\Api\Model\ProductInterface;
+use Throwable;
 use WTG\Catalog\ProductManager;
 use WTG\Foundation\Api\ErpModelInterface;
 use WTG\Import\Importer\SingleProductImporter;
 use WTG\Import\ImportManager;
-use WTG\RestClient\Model\Rest\GetProduct\Request;
 
 class StagedProductChanges extends Command
 {
@@ -27,9 +26,6 @@ class StagedProductChanges extends Command
     protected $description = 'Process the staged product changes';
 
     protected ProductManager $productManager;
-    /**
-     * @var ImportManager
-     */
     protected ImportManager $importManager;
 
     /**
@@ -50,35 +46,42 @@ class StagedProductChanges extends Command
      * Run the command.
      *
      * @return int
+     * @throws Throwable
      */
     public function handle()
     {
-        $collection = DB::table('staged_product_changes')->orderBy('change_number')->get();
-        $collection->each(
-            function ($change) {
-                if ($change->action === 'D') {
-                    try {
-                        $product = $this->productManager->find($change->erp_id, ErpModelInterface::FIELD_ERP_ID);
+        DB::beginTransaction();
 
-                        $this->productManager->delete($product->getId());
-                    } catch (ModelNotFoundException $e) {
-                        //
-                    }
-                } elseif ($change->action === 'C' || $change->action === 'N') {
-                    try {
+        try {
+            $collection = DB::table('staged_product_changes')->orderBy('change_number')->get();
+            $collection->each(
+                function ($change) {
+                    if ($change->action === 'D') {
+                        try {
+                            $product = $this->productManager->find($change->erp_id, ErpModelInterface::FIELD_ERP_ID);
+
+                            $this->productManager->delete($product->getId());
+                        } catch (ModelNotFoundException $e) {
+                            //
+                        }
+                    } elseif ($change->action === 'C' || $change->action === 'N') {
                         /** @var SingleProductImporter $importer */
                         $importer = app(SingleProductImporter::class);
                         $importer->setErpIp($change->erp_id);
 
                         $this->importManager->run($importer);
-                    } catch (\Throwable $e) {
-                        $this->error($e->getMessage());
                     }
-                }
 
-                DB::table('staged_product_changes')->delete($change->id);
-            }
-        );
+                    DB::table('staged_product_changes')->delete($change->id);
+                }
+            );
+        } catch (Throwable $e) {
+            DB::rollBack();
+
+            throw $e;
+        }
+
+        DB::commit();
 
         return Command::SUCCESS;
     }

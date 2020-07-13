@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WTG\Services\DiscountFile;
+namespace WTG\Services\DiscountFile\Api;
 
 /**
  * Interface Generator
