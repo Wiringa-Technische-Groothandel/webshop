@@ -6,6 +6,7 @@ namespace WTG\Services\DiscountFile;
 
 use WTG\Models\Customer;
 use WTG\Models\Discount;
+use WTG\Services\DiscountFile\Api\Generator;
 
 /**
  * ICC generator.
@@ -55,7 +56,7 @@ class ICCGenerator extends AbstractGenerator implements Generator
      */
     public function addGroupDiscounts()
     {
-        $discounts = Discount::where('company_id', $this->customer->getCompany()->getCustomerNumber())
+        $discounts = Discount::query()->where('company_id', $this->customer->getCompany()->getCustomerNumber())
             ->where('importance', Discount::IMPORTANCE_GROUP)
             ->where('group_desc', '!=', 'Vervallen')
             ->get();
@@ -103,7 +104,7 @@ class ICCGenerator extends AbstractGenerator implements Generator
      */
     public function addDefaultGroupDiscounts()
     {
-        $discounts = Discount::where('importance', Discount::IMPORTANCE_GENERIC)
+        $discounts = Discount::query()->where('importance', Discount::IMPORTANCE_GENERIC)
             ->where('group_desc', '!=', 'Vervallen')
             ->whereNotIn(
                 'product',
@@ -130,7 +131,7 @@ class ICCGenerator extends AbstractGenerator implements Generator
      */
     public function addDefaultProductDiscounts()
     {
-        $discounts = Discount::where('importance', Discount::IMPORTANCE_PRODUCT)
+        $discounts = Discount::query()->where('importance', Discount::IMPORTANCE_PRODUCT)
             ->whereNotIn(
                 'product',
                 function ($query) {
@@ -185,7 +186,7 @@ class ICCGenerator extends AbstractGenerator implements Generator
      */
     public function addProductDiscounts()
     {
-        $discounts = Discount::where('company_id', $this->customer->getCompany()->getCustomerNumber())
+        $discounts = Discount::query()->where('company_id', $this->customer->getCompany()->getCustomerNumber())
             ->where('importance', Discount::IMPORTANCE_CUSTOMER)
             ->get();
 

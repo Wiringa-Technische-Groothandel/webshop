@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\Factory as ViewFactory;
 use WTG\Http\Controllers\Controller;
-use WTG\Services\SearchService;
+use WTG\Search\SearchManager;
 
 /**
  * Search controller.
@@ -21,22 +21,19 @@ use WTG\Services\SearchService;
  */
 class SearchController extends Controller
 {
-    /**
-     * @var SearchService
-     */
-    protected $searchService;
+    protected SearchManager $searchManager;
 
     /**
      * SearchController constructor.
      *
      * @param ViewFactory $view
-     * @param SearchService $searchService
+     * @param SearchManager $searchManager
      */
-    public function __construct(ViewFactory $view, SearchService $searchService)
+    public function __construct(ViewFactory $view, SearchManager $searchManager)
     {
         parent::__construct($view);
 
-        $this->searchService = $searchService;
+        $this->searchManager = $searchManager;
     }
 
     /**
@@ -54,7 +51,7 @@ class SearchController extends Controller
             return back();
         }
 
-        $results = $this->searchService->searchProducts(
+        $results = $this->searchManager->searchProducts(
             [
                 'query'  => $searchQuery,
                 'brand'  => $request->input('brand'),
@@ -85,12 +82,9 @@ class SearchController extends Controller
             );
         }
 
-        /** @var SearchService $service */
-        $service = app(SearchService::class);
-
         return response()->json(
             [
-                'products' => $service->suggestProducts($searchQuery),
+                'products' => $this->searchManager->suggestProducts($searchQuery),
             ]
         );
     }

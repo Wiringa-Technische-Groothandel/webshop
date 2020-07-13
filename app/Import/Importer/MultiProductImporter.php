@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Log\LogManager;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Throwable;
 use WTG\Import\Api\ImporterInterface;
@@ -16,6 +17,9 @@ use WTG\Import\Downloader\ProductsDownloader;
 use WTG\Import\Parser\CsvWithHeaderParser;
 use WTG\Import\Processor\ProductProcessor;
 use WTG\Catalog\Model\Product;
+use WTG\RestClient\Api\RestManagerInterface;
+use WTG\RestClient\Model\Rest\GetLastChangeId\Request;
+use WTG\RestClient\Model\Rest\GetLastChangeId\Response;
 
 /**
  * Multi product importer.
@@ -32,20 +36,10 @@ class MultiProductImporter extends MultiImporter implements ImporterInterface
      */
     public string $csvFileName = '';
 
-    /**
-     * @var LogManager
-     */
     protected LogManager $logManager;
-
-    /**
-     * @var ConsoleKernel
-     */
     protected ConsoleKernel $console;
-
-    /**
-     * @var DatabaseManager
-     */
     protected DatabaseManager $databaseManager;
+    protected RestManagerInterface $restManager;
 
     /**
      * MultiProductImporter constructor.
@@ -56,6 +50,7 @@ class MultiProductImporter extends MultiImporter implements ImporterInterface
      * @param LogManager $logManager
      * @param ConsoleKernel $console
      * @param DatabaseManager $databaseManager
+     * @param RestManagerInterface $restManager
      */
     public function __construct(
         ProductsDownloader $downloader,
@@ -63,13 +58,15 @@ class MultiProductImporter extends MultiImporter implements ImporterInterface
         CsvWithHeaderParser $parser,
         LogManager $logManager,
         ConsoleKernel $console,
-        DatabaseManager $databaseManager
+        DatabaseManager $databaseManager,
+        RestManagerInterface $restManager
     ) {
         parent::__construct($downloader, $processor, $parser);
 
         $this->logManager = $logManager;
         $this->console = $console;
         $this->databaseManager = $databaseManager;
+        $this->restManager = $restManager;
     }
 
     /**
@@ -111,6 +108,8 @@ class MultiProductImporter extends MultiImporter implements ImporterInterface
         }
 
         $this->updateIndex();
+
+        $this->updateProductChangeNumber();
     }
 
     /**
@@ -152,5 +151,22 @@ class MultiProductImporter extends MultiImporter implements ImporterInterface
             ],
             app()->runningInConsole() ? app(ConsoleOutput::class) : null
         );
+    }
+
+    /**
+     * Update the db product change number to the latest number.
+     *
+     * @return void
+     */
+    protected function updateProductChangeNumber(): void
+    {
+        /** @var Response $response */
+        $response = $this->restManager->handle(new Request());
+
+        DB::table('config')
+            ->where('key', 'last_product_change_number')
+            ->update(
+                ['value' => $response->changeNumberEnd]
+            );
     }
 }

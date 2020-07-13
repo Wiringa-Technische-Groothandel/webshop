@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\Factory as ViewFactory;
 use Illuminate\View\View;
 use WTG\Http\Controllers\Controller;
-use WTG\Services\SearchService;
+use WTG\Search\SearchManager;
 
 /**
  * Assortment controller.
@@ -19,22 +19,19 @@ use WTG\Services\SearchService;
  */
 class AssortmentController extends Controller
 {
-    /**
-     * @var SearchService
-     */
-    protected $searchService;
+    protected SearchManager $searchManager;
 
     /**
      * AssortmentController constructor.
      *
      * @param ViewFactory $view
-     * @param SearchService $searchService
+     * @param SearchManager $searchManager
      */
-    public function __construct(ViewFactory $view, SearchService $searchService)
+    public function __construct(ViewFactory $view, SearchManager $searchManager)
     {
         parent::__construct($view);
 
-        $this->searchService = $searchService;
+        $this->searchManager = $searchManager;
     }
 
     /**
@@ -47,7 +44,7 @@ class AssortmentController extends Controller
     {
         $page = (int)$request->input('page', 1);
 
-        $results = $this->searchService->listProducts(
+        $results = $this->searchManager->listProducts(
             $request->input('brand'),
             $request->input('series'),
             $request->input('type'),

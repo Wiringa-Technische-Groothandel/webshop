@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace WTG\Services\Import;
 
-use Cache;
 use Carbon\Carbon;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Collection;
-use Log;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use WTG\Models\Company;
 
 /**
@@ -158,7 +158,7 @@ class Invoices
                                 }
                             );
 
-                            $company = Company::where('customer_number', $customerNumber)->first();
+                            $company = Company::query()->where('customer_number', $customerNumber)->first();
 
                             if (! $company) {
                                 Log::notice(
