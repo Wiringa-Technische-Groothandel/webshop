@@ -13,6 +13,8 @@ use WTG\RestClient\Api\Model\RequestInterface;
  */
 abstract class AbstractRequest implements RequestInterface
 {
+    public int $timeout = 5;
+
     /**
      * @return array
      */

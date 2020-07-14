@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace WTG\Console\Commands\Import;
 
+use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use WTG\RestClient\Api\RestManagerInterface;
 use WTG\RestClient\Model\Rest\ErrorResponse;
 use WTG\RestClient\Model\Rest\GetChangedProducts\Request;
@@ -48,10 +50,21 @@ class ProductChanges extends Command
         $response = $this->restManager->handle(new Request());
 
         if ($response instanceof ErrorResponse) {
-            $this->error($response->message);
+            $this->error($response->exception->getMessage());
+
+            if ($response->exception instanceof ConnectException) {
+                $msg = "Partial product import failed, updating change id to prevent API overload.";
+
+                Log::warning($msg);
+                $this->warn($msg);
+
+                $this->call('import:latest-change-id');
+            }
 
             return Command::FAILURE;
         }
+
+        $this->call('import:latest-change-id');
 
         $query = DB::table('config')->where('key', 'last_product_change_number');
 
