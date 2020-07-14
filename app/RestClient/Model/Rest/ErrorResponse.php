@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WTG\RestClient\Model\Rest;
 
-use GuzzleHttp\Exception\GuzzleException;
+use Throwable;
 use WTG\RestClient\Api\Model\ResponseInterface;
 
 /**
@@ -15,16 +15,16 @@ use WTG\RestClient\Api\Model\ResponseInterface;
  */
 class ErrorResponse implements ResponseInterface
 {
-    public string $message;
+    public Throwable $exception;
 
     /**
      * ErrorResponse constructor.
      *
-     * @param string $message
+     * @param Throwable $exception
      */
-    public function __construct(string $message)
+    public function __construct(Throwable $exception)
     {
-        $this->message = $message;
+        $this->exception = $exception;
 
         $this->parse();
     }
@@ -43,7 +43,7 @@ class ErrorResponse implements ResponseInterface
     public function __toArray(): array
     {
         return [
-            'message' => $this->message
+            'message' => $this->exception->getMessage()
         ];
     }
 

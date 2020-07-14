@@ -15,6 +15,8 @@ use WTG\RestClient\Model\Rest\AbstractRequest;
  */
 class Request extends AbstractRequest implements RequestInterface
 {
+    public int $timeout = 60;
+
     /**
      * @var int
      */

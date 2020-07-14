@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WTG\Services\Import;
 
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Collection;
@@ -25,29 +25,19 @@ class Invoices
     public const FILENAME_PATTERN = '/(?P<invoice>[0-9]{8})_(?P<customer>[0-9]{5})_(?P<date>[0-9]{8})_(?P<time>[0-9]{6})\.PDF$/';
     public const SORT_ORDER_ASC = 1;
     public const SORT_ORDER_DESC = 2;
+    public const CACHE_KEY = 'invoice_files';
 
-    /**
-     * @var FilesystemManager
-     */
-    protected $fs;
-
-    /**
-     * @var Collection
-     */
-    protected $files;
-
-    /**
-     * @var Carbon
-     */
-    protected $runTime;
+    protected FilesystemManager $fs;
+    protected Collection $files;
+    protected CarbonImmutable $runTime;
 
     /**
      * Assortment constructor.
      *
      * @param FilesystemManager $fs
-     * @param Carbon $carbon
+     * @param CarbonImmutable $carbon
      */
-    public function __construct(FilesystemManager $fs, Carbon $carbon)
+    public function __construct(FilesystemManager $fs, CarbonImmutable $carbon)
     {
         $this->fs = $fs;
         $this->runTime = $carbon;
@@ -72,7 +62,7 @@ class Invoices
         if ($sort) {
             $files = $files->sortBy(
                 function (Collection $file) {
-                    /** @var Carbon $date */
+                    /** @var CarbonImmutable $date */
                     $date = $file->get('date');
 
                     return $date->timestamp;
@@ -90,93 +80,39 @@ class Invoices
     /**
      * Get the file list from the ftp location.
      *
-     * @param bool $force
+     * @param bool $rebuildCache
      * @return Collection
      */
-    public function getFileList(bool $force = false): Collection
+    public function getFileList(bool $rebuildCache = false): Collection
     {
-        if ($this->files && ! $force) {
+        if ($this->files && ! $rebuildCache) {
             return $this->files;
         }
 
-        if ($force) {
-            Cache::forget('invoice_files');
+        if ($rebuildCache) {
+            return $this->rebuildCache();
         }
 
-        $this->files = Cache::remember(
-            'invoice_files',
-            60 * 60 * 24,
+        $this->files = Cache::rememberForever(
+            self::CACHE_KEY,
             function () {
-                return collect(
-                    $this->fs->disk('sftp')->allFiles('invoices')
-                )->map(
-                    function ($filename) {
-                        if (! preg_match(self::FILENAME_PATTERN, $filename, $match)) {
-                            Log::notice(
-                                sprintf(
-                                    "%s: Removing file '%s' because the name does not match the given pattern.",
-                                    __CLASS__,
-                                    $filename
-                                )
-                            );
-
-                            // Remove the files that should not be in the folder
-                            $this->fs->disk('sftp')->delete($filename);
-
-                            return null;
-                        }
-
-                        return collect(
-                            [
-                                'filename' => $filename,
-                                'customer' => (int)$match['customer'],
-                                'invoice'  => (int)$match['invoice'],
-                                'date'     => Carbon::createFromFormat('dmYHis', ($match['date'] . $match['time'])),
-                            ]
-                        );
-                    }
-                )
-                    ->filter()
-                    ->groupBy(
-                        function (Collection $item) {
-                            return $item->get('customer');
-                        }
-                    )
-                    ->map(
-                        function (Collection $fileGroup, int $customerNumber) {
-                            $files = $fileGroup->mapWithKeys(
-                                function (Collection $file) {
-                                    return [
-                                        $file->get('invoice') => $file->only(
-                                            [
-                                                'filename',
-                                                'invoice',
-                                                'date',
-                                            ]
-                                        ),
-                                    ];
-                                }
-                            );
-
-                            $company = Company::query()->where('customer_number', $customerNumber)->first();
-
-                            if (! $company) {
-                                Log::notice(
-                                    sprintf(
-                                        '%s: Found invoice files for non-existent customer %s',
-                                        __CLASS__,
-                                        $customerNumber
-                                    )
-                                );
-                            }
-
-                            return $files;
-                        }
-                    );
+                return $this->getInvoiceFileList();
             }
         );
 
         return $this->files;
+    }
+
+    /**
+     * Rebuild the invoice file list cache.
+     *
+     * @return Collection
+     */
+    public function rebuildCache(): Collection
+    {
+        return tap($this->getInvoiceFileList(), function ($files) {
+            Cache::put(self::CACHE_KEY, $files);
+        });
     }
 
     /**
@@ -189,5 +125,80 @@ class Invoices
     public function readFile(string $file): string
     {
         return $this->fs->disk('sftp')->get($file);
+    }
+
+    /**
+     * Get the invoice file list from the FTP disk.
+     *
+     * @return Collection
+     */
+    private function getInvoiceFileList(): Collection
+    {
+        return collect(
+            $this->fs->disk('sftp')->allFiles('invoices')
+        )->map(
+            function ($filename) {
+                if (! preg_match(self::FILENAME_PATTERN, $filename, $match)) {
+                    Log::notice(
+                        sprintf(
+                            "%s: Removing file '%s' because the name does not match the given pattern.",
+                            __CLASS__,
+                            $filename
+                        )
+                    );
+
+                    // Remove the files that should not be in the folder
+                    $this->fs->disk('sftp')->delete($filename);
+
+                    return null;
+                }
+
+                return collect(
+                    [
+                        'filename' => $filename,
+                        'customer' => (int)$match['customer'],
+                        'invoice'  => (int)$match['invoice'],
+                        'date'     => CarbonImmutable::createFromFormat('dmYHis', ($match['date'] . $match['time'])),
+                    ]
+                );
+            }
+        )
+            ->filter()
+            ->groupBy(
+                function (Collection $item) {
+                    return $item->get('customer');
+                }
+            )
+            ->map(
+                function (Collection $fileGroup, int $customerNumber) {
+                    $files = $fileGroup->mapWithKeys(
+                        function (Collection $file) {
+                            return [
+                                $file->get('invoice') => $file->only(
+                                    [
+                                        'filename',
+                                        'invoice',
+                                        'date',
+                                    ]
+                                ),
+                            ];
+                        }
+                    );
+
+                    $company = Company::query()->where('customer_number', $customerNumber)->first();
+
+                    if (! $company) {
+                        Log::notice(
+                            sprintf(
+                                '%s: Found invoice files for non-existent customer %s',
+                                __CLASS__,
+                                $customerNumber
+                            )
+                        );
+                    }
+
+                    return $files;
+                }
+            );
     }
 }
