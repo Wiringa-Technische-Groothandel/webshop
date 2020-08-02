@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Log;
 use WTG\Contracts\Models\CompanyContract;
-use WTG\Contracts\Services\AuthServiceContract as AuthService;
+use WTG\Contracts\Services\AuthManagerContract as AuthService;
 use WTG\Http\Controllers\Controller;
 
 /**

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WTG\Contracts\Models;
 
 use Illuminate\Support\Collection;
-use WTG\Catalog\Api\Model\ProductInterface;
+use WTG\Catalog\Api\ProductInterface;
 
 /**
  * Pack contract.

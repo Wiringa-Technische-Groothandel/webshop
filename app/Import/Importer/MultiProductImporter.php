@@ -16,7 +16,7 @@ use WTG\Import\Api\ImporterInterface;
 use WTG\Import\Downloader\ProductsDownloader;
 use WTG\Import\Parser\CsvWithHeaderParser;
 use WTG\Import\Processor\ProductProcessor;
-use WTG\Catalog\Model\Product;
+use WTG\Models\Product;
 use WTG\RestClient\Api\RestManagerInterface;
 use WTG\RestClient\Model\Rest\GetLastChangeId\Request;
 use WTG\RestClient\Model\Rest\GetLastChangeId\Response;

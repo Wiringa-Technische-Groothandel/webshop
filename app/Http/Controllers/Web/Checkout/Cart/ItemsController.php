@@ -6,7 +6,7 @@ namespace WTG\Http\Controllers\Web\Checkout\Cart;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\Factory as ViewFactory;
-use WTG\Contracts\Services\CartServiceContract;
+use WTG\Contracts\Services\CartManagerContract;
 use WTG\Http\Controllers\Controller;
 
 /**
@@ -19,17 +19,17 @@ use WTG\Http\Controllers\Controller;
 class ItemsController extends Controller
 {
     /**
-     * @var CartServiceContract
+     * @var CartManagerContract
      */
-    protected CartServiceContract $cartService;
+    protected CartManagerContract $cartService;
 
     /**
      * CartController constructor.
      *
      * @param ViewFactory $view
-     * @param CartServiceContract $cartService
+     * @param CartManagerContract $cartService
      */
-    public function __construct(ViewFactory $view, CartServiceContract $cartService)
+    public function __construct(ViewFactory $view, CartManagerContract $cartService)
     {
         parent::__construct($view);
 

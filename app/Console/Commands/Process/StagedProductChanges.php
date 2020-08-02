@@ -8,10 +8,10 @@ use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Throwable;
-use WTG\Catalog\ProductManager;
 use WTG\Foundation\Api\ErpModelInterface;
 use WTG\Import\Importer\SingleProductImporter;
-use WTG\Import\ImportManager;
+use WTG\Managers\ImportManager;
+use WTG\Managers\ProductManager;
 
 class StagedProductChanges extends Command
 {

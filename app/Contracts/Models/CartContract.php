@@ -6,7 +6,7 @@ namespace WTG\Contracts\Models;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use WTG\Catalog\Model\Product;
+use WTG\Models\Product;
 
 /**
  * Cart contract.

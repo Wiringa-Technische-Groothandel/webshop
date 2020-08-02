@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Throwable;
 use WTG\Import\Api\ImporterInterface;
-use WTG\Import\ImportManager;
+use WTG\Managers\ImportManager;
 
 /**
  * Abstract import command.

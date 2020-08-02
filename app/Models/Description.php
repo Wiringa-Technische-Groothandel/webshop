@@ -7,8 +7,7 @@ namespace WTG\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\HtmlString;
-use WTG\Catalog\Api\Model\ProductInterface;
-use WTG\Catalog\Model\Product;
+use WTG\Catalog\Api\ProductInterface;
 use WTG\Contracts\Models\DescriptionContract;
 
 /**

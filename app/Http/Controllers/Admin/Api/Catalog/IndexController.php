@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace WTG\Http\Controllers\Admin\Api\Catalog;
 
 use Symfony\Component\HttpFoundation\Response;
-use WTG\Catalog\Model\Product;
 use WTG\Http\Controllers\Admin\Controller;
+use WTG\Models\Product;
 
 /**
  * Admin API product catalog index controller.

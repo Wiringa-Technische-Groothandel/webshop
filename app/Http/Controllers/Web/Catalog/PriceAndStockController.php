@@ -8,13 +8,13 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\Factory as ViewFactory;
-use WTG\Catalog\PriceManager;
-use WTG\Catalog\ProductManager;
-use WTG\Catalog\StockManager;
 use WTG\Contracts\Models\CustomerContract;
 use WTG\Http\Controllers\Controller;
 use WTG\Http\Requests\FetchPriceRequest;
-use WTG\Catalog\Model\Product;
+use WTG\Managers\PriceManager;
+use WTG\Managers\ProductManager;
+use WTG\Managers\StockManager;
+use WTG\Models\Product;
 use WTG\RestClient\Model\Rest\GetProductPrices\Response\Price;
 use WTG\RestClient\Model\Rest\GetProductStocks\Response\Stock;
 

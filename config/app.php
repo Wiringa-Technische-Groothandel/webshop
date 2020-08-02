@@ -160,8 +160,7 @@ return [
         WTG\Providers\RouteServiceProvider::class,
         WTG\Providers\ElasticsearchProvider::class,
 
-        WTG\Catalog\ServiceProvider::class,
-        WTG\RestClient\ServiceProvider::class,
+        \WTG\Providers\RestServiceProvider::class,
     ],
 
     /*

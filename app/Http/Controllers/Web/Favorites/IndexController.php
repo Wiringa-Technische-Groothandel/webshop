@@ -7,12 +7,11 @@ namespace WTG\Http\Controllers\Web\Favorites;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\Factory as ViewFactory;
-use WTG\Catalog\ProductManager;
 use WTG\Contracts\Models\CustomerContract;
 use WTG\Contracts\Services\FavoritesServiceContract;
 use WTG\Exceptions\ProductNotFoundException;
 use WTG\Http\Controllers\Controller;
-use WTG\Catalog\Model\Product;
+use WTG\Managers\ProductManager;
 
 /**
  * Favorites index controller.

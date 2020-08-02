@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WTG\Contracts\Models;
 
-use WTG\Catalog\Api\Model\ProductInterface;
+use WTG\Catalog\Api\ProductInterface;
 
 /**
  * Description contract.

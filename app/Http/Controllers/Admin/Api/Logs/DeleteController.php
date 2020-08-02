@@ -6,8 +6,8 @@ namespace WTG\Http\Controllers\Admin\Api\Logs;
 
 use Illuminate\Auth\AuthManager;
 use Symfony\Component\HttpFoundation\Response;
-use WTG\Foundation\Logging\LogManager;
 use WTG\Http\Controllers\Admin\Controller;
+use WTG\Managers\LogManager;
 use WTG\Models\Admin;
 
 /**

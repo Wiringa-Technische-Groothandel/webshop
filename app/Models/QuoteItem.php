@@ -6,7 +6,6 @@ namespace WTG\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use WTG\Catalog\Model\Product;
 use WTG\Contracts\Models\CartContract;
 use WTG\Contracts\Models\CartItemContract;
 

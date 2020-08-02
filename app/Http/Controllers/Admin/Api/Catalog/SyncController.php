@@ -11,8 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use WTG\Http\Controllers\Admin\Controller;
 use WTG\Import\Importer\SingleProductImporter;
-use WTG\Import\ImportManager;
 use WTG\Import\ProductImport;
+use WTG\Managers\ImportManager;
 
 /**
  * Product catalog sync controller.

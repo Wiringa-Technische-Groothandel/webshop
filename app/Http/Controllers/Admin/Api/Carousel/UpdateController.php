@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Log\LogManager;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
-use WTG\Carousel\CarouselManager;
+use WTG\Managers\CarouselManager;
 use WTG\Http\Controllers\Admin\Controller;
 
 /**

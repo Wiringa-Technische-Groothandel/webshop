@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\Factory as ViewFactory;
 use WTG\Http\Controllers\Controller;
-use WTG\Search\SearchManager;
+use WTG\Managers\SearchManager;
 
 /**
  * Search controller.

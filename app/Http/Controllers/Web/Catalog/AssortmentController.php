@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\Factory as ViewFactory;
 use Illuminate\View\View;
 use WTG\Http\Controllers\Controller;
-use WTG\Search\SearchManager;
+use WTG\Managers\SearchManager;
 
 /**
  * Assortment controller.

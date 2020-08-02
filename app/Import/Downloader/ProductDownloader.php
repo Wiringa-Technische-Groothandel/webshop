@@ -9,10 +9,10 @@ use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Log\LogManager;
 use WTG\Import\Api\DownloaderInterface;
+use WTG\Managers\RestManager;
 use WTG\RestClient\Api\Model\ResponseInterface;
 use WTG\RestClient\Model\Rest\GetProduct\Request as GetProductRequest;
 use WTG\RestClient\Model\Rest\GetProduct\Response as GetProductResponse;
-use WTG\RestClient\RestManager;
 
 /**
  * Product downloader.

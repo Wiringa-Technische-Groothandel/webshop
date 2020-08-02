@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WTG\Contracts\Models;
 
 use Illuminate\Support\Collection;
-use WTG\Catalog\Model\Product;
+use WTG\Models\Product;
 
 /**
  * Customer contract.

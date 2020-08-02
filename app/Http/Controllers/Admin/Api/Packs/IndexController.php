@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace WTG\Http\Controllers\Admin\Api\Packs;
 
 use Symfony\Component\HttpFoundation\Response;
-use WTG\Catalog\PackManager;
 use WTG\Http\Controllers\Admin\Controller;
+use WTG\Managers\PackManager;
 
 /**
  * Admin api packs index controller.

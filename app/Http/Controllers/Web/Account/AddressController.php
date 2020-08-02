@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\Factory as ViewFactory;
-use WTG\Contracts\Services\Account\AddressServiceContract;
+use WTG\Contracts\Services\Account\AddressManagerContract;
 use WTG\Http\Controllers\Controller;
 use WTG\Http\Requests\Account\Address\CreateRequest;
 use WTG\Http\Requests\Account\Address\DeleteRequest;
@@ -27,7 +27,7 @@ use WTG\Models\Customer;
 class AddressController extends Controller
 {
     /**
-     * @var AddressServiceContract
+     * @var AddressManagerContract
      */
     protected $addressService;
 
@@ -35,9 +35,9 @@ class AddressController extends Controller
      * AddressController constructor.
      *
      * @param ViewFactory $view
-     * @param AddressServiceContract $addressService
+     * @param AddressManagerContract $addressService
      */
-    public function __construct(ViewFactory $view, AddressServiceContract $addressService)
+    public function __construct(ViewFactory $view, AddressManagerContract $addressService)
     {
         parent::__construct($view);
 
