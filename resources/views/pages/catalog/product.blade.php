@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="container">
-        <div class="row mb-3">
+        <div class="row my-3">
             <div class="col-12 d-block d-md-none">
                 <a href="{{ $previousUrl ?? route('catalog.assortment') }}" class="btn btn-link mb-3 px-0">
                     <i class="fal fa-fw fa-chevron-left"></i> {{ __('Terug naar overzicht') }}
