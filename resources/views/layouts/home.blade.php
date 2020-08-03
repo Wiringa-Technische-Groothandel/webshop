@@ -4,7 +4,7 @@
         @include('components.head')
     </head>
 
-    <body  style="opacity: 0;">
+    <body style="opacity: 0;">
         <div id="app">
             @yield('before_content')
 

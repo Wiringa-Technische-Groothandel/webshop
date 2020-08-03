@@ -159,8 +159,7 @@ return [
         WTG\Providers\EventServiceProvider::class,
         WTG\Providers\RouteServiceProvider::class,
         WTG\Providers\ElasticsearchProvider::class,
-
-        \WTG\Providers\RestServiceProvider::class,
+        WTG\Providers\RestServiceProvider::class,
     ],
 
     /*
