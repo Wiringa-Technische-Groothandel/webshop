@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 use WTG\Http\Controllers\Admin\Controller;
-use WTG\Services\Admin\AuthService;
+use WTG\Managers\AdminAuthManager;
 
 /**
  * Admin refresh token controller.
@@ -29,9 +29,9 @@ class RefreshTokenController extends Controller
     protected Request $request;
 
     /**
-     * @var AuthService
+     * @var AdminAuthManager
      */
-    protected AuthService $authService;
+    protected AdminAuthManager $authService;
 
     /**
      * @var LogManager
@@ -42,10 +42,10 @@ class RefreshTokenController extends Controller
      * LoginController constructor.
      *
      * @param Request $request
-     * @param AuthService $authService
+     * @param AdminAuthManager $authService
      * @param LogManager $logManager
      */
-    public function __construct(Request $request, AuthService $authService, LogManager $logManager)
+    public function __construct(Request $request, AdminAuthManager $authService, LogManager $logManager)
     {
         $this->request = $request;
         $this->authService = $authService;

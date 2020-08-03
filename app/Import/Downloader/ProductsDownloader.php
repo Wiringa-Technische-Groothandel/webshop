@@ -9,9 +9,9 @@ use Generator;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Log\LogManager;
 use WTG\Import\Api\BulkDownloaderInterface;
+use WTG\Managers\RestManager;
 use WTG\RestClient\Model\Rest\GetProducts\Request as GetProductsRequest;
 use WTG\RestClient\Model\Rest\GetProducts\Response as GetProductsResponse;
-use WTG\RestClient\RestManager;
 
 /**
  * Products downloader.

@@ -10,7 +10,7 @@ use WTG\Http\Controllers\Admin\Controller;
 use WTG\Models\Customer;
 use WTG\Models\Discount;
 use WTG\Models\Order;
-use WTG\Catalog\Model\Product;
+use WTG\Models\Product;
 
 /**
  * Admin API dashboard stats data controller.

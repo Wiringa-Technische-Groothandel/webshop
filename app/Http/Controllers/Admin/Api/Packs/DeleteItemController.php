@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Log\LogManager;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
-use WTG\Catalog\PackManager;
 use WTG\Http\Controllers\Admin\Controller;
+use WTG\Managers\PackManager;
 
 /**
  * Admin api delete pack item controller.

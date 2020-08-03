@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace WTG\Foundation\Logging\Handlers;
 
 use Exception;
-use Illuminate\Support\Facades\DB;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
-use WTG\Foundation\Logging\LogManager;
+use WTG\Managers\LogManager;
 
 /**
  * Database log handler.

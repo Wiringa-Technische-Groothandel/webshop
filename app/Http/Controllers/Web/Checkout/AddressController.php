@@ -8,8 +8,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\Factory as ViewFactory;
 use Illuminate\View\View;
-use WTG\Contracts\Services\Account\AddressServiceContract;
-use WTG\Contracts\Services\CartServiceContract;
+use WTG\Contracts\Services\Account\AddressManagerContract;
+use WTG\Contracts\Services\CartManagerContract;
 use WTG\Http\Controllers\Controller;
 use WTG\Http\Requests\UpdateQuoteAddressRequest;
 use WTG\Models\Address;
@@ -25,26 +25,26 @@ use WTG\Models\Customer;
 class AddressController extends Controller
 {
     /**
-     * @var AddressServiceContract
+     * @var AddressManagerContract
      */
-    protected AddressServiceContract $addressService;
+    protected AddressManagerContract $addressService;
 
     /**
-     * @var CartServiceContract
+     * @var CartManagerContract
      */
-    protected CartServiceContract $cartService;
+    protected CartManagerContract $cartService;
 
     /**
      * AddressController constructor.
      *
      * @param ViewFactory $view
-     * @param AddressServiceContract $addressService
-     * @param CartServiceContract $cartService
+     * @param AddressManagerContract $addressService
+     * @param CartManagerContract $cartService
      */
     public function __construct(
         ViewFactory $view,
-        AddressServiceContract $addressService,
-        CartServiceContract $cartService
+        AddressManagerContract $addressService,
+        CartManagerContract $cartService
     ) {
         parent::__construct($view);
 

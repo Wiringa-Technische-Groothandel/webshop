@@ -8,7 +8,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\Factory as ViewFactory;
 use Illuminate\View\View;
-use WTG\Contracts\Services\CartServiceContract;
+use WTG\Contracts\Services\CartManagerContract;
 use WTG\Http\Controllers\Controller;
 use WTG\Http\Requests\Checkout\Cart\AddProductRequest;
 use WTG\Http\Requests\Checkout\Cart\UpdateRequest;
@@ -23,7 +23,7 @@ use WTG\Http\Requests\Checkout\Cart\UpdateRequest;
 class CartController extends Controller
 {
     /**
-     * @var CartServiceContract
+     * @var CartManagerContract
      */
     protected $cartService;
 
@@ -31,9 +31,9 @@ class CartController extends Controller
      * CartController constructor.
      *
      * @param ViewFactory $view
-     * @param CartServiceContract $cartService
+     * @param CartManagerContract $cartService
      */
-    public function __construct(ViewFactory $view, CartServiceContract $cartService)
+    public function __construct(ViewFactory $view, CartManagerContract $cartService)
     {
         parent::__construct($view);
 

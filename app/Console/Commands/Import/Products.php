@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace WTG\Console\Commands\Import;
 
 use WTG\Import\Importer\MultiProductImporter;
-use WTG\Import\ImportManager;
+use WTG\Managers\ImportManager;
 
 /**
  * Import products command.

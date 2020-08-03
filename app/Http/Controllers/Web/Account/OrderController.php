@@ -10,7 +10,7 @@ use Illuminate\View\Factory as ViewFactory;
 use Illuminate\View\View;
 use WTG\Contracts\Models\CustomerContract;
 use WTG\Contracts\Models\OrderContract;
-use WTG\Contracts\Services\CartServiceContract;
+use WTG\Contracts\Services\CartManagerContract;
 use WTG\Http\Controllers\Controller;
 use WTG\Models\Customer;
 use WTG\Models\Order;
@@ -26,7 +26,7 @@ use WTG\Models\OrderItem;
 class OrderController extends Controller
 {
     /**
-     * @var CartServiceContract
+     * @var CartManagerContract
      */
     protected $cartService;
 
@@ -34,9 +34,9 @@ class OrderController extends Controller
      * OrderController constructor.
      *
      * @param ViewFactory $view
-     * @param CartServiceContract $cartService
+     * @param CartManagerContract $cartService
      */
-    public function __construct(ViewFactory $view, CartServiceContract $cartService)
+    public function __construct(ViewFactory $view, CartManagerContract $cartService)
     {
         parent::__construct($view);
 

@@ -9,8 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\Factory as ViewFactory;
 use Illuminate\View\View;
-use WTG\Foundation\Logging\LogManager;
 use WTG\Http\Controllers\Controller;
+use WTG\Managers\LogManager;
 use WTG\Models\Customer;
 
 /**

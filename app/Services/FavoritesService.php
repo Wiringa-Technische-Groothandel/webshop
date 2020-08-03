@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace WTG\Services;
 
 use Illuminate\Support\Collection;
-use WTG\Catalog\Api\Model\ProductInterface;
-use WTG\Catalog\ProductManager;
-use WTG\Contracts\Services\AuthServiceContract;
+use WTG\Catalog\Api\ProductInterface;
+use WTG\Contracts\Services\AuthManagerContract;
 use WTG\Contracts\Services\FavoritesServiceContract;
 use WTG\Exceptions\ProductNotFoundException;
+use WTG\Managers\ProductManager;
 
 /**
  * Favorites service.
@@ -20,9 +20,9 @@ use WTG\Exceptions\ProductNotFoundException;
 class FavoritesService implements FavoritesServiceContract
 {
     /**
-     * @var AuthServiceContract
+     * @var AuthManagerContract
      */
-    protected AuthServiceContract $authService;
+    protected AuthManagerContract $authService;
 
     /**
      * @var ProductManager
@@ -32,10 +32,10 @@ class FavoritesService implements FavoritesServiceContract
     /**
      * CartService constructor.
      *
-     * @param AuthServiceContract $authService
+     * @param AuthManagerContract $authService
      * @param ProductManager      $productManager
      */
-    public function __construct(AuthServiceContract $authService, ProductManager $productManager)
+    public function __construct(AuthManagerContract $authService, ProductManager $productManager)
     {
         $this->authService = $authService;
         $this->productManager = $productManager;

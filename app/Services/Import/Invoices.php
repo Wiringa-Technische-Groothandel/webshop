@@ -41,6 +41,7 @@ class Invoices
     {
         $this->fs = $fs;
         $this->runTime = $carbon;
+        $this->files = Cache::get(self::CACHE_KEY, collect());
     }
 
     /**
@@ -57,7 +58,7 @@ class Invoices
         int $sortOrder = self::SORT_ORDER_DESC
     ): Collection {
         /** @var Collection $files */
-        $files = $this->getFileList()->get($customerNumber, collect());
+        $files = $this->files->get($customerNumber, collect());
 
         if ($sort) {
             $files = $files->sortBy(
@@ -75,32 +76,6 @@ class Invoices
         }
 
         return $files;
-    }
-
-    /**
-     * Get the file list from the ftp location.
-     *
-     * @param bool $rebuildCache
-     * @return Collection
-     */
-    public function getFileList(bool $rebuildCache = false): Collection
-    {
-        if ($this->files && ! $rebuildCache) {
-            return $this->files;
-        }
-
-        if ($rebuildCache) {
-            return $this->rebuildCache();
-        }
-
-        $this->files = Cache::rememberForever(
-            self::CACHE_KEY,
-            function () {
-                return $this->getInvoiceFileList();
-            }
-        );
-
-        return $this->files;
     }
 
     /**

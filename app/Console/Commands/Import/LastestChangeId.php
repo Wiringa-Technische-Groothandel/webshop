@@ -60,7 +60,7 @@ class LastestChangeId extends Command
         $lastChangeNumber = $query->value('value');
 
         if ($lastChangeNumber > $response->changeNumberEnd) {
-            if (! $this->ask('Returned change number lower than last change number, continue anyway?')) {
+            if (! $this->ask('Returned change number lower than last change number, continue anyway?', false)) {
                 $this->error("Aborting...");
 
                 return Command::FAILURE;

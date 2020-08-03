@@ -8,11 +8,11 @@ use Exception;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Log\LogManager;
 use Throwable;
-use WTG\Catalog\Api\Model\ProductInterface;
-use WTG\Catalog\ProductManager;
+use WTG\Catalog\Api\ProductInterface;
 use WTG\Import\Api\ImporterInterface;
 use WTG\Import\Downloader\ProductDownloader;
 use WTG\Import\Processor\ProductProcessor;
+use WTG\Managers\ProductManager;
 
 /**
  * Single product importer.

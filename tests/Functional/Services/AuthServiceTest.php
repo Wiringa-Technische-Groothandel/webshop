@@ -7,7 +7,7 @@ namespace Tests\Functional\Services;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use Tests\Functional\TestCase;
-use WTG\Contracts\Services\AuthServiceContract;
+use WTG\Contracts\Services\AuthManagerContract;
 use WTG\Models\Customer;
 
 /**
@@ -19,9 +19,9 @@ use WTG\Models\Customer;
 class AuthServiceTest extends TestCase
 {
     /**
-     * @var AuthServiceContract
+     * @var AuthManagerContract
      */
-    protected AuthServiceContract $authService;
+    protected AuthManagerContract $authService;
 
     /**
      * @return void
@@ -31,7 +31,7 @@ class AuthServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->authService = $this->app->make(AuthServiceContract::class);
+        $this->authService = $this->app->make(AuthManagerContract::class);
     }
 
     /**

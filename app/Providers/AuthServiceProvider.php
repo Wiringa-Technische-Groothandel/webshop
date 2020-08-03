@@ -7,12 +7,12 @@ namespace WTG\Providers;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use WTG\Contracts\Models\RegistrationContract;
-use WTG\Contracts\Services\AuthServiceContract;
+use WTG\Contracts\Services\AuthManagerContract;
 use WTG\Contracts\Services\RegistrationServiceContract;
+use WTG\Managers\AuthManager;
 use WTG\Models\Customer;
 use WTG\Models\Registration;
 use WTG\Policies\SubAccountPolicy;
-use WTG\Services\AuthService;
 use WTG\Services\RegistrationService;
 
 /**
@@ -46,7 +46,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('subaccounts-assign-admin', 'WTG\Policies\SubAccountPolicy@assignAdminRole');
         Gate::define('subaccounts-assign-manager', 'WTG\Policies\SubAccountPolicy@assignManagerRole');
 
-        $this->app->bind(AuthServiceContract::class, AuthService::class);
+        $this->app->bind(AuthManagerContract::class, AuthManager::class);
         $this->app->bind(RegistrationContract::class, Registration::class);
         $this->app->bind(RegistrationServiceContract::class, RegistrationService::class);
     }

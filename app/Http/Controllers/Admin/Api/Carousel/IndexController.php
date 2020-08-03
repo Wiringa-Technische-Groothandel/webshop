@@ -6,7 +6,7 @@ namespace WTG\Http\Controllers\Admin\Api\Carousel;
 
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use WTG\Carousel\CarouselManager;
+use WTG\Managers\CarouselManager;
 use WTG\Http\Controllers\Admin\Controller;
 
 /**

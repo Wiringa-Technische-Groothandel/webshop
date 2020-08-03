@@ -13,8 +13,8 @@ use WTG\Exceptions\InvalidFormatException;
 use WTG\Http\Controllers\Controller;
 use WTG\Http\Requests\DownloadDiscountFileRequest;
 use WTG\Mail\DiscountFile;
+use WTG\Managers\AuthManager;
 use WTG\Models\Customer;
-use WTG\Services\AuthService;
 use WTG\Services\DiscountFileService;
 
 /**
@@ -41,7 +41,7 @@ class DiscountController extends Controller
     private $mailer;
 
     /**
-     * @var AuthService
+     * @var AuthManager
      */
     private $authService;
 
@@ -56,14 +56,14 @@ class DiscountController extends Controller
      * @param ViewFactory $view
      * @param DiscountFileService $discountFileService
      * @param Mailer $mailer
-     * @param AuthService $authService
+     * @param AuthManager $authService
      * @param SessionStore $session
      */
     public function __construct(
         ViewFactory $view,
         DiscountFileService $discountFileService,
         Mailer $mailer,
-        AuthService $authService,
+        AuthManager $authService,
         SessionStore $session
     ) {
         parent::__construct($view);

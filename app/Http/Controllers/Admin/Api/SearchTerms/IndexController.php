@@ -6,7 +6,7 @@ namespace WTG\Http\Controllers\Admin\Api\SearchTerms;
 
 use Symfony\Component\HttpFoundation\Response;
 use WTG\Http\Controllers\Admin\Controller;
-use WTG\Search\SearchTermsManager;
+use WTG\Managers\SearchTermsManager;
 
 /**
  * Admin API synonym index controller.

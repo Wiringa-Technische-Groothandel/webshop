@@ -12,12 +12,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
-use WTG\Catalog\Model\Product;
 use WTG\Contracts\Models\AddressContract;
 use WTG\Contracts\Models\CartContract;
 use WTG\Contracts\Models\CartItemContract;
 use WTG\Contracts\Models\CustomerContract;
-use WTG\Contracts\Services\Account\AddressServiceContract;
+use WTG\Contracts\Services\Account\AddressManagerContract;
 use WTG\Exceptions\CartUpdateException;
 
 /**
@@ -56,8 +55,8 @@ class Quote extends Model implements CartContract
      */
     public function getAddress(): ?AddressContract
     {
-        /** @var AddressServiceContract $addressService */
-        $addressService = app()->make(AddressServiceContract::class);
+        /** @var AddressManagerContract $addressService */
+        $addressService = app()->make(AddressManagerContract::class);
         $customer = $this->getAttribute('customer');
         $address = $this->getAttribute('address') ?: $addressService->getDefaultAddressForCustomer($customer);
 

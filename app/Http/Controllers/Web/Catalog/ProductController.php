@@ -6,8 +6,8 @@ namespace WTG\Http\Controllers\Web\Catalog;
 
 use Illuminate\View\Factory as ViewFactory;
 use Illuminate\View\View;
-use WTG\Catalog\ProductManager;
 use WTG\Http\Controllers\Controller;
+use WTG\Managers\ProductManager;
 
 /**
  * Product controller.

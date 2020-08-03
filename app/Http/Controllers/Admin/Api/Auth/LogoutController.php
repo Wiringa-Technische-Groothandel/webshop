@@ -6,7 +6,7 @@ namespace WTG\Http\Controllers\Admin\Api\Auth;
 
 use Symfony\Component\HttpFoundation\Response;
 use WTG\Http\Controllers\Admin\Controller;
-use WTG\Services\Admin\AuthService;
+use WTG\Managers\AdminAuthManager;
 
 /**
  * Admin logout controller.
@@ -18,16 +18,16 @@ use WTG\Services\Admin\AuthService;
 class LogoutController extends Controller
 {
     /**
-     * @var AuthService
+     * @var AdminAuthManager
      */
-    protected AuthService $authService;
+    protected AdminAuthManager $authService;
 
     /**
      * LogoutController constructor.
      *
-     * @param AuthService $authService
+     * @param AdminAuthManager $authService
      */
-    public function __construct(AuthService $authService)
+    public function __construct(AdminAuthManager $authService)
     {
         $this->authService = $authService;
     }

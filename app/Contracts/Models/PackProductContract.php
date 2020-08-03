@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WTG\Contracts\Models;
 
-use WTG\Catalog\Model\Product;
+use WTG\Models\Product;
 
 /**
  * Pack product contract.

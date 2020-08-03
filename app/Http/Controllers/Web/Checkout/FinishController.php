@@ -10,7 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Log\LogManager;
 use Illuminate\View\Factory as ViewFactory;
-use WTG\Contracts\Services\CheckoutServiceContract;
+use WTG\Contracts\Services\CheckoutManagerContract;
 use WTG\Exceptions\Checkout\EmptyCartException;
 use WTG\Http\Controllers\Controller;
 
@@ -24,9 +24,9 @@ use WTG\Http\Controllers\Controller;
 class FinishController extends Controller
 {
     /**
-     * @var CheckoutServiceContract
+     * @var CheckoutManagerContract
      */
-    protected CheckoutServiceContract $checkoutService;
+    protected CheckoutManagerContract $checkoutService;
 
     /**
      * @var LogManager
@@ -37,10 +37,10 @@ class FinishController extends Controller
      * FinishController constructor.
      *
      * @param ViewFactory             $view
-     * @param CheckoutServiceContract $checkoutService
+     * @param CheckoutManagerContract $checkoutService
      * @param LogManager              $logManager
      */
-    public function __construct(ViewFactory $view, CheckoutServiceContract $checkoutService, LogManager $logManager)
+    public function __construct(ViewFactory $view, CheckoutManagerContract $checkoutService, LogManager $logManager)
     {
         parent::__construct($view);
 

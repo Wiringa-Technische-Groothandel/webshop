@@ -7,11 +7,11 @@ namespace WTG\Http\Controllers\Web\Account;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\Factory as ViewFactory;
 use Illuminate\View\View;
-use WTG\Contracts\Services\CartServiceContract;
+use WTG\Contracts\Services\CartManagerContract;
 use WTG\Contracts\Services\FavoritesServiceContract;
 use WTG\Http\Controllers\Controller;
 use WTG\Http\Requests\AddFavoritesToCartRequest;
-use WTG\Catalog\Model\Product;
+use WTG\Models\Product;
 
 /**
  * Favorites controller.
@@ -23,7 +23,7 @@ use WTG\Catalog\Model\Product;
 class FavoritesController extends Controller
 {
     /**
-     * @var CartServiceContract
+     * @var CartManagerContract
      */
     protected $cartService;
 
@@ -36,12 +36,12 @@ class FavoritesController extends Controller
      * FavoritesController constructor.
      *
      * @param ViewFactory $view
-     * @param CartServiceContract $cartService
+     * @param CartManagerContract $cartService
      * @param FavoritesServiceContract $favoritesService
      */
     public function __construct(
         ViewFactory $view,
-        CartServiceContract $cartService,
+        CartManagerContract $cartService,
         FavoritesServiceContract $favoritesService
     ) {
         parent::__construct($view);

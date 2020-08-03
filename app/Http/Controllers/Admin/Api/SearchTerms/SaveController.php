@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use WTG\Http\Controllers\Admin\Controller;
-use WTG\Search\SearchTermsManager;
+use WTG\Managers\SearchTermsManager;
 
 /**
  * Admin API save synonyms controller.

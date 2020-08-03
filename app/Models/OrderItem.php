@@ -7,10 +7,9 @@ namespace WTG\Models;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use WTG\Catalog\Model\Product;
-use WTG\Catalog\ProductManager;
 use WTG\Contracts\Models\OrderContract;
 use WTG\Contracts\Models\OrderItemContract;
+use WTG\Managers\ProductManager;
 
 /**
  * Order item model.

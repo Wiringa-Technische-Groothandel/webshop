@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 use Throwable;
 use WTG\Import\Api\ProcessorInterface;
 use WTG\Models\Description;
-use WTG\Catalog\Model\Product as ProductModel;
+use WTG\Models\Product as ProductModel;
 use WTG\RestClient\Model\Rest\ProductResponse;
 
 /**
