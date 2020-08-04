@@ -36,14 +36,11 @@
                         <i class="fa fa-fw fa-eye"></i>
                     </a>
 
-                    <form method="post" class="d-inline-block">
-                        {{ csrf_field() }}
-                        <input type="hidden" value="{{ $order->getAttribute('id') }}" name="order"/>
-
-                        <button class="btn btn-sm btn-outline-dark" title="{{ __('PDF Downloaden') }}">
-                            <i class="fa fa-fw fa-download"></i>
-                        </button>
-                    </form>
+                    <a class="btn btn-sm btn-outline-dark"
+                       onclick="openOrder('{{ route('account.order.download', ['uuid' => $order->getUuid()]) }}')"
+                       title="{{ __('PDF Downloaden') }}">
+                        <i class="fa fa-fw fa-download"></i>
+                    </a>
                 </td>
             </tr>
         @empty
@@ -58,3 +55,13 @@
         </tbody>
     </table>
 @endsection
+
+@push('scripts')
+    <script>
+        function openOrder(url) {
+            window.open(
+                url, '', 'location=no,scrollbars=yes,status=no,toolbar=yes,width=800,height=800'
+            );
+        }
+    </script>
+@endpush

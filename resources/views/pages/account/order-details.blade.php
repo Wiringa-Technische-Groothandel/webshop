@@ -30,7 +30,7 @@
         {{ __('Producten die niet meer in de webshop staan zullen niet toegevoegd worden aan de winkelwagen') }}
     </small>
 
-    <table class="table" id="order-details-table">
+    <table class="table table-hover" id="order-details-table">
         <thead>
         <tr>
             <th>{{ __("Productnummer") }}</th>
@@ -48,7 +48,7 @@
                 $product = $item->getProduct()
             @endphp
 
-            <tr>
+            <tr @if($product) onclick="this.querySelector('a').click()" style="cursor: pointer;" @endif>
                 <td style="white-space: nowrap">
                     @if ($product)
                         <a href="{{ $product->getUrl() }}">{{ $item->getAttribute('sku') }}</a>
@@ -70,7 +70,7 @@
         </tbody>
 
         <tfoot>
-            <tr style="font-size: 1.7em;">
+            <tr style="font-size: 1.3em;">
                 <td colspan="2" class="text-right"><b>{{ __('Totaalprijs') }}</b></td>
                 <td colspan="3" class="text-center">
                     <i class="far fa-fw fa-euro-sign"></i> {{ format_price($order->getGrandTotal()) }}

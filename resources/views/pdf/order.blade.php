@@ -1,7 +1,7 @@
 @extends('layouts.pdf')
 
 @section('title')
-    <h2 class="py-3 d-inline-block">{{ __("Webshop order") }}</h2>
+    <h2 class="py-3 d-inline-block">{{ __("Webshop bestelling") }}</h2>
 @endsection
 
 @section('pre-content')
@@ -52,9 +52,9 @@
             <tr>
                 <td style="white-space: nowrap">{{ $item->getAttribute('sku') }}</td>
                 <td>{{ $item->getAttribute('name') }}</td>
-                <td style="white-space: nowrap">{{ format_price($item->getAttribute('price')) }}</td>
+                <td style="white-space: nowrap">&euro; {{ format_price($item->getAttribute('price')) }}</td>
                 <td style="white-space: nowrap">{{ $item->getAttribute('qty') }}</td>
-                <td style="white-space: nowrap">{{ format_price($item->getAttribute('price') * $item->getAttribute('qty')) }}</td>
+                <td style="white-space: nowrap">&euro; {{ format_price($item->getAttribute('price') * $item->getAttribute('qty')) }}</td>
             </tr>
         @endforeach
         </tbody>
