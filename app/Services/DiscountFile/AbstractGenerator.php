@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WTG\Services\DiscountFile;
 
 use WTG\Models\Customer;
+use WTG\Services\DiscountFile\Api\Generator;
 
 /**
  * Abstract generator.
