@@ -64,8 +64,6 @@ class ProductChanges extends Command
             return Command::FAILURE;
         }
 
-        $this->call('import:latest-change-id');
-
         $query = DB::table('config')->where('key', 'last_product_change_number');
 
         $lastChangeNumber = $query->value('value');
