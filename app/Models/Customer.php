@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
+use Laravel\Sanctum\HasApiTokens;
 use WTG\Contracts\Models\CompanyContract;
 use WTG\Contracts\Models\ContactContract;
 use WTG\Contracts\Models\CustomerContract;
@@ -28,6 +29,7 @@ use WTG\Notifications\ResetPassword;
  */
 class Customer extends Authenticatable implements CustomerContract
 {
+    use HasApiTokens;
     use Notifiable;
     use SoftDeletes;
 

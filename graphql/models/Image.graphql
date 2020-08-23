@@ -1,0 +1,6 @@
+type Image {
+    small: String!
+    medium: String!
+    large: String!
+    original: String!
+}

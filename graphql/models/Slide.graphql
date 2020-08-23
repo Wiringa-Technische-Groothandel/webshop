@@ -1,0 +1,6 @@
+type Slide {
+    id: ID!
+    order: String!
+    title: String!
+    caption: String!
+}

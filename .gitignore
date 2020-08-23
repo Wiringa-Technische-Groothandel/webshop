@@ -18,3 +18,8 @@ composer.phar
 .phpunit.result.cache
 app/Base/
 .DS_Store
+
+# nuwave/lighthouse ide helper files
+_lighthouse_ide_helper.php
+programmatic-types.graphql
+schema-directives.graphql

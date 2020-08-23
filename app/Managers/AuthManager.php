@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace WTG\Managers;
 
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
-use WTG\Contracts\Models\CompanyContract;
-use WTG\Contracts\Models\CustomerContract;
 use WTG\Contracts\Services\AuthManagerContract;
 use WTG\Models\Company;
+use WTG\Models\Customer;
 
 /**
  * Authentication manager.
@@ -19,10 +17,8 @@ use WTG\Models\Company;
  */
 class AuthManager implements AuthManagerContract
 {
-    /**
-     * @var AuthFactory
-     */
-    protected AuthFactory $auth;
+    private AuthFactory $auth;
+    private string $guard;
 
     /**
      * AuthService constructor.
@@ -31,6 +27,8 @@ class AuthManager implements AuthManagerContract
      */
     public function __construct(AuthFactory $auth)
     {
+        $this->lighthouseGuard = config('lighthouse.guard', 'sanctum');
+        $this->sanctumGuard = config('sanctum.guard', 'web');
         $this->auth = $auth;
     }
 
@@ -38,14 +36,28 @@ class AuthManager implements AuthManagerContract
      * Authenticate a user by request.
      *
      * @param Request $request
-     * @return null|CustomerContract
-     * @throws BindingResolutionException
+     * @return null|Customer
      */
-    public function authenticateByRequest(Request $request): ?CustomerContract
+    public function authenticateByRequest(Request $request): ?Customer
     {
+        return $this->authenticate(
+            (string) $request->input('company'),
+            (string) $request->input('username'),
+            (string) $request->input('password'),
+            (bool) $request->input('remember', false)
+        );
+    }
+
+    public function authenticate(
+        string $customerNumber,
+        string $username,
+        string $password,
+        bool $remember = false
+    ): ?Customer {
         /** @var Company $company */
-        $company = app()->make(CompanyContract::class)
-            ->where('customer_number', $request->input('company'))
+        $company = Company::query()
+            ->where('customer_number', $customerNumber)
+            ->where('active', true)
             ->first();
 
         if ($company === null) {
@@ -54,12 +66,12 @@ class AuthManager implements AuthManagerContract
 
         $loginData = [
             'company_id' => $company->getAttribute('id'),
-            'username'   => $request->input('username'),
-            'password'   => $request->input('password'),
+            'username'   => $username,
+            'password'   => $password,
             'active'     => true,
         ];
 
-        $this->auth->guard()->attempt($loginData, $request->input('remember', false));
+        $this->auth->guard($this->sanctumGuard)->attempt($loginData, $remember);
 
         return $this->getCurrentCustomer();
     }
@@ -67,10 +79,26 @@ class AuthManager implements AuthManagerContract
     /**
      * Get the currently authenticated user.
      *
-     * @return null|CustomerContract
+     * @return null|Customer
      */
-    public function getCurrentCustomer(): ?CustomerContract
+    public function getCurrentCustomer(): ?Customer
     {
-        return $this->auth->guard()->user();
+        return $this->auth->guard($this->lighthouseGuard)->user();
+    }
+
+    /**
+     * Logout the current user.
+     *
+     * @return void
+     */
+    public function logout(): void
+    {
+        $customer = $this->getCurrentCustomer();
+
+        if (! $customer) {
+            return;
+        }
+
+        $customer->currentAccessToken()->delete();
     }
 }

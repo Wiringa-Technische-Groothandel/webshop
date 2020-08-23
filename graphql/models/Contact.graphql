@@ -1,0 +1,9 @@
+type Contact {
+    id: ID!
+    generalEmail: String @rename(attribute: "contact_email")
+    orderEmail: String @rename(attribute: "order_email")
+    preferredAddress: Address! @belongsTo(relation: "address")
+    customer: Customer! @belongsTo
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+}

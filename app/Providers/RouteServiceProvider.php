@@ -16,15 +16,8 @@ use Illuminate\Support\Facades\Route;
  */
 class RouteServiceProvider extends ServiceProvider
 {
-    /**
-     * @var string
-     */
-    protected $webNamespace = 'WTG\Http\Controllers\Web';
-
-    /**
-     * @var string
-     */
-    protected $adminNamespace = 'WTG\Http\Controllers\Admin';
+    protected string $webNamespace = 'WTG\Http\Controllers\Web';
+    protected string $adminNamespace = 'WTG\Http\Controllers\Admin';
 
     /**
      * Define the routes for the application.
@@ -35,7 +28,6 @@ class RouteServiceProvider extends ServiceProvider
     {
 //        $this->mapWebRoutes();
 //        $this->mapAdminRoutes();
-        $this->mapApiRoutes();
     }
 
     /**
@@ -63,22 +55,5 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::namespace($this->adminNamespace)
             ->group(base_path('routes/admin.php'));
-    }
-
-    /**
-     * Define the "api" routes for the application.
-     *
-     * @return void
-     */
-    protected function mapApiRoutes()
-    {
-        Route::group(
-            [
-                'prefix' => 'rest/v1',
-                'as' => 'api.',
-                'middleware' => 'api'
-            ],
-            base_path('routes/api.php')
-        );
     }
 }

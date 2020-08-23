@@ -1,0 +1,13 @@
+type Stock {
+    actualStock: Float!
+    actualStockBasedOnComponents: Float!
+    availableStock: Float!
+    availableStockBasedOnComponents: Float!
+    availableStockForSales: Float!
+    availableStockNoPurch: Float!
+    blockedStock: Float!
+    freeStock: Float!
+    freeStockNoPurch: Float!
+    reservedStock: Float!
+    displayStock: Float!
+}

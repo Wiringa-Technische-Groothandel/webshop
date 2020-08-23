@@ -16,7 +16,7 @@ class Price
     public string $scaleUnit;
     public string $priceUnit;
 
-    public bool $actionPrice;
+    public bool $isAction;
 
     public float $discount;
     public float $netPrice;

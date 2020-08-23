@@ -1,0 +1,53 @@
+type Query {
+    "Get the currently authed customer"
+    me: Customer @auth
+
+    "Search for products"
+    search(term: String!, brand: String, series: String, type: String, page: Int): ProductPaginator!
+
+    "Returns a limited set of products"
+    quickSearch(term: String!): [Product!]!
+
+    "Fetch a CMS block by its name"
+    block(name: String! @where): Block @first
+
+    "Fetch carousel slides"
+    slides: [Slide!]!
+
+    "Fetch a product by its sku"
+    product(sku: String! @where): Product @first
+
+    products(brand: String, series: String, type: String, page: Int): ProductPaginator!
+    prices(skus: [String!]!): [Price!]!
+    stocks(skus: [String!]!): [Stock!]!
+}
+
+type Mutation {
+    "Log in to a new session and get the auth token."
+    login(customerNumber: String!, username: String!, password: String!): AuthToken!
+
+    "Log out from the current session."
+    logout: Boolean @guard
+
+    "Toggle the favorite state of a product"
+    toggleFavorite(sku: String!): Boolean @guard
+}
+
+type AuthToken {
+    token: String!
+}
+
+type ProductPaginator {
+    products: [Product!]!
+    filters: Filters!
+    paginatorInfo: PaginatorInfo!
+}
+
+type Filters {
+    brands: [String!]!
+    series: [String!]!
+    types: [String!]!
+}
+
+#import scalars/*.graphql
+#import models/*.graphql

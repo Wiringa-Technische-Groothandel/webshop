@@ -1,0 +1,41 @@
+enum ImageSize {
+    SMALL @enum(value: "small")
+    MEDIUM @enum(value: "medium")
+    LARGE @enum(value: "large")
+    ORIGINAL @enum(value: "original")
+}
+
+type Product {
+    id: ID!
+    name: String!
+    sku: String!
+    group: String!
+    brand: String!
+    series: String!
+    type: String!
+    supplierCode: String @rename(attribute: "supplier_code")
+    ean: String
+    salesUnit: String! @rename(attribute: "sales_unit")
+    packingUnit: String! @rename(attribute: "packing_unit")
+    length: Float!
+    height: Float!
+    width: Float!
+    weight: Float!
+    discontinued: Boolean!
+    relatedProducts: [Product!]! @field(resolver: "Product@resolveRelatedProducts") @namespace(field: "WTG\\GraphQL\\Fields")
+    stockDisplay: String! @rename(attribute: "stock_display")
+    minimalPurchase: Float! @rename(attribute: "minimal_purchase")
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+    price(qty: Float!): Price @field(resolver: "Product@resolvePrice") @namespace(field: "WTG\\GraphQL\\Fields")
+    stock: Stock @field(resolver: "Product@resolveStock") @namespace(field: "WTG\\GraphQL\\Fields")
+    image(size: ImageSize!): String! @field(resolver: "Product@resolveImage") @namespace(field: "WTG\\GraphQL\\Fields")
+    description: String @field(resolver: "Product@resolveDescription") @namespace(field: "WTG\\GraphQL\\Fields")
+    salesUnit: SalesUnit @field(resolver: "Product@resolveSalesUnit") @namespace(field: "WTG\\GraphQL\\Fields")
+    isFavorite: Boolean @field(resolver: "Product@resolveIsFavorite") @namespace(field: "WTG\\GraphQL\\Fields")
+}
+
+type SalesUnit {
+    singular: String!
+    plural: String!
+}

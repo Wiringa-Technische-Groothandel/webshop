@@ -44,7 +44,7 @@ class StockManager
      * Fetch stocks for multiple products.
      *
      * @param Collection $products
-     * @return Collection
+     * @return Collection|GetProductStocksResponse\Stock[]
      * @throws BindingResolutionException
      */
     public function fetchStocks(Collection $products): Collection

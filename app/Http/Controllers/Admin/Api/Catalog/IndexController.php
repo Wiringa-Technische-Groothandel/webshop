@@ -21,7 +21,6 @@ class IndexController extends Controller
      */
     public function execute(): Response
     {
-        Product::$withoutAppends = true;
         $products = Product::query()
             ->get(['sku', 'group', 'name', 'created_at', 'updated_at']);
 
