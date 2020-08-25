@@ -43,20 +43,26 @@ class ProductProcessor implements ProcessorInterface
     public function process(array $data): void
     {
         $product = $this->fetchProduct($data['sku'], $data['salesUnit']);
-
-        if ($data['isWeb']) {
-            if (! $product) {
-                $product = $this->fillModel(new ProductModel(), $data);
-            } else {
-                $product = $this->fillModel($product, $data);
-            }
-
-            ProductModel::withoutSyncingToSearch(fn () => $product->saveOrFail());
-
-            $this->setDescription($product, $data['description']);
+      
+        if (! $product && $data['isWeb']) {
+            $product = $this->fillModel(new ProductModel(), $data);
+        } else {
+            $product = $this->fillModel($product, $data);
         }
+      
+      	if ($product) {
+          	ProductModel::withoutSyncingToSearch(fn () => $product->saveOrFail());
+      
+            $this->setDescription($product, $data['description']);
 
-        $this->logManager->debug('[Product processor] Imported/updated product ' . $data['sku']);
+            if (! $data['isWeb']) {
+                $product->delete();
+              
+              	$this->logManager->debug('[Product processor] Soft-deleted product ' . $data['sku']);
+            } else {
+            	$this->logManager->debug('[Product processor] Imported/updated product ' . $data['sku']);
+            }
+        }
     }
 
     /**
