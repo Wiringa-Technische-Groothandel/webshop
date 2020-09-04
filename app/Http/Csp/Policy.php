@@ -37,6 +37,8 @@ class Policy extends \Spatie\Csp\Policies\Policy
                     Keyword::SELF,
                     'https://browser.sentry-cdn.com',
                     'https://*.fontawesome.com',
+                    'https://www.google.com',
+                    'https://www.gstatic.com',
                 ]
             )
             ->addDirective(
