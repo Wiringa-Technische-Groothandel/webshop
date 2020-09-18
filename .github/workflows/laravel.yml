@@ -1,0 +1,73 @@
+name: Laravel
+
+on:
+  push:
+    branches: [ development ]
+  pull_request:
+    branches: [ development ]
+
+jobs:
+  build:
+
+    name: Build the application
+
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install composer dependencies
+        run: composer install -q --no-ansi --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
+      - name: Install Node dependencies
+        run: npm ci
+      - name: Build Node assets
+        run: npm run prod-silent
+      - name: Create artifact
+        run: tar --exclude=build --exclude=./.git --exclude=node_modules --exclude=.env.example --exclude=.env.testing --exclude=package.json --exclude=package-lock.json --exclude=webpack.mix.js --exclude=storage/app/public/uploads -czf build/deployment.tar.gz *
+      - uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: build/deployment.tar.gz
+          
+  test:
+    
+    name: Test the application
+    
+    services: 
+      redis:
+        image: redis
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_DATABASE: testing
+          MYSQL_ROOT_PASSWORD: testing
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dev modules
+        run: composer install -q --no-ansi --prefer-dist --no-progress --no-interaction --dev --optimize-autoloader
+      - name: Check code style
+        run: vendor/bin/phpcs -d memory_limit=1G --standard=PSR12 --ignore=\*blade.php,\*.js,\*/vendor/\*,\*/storage/framework/\*,\*/bootstrap/cache/\*,\*/database/\* --extensions=php .
+        continue-on-error: true
+      - name: Populate .env
+        run: |
+          php artisan key:generate --env=testing
+          php artisan jwt:secret --env=testing
+      - name: Unit tests
+        run: vendor/bin/phpunit
+        
+  create-docker-image:
+    
+    name: Create docker image
+    
+    needs: [build]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: build-artifacts
+      - name: Build docker image
+        run: docker build -t wiringa/webshop ./build
