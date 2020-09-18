@@ -6,7 +6,7 @@ LABEL maintainer="Thomas Wiringa <thomas.wiringa@gmail.com>"
 RUN apt-get update -y \
  && apt-get install -y --no-install-recommends \
     git wget unzip \
-    libonig-dev \
+    libonig-dev libmagickwand-dev \
     libxrender-dev  libfontconfig-dev libxext-dev
 
 # Install php modules
