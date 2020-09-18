@@ -11,16 +11,12 @@ jobs:
 
     name: Build the application
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04	
     
     steps:
       - uses: actions/checkout@v2
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '7.4'
       - name: Install composer dependencies
-        run: composer install -q --no-ansi --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
+        run: composer install --no-ansi --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
       - name: Install Node dependencies
         run: npm ci
       - name: Build Node assets
@@ -49,12 +45,8 @@ jobs:
     
     steps:
       - uses: actions/checkout@v2
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '7.4'
       - name: Install dev modules
-        run: composer install -q --no-ansi --prefer-dist --no-progress --no-interaction --dev --optimize-autoloader
+        run: composer install --no-ansi --prefer-dist --no-progress --no-interaction --dev --optimize-autoloader
       - name: Check code style
         run: vendor/bin/phpcs -d memory_limit=1G --standard=PSR12 --ignore=\*blade.php,\*.js,\*/vendor/\*,\*/storage/framework/\*,\*/bootstrap/cache/\*,\*/database/\* --extensions=php .
         continue-on-error: true
