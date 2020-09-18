@@ -15,6 +15,12 @@ jobs:
     
     steps:
       - uses: actions/checkout@v2
+      - name: Setup PHP with pecl extension
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          tools: pecl
+          extensions: imagick
       - name: Install composer dependencies
         run: composer install --no-ansi --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
       - name: Install Node dependencies
@@ -45,6 +51,12 @@ jobs:
     
     steps:
       - uses: actions/checkout@v2
+      - name: Setup PHP with pecl extension
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          tools: pecl
+          extensions: imagick
       - name: Install dev modules
         run: composer install --no-ansi --prefer-dist --no-progress --no-interaction --dev --optimize-autoloader
       - name: Check code style
