@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Log\LogManager;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
-use WTG\Http\Controllers\Admin\Controller;
+use WTG\Http\Controllers\Controller;
 use WTG\Models\Company;
 
 /**

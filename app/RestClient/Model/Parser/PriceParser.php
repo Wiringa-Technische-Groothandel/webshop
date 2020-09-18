@@ -29,7 +29,7 @@ class PriceParser
         $price->netTotal = $item['nettAmountTotal'];
         $price->grossPrice = $item['price'];
         $price->discount = $item['discount'];
-        $price->actionPrice = $item['actionPrice'];
+        $price->isAction = $item['actionPrice'];
         $price->pricePer = $item['pricePerUnit'];
         $price->priceFactor = $item['conversionFactor'];
         $price->scaleUnit = unit_to_str($item['unitCode'], false);

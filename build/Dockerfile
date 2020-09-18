@@ -6,21 +6,17 @@ MAINTAINER Thomas Wiringa <thomas.wiringa@gmail.com>
 RUN apt-get update -y \
  && apt-get install -y --no-install-recommends \
     git wget unzip \
-    libpng-dev libjpeg62-turbo-dev libxml2-dev \
     libxrender-dev  libfontconfig-dev libxext-dev
-
-# Configure PHP gd module
-RUN docker-php-ext-configure gd \
-    --with-jpeg-dir=/usr/lib/x86_64-linux-gnu \
-    --with-png-dir=/usr/lib/x86_64-linux-gnu
 
 # Install php modules
 RUN docker-php-ext-install \
     mbstring \
     pdo_mysql \
-    gd \
     tokenizer \
     opcache
+
+RUN pecl install imagick \
+ && docker-php-ext-enable imagick
 
 # Copy PHP config files
 ADD ./php.ini /usr/local/etc/php/conf.d

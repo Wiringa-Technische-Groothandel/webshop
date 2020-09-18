@@ -20,6 +20,23 @@ use WTG\Contracts\Models\CustomerContract;
 class Contact extends Model implements ContactContract
 {
     /**
+     * @var string[]
+     */
+    protected $hidden = [
+        'customer_id',
+        'address_id',
+        'created_at',
+        'updated_at',
+    ];
+
+    /**
+     * @var string[]
+     */
+    protected $with = [
+        'address'
+    ];
+
+    /**
      * Company relation.
      *
      * @return BelongsTo
@@ -100,8 +117,7 @@ class Contact extends Model implements ContactContract
      */
     public function address()
     {
-        return $this->belongsTo(Address::class)
-            ->where('company_id', $this->getCustomer()->getCompany()->getId());
+        return $this->belongsTo(Address::class);
     }
 
     /**

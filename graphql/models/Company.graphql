@@ -1,0 +1,13 @@
+type Company {
+    id: ID!
+    name: String!
+    customerNumber: String! @rename(attribute: "customer_number")
+    street: String!,
+    postcode: String!,
+    city: String!,
+    active: Boolean!
+    customers: [Customer!]! @hasMany
+    addresses: [Address!]! @hasMany
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+}

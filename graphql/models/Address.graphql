@@ -1,0 +1,12 @@
+type Address {
+    id: ID!
+    name: String!
+    street: String!
+    postcode: String!
+    city: String!
+    phone: String
+    mobile: String
+    company: Company! @belongsTo
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+}

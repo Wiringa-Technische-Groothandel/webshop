@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace WTG\Models;
 
-use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
-use Intervention\Image\Facades\Image;
 use Laravel\Scout\Searchable;
 use WTG\Catalog\Api\ProductInterface;
 use WTG\Contracts\Models\DescriptionContract;
@@ -37,12 +34,6 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     use Searchable;
     use SoftDeletes;
 
-    public const IMAGE_PLACEHOLDER_PATH = 'storage/static/images/product-image-placeholder.png';
-    public const IMAGE_PLACEHOLDER_CACHE_KEY = 'product-image-placeholder';
-    public const IMAGE_SIZE_LARGE = 'large';
-    public const IMAGE_SIZE_MEDIUM = 'medium';
-    public const IMAGE_SIZE_SMALL = 'small';
-    public const IMAGE_SIZE_ORIGINAL = 'original';
     public const DEFAULT_STOCK_DISPLAY = 'S';
 
     /**
@@ -62,32 +53,6 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     ];
 
     /**
-     * @var string[]
-     */
-    protected $appends = [
-        'sales_unit_long',
-        'sales_unit_long_plural',
-    ];
-
-    /**
-     * @var bool
-     */
-    public static $withoutAppends = false;
-
-    /**
-     * @return array
-     */
-    protected function getArrayableAppends()
-    {
-        if (self::$withoutAppends) {
-            return [];
-        }
-        return parent::getArrayableAppends();
-    }
-
-    // Model relations
-
-    /**
      * Description relation.
      *
      * @return HasOne
@@ -96,6 +61,8 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     {
         return $this->hasOne(Description::class);
     }
+
+    // Model relations
 
     /**
      * Get the product description.
@@ -178,8 +145,6 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
         return $this->setAttribute(self::FIELD_SKU, $sku);
     }
 
-    // Model field getters and setters
-
     /**
      * Get the supplier code.
      *
@@ -189,6 +154,8 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     {
         return $this->getAttribute(self::FIELD_SUPPLIER_CODE);
     }
+
+    // Model field getters and setters
 
     /**
      * Set the supplier code.
@@ -600,7 +567,7 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
             } elseif (str_contains($field, '.')) {
                 $values = Arr::get($this->toArray(), $field);
 
-                if (!is_array($values)) {
+                if (! is_array($values)) {
                     $values = [$values];
                 }
             } else {
@@ -611,86 +578,6 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
         }
 
         return $searchableArray;
-    }
-
-    /**
-     * Get the list of searchable fields.
-     *
-     * @return array
-     */
-    protected function getSearchableFields(): array
-    {
-        return [
-            'sku',
-            'group',
-            'description' => ['name', 'keywords'],
-            'brand',
-            'series',
-            'type',
-            'ean',
-            'supplier_code',
-            'long_description' => 'description.value'
-        ];
-    }
-
-    /**
-     * Get the product image url.
-     *
-     * @param string $size
-     * @return string
-     * @throws Exception
-     */
-    public function getImageUrl(string $size = self::IMAGE_SIZE_LARGE)
-    {
-        $relativePath = sprintf("storage/uploads/images/products/%s.jpg", $this->getAttribute(self::FIELD_SKU));
-
-        switch ($size) {
-            case self::IMAGE_SIZE_SMALL:
-                $width = 100;
-                $height = 100;
-                break;
-            case self::IMAGE_SIZE_MEDIUM:
-                $width = 200;
-                $height = 200;
-                break;
-            case self::IMAGE_SIZE_LARGE:
-                $width = 300;
-                $height = 300;
-                break;
-            case self::IMAGE_SIZE_ORIGINAL:
-                return url($relativePath);
-            default:
-                $size = self::IMAGE_SIZE_LARGE;
-                $width = 300;
-                $height = 300;
-        }
-
-        $path = public_path($relativePath);
-        $cacheKey = 'product-image-' . $this->getAttribute(self::FIELD_SKU) . '-' . $size;
-
-        if (! file_exists($path)) {
-            $path = public_path(static::IMAGE_PLACEHOLDER_PATH);
-            $cacheKey = static::IMAGE_PLACEHOLDER_CACHE_KEY . '-' . $size;
-        }
-
-        return Cache::tags(['product-images'])->remember(
-            $cacheKey,
-            60 * 60 * 24,
-            function () use ($path, $width, $height) {
-                return Image::make($path)
-                    ->trim('top-left', null, 10, 5)
-                    ->resize(
-                        $width,
-                        $height,
-                        function ($constraint) {
-                            $constraint->upsize();
-                            $constraint->aspectRatio();
-                        }
-                    )
-                    ->resizeCanvas($width, $height)
-                    ->encode('data-url');
-            }
-        );
     }
 
     /**
@@ -753,22 +640,6 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
     }
 
     /**
-     * @return string
-     */
-    public function getSalesUnitLongAttribute(): string
-    {
-        return unit_to_str($this->getSalesUnit(), false);
-    }
-
-    /**
-     * @return string
-     */
-    public function getSalesUnitLongPluralAttribute(): string
-    {
-        return unit_to_str($this->getSalesUnit(), true);
-    }
-
-    /**
      * Get the minimal purchase amount.
      *
      * @return float
@@ -778,5 +649,25 @@ class Product extends Model implements ProductInterface, ErpModelInterface, Soft
         $minimalPurchase = $this->getAttributeFromArray('minimal_purchase');
 
         return $minimalPurchase > 0.0 ? $minimalPurchase : 1.0;
+    }
+
+    /**
+     * Get the list of searchable fields.
+     *
+     * @return array
+     */
+    protected function getSearchableFields(): array
+    {
+        return [
+            'sku',
+            'group',
+            'description'      => ['name', 'keywords'],
+            'brand',
+            'series',
+            'type',
+            'ean',
+            'supplier_code',
+            'long_description' => 'description.value'
+        ];
     }
 }

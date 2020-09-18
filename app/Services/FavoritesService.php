@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace WTG\Services;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use WTG\Catalog\Api\ProductInterface;
 use WTG\Contracts\Services\AuthManagerContract;
 use WTG\Contracts\Services\FavoritesServiceContract;
 use WTG\Exceptions\ProductNotFoundException;
 use WTG\Managers\ProductManager;
+use WTG\Models\Customer;
+use WTG\Models\Product;
 
 /**
  * Favorites service.
@@ -19,14 +22,7 @@ use WTG\Managers\ProductManager;
  */
 class FavoritesService implements FavoritesServiceContract
 {
-    /**
-     * @var AuthManagerContract
-     */
     protected AuthManagerContract $authService;
-
-    /**
-     * @var ProductManager
-     */
     protected ProductManager $productManager;
 
     /**
@@ -75,14 +71,13 @@ class FavoritesService implements FavoritesServiceContract
      * True: Product is marked as favorite
      * False: Product is removed from favorites
      *
-     * @param string $sku
+     * @param Product $product
+     * @param Customer $customer
      * @return bool
      */
-    public function toggleFavorite(string $sku): bool
+    public function toggleFavorite(Product $product, Customer $customer): bool
     {
-        $customer = $this->authService->getCurrentCustomer();
-        $isFavorite = $this->isFavorite($sku);
-        $product = $this->productManager->find($sku);
+        $isFavorite = $this->isFavorite($product, $customer);
 
         if ($isFavorite) {
             $customer->removeFavorite($product);
@@ -96,18 +91,12 @@ class FavoritesService implements FavoritesServiceContract
     /**
      * Check if a product is marked as favorite.
      *
-     * @param string $sku
+     * @param Product $product
+     * @param Customer $customer
      * @return bool
-     * @throws ProductNotFoundException
      */
-    public function isFavorite(string $sku): bool
+    public function isFavorite(Product $product, Customer $customer): bool
     {
-        $product = $this->productManager->find($sku);
-
-        if ($product === null) {
-            throw new ProductNotFoundException(__('Geen product gevonden voor sku :sku', ['sku' => $sku]));
-        }
-
-        return $this->authService->getCurrentCustomer()->hasFavorite($product);
+        return $customer->hasFavorite($product);
     }
 }

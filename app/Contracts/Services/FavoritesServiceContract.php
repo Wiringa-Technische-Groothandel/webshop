@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace WTG\Contracts\Services;
 
 use Illuminate\Support\Collection;
+use WTG\Models\Customer;
+use WTG\Models\Product;
 
 /**
  * Favorites service contract.
@@ -33,16 +35,18 @@ interface FavoritesServiceContract
     /**
      * Check if a product is marked as favorite.
      *
-     * @param string $sku
+     * @param Product $product
+     * @param Customer $customer
      * @return bool
      */
-    public function isFavorite(string $sku): bool;
+    public function isFavorite(Product $product, Customer $customer): bool;
 
     /**
      * Toggle the favorite state of a product.
      *
-     * @param string $sku
+     * @param Product $product
+     * @param Customer $customer
      * @return bool
      */
-    public function toggleFavorite(string $sku): bool;
+    public function toggleFavorite(Product $product, Customer $customer): bool;
 }

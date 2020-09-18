@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WTG\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Routing\RouteRegistrar;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -15,15 +16,8 @@ use Illuminate\Support\Facades\Route;
  */
 class RouteServiceProvider extends ServiceProvider
 {
-    /**
-     * @var string
-     */
-    protected $webNamespace = 'WTG\Http\Controllers\Web';
-
-    /**
-     * @var string
-     */
-    protected $adminNamespace = 'WTG\Http\Controllers\Admin';
+    protected string $webNamespace = 'WTG\Http\Controllers\Web';
+    protected string $adminNamespace = 'WTG\Http\Controllers\Admin';
 
     /**
      * Define the routes for the application.
@@ -32,9 +26,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->mapWebRoutes();
-
-        $this->mapAdminRoutes();
+//        $this->mapWebRoutes();
+//        $this->mapAdminRoutes();
     }
 
     /**

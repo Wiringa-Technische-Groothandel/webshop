@@ -34,12 +34,8 @@ jobs:
           extensions: imagick
       - name: Install composer dependencies
         run: composer install --no-ansi --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
-      - name: Install Node dependencies
-        run: npm ci
-      - name: Build Node assets
-        run: npm run prod-silent
       - name: Create artifact
-        run: tar --exclude=build --exclude=./.git --exclude=node_modules --exclude=.env.example --exclude=.env.testing --exclude=package.json --exclude=package-lock.json --exclude=webpack.mix.js --exclude=storage/app/public/uploads -czf build/deployment.tar.gz *
+        run: tar --exclude=build --exclude=./.git --exclude=.env.example --exclude=.env.testing --exclude=storage/app/public/uploads -czf build/deployment.tar.gz *
       - uses: actions/upload-artifact@v2
         with:
           name: build-artifacts
@@ -62,7 +58,7 @@ jobs:
           MYSQL_DATABASE: testing
           MYSQL_ROOT_PASSWORD: testing
     
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     
     steps:
       - uses: actions/checkout@v2
@@ -85,16 +81,26 @@ jobs:
         run: vendor/bin/phpunit
         
   create-docker-image:
-    
+
     name: Create docker image
     
-    needs: [ build ]
+    needs: [ build, test ]
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+
+    if: github.event.pull_request.merged == true
 
     steps:
+      - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
         with:
           name: build-artifacts
       - name: Build docker image
-        run: docker build -t wiringa/webshop ./build
+        run: docker build -t wiringa/webshopi:$GITHUB_SHA ./build
+      - name: Push to Docker Hub
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: wiringawtg/webshop-api
+          tag_with_ref: true

@@ -22,6 +22,22 @@ class Company extends Model implements CompanyContract
     use SoftDeletes;
 
     /**
+     * @var string[]
+     */
+    protected $casts = [
+        'active' => 'boolean',
+    ];
+
+    /**
+     * @var string[]
+     */
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
+    /**
      * Override parent boot and Call deleting event
      *
      * @return void

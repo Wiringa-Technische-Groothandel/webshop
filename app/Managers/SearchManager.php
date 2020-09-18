@@ -63,13 +63,9 @@ class SearchManager
             }
         }
 
-        $results = $query->get(
-            [
-                'brand',
-                'series',
-                'type',
-            ]
-        );
+        $results = $query->get();
+
+        return $results;
 
         $paginator = $query->paginate(10, ['*'], 'page', $page);
         $paginator->appends(
@@ -94,10 +90,9 @@ class SearchManager
      * Search for products.
      *
      * @param array $data
-     * @param int $page
      * @return Collection
      */
-    public function searchProducts(array $data, int $page = 1): Collection
+    public function searchProducts(array $data): Collection
     {
         $query = $data['query'];
 
@@ -137,7 +132,7 @@ class SearchManager
 
             $results = Product::search(
                 $query,
-                function (Client $elastic, $query, $params) use ($page, $filters) {
+                function (Client $elastic, $query, $params) use ($filters) {
                     $results = $elastic->search(
                         $this->prepareParameters($query, 10000, $filters)
                     );
@@ -161,18 +156,11 @@ class SearchManager
                 ->get();
         }
 
-        $paginator = new LengthAwarePaginator($results->forPage($page, 10), $results->count(), 10, $page);
-        $paginator->withPath('search');
-        $paginator->appends($data);
+//        $paginator = new LengthAwarePaginator($results->forPage($page, 10), $results->count(), 10, $page);
+//        $paginator->withPath('search');
+//        $paginator->appends($data);
 
-        return collect(
-            [
-                'products' => $paginator,
-                'brands'   => $results->pluck('brand')->unique()->sort(),
-                'series'   => $results->pluck('series')->unique()->sort(),
-                'types'    => $results->pluck('type')->unique()->sort(),
-            ]
-        );
+        return $results;
     }
 
     /**
@@ -310,14 +298,6 @@ class SearchManager
         )
             ->get()
             ->where('inactive', 0)
-            ->where('blocked', 0)
-            ->map(
-                function (Product $product) {
-                    return [
-                        'url'  => $this->productManager->getProductUrl($product),
-                        'name' => $product->getName(),
-                    ];
-                }
-            );
+            ->where('blocked', 0);
     }
 }

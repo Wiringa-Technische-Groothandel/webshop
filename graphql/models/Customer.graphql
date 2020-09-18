@@ -1,0 +1,9 @@
+type Customer {
+    id: ID!
+    username: String!
+    active: Boolean!
+    company: Company! @belongsTo
+    contact: Contact! @hasOne
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+}

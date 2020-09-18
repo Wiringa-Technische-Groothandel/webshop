@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Response;
-use WTG\Http\Controllers\Admin\Controller;
+use WTG\Http\Controllers\Controller;
 use WTG\Models\Order;
 
 /**

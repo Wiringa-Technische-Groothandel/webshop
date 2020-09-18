@@ -62,20 +62,6 @@ class ProductManager
     }
 
     /**
-     * @param ProductInterface $product
-     * @return string
-     */
-    public function getProductUrl(ProductInterface $product): string
-    {
-        return route(
-            'catalog.product',
-            [
-                'sku' => $product->getSku(),
-            ]
-        );
-    }
-
-    /**
      * Get the related products for a product.
      *
      * @param ProductInterface $product
