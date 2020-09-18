@@ -32,6 +32,14 @@ jobs:
           php-version: '7.4'
           tools: pecl
           extensions: imagick
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
       - name: Install composer dependencies
         run: composer install --no-ansi --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
       - name: Create artifact
@@ -68,6 +76,14 @@ jobs:
           php-version: '7.4'
           tools: pecl
           extensions: imagick
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
       - name: Install dev modules
         run: composer install --no-ansi --prefer-dist --no-progress --no-interaction --dev --optimize-autoloader
       - name: Check code style
@@ -88,7 +104,7 @@ jobs:
 
     runs-on: ubuntu-20.04
 
-    if: github.event.pull_request.merged == true
+    if: github.event_name == 'push'
 
     steps:
       - uses: actions/checkout@v2
