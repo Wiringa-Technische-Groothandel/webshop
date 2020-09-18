@@ -42,8 +42,6 @@ WORKDIR /var/www/html
 # Add and extract the tar to the webroot
 ADD ./deployment.tar.gz /var/www/html
 
-RUN php /var/www/html/artisan storage:link
-
 # Copy the apache vhost config
 COPY vhost.conf /etc/apache2/sites-available/000-default.conf
 

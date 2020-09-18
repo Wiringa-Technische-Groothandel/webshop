@@ -42,6 +42,8 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Install composer dependencies
         run: composer install --no-ansi --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
+      - name: Symlink storage dir
+        run: ln -s ../storage/app/public public/storage
       - name: Create artifact
         run: tar --exclude=build --exclude=./.git --exclude=.env.example --exclude=.env.testing --exclude=storage/app/public/uploads -czf build/deployment.tar.gz *
       - uses: actions/upload-artifact@v2
