@@ -1,6 +1,6 @@
-FROM php:7.4-apache-stretch
+FROM php:7.4-apache
 
-MAINTAINER Thomas Wiringa <thomas.wiringa@gmail.com>
+LABEL maintainer="Thomas Wiringa <thomas.wiringa@gmail.com>"
 
 # Install required packages
 RUN apt-get update -y \
