@@ -12,6 +12,7 @@ env:
   GCE_INSTANCE_ZONE: europe-west4-a
   CACHE_DRIVER: array
   SESSION_DRIVER: array
+  DB_HOST: "127.0.0.1"
 
 jobs:
 
