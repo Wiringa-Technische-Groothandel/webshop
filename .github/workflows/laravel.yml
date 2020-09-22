@@ -134,7 +134,7 @@ jobs:
   # Job to create docker image
   deploy:
 
-    needs: [ release ]
+    needs: [ build ]
 
     name: Deploy the docker image
 
