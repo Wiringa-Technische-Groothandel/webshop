@@ -20,6 +20,7 @@ jobs:
   build:
 
     name: Build the application
+: github.event_name == 'push'
 
     runs-on: ubuntu-20.04
 
@@ -59,19 +60,7 @@ jobs:
 
       - name: Build docker image
         run: docker build -t gcr.io/$PROJECT_ID/webshop-api:build-$GITHUB_RUN_NUMBER ./build
-
-  # Push the docker image to the repo
-  release:
-
-    name: Release the docker image
-
-    needs: [ build ]
-
-    if: github.event_name == 'push'
-
-    runs-on: ubuntu-20.04
-
-    steps:
+      
       # Setup gcloud CLI
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
@@ -85,8 +74,10 @@ jobs:
         run: gcloud --quiet auth configure-docker
 
       - name: Push tags to Docker Hub
+        if: github.event_name == 'push'
         run: |
           docker push gcr.io/$PROJECT_ID/webshop-api:build-$GITHUB_RUN_NUMBER
+  
 
   # Run application tests
   test:
