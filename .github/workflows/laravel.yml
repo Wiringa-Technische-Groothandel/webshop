@@ -20,7 +20,8 @@ jobs:
   build:
 
     name: Build the application
-: github.event_name == 'push'
+    
+    if: github.event_name == 'push'
 
     runs-on: ubuntu-20.04
 
