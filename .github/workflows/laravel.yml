@@ -7,9 +7,14 @@ on:
     branches: [ development ]
 
 env:
+  # Google Cloud variables
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
   GCE_INSTANCE: webshop-api-0
+  GCE_INSTANCE_REGION: europe-west4
   GCE_INSTANCE_ZONE: europe-west4-a
+  GCE_INSTANCE_TYPE: e2-micro
+
+  # Laravel variables
   CACHE_DRIVER: array
   SESSION_DRIVER: array
   DB_HOST: "127.0.0.1"
@@ -20,7 +25,7 @@ jobs:
   build:
 
     name: Build the application
-    
+
     if: github.event_name == 'push'
 
     runs-on: ubuntu-20.04
@@ -61,7 +66,7 @@ jobs:
 
       - name: Build docker image
         run: docker build -t gcr.io/$PROJECT_ID/webshop-api:build-$GITHUB_RUN_NUMBER ./build
-      
+
       # Setup gcloud CLI
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
@@ -78,7 +83,7 @@ jobs:
         if: github.event_name == 'push'
         run: |
           docker push gcr.io/$PROJECT_ID/webshop-api:build-$GITHUB_RUN_NUMBER
-  
+
 
   # Run application tests
   test:
@@ -149,13 +154,19 @@ jobs:
           service_account_key: ${{ secrets.GCE_SA_KEY }}
           project_id: ${{ secrets.GCE_PROJECT }}
 
-      # Configure Docker to use the gcloud command-line tool as a credential
-      # helper for authentication
-      - run: |-
-          gcloud --quiet auth configure-docker
+      - name: Create new instance template
+        run: |-
+          gcloud compute instance-templates create-with-container "api-template-$GITHUB_RUN_NUMBER" \
+            --container-image "gcr.io/$PROJECT_ID/webshop-api:build-$GITHUB_RUN_NUMBER" \
+            --container-restart-policy on-failure \
+            --tags "webshop-api,http-server" \
+            --machine-type $GCE_INSTANCE_TYPE \
+            --region $GCE_INSTANCE_REGION \
+            --boot-disk-auto-delete \
+            --metadata "google-logging-enabled=true"
 
       - name: Deploy
         run: |-
-          gcloud compute instances update-container "$GCE_INSTANCE" \
-            --zone "$GCE_INSTANCE_ZONE" \
-            --container-image "gcr.io/$PROJECT_ID/webshop-api:build-$GITHUB_RUN_NUMBER"
+          gcloud compute instance-groups managed rolling-action start-update api-group-1 \
+            --version "template=api-template-$GITHUB_RUN_NUMBER" \
+            --zone "$GCE_INSTANCE_ZONE"
