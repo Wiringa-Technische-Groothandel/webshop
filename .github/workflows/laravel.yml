@@ -155,14 +155,23 @@ jobs:
           project_id: ${{ secrets.GCE_PROJECT }}
 
       - name: Create new instance template
+        env:
+          APP_KEY: ${{ secrets.APP_KEY }}
+          REDIS_HOST: ${{ secrets.APP_REDIS_HOST }}
+          DB_CONFIG: ${{ secrets.APP_DB_CONFIG }}
+          MAIL_CONFIG: ${{ secrets.APP_MAIL_CONFIG }}
+          SFTP_CONFIG: ${{ secrets.APP_SFTP_ENV }}
+          REST_CONFIG: ${{ secrets.APP_REST_CONFIG }}
         run: |-
           gcloud compute instance-templates create-with-container "api-template-$GITHUB_RUN_NUMBER" \
             --container-image "gcr.io/$PROJECT_ID/webshop-api:build-$GITHUB_RUN_NUMBER" \
             --container-restart-policy on-failure \
+            --container-env "ELASTICSEARCH_HOST=elasticsearch-0:9200,REDIS_HOST=$REDIS_HOST,APP_KEY=$APP_KEY,$SFTP_CONFIG,$REST_CONFIG,$DB_CONFIG"
             --tags "webshop-api,http-server" \
             --machine-type $GCE_INSTANCE_TYPE \
             --region $GCE_INSTANCE_REGION \
             --boot-disk-auto-delete \
+            --no-address \
             --metadata "google-logging-enabled=true"
 
       - name: Deploy
