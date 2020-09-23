@@ -166,7 +166,7 @@ jobs:
           gcloud compute instance-templates create-with-container "api-template-$GITHUB_RUN_NUMBER" \
             --container-image "gcr.io/$PROJECT_ID/webshop-api:build-$GITHUB_RUN_NUMBER" \
             --container-restart-policy on-failure \
-            --container-env "ELASTICSEARCH_HOST=elasticsearch-0:9200,REDIS_HOST=$REDIS_HOST,APP_KEY=$APP_KEY,$SFTP_CONFIG,$REST_CONFIG,$DB_CONFIG"
+            --container-env "ELASTICSEARCH_HOST=elasticsearch-0:9200,REDIS_HOST=$REDIS_HOST,APP_KEY=$APP_KEY,$SFTP_CONFIG,$REST_CONFIG,$DB_CONFIG" \
             --tags "webshop-api,http-server" \
             --machine-type $GCE_INSTANCE_TYPE \
             --region $GCE_INSTANCE_REGION \
