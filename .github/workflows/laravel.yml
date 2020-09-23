@@ -28,7 +28,7 @@ jobs:
 
     name: Build the application
 
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
 
     runs-on: ubuntu-20.04
 
@@ -82,7 +82,7 @@ jobs:
         run: gcloud --quiet auth configure-docker
 
       - name: Push tags to Docker Hub
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: |
           docker push gcr.io/$PROJECT_ID/webshop-api:build-$GITHUB_RUN_NUMBER
 
@@ -147,7 +147,7 @@ jobs:
 
     runs-on: ubuntu-20.04
 
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
 
     steps:
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
