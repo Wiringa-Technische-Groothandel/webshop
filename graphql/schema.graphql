@@ -3,10 +3,10 @@ type Query {
     me: Customer @auth
 
     "Search for products"
-    search(term: String!, brand: String, series: String, type: String, page: Int): ProductPaginator!
+    search(term: String!, brand: String, series: String, type: String, page: Int): ProductsResult!
 
     "Returns a limited set of products"
-    quickSearch(term: String!): [Product!]!
+    quickSearch(term: String!): [ID!]!
 
     "Fetch a CMS block by its name"
     block(name: String! @where): Block @first
@@ -15,9 +15,9 @@ type Query {
     slides: [Slide!]!
 
     "Fetch a product by its sku"
-    product(sku: String! @where): Product @first
+    product(id: ID! @where): Product @find
 
-    products(brand: String, series: String, type: String, page: Int): ProductPaginator!
+    products(brand: String, series: String, type: String, page: Int): ProductsResult!
     prices(skus: [String!]!): [Price!]!
     stocks(skus: [String!]!): [Stock!]!
 }
@@ -37,8 +37,13 @@ type AuthToken {
     token: String!
 }
 
+type ProductsResult {
+    products: [ID!]!
+    filters: Filters!
+}
+
 type ProductPaginator {
-    products: [Product!]!
+    products: [ID!]!
     filters: Filters!
     paginatorInfo: PaginatorInfo!
 }

@@ -95,7 +95,24 @@ class Product
             function () use ($product) {
                 PriceBuffer::loadBuffered();
 
-                return PriceBuffer::get($product->getSku());
+                $price = PriceBuffer::get($product->getSku());
+
+                if (! $price) {
+                    return null;
+                }
+
+                $netPrice = ($price->netPrice * $price->priceFactor) / $price->pricePer;
+                $grossPrice = ($price->grossPrice * $price->priceFactor) / $price->pricePer;
+
+                return [
+                    'isAction'    => $price->isAction,
+                    'net'         => $netPrice,
+                    'gross'       => $grossPrice,
+                    'scaleUnit'   => $price->scaleUnit,
+                    'priceUnit'   => $price->priceUnit,
+                    'pricePer'    => $price->pricePer,
+                    'priceFactor' => $price->priceFactor,
+                ];
             }
         );
     }
@@ -124,7 +141,7 @@ class Product
     ): string {
         $image = $this->imageManager->getProductImage($product, $args['size']);
 
-        return (string) $image->encode('data-url');
+        return (string)$image->encode('data-url');
     }
 
     /**

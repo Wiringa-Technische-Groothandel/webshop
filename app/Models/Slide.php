@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Slide extends Model
 {
+    public const LINK_TYPE_PRODUCT = 'product';
+
     /**
      * @var string
      */
@@ -93,7 +95,7 @@ class Slide extends Model
     }
 
     /**
-     * Set the order.
+     * Set the image.
      *
      * @param string $image
      * @return Slide
@@ -104,12 +106,55 @@ class Slide extends Model
     }
 
     /**
-     * Get the order.
+     * Get the image.
      *
      * @return string
      */
     public function getImage(): string
     {
         return $this->getAttribute('image');
+    }
+
+    /**
+     * Set the link.
+     *
+     * @param string|null $link
+     * @param string|null $linkType
+     * @return Slide
+     */
+    public function setLink(?string $link, ?string $linkType): Slide
+    {
+        if ($link && ! in_array($linkType, [static::LINK_TYPE_PRODUCT])) {
+            throw new \RuntimeException('Unknown link type: ' . $linkType);
+        }
+
+        if (! $link) {
+            $link = $linkType = null;
+        }
+
+        $this->setAttribute('link', $link);
+        $this->setAttribute('link_type', $linkType);
+
+        return $this;
+    }
+
+    /**
+     * Get the link.
+     *
+     * @return string|null
+     */
+    public function getLink(): ?string
+    {
+        return $this->getAttribute('link');
+    }
+
+    /**
+     * Get the link type.
+     *
+     * @return string|null
+     */
+    public function getLinkType(): ?string
+    {
+        return $this->getAttribute('link_type');
     }
 }

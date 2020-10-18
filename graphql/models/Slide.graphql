@@ -3,4 +3,6 @@ type Slide {
     order: String!
     title: String!
     caption: String!
+    image: String! @field(resolver: "Slide@resolveImage") @namespace(field: "WTG\\GraphQL\\Fields")
+    product: Product @field(resolver: "Slide@resolveProduct") @namespace(field: "WTG\\GraphQL\\Fields")
 }

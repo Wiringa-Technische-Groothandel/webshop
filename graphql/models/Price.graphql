@@ -1,11 +1,9 @@
 type Price {
+    isAction: Boolean!
+    net: Float!
+    gross: Float!
     scaleUnit: String!
     priceUnit: String!
-    isAction: Boolean!
-    discount: Float!
-    netPrice: Float!
-    netTotal: Float!
-    grossPrice: Float!
     pricePer: Float!
     priceFactor: Float!
 }

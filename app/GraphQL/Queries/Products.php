@@ -24,29 +24,24 @@ class Products
     }
 
     /**
-     * @param  null  $_
-     * @param  array<string, mixed>  $args
+     * @param null $_
+     * @param array<string, mixed> $args
      */
     public function __invoke($_, array $args)
     {
-        $page = $args['page'] ?? 1;
-        $products = $this->searchManager->listProducts(
+        [ $products, $brands, $series, $types ] = $this->searchManager->listProducts(
             $args['brand'] ?? null,
             $args['series'] ?? null,
-            $args['type'] ?? null,
-            $args['page'],
+            $args['type'] ?? null
         );
 
-        $paginator = new LengthAwarePaginator($products->forPage($page, 10), $products->count(), 10, $page);
-
         return [
-            'products'      => $this->paginatorField->dataResolver($paginator),
-            'filters'        => [
-                'brands' => $products->pluck('brand')->unique()->sort(),
-                'series' => $products->pluck('series')->unique()->sort(),
-                'types'  => $products->pluck('type')->unique()->sort(),
+            'products'      => $products,
+            'filters'       => [
+                'brands' => $brands,
+                'series' => $series,
+                'types'  => $types,
             ],
-            'paginatorInfo' => $this->paginatorField->paginatorInfoResolver($paginator),
         ];
     }
 }

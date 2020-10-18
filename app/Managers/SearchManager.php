@@ -38,15 +38,13 @@ class SearchManager
      * @param null|string $brand
      * @param null|string $series
      * @param null|string $type
-     * @param int $page
-     * @return Collection
+     * @return array
      */
     public function listProducts(
         ?string $brand = null,
         ?string $series = null,
-        ?string $type = null,
-        int $page = 1
-    ): Collection {
+        ?string $type = null
+    ): array {
         $query = Product::query();
         $query->where('inactive', false);
         $query->where('blocked', false);
@@ -63,27 +61,14 @@ class SearchManager
             }
         }
 
-        $results = $query->get();
+        $results = $query->get(['id', 'brand', 'series', 'type']);
 
-        return $results;
-
-        $paginator = $query->paginate(10, ['*'], 'page', $page);
-        $paginator->appends(
-            [
-                'brand'  => $brand,
-                'series' => $series,
-                'type'   => $type,
-            ]
-        );
-
-        return collect(
-            [
-                'products' => $paginator,
-                'brands'   => $results->pluck('brand')->unique()->sort(),
-                'series'   => $results->pluck('series')->unique()->sort(),
-                'types'    => $results->pluck('type')->unique()->sort(),
-            ]
-        );
+        return [
+            $results->pluck('id')->all(),
+            $results->pluck('brand')->unique()->sort(),
+            $results->pluck('series')->unique()->sort(),
+            $results->pluck('type')->unique()->sort(),
+        ];
     }
 
     /**
