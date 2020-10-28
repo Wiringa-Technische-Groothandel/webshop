@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace WTG\GraphQL\Fields;
 
+use Illuminate\Support\Facades\Log;
+use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\Facades\Image;
 use WTG\Catalog\Api\ProductInterface;
 use WTG\Managers\ProductManager;
@@ -41,16 +43,22 @@ class Slide
         SlideModel $slide,
         array $args
     ): string {
-        $image = Image::make(sprintf(storage_path('app/public/uploads/images/carousel/%s'), $slide->getImage()))
-            ->resize(
-                null,
-                300,
-                function ($constraint) {
-                    $constraint->aspectRatio();
-                }
-            );
+        try {
+            $image = Image::make(sprintf(storage_path('app/public/uploads/images/carousel/%s'), $slide->getImage()))
+                ->resize(
+                    null,
+                    300,
+                    function ($constraint) {
+                        $constraint->aspectRatio();
+                    }
+                );
 
-        return (string) $image->encode('data-url');
+            return (string) $image->encode('data-url');
+        } catch (NotReadableException $e) {
+            Log::warning(sprintf('Slide image unreadable: %s', $slide->getImage()));
+
+            return '';
+        }
     }
 
     /**

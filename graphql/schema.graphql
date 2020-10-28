@@ -2,6 +2,10 @@ type Query {
     "Get the currently authed customer"
     me: Customer @auth
 
+    "Get the invoice list for the current user"
+    invoices: [Invoice!] @guard
+    invoice(invoiceNumber: String!): Invoice @guard
+
     "Search for products"
     search(term: String!, brand: String, series: String, type: String, page: Int): ProductsResult!
 

@@ -64,7 +64,7 @@ class Company extends Model implements CompanyContract
      *
      * @return HasMany
      */
-    public function customers()
+    public function customers(): HasMany
     {
         return $this->hasMany(Customer::class)->with('contact');
     }
@@ -74,9 +74,19 @@ class Company extends Model implements CompanyContract
      *
      * @return HasMany
      */
-    public function addresses()
+    public function addresses(): HasMany
     {
         return $this->hasMany(Address::class);
+    }
+
+    /**
+     * Invoice relation.
+     *
+     * @return HasMany
+     */
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
     }
 
     /**
@@ -84,9 +94,22 @@ class Company extends Model implements CompanyContract
      *
      * @return HasMany
      */
-    public function orders()
+    public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Get the attached invoices.
+     *
+     * @return Collection
+     */
+    public function getInvoices(): Collection
+    {
+        return $this->invoices()
+            ->orderByDesc('invoice_date')
+            ->orderByDesc('invoice_number')
+            ->get();
     }
 
     /**

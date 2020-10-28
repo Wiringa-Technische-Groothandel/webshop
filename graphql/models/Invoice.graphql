@@ -1,0 +1,19 @@
+type Invoice {
+    id: ID!
+    company: Company
+    customerNumber: String! @rename(attribute: "customer_number")
+    invoiceNumber: String! @rename(attribute: "invoice_number")
+    invoiceDate: Date! @rename(attribute: "invoice_date")
+    isDownloadable: Boolean! @field(resolver: "Invoice@resolveIsDownloadable") @namespace(field: "WTG\\GraphQL\\Fields")
+    fileData: String @field(resolver: "Invoice@resolveFileData") @namespace(field: "WTG\\GraphQL\\Fields")
+    dueDate: Date @rename(attribute: "due_date")
+    description: String
+    subtotal: Float!
+    vat: Float!
+    total: Float!
+    vatCode: String! @rename(attribute: "vat_code")
+    statusCode: String! @rename(attribute: "status_code")
+    statusDescription: String! @rename(attribute: "status_description")
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+}

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\Factory as ViewFactory;
 use WTG\Http\Controllers\Controller;
-use WTG\Services\Import\Invoices as InvoiceService;
+use WTG\Managers\InvoiceManager;
 
 /**
  * Invoice controller.
@@ -21,20 +21,17 @@ use WTG\Services\Import\Invoices as InvoiceService;
  */
 class InvoiceController extends Controller
 {
-    /**
-     * @var InvoiceService
-     */
-    protected $service;
+    protected InvoiceManager $invoiceManager;
 
     /**
      * InvoiceController constructor.
      *
      * @param ViewFactory $view
-     * @param InvoiceService $invoiceService
+     * @param InvoiceManager $invoiceManager
      */
-    public function __construct(ViewFactory $view, InvoiceService $invoiceService)
+    public function __construct(ViewFactory $view, InvoiceManager $invoiceManager)
     {
-        $this->service = $invoiceService;
+        $this->invoiceManager = $invoiceManager;
 
         parent::__construct($view);
     }
@@ -48,16 +45,16 @@ class InvoiceController extends Controller
     public function getAction(Request $request): View
     {
         switch ((int)$request->input('sort-order')) {
-            case InvoiceService::SORT_ORDER_ASC:
-            case InvoiceService::SORT_ORDER_DESC:
+            case InvoiceManager::SORT_ORDER_ASC:
+            case InvoiceManager::SORT_ORDER_DESC:
                 $sortOrder = (int)$request->input('sort-order');
                 break;
             default:
-                $sortOrder = InvoiceService::SORT_ORDER_DESC;
+                $sortOrder = InvoiceManager::SORT_ORDER_DESC;
         }
 
-        $invoices = $this->service->getForCustomer(
-            $request->user()->getCompany()->getCustomerNumber(),
+        $invoices = $this->invoiceManager->getForCompany(
+            $request->user()->getCompany(),
             true,
             $sortOrder
         );
@@ -74,8 +71,8 @@ class InvoiceController extends Controller
      */
     public function viewAction(Request $request, int $file)
     {
-        $invoices = $this->service->getForCustomer(
-            $request->user()->getCompany()->getCustomerNumber()
+        $invoices = $this->invoiceManager->getForCompany(
+            $request->user()->getCompany()
         );
 
         $invoice = $invoices->get($file);
@@ -87,7 +84,7 @@ class InvoiceController extends Controller
         $filename = $invoice->get('filename');
 
         try {
-            $data = $this->service->readFile($filename);
+            $data = $this->invoiceManager->readFile($filename);
         } catch (Exception $e) {
             return back()->withErrors(__('Er is een fout opgetreden tijdens het ophalen van de factuur.'));
         }

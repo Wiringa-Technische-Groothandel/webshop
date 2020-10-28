@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WTG\Services\Import;
+namespace WTG\Managers;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -10,6 +10,7 @@ use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use WTG\DTO\InvoiceFile;
 use WTG\Models\Company;
 
 /**
@@ -19,7 +20,7 @@ use WTG\Models\Company;
  * @subpackage  Commands\Import
  * @author      Thomas Wiringa  <thomas.wiringa@gmail.com>
  */
-class Invoices
+class InvoiceManager
 {
     // phpcs:ignore
     public const FILENAME_PATTERN = '/(?P<invoice>[0-9]{8})_(?P<customer>[0-9]{5})_(?P<date>[0-9]{8})_(?P<time>[0-9]{6})\.PDF$/';
@@ -47,26 +48,24 @@ class Invoices
     /**
      * Get the invoice collection for a customer.
      *
-     * @param string $customerNumber
+     * @param Company $company
      * @param bool $sort
      * @param int $sortOrder
-     * @return Collection
+     * @return Collection|InvoiceFile[]
      */
-    public function getForCustomer(
-        string $customerNumber,
+    public function getForCompany(
+        Company $company,
         bool $sort = true,
         int $sortOrder = self::SORT_ORDER_DESC
     ): Collection {
         /** @var Collection $files */
-        $files = $this->files->get($customerNumber, collect());
+//        $files = $this->files->get($company->getCustomerNumber(), collect());
+        $files = $this->files->get('10276', collect());
 
         if ($sort) {
             $files = $files->sortBy(
-                function (Collection $file) {
-                    /** @var CarbonImmutable $date */
-                    $date = $file->get('date');
-
-                    return $date->timestamp;
+                function (InvoiceFile $file) {
+                    return $file->getDate()->timestamp;
                 }
             );
         }
@@ -128,34 +127,26 @@ class Invoices
                     return null;
                 }
 
-                return collect(
-                    [
-                        'filename' => $filename,
-                        'customer' => (int)$match['customer'],
-                        'invoice'  => (int)$match['invoice'],
-                        'date'     => CarbonImmutable::createFromFormat('dmYHis', ($match['date'] . $match['time'])),
-                    ]
+                return new InvoiceFile(
+                    $filename,
+                    $match['customer'],
+                    $match['invoice'],
+                    CarbonImmutable::createFromFormat('dmYHis', ($match['date'] . $match['time']))
                 );
             }
         )
             ->filter()
             ->groupBy(
-                function (Collection $item) {
-                    return $item->get('customer');
+                function (InvoiceFile $item) {
+                    return $item->getCustomerNumber();
                 }
             )
             ->map(
                 function (Collection $fileGroup, int $customerNumber) {
                     $files = $fileGroup->mapWithKeys(
-                        function (Collection $file) {
+                        function (InvoiceFile $file) {
                             return [
-                                $file->get('invoice') => $file->only(
-                                    [
-                                        'filename',
-                                        'invoice',
-                                        'date',
-                                    ]
-                                ),
+                                $file->getInvoiceNumber() => $file
                             ];
                         }
                     );

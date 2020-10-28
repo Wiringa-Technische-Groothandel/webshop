@@ -6,7 +6,7 @@ namespace WTG\Console\Commands\Cache\Rebuild;
 
 use Illuminate\Console\Command;
 use Throwable;
-use WTG\Services\Import\Invoices;
+use WTG\Managers\InvoiceManager;
 
 /**
  * Rebuild invoice list cache command.
@@ -23,18 +23,18 @@ class InvoiceList extends Command
      */
     protected $description = 'Rebuild the invoice list cache';
 
-    private Invoices $invoiceImporter;
+    private InvoiceManager $invoiceManager;
 
     /**
      * InvoiceList constructor.
      *
-     * @param Invoices $invoiceImporter
+     * @param InvoiceManager $invoiceManager
      */
-    public function __construct(Invoices $invoiceImporter)
+    public function __construct(InvoiceManager $invoiceManager)
     {
         parent::__construct();
 
-        $this->invoiceImporter = $invoiceImporter;
+        $this->invoiceManager = $invoiceManager;
     }
 
     /**
@@ -46,7 +46,7 @@ class InvoiceList extends Command
     public function handle()
     {
         try {
-            $this->invoiceImporter->rebuildCache();
+            $this->invoiceManager->rebuildCache();
         } catch (\Throwable $exception) {
             report($exception);
 

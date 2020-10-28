@@ -6,9 +6,7 @@ namespace WTG\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Console\ImportCommand;
-use WTG\Services\Import\Invoices;
 
 /**
  * Console kernel.
@@ -45,6 +43,13 @@ class Kernel extends ConsoleKernel
 
         // Process product changes
         $schedule->command('process:staged-product-changes')->everyFiveMinutes()->withoutOverlapping();
+
+        // Invoice imports
+        $schedule->command('import:invoices')->dailyAt('5:00');
+        $schedule->command('import:unpaid-invoices')->everyThirtyMinutes()->between(
+            '6:00',
+            '22:00'
+        )->withoutOverlapping();
 
         // Re-cache the invoice files
         $schedule->command('cache:rebuild:invoice-list')->hourly()->between('6:00', '22:00');
